@@ -1,6 +1,6 @@
 # social-platform
 創新社交平臺
 
-index.js 為後端（Server）
+server 為後端
 
-index.html 為前端（Client）
+client 為前端

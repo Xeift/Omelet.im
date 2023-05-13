@@ -3,10 +3,10 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-app.use(express.static('website'))
+app.use(express.static('client'))
 
 app.get('/', (req, res) => { // 首頁
-    res.sendFile(__dirname + '/website/index.html')
+    res.sendFile(__dirname + '/../client/index.html')
 })
 
 io.on('connection', (socket) => { // client 連上時執行的程式

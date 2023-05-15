@@ -35,30 +35,30 @@
             let sendForm = document.getElementById("send-form"); // 加入這行
             let content = document.getElementById("content");    // 加入這行
 
-        sendForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-         
-            let ok = true;
-            let formData = {};
-            let formChild = sendForm.children;
-         
-            for (let i=0; i< sendForm.childElementCount; i++) {
-                let child = formChild[i];
-                if (child.name !== "") {
-                    let val = child.value;
-                    if (val === "" || !val) {    // 如果值為空或不存在
-                        ok = false;
-                        child.classList.add("error");
-                    } else {
-                        child.classList.remove("error");
-                        formData[child.name] = val;
+            sendForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+            
+                let ok = true;
+                let formData = {};
+                let formChild = sendForm.children;
+            
+                for (let i=0; i< sendForm.childElementCount; i++) {
+                    let child = formChild[i];
+                    if (child.name !== "") {
+                        let val = child.value;
+                        if (val === "" || !val) {    // 如果值為空或不存在
+                            ok = false;
+                            child.classList.add("error");
+                        } else {
+                            child.classList.remove("error");
+                            formData[child.name] = val;
+                        }
                     }
                 }
-            }
-         
-            // ok 為真才能送出
-            if (ok) socket.emit("send", formData);
-        });
+            
+                // ok 為真才能送出
+                if (ok) socket.emit("send", formData);
+            });
             
             socket.on("connect", function () {
                 status.innerText = "Connected.";

@@ -6,7 +6,7 @@
     <title>My Chatroom</title>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var socket = io();
+        let socket = io();
     </script>
     <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
@@ -30,22 +30,22 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
  
-            var status = document.getElementById("status");
-            var online = document.getElementById("online");
-            var sendForm = document.getElementById("send-form"); // 加入這行
-            var content = document.getElementById("content");    // 加入這行
+            let status = document.getElementById("status");
+            let online = document.getElementById("online");
+            let sendForm = document.getElementById("send-form"); // 加入這行
+            let content = document.getElementById("content");    // 加入這行
 
         sendForm.addEventListener("submit", function (e) {
             e.preventDefault();
          
-            var ok = true;
-            var formData = {};
-            var formChild = sendForm.children;
+            let ok = true;
+            let formData = {};
+            let formChild = sendForm.children;
          
-            for (var i=0; i< sendForm.childElementCount; i++) {
-                var child = formChild[i];
+            for (let i=0; i< sendForm.childElementCount; i++) {
+                let child = formChild[i];
                 if (child.name !== "") {
-                    var val = child.value;
+                    let val = child.value;
                     if (val === "" || !val) {    // 如果值為空或不存在
                         ok = false;
                         child.classList.add("error");
@@ -73,12 +73,12 @@
             });
 
             socket.on("msg", function (d) {
-                var msgBox = document.createElement("div")
+                let msgBox = document.createElement("div")
                     msgBox.className = "msg";
-                var nameBox = document.createElement("span");
+                let nameBox = document.createElement("span");
                     nameBox.className = "name";
-                var name = document.createTextNode(d.name);
-                var msg = document.createTextNode(d.msg);
+                let name = document.createTextNode(d.name);
+                let msg = document.createTextNode(d.msg);
          
                 nameBox.appendChild(name);
                 msgBox.appendChild(nameBox);

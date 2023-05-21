@@ -1,11 +1,11 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
 
-    let status = document.getElementById("status");
-    let online = document.getElementById("online");
-    let sendForm = document.getElementById("send-form"); // 加入這行
-    let content = document.getElementById("content");    // 加入這行
+    let status = document.getElementById('status');
+    let online = document.getElementById('online');
+    let sendForm = document.getElementById('send-form'); // 加入這行
+    let content = document.getElementById('content');    // 加入這行
 
-    sendForm.addEventListener("submit", function (e) {
+    sendForm.addEventListener('submit', function (e) {
         e.preventDefault();
     
         let ok = true;
@@ -14,39 +14,39 @@ document.addEventListener("DOMContentLoaded", () => {
     
         for (let i=0; i< sendForm.childElementCount; i++) {
             let child = formChild[i];
-            if (child.name !== "") {
+            if (child.name !== '') {
                 let val = child.value;
-                if (val === "" || !val) {    // 如果值為空或不存在
+                if (val === '' || !val) {    // 如果值為空或不存在
                     ok = false;
-                    child.classList.add("error");
+                    child.classList.add('error');
                 } else {
-                    child.classList.remove("error");
+                    child.classList.remove('error');
                     formData[child.name] = val;
                 }
             }
         }
     
         // ok 為真才能送出
-        if (ok) socket.emit("send", formData);
+        if (ok) socket.emit('send', formData);
     });
     
-    socket.on("connect", function () {
-        status.innerText = "Connected.";
+    socket.on('connect', function () {
+        status.innerText = 'Connected.';
     });
 
-    socket.on("disconnect", function () {
-        status.innerText = "Disconnected.";
+    socket.on('disconnect', function () {
+        status.innerText = 'Disconnected.';
     });
 
-    socket.on("online", function (amount) {
+    socket.on('online', function (amount) {
         online.innerText = amount;
     });
 
-    socket.on("msg", function (d) {
-        let msgBox = document.createElement("div")
-            msgBox.className = "msg";
-        let nameBox = document.createElement("span");
-            nameBox.className = "name";
+    socket.on('msg', function (d) {
+        let msgBox = document.createElement('div')
+            msgBox.className = 'msg';
+        let nameBox = document.createElement('span');
+            nameBox.className = 'name';
         let name = document.createTextNode(d.name);
         let msg = document.createTextNode(d.msg);
  

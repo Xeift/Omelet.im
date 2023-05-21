@@ -27,6 +27,7 @@ io.on('connection', (socket) => { // client 連上時執行的程式
      
         // 廣播訊息到聊天室
         io.emit('msg', msg);
+        console.log('aaaaaaa');
     });
 })
 

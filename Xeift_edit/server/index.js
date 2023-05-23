@@ -1,37 +1,51 @@
 const express = require('express');
 const app = express();
+app.use(express.static('client'))
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+const records = require('./record.js');
+const port = process.env.PORT || 3000;
 
-app.use(express.static('client'))
+// 加入線上人數計數
+let onlineCount = 0;
 
-app.get('/', (req, res) => { // 首頁的 html
+app.get('/', (req, res) => {
     res.sendFile(__dirname + '/../client/index.html')
-})
+});
 
-io.on('connection', (socket) => { // client 連上時執行的程式
-    console.log('客戶端已連接');
+io.on('connection', (socket) => {
+    // 有連線發生時增加人數
+    onlineCount++;
+    // 發送人數給網頁
+    io.emit("online", onlineCount);
+    // 發送紀錄最大值
+    socket.emit("maxRecord", records.getMax());
+    // 發送紀錄
+    socket.emit("chatRecord", records.get());
 
-    socket.on('greet', () => { // 2. 接收到 client 事件，回傳 greet 事件
-        socket.emit('greet', 'server端已接收到greet事件');
+    socket.on("greet", () => {
+        socket.emit("greet", onlineCount);
     });
 
-    socket.on('disconnect', () => { // client 中斷連接時執行的程式
-        console.log('客戶端已中斷連接');
-    })
-
-    socket.on('send', (msg) => {
+    socket.on("send", (msg) => {
         // 如果 msg 內容鍵值小於 2 等於是訊息傳送不完全
         // 因此我們直接 return ，終止函式執行。
         if (Object.keys(msg).length < 2) return;
-     
-        // 廣播訊息到聊天室
-        io.emit('msg', msg);
-        console.log('aaaaaaa');
+        records.push(msg);
     });
-})
 
+    socket.on('disconnect', () => {
+        // 有人離線了，扣人
+        onlineCount = (onlineCount < 0) ? 0 : onlineCount-=1;
+        io.emit("online", onlineCount);
+    });
+});
 
-server.listen(3000, () => { // 在 3000 port 上運行伺服器
-    console.log('server started on\nhttp://localhost:3000')
-})
+records.on("new_message", (msg) => {
+    // 廣播訊息到聊天室
+    io.emit("msg", msg);
+});
+
+server.listen(port, () => {
+    console.log("Server Started. http://localhost:" + port);
+});

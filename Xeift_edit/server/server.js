@@ -9,11 +9,11 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/../client/index.html') // 首頁
 });
 
-io.on('connection', (socket) => { // 當成員連線
-    socket.emit('chatRecord', records.get()); // 取得聊天記錄
-    socket.on('send', (msg) => { // 當成員發送訊息
+io.on('connection', (socket) => { // 1當成員連線
+    socket.emit('chatRecord', records.get()); // 2取得聊天記錄
+    socket.on('send', (msg) => { // 5收到 emit send event
         if (Object.keys(msg).length < 2) return;
-        records.push(msg);
+        records.push(msg); // 6將新訊息加進records
     });
 
     socket.on('disconnect', () => { // 當成員離線
@@ -26,5 +26,5 @@ records.on('new_message', (msg) => {
 });
 
 server.listen(3000, () => {
-    console.log('Server Started. http://localhost:' + 3000);
+    console.log('Server Started. http://localhost:3000');
 });

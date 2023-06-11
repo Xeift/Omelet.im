@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let sendForm = document.getElementById('send-form');
     let content = document.getElementById('content');
 
-    sendForm.addEventListener('submit', function (e) { // 按下送出表單按鈕
+    sendForm.addEventListener('submit', function (e) { // 3按下送出表單按鈕
         e.preventDefault(); // 阻止表單預設行為
     
         let ok = true;
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        if (ok) socket.emit('send', formData); // 狀態正常則發送
+        if (ok) socket.emit('send', formData); // 4狀態正常則 emit send event
     });
 
     socket.on('connect', function () { // 連接
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         max_record = amount;
     });
 
-    socket.on('msg', addMsgToBox); // 新訊息
+    socket.on('msg', addMsgToBox); // 有新訊息，執行 addMsgToBox
  
     function addMsgToBox (d) {
         let msgBox = document.createElement('div')

@@ -4,7 +4,6 @@ app.use(express.static('client'))
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const records = require('./record.js');
-const port = process.env.PORT || 3000;
 
 // 加入線上人數計數
 let onlineCount = 0;
@@ -46,6 +45,6 @@ records.on('new_message', (msg) => {
     io.emit('msg', msg);
 });
 
-server.listen(port, () => {
-    console.log('Server Started. http://localhost:' + port);
+server.listen(3000, () => {
+    console.log('Server Started. http://localhost:' + 3000);
 });

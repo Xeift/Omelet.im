@@ -15,33 +15,33 @@ document.addEventListener('DOMContentLoaded', () => {
     
         for (let i=0; i< sendForm.childElementCount; i++) {
             let child = formChild[i];
-            if (child.name !== '') {
+            if (child.name !== '') { // 處理表單為空的狀況
                 let val = child.value;
                 if (val === '' || !val) {
-                    ok = false;
+                    ok = false; // 禁止傳送
                     child.classList.add('error');
                 } else {
                     child.classList.remove('error');
-                    formData[child.name] = val;
+                    formData[child.name] = val; // 設 formChild 為表單內容
                 }
             }
         }
-        if (ok) socket.emit('send', formData);
+        if (ok) socket.emit('send', formData); // 狀態正常則發送
     });
 
-    socket.on('connect', function () {
+    socket.on('connect', function () { // 連接
         status.innerText = 'Connected.';
     });
 
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function () { // 中斷連接
         status.innerText = 'Disconnected.';
     });
 
-    socket.on('online', function (amount) {
+    socket.on('online', function (amount) { // 上線
         online.innerText = amount;
     });
 
-    socket.on('chatRecord', function (msgs) {
+    socket.on('chatRecord', function (msgs) { // 聊天記錄
         for (var i=0; i < msgs.length; i++) {
             (function () {
                 addMsgToBox(msgs[i]);
@@ -49,11 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
  
-    socket.on('maxRecord', function (amount) {
+    socket.on('maxRecord', function (amount) { // 最大聊天記錄
         max_record = amount;
     });
 
-    socket.on('msg', addMsgToBox);
+    socket.on('msg', addMsgToBox); // 新訊息
  
     function addMsgToBox (d) {
         var msgBox = document.createElement('div')

@@ -16,7 +16,7 @@ class Records extends EventEmitter {
             data.splice(0, 1);
         }
 
-        this.emit('new_message', msg); // 7將新訊息
+        this.emit('new_message', msg); // 7emit new_message event
     }
 
     get () {

@@ -21,8 +21,8 @@ io.on('connection', (socket) => { // 1當成員連線
     });
 });
 
-records.on('new_message', (msg) => {
-    io.emit('msg', msg); // 廣播訊息到聊天室
+records.on('new_message', (msg) => { // 8當收到new_message event(record.js)
+    io.emit('msg', msg); // 9emit msg event
 });
 
 server.listen(3000, () => {

@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         max_record = amount;
     });
 
-    socket.on('msg', addMsgToBox); // 有新訊息，執行 addMsgToBox
+    socket.on('msg', addMsgToBox); // 10有新訊息，執行 addMsgToBox
  
     function addMsgToBox (d) {
         let msgBox = document.createElement('div')

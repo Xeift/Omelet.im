@@ -10,8 +10,8 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => { // 當成員連線
-    socket.emit('chatRecord', records.get()); // 聊天記錄
-    socket.on('send', (msg) => {
+    socket.emit('chatRecord', records.get()); // 取得聊天記錄
+    socket.on('send', (msg) => { // 當成員發送訊息
         if (Object.keys(msg).length < 2) return;
         records.push(msg);
     });
@@ -22,8 +22,7 @@ io.on('connection', (socket) => { // 當成員連線
 });
 
 records.on('new_message', (msg) => {
-    // 廣播訊息到聊天室
-    io.emit('msg', msg);
+    io.emit('msg', msg); // 廣播訊息到聊天室
 });
 
 server.listen(3000, () => {

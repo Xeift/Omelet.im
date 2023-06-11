@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let sendForm = document.getElementById('send-form');
     let content = document.getElementById('content');
 
-    sendForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+    sendForm.addEventListener('submit', function (e) { // 按下送出表單按鈕
+        e.preventDefault(); // 阻止表單預設行為
     
         let ok = true;
         let formData = {};
-        let formChild = sendForm.children;
+        let formChild = sendForm.children; // 取得表單中所有子元素
     
         for (let i=0; i< sendForm.childElementCount; i++) {
             let child = formChild[i];

@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let max_record; // 新增
+    let max_record;
 
     let status = document.getElementById('status');
     let online = document.getElementById('online');
-    let sendForm = document.getElementById('send-form'); // 加入這行
-    let content = document.getElementById('content');    // 加入這行
+    let sendForm = document.getElementById('send-form');
+    let content = document.getElementById('content');
 
     sendForm.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let child = formChild[i];
             if (child.name !== '') {
                 let val = child.value;
-                if (val === '' || !val) {    // 如果值為空或不存在
+                if (val === '' || !val) {
                     ok = false;
                     child.classList.add('error');
                 } else {
@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-    
-        // ok 為真才能送出
         if (ok) socket.emit('send', formData);
     });
 
@@ -43,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
         online.innerText = amount;
     });
 
-    // 加入新的事件監聽器  
     socket.on('chatRecord', function (msgs) {
         for (var i=0; i < msgs.length; i++) {
             (function () {
@@ -58,8 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('msg', addMsgToBox);
  
-    // 新增兩個 function
-    // 新增訊息到方框中
     function addMsgToBox (d) {
         var msgBox = document.createElement('div')
             msgBox.className = 'msg';
@@ -78,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
  
-    // 移除多餘的訊息
     function rmMsgFromBox () {
         var childs = content.children;
         childs[0].remove();

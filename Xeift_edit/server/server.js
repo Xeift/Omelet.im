@@ -17,11 +17,6 @@ io.on('connection', (socket) => { // 當成員連線
     io.emit('online', onlineCount); // 發送人數給 client
     socket.emit('maxRecord', records.getMax()); // 人數最大值
     socket.emit('chatRecord', records.get()); // 聊天記錄
-
-    // socket.on('greet', () => {
-    //     socket.emit('greet', onlineCount);
-    // });
-
     socket.on('send', (msg) => {
         if (Object.keys(msg).length < 2) return;
         records.push(msg);

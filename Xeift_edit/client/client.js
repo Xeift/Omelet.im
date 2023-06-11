@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 加入新的事件監聽器  
-    socket.on("chatRecord", function (msgs) {
+    socket.on('chatRecord', function (msgs) {
         for (var i=0; i < msgs.length; i++) {
             (function () {
                 addMsgToBox(msgs[i]);
@@ -52,19 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
  
-    socket.on("maxRecord", function (amount) {
+    socket.on('maxRecord', function (amount) {
         max_record = amount;
     });
 
-    socket.on("msg", addMsgToBox);
+    socket.on('msg', addMsgToBox);
  
     // 新增兩個 function
     // 新增訊息到方框中
     function addMsgToBox (d) {
-        var msgBox = document.createElement("div")
-            msgBox.className = "msg";
-        var nameBox = document.createElement("span");
-            nameBox.className = "name";
+        var msgBox = document.createElement('div')
+            msgBox.className = 'msg';
+        var nameBox = document.createElement('span');
+            nameBox.className = 'name';
         var name = document.createTextNode(d.name);
         var msg = document.createTextNode(d.msg);
  

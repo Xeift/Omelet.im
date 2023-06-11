@@ -17,17 +17,17 @@ io.on('connection', (socket) => {
     // 有連線發生時增加人數
     onlineCount++;
     // 發送人數給網頁
-    io.emit("online", onlineCount);
+    io.emit('online', onlineCount);
     // 發送紀錄最大值
-    socket.emit("maxRecord", records.getMax());
+    socket.emit('maxRecord', records.getMax());
     // 發送紀錄
-    socket.emit("chatRecord", records.get());
+    socket.emit('chatRecord', records.get());
 
-    socket.on("greet", () => {
-        socket.emit("greet", onlineCount);
+    socket.on('greet', () => {
+        socket.emit('greet', onlineCount);
     });
 
-    socket.on("send", (msg) => {
+    socket.on('send', (msg) => {
         // 如果 msg 內容鍵值小於 2 等於是訊息傳送不完全
         // 因此我們直接 return ，終止函式執行。
         if (Object.keys(msg).length < 2) return;
@@ -37,15 +37,15 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         // 有人離線了，扣人
         onlineCount = (onlineCount < 0) ? 0 : onlineCount-=1;
-        io.emit("online", onlineCount);
+        io.emit('online', onlineCount);
     });
 });
 
-records.on("new_message", (msg) => {
+records.on('new_message', (msg) => {
     // 廣播訊息到聊天室
-    io.emit("msg", msg);
+    io.emit('msg', msg);
 });
 
 server.listen(port, () => {
-    console.log("Server Started. http://localhost:" + port);
+    console.log('Server Started. http://localhost:' + port);
 });

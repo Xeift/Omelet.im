@@ -3,38 +3,31 @@ const app = express();
 app.use(express.static('client'))
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const records = require('./record.js');
+const records = require('./record.js');  // 記錄歷史訊息
 
-// 加入線上人數計數
+
 let onlineCount = 0;
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/../client/index.html')
+    res.sendFile(__dirname + '/../client/index.html') // 首頁
 });
 
-io.on('connection', (socket) => {
-    // 有連線發生時增加人數
+io.on('connection', (socket) => { // 當成員連線
     onlineCount++;
-    // 發送人數給網頁
-    io.emit('online', onlineCount);
-    // 發送紀錄最大值
-    socket.emit('maxRecord', records.getMax());
-    // 發送紀錄
-    socket.emit('chatRecord', records.get());
+    io.emit('online', onlineCount); // 發送人數給 client
+    socket.emit('maxRecord', records.getMax()); // 人數最大值
+    socket.emit('chatRecord', records.get()); // 聊天記錄
 
-    socket.on('greet', () => {
-        socket.emit('greet', onlineCount);
-    });
+    // socket.on('greet', () => {
+    //     socket.emit('greet', onlineCount);
+    // });
 
     socket.on('send', (msg) => {
-        // 如果 msg 內容鍵值小於 2 等於是訊息傳送不完全
-        // 因此我們直接 return ，終止函式執行。
         if (Object.keys(msg).length < 2) return;
         records.push(msg);
     });
 
-    socket.on('disconnect', () => {
-        // 有人離線了，扣人
+    socket.on('disconnect', () => { // 當成員離線
         onlineCount = (onlineCount < 0) ? 0 : onlineCount-=1;
         io.emit('online', onlineCount);
     });

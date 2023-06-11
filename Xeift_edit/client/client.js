@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('chatRecord', function (msgs) { // 聊天記錄
-        for (var i=0; i < msgs.length; i++) {
+        for (let i=0; i < msgs.length; i++) {
             (function () {
                 addMsgToBox(msgs[i]);
             })();
@@ -56,12 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('msg', addMsgToBox); // 新訊息
  
     function addMsgToBox (d) {
-        var msgBox = document.createElement('div')
+        let msgBox = document.createElement('div')
             msgBox.className = 'msg';
-        var nameBox = document.createElement('span');
+        let nameBox = document.createElement('span');
             nameBox.className = 'name';
-        var name = document.createTextNode(d.name);
-        var msg = document.createTextNode(d.msg);
+        let name = document.createTextNode(d.name);
+        let msg = document.createTextNode(d.msg);
  
         nameBox.appendChild(name);
         msgBox.appendChild(nameBox);
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
  
     function rmMsgFromBox () {
-        var childs = content.children;
+        let childs = content.children;
         childs[0].remove();
     }
 });

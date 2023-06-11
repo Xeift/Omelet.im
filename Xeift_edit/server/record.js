@@ -1,4 +1,4 @@
-const {EventEmitter} = require("events");
+const {EventEmitter} = require('events');
 
 let instance;
 let data = [];
@@ -16,7 +16,7 @@ class Records extends EventEmitter {
             data.splice(0, 1);
         }
 
-        this.emit("new_message", msg);
+        this.emit('new_message', msg);
     }
 
     get () {

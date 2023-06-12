@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('msg', addMsgToBox); // 10有新訊息，執行 addMsgToBox
  
-    function addMsgToBox (d) {
+    function addMsgToBox (d) { // 11將訊息呈現在前端
         let msgBox = document.createElement('div')
             msgBox.className = 'msg';
         let nameBox = document.createElement('span');

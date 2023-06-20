@@ -1,6 +1,7 @@
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://xeift:M9Tuj4iOYjzM09Ns@omelet-cluster-1.svzxu5e.mongodb.net/?retryWrites=true&w=majority";
+require('dotenv').config(); // 讀取 .env 檔案
+const uri = process.env.MONGO_URI; // 使用 .env 中的 MONGO_URI
 const client = new MongoClient(uri, { // mongo client
   serverApi: {
     version: ServerApiVersion.v1,

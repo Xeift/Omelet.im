@@ -38,31 +38,24 @@ app.post('/login', async (req, res) => { // set login router
     }
 });
 
-// 設定註冊路由
-app.post('/register', async (req, res) => {
-    // 獲取請求中的帳號密碼
+
+app.post('/register', async (req, res) => { // set register router
     let username = req.body.username;
     let password = req.body.password;
-    // 檢查帳號是否已經存在
     try {
-      // 用UserModel查詢資料庫中是否有匹配的使用者
-      let user = await UserModel.findOne({username});
-      if (user) {
-        // 帳號已存在，返回一個錯誤
-        res.send('註冊失敗，帳號已被使用');
-      } else {
-        // 帳號不存在，用UserModel新增一個使用者到資料庫中
-        await UserModel.create({username, password});
-        // 註冊成功，返回一個訊息
-        res.send('註冊成功，歡迎' + username);
-      }
+        let user = await UserModel.findOne({username});
+        if (user) {
+            res.send('註冊失敗，帳號已被使用');
+        }
+        else {
+          await UserModel.create({username, password});
+          res.send('註冊成功，歡迎' + username);
+        }
     } catch (err) {
-      // 發生錯誤，返回一個錯誤
-      res.send('發生錯誤：' + err.message);
+        res.send('發生錯誤：' + err.message);
     }
 });
 
-// 啟動伺服器，監聽3000端口
-app.listen(3000, () => {
-    console.log('伺服器已啟動，請訪問http://localhost:3000');
+app.listen(3000, () => { // start server on port 3000
+    console.log('伺服器已啟動\nhttp://localhost:3000');
 });

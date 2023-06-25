@@ -12,41 +12,29 @@ const UserSchema = new mongoose.Schema({ // define user schema
     username: {type: String, unique: true}, // username
     password: String // password
 });
-
-// 用UserSchema創建一個UserModel
 const UserModel = mongoose.model('User', UserSchema);
 
-// 設定靜態資源路徑
-app.use(express.static(__dirname + '/client'));
+app.use(express.static(__dirname + '/client')); // set express static file path
+app.use(bodyParser.urlencoded({extended: false})); // set body-parser
 
-// 設定body-parser中介軟體
-app.use(bodyParser.urlencoded({extended: false}));
-
-// 設定首頁路由
-app.get('/', (req, res) => {
-    // 返回index.html
+app.get('/', (req, res) => { // set home router
     res.sendFile(__dirname + '/client/index.html');
 });
 
-// 設定登入路由
-app.post('/login', async (req, res) => {
-    // 獲取請求中的帳號密碼
-    let username = req.body.username;
-    let password = req.body.password;
-    // 檢查帳號密碼是否正確
+app.post('/login', async (req, res) => { // set login router
+    let username = req.body.username; // username in req
+    let password = req.body.password; // password in req
     try {
-      // 用UserModel查詢資料庫中是否有匹配的使用者
-      let user = await UserModel.findOne({username, password});
-      if (user) {
-        // 登入成功，返回一個訊息
-        res.send('登入成功，歡迎' + username);
-      } else {
-        // 登入失敗，返回一個錯誤
-        res.send('登入失敗，帳號或密碼錯誤');
-      }
-    } catch (err) {
-      // 發生錯誤，返回一個錯誤
-      res.send('發生錯誤：' + err.message);
+        let user = await UserModel.findOne({username, password});
+        if (user) { // user in collection
+          res.send('登入成功，歡迎' + username);
+        }
+        else { // user not in collection
+          res.send('登入失敗，帳號或密碼錯誤');
+        }
+    }
+    catch (err) {
+        res.send('發生錯誤：' + err.message);
     }
 });
 

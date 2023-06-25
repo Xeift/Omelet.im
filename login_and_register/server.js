@@ -1,18 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-require('dotenv').config();
-const uri = process.env.MONGO_URI;
+const mdb = require('./mongodb.js')
 
-
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}); // connect to mongodb
-
-const UserSchema = new mongoose.Schema({ // define user schema
-    username: {type: String, unique: true}, // username
-    password: String // password
-});
-const UserModel = mongoose.model('User', UserSchema);
 
 app.use(express.static(__dirname + '/client')); // set express static file path
 app.use(bodyParser.urlencoded({extended: false})); // set body-parser
@@ -24,18 +14,21 @@ app.get('/', (req, res) => { // set home router
 app.post('/login', async (req, res) => { // set login router
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
+
     try {
-        let user = await UserModel.findOne({username, password});
+        // let user = await UserModel.findOne({username, password});
+        let user = await mdb.login(username, password);
         if (user) { // user in collection
-          res.send('登入成功，歡迎' + username);
+            res.send('登入成功，歡迎' + username);
         }
         else { // user not in collection
-          res.send('登入失敗，帳號或密碼錯誤');
+            res.send('登入失敗，帳號或密碼錯誤');
         }
     }
     catch (err) {
         res.send('發生錯誤：' + err.message);
     }
+
 });
 
 
@@ -43,13 +36,13 @@ app.post('/register', async (req, res) => { // set register router
     let username = req.body.username;
     let password = req.body.password;
     try {
-        let user = await UserModel.findOne({username});
+        let user = await mdb.isUserExsists(username);
         if (user) {
             res.send('註冊失敗，帳號已被使用');
         }
         else {
-          await UserModel.create({username, password});
-          res.send('註冊成功，歡迎' + username);
+            await mdb.register(username, password);
+            res.send('註冊成功，歡迎' + username);
         }
     } catch (err) {
         res.send('發生錯誤：' + err.message);

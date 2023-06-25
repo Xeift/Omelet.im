@@ -2,9 +2,21 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose'); // 引入mongoose模組
+require('dotenv').config(); // 讀取 .env 檔案
+const uri = process.env.MONGO_URI;
 
-// 用一個變數來暫存帳號密碼，之後你可以改用資料庫
-let users = {};
+// 用Atlas給你的連接字串來連接到你的資料庫，並將<dbname>替換成mtestdb
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+
+// 定義一個UserSchema
+const UserSchema = new mongoose.Schema({
+    username: {type: String, unique: true}, // 帳號，唯一
+    password: String // 密碼
+});
+
+// 用UserSchema創建一個UserModel
+const UserModel = mongoose.model('User', UserSchema);
 
 // 設定靜態資源路徑
 app.use(express.static(__dirname + '/client'));
@@ -19,34 +31,48 @@ app.get('/', (req, res) => {
 });
 
 // 設定登入路由
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     // 獲取請求中的帳號密碼
     let username = req.body.username;
     let password = req.body.password;
     // 檢查帳號密碼是否正確
-    if (users[username] && users[username] === password) {
+    try {
+      // 用UserModel查詢資料庫中是否有匹配的使用者
+      let user = await UserModel.findOne({username, password});
+      if (user) {
         // 登入成功，返回一個訊息
         res.send('登入成功，歡迎' + username);
-    } else {
+      } else {
         // 登入失敗，返回一個錯誤
         res.send('登入失敗，帳號或密碼錯誤');
+      }
+    } catch (err) {
+      // 發生錯誤，返回一個錯誤
+      res.send('發生錯誤：' + err.message);
     }
 });
 
 // 設定註冊路由
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
     // 獲取請求中的帳號密碼
     let username = req.body.username;
     let password = req.body.password;
     // 檢查帳號是否已經存在
-    if (users[username]) {
+    try {
+      // 用UserModel查詢資料庫中是否有匹配的使用者
+      let user = await UserModel.findOne({username});
+      if (user) {
         // 帳號已存在，返回一個錯誤
         res.send('註冊失敗，帳號已被使用');
-    } else {
-        // 帳號不存在，將其存入變數中
-        users[username] = password;
+      } else {
+        // 帳號不存在，用UserModel新增一個使用者到資料庫中
+        await UserModel.create({username, password});
         // 註冊成功，返回一個訊息
         res.send('註冊成功，歡迎' + username);
+      }
+    } catch (err) {
+      // 發生錯誤，返回一個錯誤
+      res.send('發生錯誤：' + err.message);
     }
 });
 

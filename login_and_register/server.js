@@ -1,18 +1,16 @@
-// app.js
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose'); // 引入mongoose模組
-require('dotenv').config(); // 讀取 .env 檔案
+const mongoose = require('mongoose');
+require('dotenv').config();
 const uri = process.env.MONGO_URI;
 
-// 用Atlas給你的連接字串來連接到你的資料庫，並將<dbname>替換成mtestdb
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
-// 定義一個UserSchema
-const UserSchema = new mongoose.Schema({
-    username: {type: String, unique: true}, // 帳號，唯一
-    password: String // 密碼
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}); // connect to mongodb
+
+const UserSchema = new mongoose.Schema({ // define user schema
+    username: {type: String, unique: true}, // username
+    password: String // password
 });
 
 // 用UserSchema創建一個UserModel

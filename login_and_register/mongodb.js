@@ -9,9 +9,9 @@ const UserSchema = new mongoose.Schema({ // define user schema
 });
 const UserModel = mongoose.model('User', UserSchema);
 
-async function login(username, password) {
+async function isUserExsists(username) {
     try {
-        let user = await UserModel.findOne({username, password});
+        let user = await UserModel.findOne({username});
         if (user) { // user in collection
             return true;
         }
@@ -24,9 +24,9 @@ async function login(username, password) {
     }
 }
 
-async function isUserExsists(username) {
+async function login(username, password) {
     try {
-        let user = await UserModel.findOne({username});
+        let user = await UserModel.findOne({username, password});
         if (user) { // user in collection
             return true;
         }
@@ -48,4 +48,4 @@ async function register(username, password) {
     }
 }
 
-module.exports = { login, isUserExsists, register }
+module.exports = { isUserExsists, login, register }

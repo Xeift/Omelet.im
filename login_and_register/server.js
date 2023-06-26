@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const mdb = require('./mongodb.js')
+const mdb = require('./config/mongodb.js')
 
 
 app.use(express.static(__dirname + '/client')); // set express static file path
@@ -20,6 +20,8 @@ app.post('/login', async (req, res) => { // set login router
         let user = await mdb.login(username, password);
         if (user) { // user in collection
             res.send('登入成功，歡迎' + username);
+            // TODO: generate jwt
+
         }
         else { // user not in collection
             res.send('登入失敗，帳號或密碼錯誤');

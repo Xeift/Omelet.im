@@ -15,21 +15,22 @@ app.get('/', (req, res) => { // set home router
 app.post('/login', async (req, res) => { // set login router
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
-
     try {
         // let user = await UserModel.findOne({username, password});
         let user = await mdb.login(username, password);
-        if (user) { // user in collection
-            res.send('登入成功，歡迎' + username);
-            // TODO: generate jwt
 
+        if (user) { // user in collection
+            // res.send('登入成功，歡迎' + username);
+            token = await auth.generateToken(username, password);
+            // 將token作為json物件傳回給客戶端
+            res.json({ success: true, token: token });
         }
         else { // user not in collection
-            res.send('登入失敗，帳號或密碼錯誤');
+            res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
         }
     }
     catch (err) {
-        res.send('發生錯誤：' + err.message);
+        res.json({ success: false, message: '發生錯誤：' + err.message });
     }
 
 });

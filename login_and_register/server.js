@@ -10,34 +10,29 @@ app.use(express.static(__dirname + '/client')); // set express static file path
 app.use(bodyParser.urlencoded({extended: false})); // set body-parser
 
 
-
 app.get('/', (req, res) => { // set home router
     res.sendFile(__dirname + '/client/index.html');
 });
+
 
 app.post('/login', async (req, res) => { // set login router
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
     try {
-        // let user = await UserModel.findOne({username, password});
-        let user = await mdb.login(username, password);
+        let user = await mdb.login(username, password); // verify password
 
-        if (user) { // user in collection
-            // res.send('登入成功，歡迎' + username);
-            let userid = await mdb.findIdByUsername(username);
-            console.log(typeof(userid), userid)
-            token = await auth.generateToken(userid, username); // TODO: id and username
-            // 將token作為json物件傳回給客戶端
-            res.json({ success: true, token: token });
+        if (user) { // username and password match
+            let userid = await mdb.findIdByUsername(username); // get userid
+            token = await auth.generateToken(userid, username); // generate jwt
+            res.json({ success: true, token: token }); // return token to client
         }
-        else { // user not in collection
+        else { // username and password not match
             res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
         }
     }
-    catch (err) {
+    catch (err) { // error handle
         res.json({ success: false, message: '發生錯誤：' + err.message });
     }
-
 });
 
 
@@ -58,38 +53,31 @@ app.post('/register', async (req, res) => { // set register router
     }
 });
 
-// 受保護資源路由
-app.get('/protected-resource', authenticateToken, (req, res) => {
-    // 在這裡處理受保護資源的請求
-    // 您可以在這裡使用 req.user 取得解碼後的使用者資訊
-    // 根據需求進行授權處理
-    const decodedToken = req.user;
-    console.log(decodedToken);
+
+app.get('/protected-resource', authenticateToken, (req, res) => { // protected resource (jwt required)
+    const decodedToken = req.user; // decoded jwt
     res.send({'decodedToken': decodedToken});
 });
   
-  // JWT 驗證中間件
-  function authenticateToken(req, res, next) {
-    // 獲取請求頭中的 JWT
-    const token = req.headers['authorization'];
-    console.log(token)
+
+function authenticateToken(req, res, next) { // jwt verify middleware
+    const token = req.headers['authorization']; // get jwt in header
     if (!token) {
         console.log('no token')
-      return res.status(401).json({ success: false, message: '未提供身份驗證令牌' });
+        return res.status(401).json({ success: false, message: '未提供身份驗證令牌' });
     }
-  
-    // 驗證 JWT
-    jwt.verify(token, 'your-secret-key', (err, decoded) => {
-      if (err) {
+
+    jwt.verify(token, 'your-secret-key', (err, decoded) => { // verify jwt
+        if (err) {
         console.log('token invalid')
         return res.status(401).json({ success: false, message: '身份驗證令牌無效' });
-      }
-      // 驗證成功，將解碼後的使用者資訊存儲在請求物件中
-      req.user = decoded;
-      next();
+        }
+
+        req.user = decoded; // user information
+        next();
     });
-  }
+}
   
-  app.listen(3000, () => { // 在 3000 端口上啟動伺服器
+app.listen(3000, () => { // start server at port 3000
     console.log('伺服器已啟動\nhttp://localhost:3000');
-  });
+});

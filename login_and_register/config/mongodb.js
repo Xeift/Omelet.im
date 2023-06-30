@@ -53,11 +53,9 @@ async function findIdByUsername(_username) {
     try {
         const user = await UserModel.findOne({ username: _username });
         if (user) {
-            console.log('User ID:', user.id);
             return user.id;
         }
         else {
-            console.log('User not found');
             return false;
         }
     }

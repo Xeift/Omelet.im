@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>測試</h1>
+    <button onclick="getProtectRes()">存取受保護內容</button>
+    <p id="moring">早安</p>
+    <script>
+        function getProtectRes() {
+            console.log('succ');
+            // 获取受保护的资源
+            fetch('/protected-resource', {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                document.getElementById('moring').innerHTML = data.decodedToken.id + data.decodedToken.username;
+            })
+            .catch(error => {
+                console.error('请求发生错误:', error);
+            });
+        }
+
+
+    </script>
+</body>
+</html>

@@ -3,10 +3,13 @@ const app = express();
 const bodyParser = require('body-parser');
 const mdb = require('./config/mongodb.js')
 const auth = require('./config/auth.js')
+const jwt = require('jsonwebtoken');
 
 
 app.use(express.static(__dirname + '/client')); // set express static file path
 app.use(bodyParser.urlencoded({extended: false})); // set body-parser
+
+
 
 app.get('/', (req, res) => { // set home router
     res.sendFile(__dirname + '/client/index.html');
@@ -21,7 +24,9 @@ app.post('/login', async (req, res) => { // set login router
 
         if (user) { // user in collection
             // res.send('登入成功，歡迎' + username);
-            token = await auth.generateToken(username, password);
+            let userid = await mdb.findIdByUsername(username);
+            console.log(typeof(userid), userid)
+            token = await auth.generateToken(userid, username); // TODO: id and username
             // 將token作為json物件傳回給客戶端
             res.json({ success: true, token: token });
         }
@@ -53,6 +58,38 @@ app.post('/register', async (req, res) => { // set register router
     }
 });
 
-app.listen(3000, () => { // start server on port 3000
-    console.log('伺服器已啟動\nhttp://localhost:3000');
+// 受保護資源路由
+app.get('/protected-resource', authenticateToken, (req, res) => {
+    // 在這裡處理受保護資源的請求
+    // 您可以在這裡使用 req.user 取得解碼後的使用者資訊
+    // 根據需求進行授權處理
+    const decodedToken = req.user;
+    console.log(decodedToken);
+    res.send({'decodedToken': decodedToken});
 });
+  
+  // JWT 驗證中間件
+  function authenticateToken(req, res, next) {
+    // 獲取請求頭中的 JWT
+    const token = req.headers['authorization'];
+    console.log(token)
+    if (!token) {
+        console.log('no token')
+      return res.status(401).json({ success: false, message: '未提供身份驗證令牌' });
+    }
+  
+    // 驗證 JWT
+    jwt.verify(token, 'your-secret-key', (err, decoded) => {
+      if (err) {
+        console.log('token invalid')
+        return res.status(401).json({ success: false, message: '身份驗證令牌無效' });
+      }
+      // 驗證成功，將解碼後的使用者資訊存儲在請求物件中
+      req.user = decoded;
+      next();
+    });
+  }
+  
+  app.listen(3000, () => { // 在 3000 端口上啟動伺服器
+    console.log('伺服器已啟動\nhttp://localhost:3000');
+  });

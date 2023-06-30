@@ -1,48 +1,36 @@
-// 獲取表單元素
-let form = document.getElementById("login-form");
-// 為表單添加提交事件監聽器
-form.addEventListener("submit", async function(event) {
-    // 阻止表單的默認提交行為
-    event.preventDefault();
-    // 獲取表單中的用戶名和密碼
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-    // 將用戶名和密碼拼接成表單數據格式
-    let data = "username=" + username + "&password=" + password;
+let form = document.getElementById('login-form');
+form.addEventListener('submit', async function(event) {
+    event.preventDefault(); // prevent default submit
+
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
+    let data = 'username=' + username + '&password=' + password;
     try {
-        // 使用fetch發送非同步請求，並指定內容類型為表單數據
-        let response = await fetch("/login", {
-            method: "POST",
+        let response = await fetch('/login', { // send async requests (submit form)
+            method: 'POST',
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: data
         });
-        // 如果響應狀態碼為200，表示成功
+
         if (response.ok) {
-            // 解析響應數據為JSON物件
             let data = await response.json();
-            // 如果成功標誌為true，表示登入成功
-            if (data.success) {
-                // 從數據中獲取token
+
+            if (data.success) { // login success
                 let token = data.token;
-                // 將token存入localstorage
-                localStorage.setItem("token", token);
-                // 跳轉到首頁或其他頁面
-                window.location.href = "/msg.html";
+                localStorage.setItem('token', token); // save jwt to localStorge
+                window.location.href = '/msg.html'; // redirect to msg.html
             }
-            else {
-                // 否則，顯示錯誤信息
+            else { // login failed
                 alert(data.message);
             }
         }
         else {
-            // 否則，顯示服務器錯誤
-            alert("Server error: " + response.status);
+            alert('Server error: ' + response.status);
         }
     }
     catch (err) {
-        // 捕獲任何異常並顯示錯誤信息
-        alert("Error: " + err.message);
+        alert('Error: ' + err.message);
     }
 });

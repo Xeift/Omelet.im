@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mdb = require('./config/mongodb.js')
 const auth = require('./config/auth.js')
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 
 
 app.use(express.static(__dirname + '/client')); // set express static file path
@@ -54,29 +54,11 @@ app.post('/register', async (req, res) => { // set register router
 });
 
 
-app.get('/protected-resource', authenticateToken, (req, res) => { // protected resource (jwt required)
+app.get('/protected-resource', auth.authenticateToken, (req, res) => { // protected resource (jwt required)
     const decodedToken = req.user; // decoded jwt
     res.send({'decodedToken': decodedToken});
 });
-  
 
-function authenticateToken(req, res, next) { // jwt verify middleware
-    const token = req.headers['authorization']; // get jwt in header
-    if (!token) {
-        console.log('no token')
-        return res.status(401).json({ success: false, message: '未提供身份驗證令牌' });
-    }
-
-    jwt.verify(token, 'your-secret-key', (err, decoded) => { // verify jwt
-        if (err) {
-        console.log('token invalid')
-        return res.status(401).json({ success: false, message: '身份驗證令牌無效' });
-        }
-
-        req.user = decoded; // user information
-        next();
-    });
-}
   
 app.listen(3000, () => { // start server at port 3000
     console.log('伺服器已啟動\nhttp://localhost:3000');

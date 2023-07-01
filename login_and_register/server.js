@@ -3,7 +3,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const mdb = require('./config/mongodb.js')
 const auth = require('./config/auth.js')
-// const jwt = require('jsonwebtoken');
 
 
 app.use(express.static(__dirname + '/client')); // set express static file path

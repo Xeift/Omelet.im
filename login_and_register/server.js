@@ -15,7 +15,7 @@ app.get('/', (req, res) => { // set home router
 });
 
 
-app.post('/login', async (req, res) => { // set login router
+app.post('/api/auth/login', async (req, res) => { // set login router /api/auth/login
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
     try {
@@ -36,7 +36,7 @@ app.post('/login', async (req, res) => { // set login router
 });
 
 
-app.post('/register', async (req, res) => { // set register router
+app.post('/api/auth/register', async (req, res) => { // set register router
     let username = req.body.username;
     let password = req.body.password;
     try {

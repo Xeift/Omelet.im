@@ -6,7 +6,7 @@ form.addEventListener('submit', async function(event) {
     let password = document.getElementById('password').value;
     let data = 'username=' + username + '&password=' + password;
     try {
-        let response = await fetch('/login', { // send async requests (submit form)
+        let response = await fetch('/api/auth/login', { // send async requests (submit form)
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

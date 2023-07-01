@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 async function generateToken(_userid, _username) {
-    const expiresIn = '1h';
+    const expiresIn = '1d';
     const secret = 'your-secret-key';
     const data = {
         id: _userid,
@@ -20,8 +20,8 @@ function authenticateToken(req, res, next) { // jwt verify middleware
 
     jwt.verify(token, 'your-secret-key', (err, decoded) => { // verify jwt
         if (err) {
-        console.log('token invalid')
-        return res.status(401).json({ success: false, message: '身份驗證令牌無效' });
+            console.log('token invalid')
+            return res.status(401).json({ success: false, message: '身份驗證令牌無效' });
         }
 
         req.user = decoded; // user information

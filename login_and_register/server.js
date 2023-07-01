@@ -7,7 +7,8 @@ const auth = require('./config/auth.js')
 
 
 app.use(express.static(__dirname + '/client')); // set express static file path
-app.use(bodyParser.urlencoded({extended: false})); // set body-parser
+// app.use(bodyParser.urlencoded({extended: false})); // set body-parser
+app.use(bodyParser.json());
 
 
 app.get('/', (req, res) => { // set home router

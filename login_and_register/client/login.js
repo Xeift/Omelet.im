@@ -1,36 +1,35 @@
-let form = document.getElementById('login-form');
-form.addEventListener('submit', async function(event) {
-    event.preventDefault(); // prevent default submit
-
+let loginButton = document.getElementById('login-button');
+loginButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
-    let data = 'username=' + username + '&password=' + password;
+    let data = {
+        username: username,
+        password: password
+    };
+
     try {
-        let response = await fetch('/api/auth/login', { // send async requests (submit form)
+        let response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             },
-            body: data
+            body: JSON.stringify(data)
         });
 
         if (response.ok) {
             let data = await response.json();
 
-            if (data.success) { // login success
+            if (data.success) {
                 let token = data.token;
-                localStorage.setItem('token', token); // save jwt to localStorge
-                window.location.href = '/msg.html'; // redirect to msg.html
-            }
-            else { // login failed
+                localStorage.setItem('token', token);
+                window.location.href = '/msg.html';
+            } else {
                 alert(data.message);
             }
-        }
-        else {
+        } else {
             alert('Server error: ' + response.status);
         }
-    }
-    catch (err) {
+    } catch (err) {
         alert('Error: ' + err.message);
     }
 });

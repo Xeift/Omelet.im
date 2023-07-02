@@ -3,10 +3,12 @@ require('dotenv').config();
 const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}); // connect to mongodb
-const UserSchema = new mongoose.Schema({ // define user schema
-    username: {type: String, unique: true}, // username
-    password: String // password
+const UserSchema = new mongoose.Schema({
+    username: { type: String, unique: true },
+    email: { type: String, unique: true },
+    password: String
 });
+
 const UserModel = mongoose.model('User', UserSchema);
 
 async function isUserExsists(username) {
@@ -56,14 +58,14 @@ async function login(username, password) {
     }
 }
 
-async function register(username, password) {
+async function register(username, email, password ) {
     try {
-        UserModel.create({username, password});
-    }
-    catch (err) {
+        UserModel.create({ username, email, password });
+    } catch (err) {
         console.log(`mongodb.js: ${err}`);
     }
 }
+
 
 async function findIdByUsername(_username) {
     try {

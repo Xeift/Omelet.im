@@ -36,22 +36,24 @@ app.get('/', (req, res) => { // set home router
 // });
 
 
-// app.post('/api/auth/register', async (req, res) => { // set register router
-//     let username = req.body.username;
-//     let password = req.body.password;
-//     try {
-//         let user = await mdb.isUserExsists(username);
-//         if (user) {
-//             res.send('註冊失敗，帳號已被使用');
-//         }
-//         else {
-//             await mdb.register(username, password);
-//             res.send('註冊成功，歡迎' + username);
-//         }
-//     } catch (err) {
-//         res.send('發生錯誤：' + err.message);
-//     }
-// });
+app.post('/api/auth/register', async (req, res) => { // set register router
+    let username = req.body.username;
+    let email = '';
+    let password = req.body.password;
+    
+    try {
+        let user = await mdb.isUserExsists(username);
+        if (user) {
+            res.send('註冊失敗，帳號已被使用');
+        }
+        else {
+            await mdb.register(username, email, password);
+            res.send('註冊成功，歡迎' + username);
+        }
+    } catch (err) {
+        res.send('發生錯誤：' + err.message);
+    }
+});
 
 app.post('/api/auth', async (req, res) => { // set login router /api/auth
     let username = req.body.username; // username in req

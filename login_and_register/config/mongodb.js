@@ -24,6 +24,22 @@ async function isUserExsists(username) {
     }
 }
 
+async function verify(username, password) {
+    try {
+        let user = await UserModel.findOne({username, password});
+
+        if (user) { // user in collection
+            return true;
+        }
+        else { // user not in collection
+            return false;
+        }
+    }
+    catch (err) {
+        console.log(`mongodb.js: ${err}`);
+    }
+}
+
 async function login(username, password) {
     try {
         let user = await UserModel.findOne({username, password});
@@ -64,4 +80,4 @@ async function findIdByUsername(_username) {
     }
 };
 
-module.exports = { isUserExsists, login, register, findIdByUsername }
+module.exports = { isUserExsists, verify, login, register, findIdByUsername }

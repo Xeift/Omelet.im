@@ -15,11 +15,50 @@ app.get('/', (req, res) => { // set home router
 });
 
 
-app.post('/api/auth/login', async (req, res) => { // set login router /api/auth/login
+// app.post('/api/auth/login', async (req, res) => { // set login router /api/auth/login
+//     let username = req.body.username; // username in req
+//     let password = req.body.password; // password in req
+//     try {
+//         let user = await mdb.login(username, password); // verify password
+
+//         if (user) { // username and password match
+//             let userid = await mdb.findIdByUsername(username); // get userid
+//             token = await auth.generateToken(userid, username); // generate jwt
+//             res.json({ success: true, token: token }); // return token to client
+//         }
+//         else { // username and password not match
+//             res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
+//         }
+//     }
+//     catch (err) { // error handle
+//         res.json({ success: false, message: '發生錯誤：' + err.message });
+//     }
+// });
+
+
+// app.post('/api/auth/register', async (req, res) => { // set register router
+//     let username = req.body.username;
+//     let password = req.body.password;
+//     try {
+//         let user = await mdb.isUserExsists(username);
+//         if (user) {
+//             res.send('註冊失敗，帳號已被使用');
+//         }
+//         else {
+//             await mdb.register(username, password);
+//             res.send('註冊成功，歡迎' + username);
+//         }
+//     } catch (err) {
+//         res.send('發生錯誤：' + err.message);
+//     }
+// });
+
+app.post('/api/auth', async (req, res) => { // set login router /api/auth
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
+    console.log(username, password);
     try {
-        let user = await mdb.login(username, password); // verify password
+        let user = await mdb.verify(username, password); // verify password
 
         if (user) { // username and password match
             let userid = await mdb.findIdByUsername(username); // get userid
@@ -33,25 +72,7 @@ app.post('/api/auth/login', async (req, res) => { // set login router /api/auth/
     catch (err) { // error handle
         res.json({ success: false, message: '發生錯誤：' + err.message });
     }
-});
-
-
-app.post('/api/auth/register', async (req, res) => { // set register router
-    let username = req.body.username;
-    let password = req.body.password;
-    try {
-        let user = await mdb.isUserExsists(username);
-        if (user) {
-            res.send('註冊失敗，帳號已被使用');
-        }
-        else {
-            await mdb.register(username, password);
-            res.send('註冊成功，歡迎' + username);
-        }
-    } catch (err) {
-        res.send('發生錯誤：' + err.message);
-    }
-});
+}); 
 
 
 app.get('/protected-resource', auth.authenticateToken, (req, res) => { // protected resource (jwt required)

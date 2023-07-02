@@ -3,11 +3,21 @@
     <title>Omelet - 創新社交平臺</title>
 </head>
 <body>
-    <h1>歡迎來到創新社交平台</h1>
+    <!-- <h1>歡迎來到創新社交平台</h1>
     <p>這是一個網頁版的創新社交平臺，你可以在這裡和其他人交流、分享、學習。</p>
     <p>如果你已經有帳號，請<a href="/login.html">登入</a>。</p>
-    <p>如果你還沒有帳號，請<a href="/register.html">註冊</a>。</p>
-
+    <p>如果你還沒有帳號，請<a href="/register.html">註冊</a>。</p> -->
+    <h1>歡迎來到創新社交平台</h1>
+    <div>
+        <label for="username">帳號:</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+        <label for="password">密碼:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <button type="button" id="login-button">登入</button>
+    
     <script src="/index.js"></script>
 </body>
 </html>

@@ -14,28 +14,6 @@ app.get('/', (req, res) => { // set home router
     res.sendFile(__dirname + '/client/index.html');
 });
 
-
-// app.post('/api/auth/login', async (req, res) => { // set login router /api/auth/login
-//     let username = req.body.username; // username in req
-//     let password = req.body.password; // password in req
-//     try {
-//         let user = await mdb.login(username, password); // verify password
-
-//         if (user) { // username and password match
-//             let userid = await mdb.findIdByUsername(username); // get userid
-//             token = await auth.generateToken(userid, username); // generate jwt
-//             res.json({ success: true, token: token }); // return token to client
-//         }
-//         else { // username and password not match
-//             res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
-//         }
-//     }
-//     catch (err) { // error handle
-//         res.json({ success: false, message: '發生錯誤：' + err.message });
-//     }
-// });
-
-
 app.post('/api/auth/register', async (req, res) => { // set register router
     let username = req.body.username;
     let email = '';
@@ -55,7 +33,7 @@ app.post('/api/auth/register', async (req, res) => { // set register router
     }
 });
 
-app.post('/api/auth', async (req, res) => { // set login router /api/auth
+app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
     console.log(username, password);

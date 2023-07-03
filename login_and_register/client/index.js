@@ -8,7 +8,7 @@ loginButton.addEventListener('click', async function(event) {
     };
 
     try {
-        let response = await fetch('/api/auth', {
+        let response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

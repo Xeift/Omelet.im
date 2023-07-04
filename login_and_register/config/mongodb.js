@@ -30,10 +30,10 @@ async function verify(username, password) {
     try {
         let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
 
-        if (user) { // user in collection
+        if (user) { // username or email match password
             return true;
         }
-        else { // user not in collection
+        else { // username or email not match password
             return false;
         }
     }

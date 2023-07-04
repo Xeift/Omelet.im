@@ -28,7 +28,7 @@ async function isUserExsists(username) {
 
 async function verify(username, password) {
     try {
-        let user = await UserModel.findOne({username, password});
+        let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
 
         if (user) { // user in collection
             return true;
@@ -44,7 +44,7 @@ async function verify(username, password) {
 
 async function login(username, password) {
     try {
-        let user = await UserModel.findOne({username, password});
+        let user = await UserModel.findOne({ username: username, password: password });
 
         if (user) { // user in collection
             return true;

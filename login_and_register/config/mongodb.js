@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 const MONGO_URI = process.env.MONGO_URI;
+const utils = require('.././utils/user_utils.js')
 
 mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}); // connect to mongodb
 const UserSchema = new mongoose.Schema({
@@ -11,13 +12,15 @@ const UserSchema = new mongoose.Schema({
 
 const UserModel = mongoose.model('User', UserSchema);
 
-async function isUserExsists(username) {
+async function isUserExsists(input) {
     try {
-        let user = await UserModel.findOne({username});
-        if (user) { // user in collection
-            return true;
+        if (await UserModel.findOne({username: input})) { // input is username
+            return 'username';
         }
-        else { // user not in collection
+        else if (await UserModel.findOne({email: input})) { // input is email
+            return 'email'; 
+        }
+        else { // input does not exists
             return false;
         }
     }
@@ -26,7 +29,7 @@ async function isUserExsists(username) {
     }
 }
 
-async function verify(username, password) {
+async function isPasswordMatch(username, password) {
     try {
         let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
 
@@ -66,4 +69,4 @@ async function findIdByUsername(_username) {
     }
 };
 
-module.exports = { isUserExsists, verify, register, findIdByUsername }
+module.exports = { isUserExsists, isPasswordMatch, register, findIdByUsername }

@@ -42,22 +42,6 @@ async function verify(username, password) {
     }
 }
 
-async function login(username, password) {
-    try {
-        let user = await UserModel.findOne({ username: username, password: password });
-
-        if (user) { // user in collection
-            return true;
-        }
-        else { // user not in collection
-            return false;
-        }
-    }
-    catch (err) {
-        console.log(`mongodb.js: ${err}`);
-    }
-}
-
 async function register(username, email, password ) {
     try {
         UserModel.create({ username, email, password });
@@ -82,4 +66,4 @@ async function findIdByUsername(_username) {
     }
 };
 
-module.exports = { isUserExsists, verify, login, register, findIdByUsername }
+module.exports = { isUserExsists, verify, register, findIdByUsername }

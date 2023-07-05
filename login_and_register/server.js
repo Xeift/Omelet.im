@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mdb = require('./config/mongodb.js')
 const auth = require('./config/auth.js')
-
+const email = require('./utils/email.js')
 
 app.use(express.static(__dirname + '/client')); // set express static file path
 // app.use(bodyParser.urlencoded({extended: false})); // set body-parser
@@ -47,14 +47,16 @@ app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
             res.json({ success: true, token: token }); // return token to client
         }
         else { // username and password not match
-            // res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
+            res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
             let usernameType = await mdb.isUserExsists(username);
-            if (usernameType === 'username') { // registered, wrong passwordTODO:
-                console.log('[user exsists] [password wrong] input is username');
-                // restore password stuff
-            }
-            else if (usernameType === 'email') { // registered, wrong passwordTODO:
+
+            if (usernameType === 'email') { // registered, wrong passwordTODO:
                 console.log('[user exsists] [password wrong] input is email');
+
+                console.log('sent!');
+            }
+            else if (usernameType === 'username') { // registered, wrong passwordTODO:
+                console.log('[user exsists] [password wrong] input is username');
                 // restore password stuff
             }
             else { // not registeredTODO:

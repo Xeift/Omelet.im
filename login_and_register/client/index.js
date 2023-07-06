@@ -26,8 +26,18 @@ loginButton.addEventListener('click', async function(event) {
                 // window.location.href = '/msg.html';
             }
             else {
-                document.getElementById('hint-msg').innerHTML = '登入失敗，是否要<a href="/restore.html">找回密碼</a>';
-                console.log(data.usernameType);
+                let usernameType = data.usernameType;
+                console.log(usernameType);
+                if (usernameType === 'username') {
+                    document.getElementById('hint-msg').innerHTML = '帳號或密碼錯誤，是否要<a href="/restore.html">找回密碼</a>？';
+                }
+                else if (usernameType === 'email') {
+                    document.getElementById('hint-msg').innerHTML = 'Email 或密碼錯誤，是否要<a href="/restore.html">找回密碼</a>？';
+                }
+                else if (usernameType === 'not exists') {
+                    document.getElementById('hint-msg').innerHTML = '帳號不存在，請點擊下方註冊';
+                }
+                
             }
         } else {
             alert('Server error: ' + response.status);

@@ -47,13 +47,12 @@ app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
             res.json({ success: true, token: token }); // return token to client
         }
         else { // username and password not match
-            res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
             let usernameType = await mdb.isUserExsists(username);
 
             if (usernameType === 'email') { // registered, wrong passwordTODO:
                 console.log('[user exsists] [password wrong] input is email');
 
-                console.log('sent!');
+                res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
             }
             else if (usernameType === 'username') { // registered, wrong passwordTODO:
                 console.log('[user exsists] [password wrong] input is username');

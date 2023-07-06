@@ -21,7 +21,7 @@ async function isUserExsists(input) {
             return 'email'; 
         }
         else { // input does not exists
-            return false;
+            return 'not exists';
         }
     }
     catch (err) {

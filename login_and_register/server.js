@@ -14,6 +14,31 @@ app.get('/', (req, res) => { // set home router
     res.sendFile(__dirname + '/client/index.html');
 });
 
+
+
+app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
+    let username = req.body.username; // username in req
+    let password = req.body.password; // password in req
+
+    try {
+        let user = await mdb.isPasswordMatch(username, password); // verify password
+
+        if (user) { // username and password match
+            console.log('[user exsist] [password match]'); 
+            let userid = await mdb.findIdByUsername(username); // get userid
+            token = await auth.generateToken(userid, username); // generate jwt
+            res.json({ success: true, token: token }); // return token to client
+        }
+        else { // username and password not match
+            let usernameType = await mdb.isUserExsists(username);
+            res.json({ success: false, usernameType: usernameType });
+        }
+    }
+    catch (err) { // error handle
+        res.json({ success: false, message: '發生錯誤：' + err.message });
+    }
+}); 
+
 app.post('/api/auth/register', async (req, res) => { // set register router
     let username = req.body.username;
     let email = '';
@@ -32,44 +57,6 @@ app.post('/api/auth/register', async (req, res) => { // set register router
         res.send('發生錯誤：' + err.message);
     }
 });
-
-app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
-    let username = req.body.username; // username in req
-    let password = req.body.password; // password in req
-
-    try {
-        let user = await mdb.isPasswordMatch(username, password); // verify password
-
-        if (user) { // username and password matchTODO:
-            console.log('[user exsist] [password match]'); 
-            let userid = await mdb.findIdByUsername(username); // get userid
-            token = await auth.generateToken(userid, username); // generate jwt
-            res.json({ success: true, token: token }); // return token to client
-        }
-        else { // username and password not match
-            let usernameType = await mdb.isUserExsists(username);
-
-            if (usernameType === 'email') { // registered, wrong passwordTODO:
-                console.log('[user exsists] [password wrong] input is email');
-
-                res.json({ success: false, message: '登入失敗，帳號或密碼錯誤' });
-            }
-            else if (usernameType === 'username') { // registered, wrong passwordTODO:
-                console.log('[user exsists] [password wrong] input is username');
-                // restore password stuff
-            }
-            else { // not registeredTODO:
-                console.log('[username not exsists]');
-                // do register stuff
-            }
-
-        }
-    }
-    catch (err) { // error handle
-        res.json({ success: false, message: '發生錯誤：' + err.message });
-    }
-}); 
-
 
 app.get('/protected-resource', auth.authenticateToken, (req, res) => { // protected resource (jwt required)
     const decodedToken = req.user; // decoded jwt

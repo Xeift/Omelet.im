@@ -85,8 +85,13 @@ loginButton.addEventListener('click', async function(event) {
 let restoreButton = document.getElementById('restore-btn');
 restoreButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
-    if (username !== null && username !== undefined && username !== '') {
+    if (username !== null && username !== undefined && username !== '' && isEmailFormatValid(username)) {
         localStorage.setItem('tempEmailForRestore', username);
     }
     window.location.href = '/restore.html';
 })
+
+function isEmailFormatValid(input) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(input);
+}

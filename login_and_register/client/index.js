@@ -35,7 +35,7 @@ loginButton.addEventListener('click', async function(event) {
                     document.getElementById('hint-msg').innerHTML = 'Email 或密碼錯誤，是否要<a href="/restore.html">找回密碼</a>？';
                 }
                 else if (usernameType === 'not exists') {
-                    document.getElementById('hint-msg').innerHTML = '帳號不存在，請點擊下方註冊';
+                    document.getElementById('hint-msg').innerHTML = '帳號不存在，請點擊按鈕註冊';
                 }
                 
             }

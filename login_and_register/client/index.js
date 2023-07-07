@@ -1,3 +1,4 @@
+let isEmail = false;
 let loginButton = document.getElementById('login-btn');
 loginButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
@@ -32,6 +33,7 @@ loginButton.addEventListener('click', async function(event) {
                     document.getElementById('hint-msg').innerHTML = '帳號或密碼錯誤，是否要<a href="/restore.html">找回密碼</a>？';
                 }
                 else if (usernameType === 'email') {
+                    isEmail = true;
                     document.getElementById('hint-msg').innerHTML = 'Email 或密碼錯誤，是否要<a href="/restore.html">找回密碼</a>？';
                 }
                 else if (usernameType === 'not exists') {
@@ -88,5 +90,11 @@ loginButton.addEventListener('click', async function(event) {
 
 let restoreButton = document.getElementById('restore-btn');
 restoreButton.addEventListener('click', async function(event) {
-    window.location.href = '/restore.html';
+    console.log(isEmail);
+    console.log('isEmail');
+    if (isEmail === true) {
+        isEmail = false;
+        localStorage.setItem('tempEmailForRestore', 'value');        
+    }
+    // window.location.href = '/restore.html';
 })

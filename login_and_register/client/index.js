@@ -1,4 +1,3 @@
-let isEmail = false;
 let loginButton = document.getElementById('login-btn');
 loginButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
@@ -28,15 +27,10 @@ loginButton.addEventListener('click', async function(event) {
             }
             else {
                 let usernameType = data.usernameType;
-                console.log(usernameType);
-                if (usernameType === 'username') {
-                    document.getElementById('hint-msg').innerHTML = '帳號或密碼錯誤，是否要<a href="/restore.html">找回密碼</a>？';
+                if (usernameType) {
+                    document.getElementById('hint-msg').innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼？';
                 }
-                else if (usernameType === 'email') {
-                    isEmail = true;
-                    document.getElementById('hint-msg').innerHTML = 'Email 或密碼錯誤，是否要<a href="/restore.html">找回密碼</a>？';
-                }
-                else if (usernameType === 'not exists') {
+                else if (usernameType === false) {
                     document.getElementById('hint-msg').innerHTML = '帳號不存在，請點擊按鈕註冊';
                 }
                 
@@ -90,11 +84,9 @@ loginButton.addEventListener('click', async function(event) {
 
 let restoreButton = document.getElementById('restore-btn');
 restoreButton.addEventListener('click', async function(event) {
-    console.log(isEmail);
-    console.log('isEmail');
-    if (isEmail === true) {
-        isEmail = false;
-        localStorage.setItem('tempEmailForRestore', 'value');        
+    let username = document.getElementById('username').value;
+    if (username !== null && username !== undefined && username !== '') {
+        localStorage.setItem('tempEmailForRestore', username);
     }
-    // window.location.href = '/restore.html';
+    window.location.href = '/restore.html';
 })

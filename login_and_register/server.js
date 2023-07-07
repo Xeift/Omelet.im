@@ -30,8 +30,8 @@ app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
             res.json({ success: true, token: token }); // return token to client
         }
         else { // username and password not match
-            let usernameType = await mdb.isUserExsists(username);
-            res.json({ success: false, usernameType: usernameType });
+            let isUserExsists = await mdb.isUserExsists(username);
+            res.json({ success: false, isUserExsists: isUserExsists });
         }
     }
     catch (err) { // error handle

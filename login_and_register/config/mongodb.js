@@ -14,14 +14,11 @@ const UserModel = mongoose.model('User', UserSchema);
 
 async function isUserExsists(input) {
     try {
-        if (await UserModel.findOne({username: input})) { // input is username
-            return 'username';
+        if (await UserModel.findOne({username: input}) || await UserModel.findOne({email: input})) { // username or email exsists
+            return true;
         }
-        else if (await UserModel.findOne({email: input})) { // input is email
-            return 'email'; 
-        }
-        else { // input does not exists
-            return 'not exists';
+        else { // username or email not exsists
+            return false;
         }
     }
     catch (err) {

@@ -1,4 +1,8 @@
 window.onload = function() {
-    let value = localStorage.getItem('tempEmailForRestore');
-    console.log(value === null || value === undefined);
+    let tempEmailForRestore = localStorage.getItem('tempEmailForRestore');
+    console.log(tempEmailForRestore);
+    if ( !(tempEmailForRestore === null || tempEmailForRestore === undefined) ) {
+        alert('exsist');
+    }
+    localStorage.removeItem('tempEmailForRestore');
 }

@@ -85,3 +85,8 @@ loginButton.addEventListener('click', async function(event) {
 //         alert('Error: ' + err.message);
 //     }
 // });
+
+let restoreButton = document.getElementById('restore-btn');
+restoreButton.addEventListener('click', async function(event) {
+    window.location.href = '/restore.html';
+})

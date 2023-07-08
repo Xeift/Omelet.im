@@ -58,6 +58,22 @@ app.post('/api/auth/register', async (req, res) => { // set register router
     }
 });
 
+app.post('/api/auth/restore', async (req, res) => { // set restore router
+    let email = req.body.email;
+    
+    try {
+        let isEmailExsists = await mdb.isEmailExsists(email);
+        // if (isEmailExsists) { 
+        //     // send email
+        // }
+
+        res.json({ success: isEmailExsists });
+    }
+    catch (err) {
+        res.json({ success: false});
+    }
+});
+
 app.get('/protected-resource', auth.authenticateToken, (req, res) => { // protected resource (jwt required)
     const decodedToken = req.user; // decoded jwt
     res.send({'decodedToken': decodedToken});

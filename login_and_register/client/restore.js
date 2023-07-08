@@ -6,3 +6,40 @@ window.onload = function() {
     }
     localStorage.removeItem('tempEmailForRestore');
 }
+
+
+let restoreButton = document.getElementById('restore-btn');
+restoreButton.addEventListener('click', async function(event) {
+    let email = document.getElementById('email').value;
+    let data = {
+        email: email
+    };
+
+    try {
+        let response = await fetch('/api/auth/restore', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            let data = await response.json();
+
+            if (data.success) {
+                document.getElementById('hint-msg').innerHTML = '已寄出';
+                // window.location.href = '/msg.html';
+            }
+            else {
+                document.getElementById('hint-msg').innerHTML = '不存在';
+            }
+        }
+        else {
+            alert('Server error: ' + response.status);
+        }
+    }
+    catch (err) {
+        alert('Error: ' + err.message);
+    }
+});

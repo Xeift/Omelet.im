@@ -26,6 +26,20 @@ async function isUserExsists(input) {
     }
 }
 
+async function isEmailExsists(input) {
+    try {
+        if (await UserModel.findOne({email: input})) { // email exsists
+            return true;
+        }
+        else { // email not exsists
+            return false;
+        }
+    }
+    catch (err) {
+        console.log(`mongodb.js: ${err}`);
+    }
+}
+
 async function isPasswordMatch(username, password) {
     try {
         let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
@@ -66,4 +80,4 @@ async function findIdByUsername(_username) {
     }
 };
 
-module.exports = { isUserExsists, isPasswordMatch, register, findIdByUsername }
+module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername }

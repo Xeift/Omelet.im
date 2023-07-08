@@ -28,7 +28,7 @@ loginButton.addEventListener('click', async function(event) {
             else {
                 let isUserExsists = data.isUserExsists;
                 if (isUserExsists) {
-                    document.getElementById('hint-msg').innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼？';
+                    document.getElementById('hint-msg').innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼';
                 }
                 else if (isUserExsists === false) {
                     document.getElementById('hint-msg').innerHTML = '帳號不存在，請點擊按鈕註冊';

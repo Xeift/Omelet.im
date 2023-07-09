@@ -59,15 +59,17 @@ app.post('/api/auth/register', async (req, res) => { // set register router
 });
 
 app.post('/api/auth/restore', async (req, res) => { // set restore router
-    let email = req.body.email;
+    let emailData = req.body.email;
     
     try {
-        let isEmailExsists = await mdb.isEmailExsists(email);
-        // if (isEmailExsists) { 
-        //     // send email
-        // }
-
-        res.json({ success: isEmailExsists });
+        let isEmailExsists = await mdb.isEmailExsists(emailData);
+        if (isEmailExsists) { 
+            await email.sendMail(emailData);
+            res.json({ success: true });
+        }
+        else {
+            res.json({ success: false });
+        }
     }
     catch (err) {
         res.json({ success: false});

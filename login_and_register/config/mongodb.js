@@ -82,9 +82,7 @@ async function findIdByUsername(_username) {
     }
 };
 
-const mongoose = require('mongoose');
-
-async function updateResetTempCode(userId, newResetTempCode) {
+async function saveResetTempCode(userId, newResetTempCode) {
     try {
         const updatedUser = await User.findByIdAndUpdate(userId, { reset_temp_code: newResetTempCode }, { new: true });
         if (updatedUser) {
@@ -101,4 +99,4 @@ async function updateResetTempCode(userId, newResetTempCode) {
 
 
 
-module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, updateResetTempCode }
+module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode }

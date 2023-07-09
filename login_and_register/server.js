@@ -65,7 +65,7 @@ app.post('/api/auth/restore', async (req, res) => { // set restore router
         let isEmailExsists = await mdb.isEmailExsists(emailData);
         if (isEmailExsists) { 
             const code = await auth.generateRestorePasswordToken();
-            await mdb.saveResetTempCode(userId, code);
+            await mdb.saveResetTempCode(emailData, code);
             await email.sendMail(emailData, code);
             res.json({ success: true });
         }

@@ -82,14 +82,14 @@ async function findIdByUsername(_username) {
     }
 };
 
-async function saveResetTempCode(userId, newResetTempCode) {
+async function saveResetTempCode(email, newResetTempCode) {
     try {
-        const updatedUser = await User.findByIdAndUpdate(userId, { reset_temp_code: newResetTempCode }, { new: true });
+        const updatedUser = await UserModel.findOneAndUpdate({ email: email }, { reset_temp_code: newResetTempCode }, { new: true });
         if (updatedUser) {
             console.log('success');
         }
         else {
-            console.log('id of user not exsist');
+            console.log('email of user not exsist');
         }
     }
     catch (error) {

@@ -11,6 +11,16 @@ async function generateToken(_userid, _username) {
     return jwt.sign(data, secret, { expiresIn });
 }
 
+async function generateRestorePasswordToken(_userid) {
+    const expiresIn = '10m';
+    const secret = 'your-secret-key';
+    const data = {
+        id: _userid
+    };
+
+    return jwt.sign(data, secret, { expiresIn });
+}
+
 function authenticateToken(req, res, next) { // jwt verify middleware
     const token = req.headers['authorization']; // get jwt in header
     if (!token) {
@@ -29,4 +39,4 @@ function authenticateToken(req, res, next) { // jwt verify middleware
     });
 }
 
-module.exports = { generateToken, authenticateToken }
+module.exports = { generateToken, generateRestorePasswordToken, authenticateToken }

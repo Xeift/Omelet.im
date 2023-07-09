@@ -7,7 +7,8 @@ mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}); 
 const UserSchema = new mongoose.Schema({
     username: { type: String, unique: true },
     email: { type: String, unique: true },
-    password: String
+    password: String,
+    reset_temp_code: { type: String, unique: true },
 });
 
 const UserModel = mongoose.model('User', UserSchema);
@@ -59,7 +60,8 @@ async function isPasswordMatch(username, password) {
 async function register(username, email, password ) {
     try {
         UserModel.create({ username, email, password });
-    } catch (err) {
+    }
+    catch (err) {
         console.log(`mongodb.js: ${err}`);
     }
 }
@@ -80,4 +82,23 @@ async function findIdByUsername(_username) {
     }
 };
 
-module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername }
+const mongoose = require('mongoose');
+
+async function updateResetTempCode(userId, newResetTempCode) {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(userId, { reset_temp_code: newResetTempCode }, { new: true });
+        if (updatedUser) {
+            console.log('success');
+        }
+        else {
+            console.log('id of user not exsist');
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+
+
+module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, updateResetTempCode }

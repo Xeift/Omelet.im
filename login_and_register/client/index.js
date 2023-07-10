@@ -35,10 +35,12 @@ loginButton.addEventListener('click', async function(event) {
                 }
                 
             }
-        } else {
+        }
+        else {
             alert('Server error: ' + response.status);
         }
-    } catch (err) {
+    }
+    catch (err) {
         alert('Error: ' + err.message);
     }
 });

@@ -85,6 +85,7 @@ async function findIdByUsername(_username) {
 async function saveResetTempCode(email, newResetTempCode) {
     try {
         const updatedUser = await UserModel.findOneAndUpdate({ email: email }, { reset_temp_code: newResetTempCode }, { new: true });
+        
         if (updatedUser) {
             console.log('success');
         }

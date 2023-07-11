@@ -32,7 +32,6 @@ loginButton.addEventListener('click', async function(event) {
                 else if (isUserExsists === false) {
                     hintMsg.innerHTML = '帳號不存在，請點擊按鈕註冊';
                 }
-                
             }
         }
         else {

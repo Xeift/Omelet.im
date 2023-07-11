@@ -6,15 +6,14 @@ const auth = require('./config/auth.js')
 const email = require('./utils/email.js')
 const jwt = require('jsonwebtoken');
 
+
 app.use(express.static(__dirname + '/client')); // set express static file path
-// app.use(bodyParser.urlencoded({extended: false})); // set body-parser
 app.use(bodyParser.json());
 
 
 app.get('/', (req, res) => { // set home router
     res.sendFile(__dirname + '/client/index.html');
 });
-
 
 
 app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
@@ -40,6 +39,7 @@ app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
     }
 }); 
 
+
 app.post('/api/auth/register', async (req, res) => { // set register router
     let username = req.body.username;
     let email = '';
@@ -58,6 +58,7 @@ app.post('/api/auth/register', async (req, res) => { // set register router
         res.send('發生錯誤：' + err.message);
     }
 });
+
 
 app.post('/api/auth/restore', async (req, res) => { // set restore router
     let emailData = req.body.email;
@@ -81,10 +82,12 @@ app.post('/api/auth/restore', async (req, res) => { // set restore router
     }
 });
 
+
 app.get('/protected-resource', auth.authenticateToken, (req, res) => { // protected resource (jwt required)
     const decodedToken = req.user; // decoded jwt
     res.send({'decodedToken': decodedToken});
 });
+
 
 app.post("/reset", async (req, res) => {
     try {

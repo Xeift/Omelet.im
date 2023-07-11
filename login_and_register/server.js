@@ -16,7 +16,7 @@ app.get('/', (req, res) => { // set home router
 });
 
 
-app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
+app.post('/api/auth/login', async (req, res) => { // set login router /api/auth/login
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
 
@@ -24,18 +24,17 @@ app.post('/api/auth/login', async (req, res) => { // set login router /api/auth
         let user = await mdb.isPasswordMatch(username, password); // verify password
 
         if (user) { // username and password match
-            console.log('[user exsist] [password match]'); 
             let userid = await mdb.findIdByUsername(username); // get userid
             token = await auth.generateToken(userid, username); // generate jwt
             res.json({ success: true, token: token }); // return token to client
         }
         else { // username and password not match
             let isUserExsists = await mdb.isUserExsists(username);
-            res.json({ success: false, isUserExsists: isUserExsists });
+            res.json({ success: false, errMsg: 'username and password not match', isUserExsists: isUserExsists });
         }
     }
     catch (err) { // error handle
-        res.json({ success: false, message: '發生錯誤：' + err.message });
+        res.json({ success: false, errMsg: `unexpected error occurred: ${err.message}` });
     }
 }); 
 

@@ -6,7 +6,7 @@ loginButton.addEventListener('click', async function(event) {
         username: username,
         password: password
     };
-
+    let hintMsg = document.getElementById('hint-msg');
     try {
         let response = await fetch('/api/auth/login', {
             method: 'POST',
@@ -18,30 +18,29 @@ loginButton.addEventListener('click', async function(event) {
 
         if (response.ok) {
             let data = await response.json();
-
             if (data.success) {
                 let token = data.token;
                 localStorage.setItem('token', token);
-                document.getElementById('hint-msg').innerHTML = '登入成功';
+                hintMsg.innerHTML = '登入成功';
                 // window.location.href = '/msg.html';
             }
             else {
                 let isUserExsists = data.isUserExsists;
                 if (isUserExsists) {
-                    document.getElementById('hint-msg').innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼';
+                    hintMsg.innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼';
                 }
                 else if (isUserExsists === false) {
-                    document.getElementById('hint-msg').innerHTML = '帳號不存在，請點擊按鈕註冊';
+                    hintMsg.innerHTML = '帳號不存在，請點擊按鈕註冊';
                 }
                 
             }
         }
         else {
-            alert('Server error: ' + response.status);
+            hintMsg.innerHTML = `伺服器錯誤 ${response.status}`;
         }
     }
     catch (err) {
-        alert('Error: ' + err.message);
+        hintMsg.innerHTML = `發生錯誤: ${err.message}`;
     }
 });
 

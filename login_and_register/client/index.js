@@ -45,6 +45,7 @@ loginButton.addEventListener('click', async function(event) {
     }
 });
 
+
 let restoreButton = document.getElementById('restore-btn');
 restoreButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
@@ -53,6 +54,7 @@ restoreButton.addEventListener('click', async function(event) {
     }
     window.location.href = '/restore.html';
 })
+
 
 function isEmailFormatValid(input) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -53,7 +53,8 @@ app.post('/api/auth/register', async (req, res) => { // set register router
             await mdb.register(username, email, password);
             res.send('註冊成功，歡迎' + username);
         }
-    } catch (err) {
+    }
+    catch (err) {
         res.send('發生錯誤：' + err.message);
     }
 });
@@ -71,7 +72,6 @@ app.post('/api/auth/restore', async (req, res) => { // set restore router
             res.json({ success: true });
         }
         else {
-            console.log('not exsist');
             res.json({ success: false });
         }
     }

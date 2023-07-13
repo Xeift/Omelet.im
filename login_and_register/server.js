@@ -26,15 +26,27 @@ app.post('/api/auth/login', async (req, res) => { // set login router /api/auth/
         if (user) { // username and password match
             let userid = await mdb.findIdByUsername(username); // get userid
             token = await auth.generateToken(userid, username); // generate jwt
-            res.json({ success: true, token: token }); // return token to client
+            res.status(200).json({ // return token to client
+                message: 'login success',
+                data: null,
+                token: token
+            });
         }
         else { // username and password not match
             let isUserExsists = await mdb.isUserExsists(username);
-            res.json({ success: false, errMsg: 'username and password not match', isUserExsists: isUserExsists });
+            res.status(401).json({
+                message: 'username and password not match',
+                data: {isUserExsists: isUserExsists},
+                token: null
+            });
         }
     }
     catch (err) { // error handle
-        res.json({ success: false, errMsg: `unexpected error occurred: ${err.message}` });
+        res.status(500).json({
+            message: `unexpected error occurred: ${err.message}`,
+            data: {isUserExsists: isUserExsists},
+            token: null
+        });
     }
 }); 
 

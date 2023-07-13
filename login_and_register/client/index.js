@@ -2,7 +2,7 @@ let loginButton = document.getElementById('login-btn');
 loginButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
-    let data = {
+    let requestData = {
         username: username,
         password: password
     };
@@ -13,28 +13,28 @@ loginButton.addEventListener('click', async function(event) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(requestData)
         });
+        let responseData = await response.json();
+        let responseStatus = response.status
+        console.log(responseStatus);
 
-        if (response.ok) {
-            let data = await response.json();
-            if (data.success) {
-                let token = data.token;
-                localStorage.setItem('token', token);
-                hintMsg.innerHTML = '登入成功';
-                // window.location.href = '/msg.html';
+        if (responseStatus === 200) {
+            let token = responseData.token;
+            localStorage.setItem('token', token);
+            hintMsg.innerHTML = '登入成功';
+            // window.location.href = '/msg.html';
+        }
+        else if (responseStatus === 401) {
+            let isUserExsists = data.isUserExsists;
+            if (isUserExsists) {
+                hintMsg.innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼';
             }
-            else {
-                let isUserExsists = data.isUserExsists;
-                if (isUserExsists) {
-                    hintMsg.innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼';
-                }
-                else if (isUserExsists === false) {
-                    hintMsg.innerHTML = '帳號不存在，請點擊按鈕註冊';
-                }
+            else if (isUserExsists === false) {
+                hintMsg.innerHTML = '帳號不存在，請點擊按鈕註冊';
             }
         }
-        else {
+        else if (responseStatus === 500) {
             hintMsg.innerHTML = `伺服器錯誤 ${response.status}`;
         }
     }

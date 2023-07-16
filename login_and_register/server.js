@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const mdb = require('./config/mongodb.js')
-const auth = require('./config/auth.js')
-const email = require('./utils/email.js')
+const mdb = require('./config/mongodb.js');
+const auth = require('./config/auth.js');
+const email = require('./utils/email.js');
 const jwt = require('jsonwebtoken');
 
 
@@ -13,44 +13,10 @@ app.use(bodyParser.json());
 
 
 app.use('/', require('./api/homeRouter.js'));
-
-// app.use('/', require('./api/loginRouter.js').loginRouter); // TODO:
-
+app.use('/api/auth/login', require('./api/loginRouter.js'));
 
 
-app.post('/api/auth/login', async (req, res) => { // set login router /api/auth/login
-    let username = req.body.username; // username in req
-    let password = req.body.password; // password in req
 
-    try {
-        let user = await mdb.isPasswordMatch(username, password); // verify password
-
-        if (user) { // username and password match
-            let userid = await mdb.findIdByUsername(username); // get userid
-            token = await auth.generateToken(userid, username); // generate jwt
-            res.status(200).json({ // return token to client
-                message: 'login success',
-                data: null,
-                token: token
-            });
-        }
-        else { // username and password not match
-            let isUserExsists = await mdb.isUserExsists(username);
-            res.status(401).json({
-                message: 'username and password not match',
-                data: {isUserExsists: isUserExsists},
-                token: null
-            });
-        }
-    }
-    catch (err) { // error handle
-        res.status(500).json({
-            message: `unexpected error occurred: ${err.message}`,
-            data: {isUserExsists: isUserExsists},
-            token: null
-        });
-    }
-}); 
 
 
 app.post('/api/auth/register', async (req, res) => { // set register router

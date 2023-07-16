@@ -1,10 +1,10 @@
 const express = require('express');
-const homeRouter = express.Router();
+const router = express.Router();
 
 
-homeRouter.get('/', (req, res) => {
+router.get('/', (req, res) => {
     res.sendFile(__dirname + '/client/index.html');
 });
 
 
-module.exports = homeRouter;
+module.exports = router;

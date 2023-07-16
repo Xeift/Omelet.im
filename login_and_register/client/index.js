@@ -2,11 +2,13 @@ let loginButton = document.getElementById('login-btn');
 loginButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
+    let hintMsg = document.getElementById('hint-msg');
+    
     let requestData = {
         username: username,
         password: password
     };
-    let hintMsg = document.getElementById('hint-msg');
+    
     try {
         let response = await fetch('/api/auth/login', {
             method: 'POST',

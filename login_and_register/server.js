@@ -13,6 +13,9 @@ app.use(bodyParser.json());
 
 app.use('/', require('./api/homeRouter.js'));
 app.use('/api/auth/login', require('./api/loginRouter.js'));
+
+
+
 // app.use('/api/auth/login', async (req, res) => { // set login router /api/auth/login
 //     let username = req.body.username; // username in req
 //     let password = req.body.password; // password in req

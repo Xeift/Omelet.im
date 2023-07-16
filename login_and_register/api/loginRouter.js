@@ -7,7 +7,7 @@ const mdb = require('./../config/mongodb.js');
 const auth = require('./../config/auth.js');
 
 
-router.post('/api/auth/login', async (req, res) => { // set login router /api/auth/login
+router.post('/', async (req, res) => {
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
 

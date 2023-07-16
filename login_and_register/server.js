@@ -11,9 +11,41 @@ app.use(express.static(__dirname + '/client')); // set express static file path
 app.use(bodyParser.json());
 
 
-
 app.use('/', require('./api/homeRouter.js'));
 app.use('/api/auth/login', require('./api/loginRouter.js'));
+// app.use('/api/auth/login', async (req, res) => { // set login router /api/auth/login
+//     let username = req.body.username; // username in req
+//     let password = req.body.password; // password in req
+
+//     try {
+//         let user = await mdb.isPasswordMatch(username, password); // verify password
+
+//         if (user) { // username and password match
+//             let userid = await mdb.findIdByUsername(username); // get userid
+//             token = await auth.generateToken(userid, username); // generate jwt
+//             res.status(200).json({ // return token to client
+//                 message: 'login success',
+//                 data: null,
+//                 token: token
+//             });
+//         }
+//         else { // username and password not match
+//             let isUserExsists = await mdb.isUserExsists(username);
+//             res.status(401).json({
+//                 message: 'username and password not match',
+//                 data: {isUserExsists: isUserExsists},
+//                 token: null
+//             });
+//         }
+//     }
+//     catch (err) { // error handle
+//         res.status(500).json({
+//             message: `unexpected error occurred: ${err.message}`,
+//             data: {isUserExsists: isUserExsists},
+//             token: null
+//         });
+//     }
+// });
 
 
 

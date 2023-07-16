@@ -20,21 +20,24 @@ loginButton.addEventListener('click', async function(event) {
         let responseData = await response.json();
         let responseStatus = response.status
         console.log(responseStatus);
-
+        console.log(responseData);
         if (responseStatus === 200) {
-            let token = responseData.token;
-            localStorage.setItem('token', token);
-            hintMsg.innerHTML = '登入成功';
-            // window.location.href = '/msg.html';
-        }
-        else if (responseStatus === 401) {
-            let isUserExsists = data.isUserExsists;
+            let isUserExsists = responseData.isUserExsists;
+            
             if (isUserExsists) {
                 hintMsg.innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼';
             }
             else if (isUserExsists === false) {
                 hintMsg.innerHTML = '帳號不存在，請點擊按鈕註冊';
             }
+
+            // let token = responseData.token;
+            // localStorage.setItem('token', token);
+            // hintMsg.innerHTML = '登入成功';
+            // window.location.href = '/msg.html';
+        }
+        else if (responseStatus === 401) {
+            console.log('401 err');
         }
         else if (responseStatus === 500) {
             hintMsg.innerHTML = `伺服器錯誤 ${response.status}`;

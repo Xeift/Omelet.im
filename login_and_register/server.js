@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 
 
-app.use('/', require('./api/home.js').homeRouter);
+app.use('/', require('./api/homeRouter.js').homeRouter);
 
 
 

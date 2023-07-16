@@ -1,13 +1,13 @@
 const express = require('express');
-const router = express.Router();
+// const router = express.Router();
 const bodyParser = require('body-parser');
-router.use(bodyParser.json());
+// router.use(bodyParser.json());
 
 const mdb = require('./../config/mongodb.js');
 const auth = require('./../config/auth.js');
 
 
-router.post('/', async (req, res) => {
+module.exports = async (req, res) => {
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
 
@@ -39,7 +39,4 @@ router.post('/', async (req, res) => {
             token: null
         });
     }
-});
-
-
-module.exports = router;
+};

@@ -11,8 +11,8 @@ app.use(express.static(__dirname + '/client')); // set express static file path
 app.use(bodyParser.json());
 
 
-app.use('/', require('./api/homeRouter.js'));
-app.use('/api/auth/login', require('./api/loginRouter.js'));
+app.get('/', require('./api/homeRouter.js'));
+app.post('/api/auth/login', require('./api/loginRouter.js'));
 
 
 

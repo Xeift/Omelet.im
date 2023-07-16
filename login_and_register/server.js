@@ -12,7 +12,9 @@ app.use(bodyParser.json());
 
 
 
-app.use('/', require('./api/homeRouter.js').homeRouter);
+app.use('/', require('./api/homeRouter.js'));
+
+// app.use('/', require('./api/loginRouter.js').loginRouter); // TODO:
 
 
 

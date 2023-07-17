@@ -17,34 +17,26 @@ loginButton.addEventListener('click', async function(event) {
             },
             body: JSON.stringify(requestData)
         });
-        let responseData = await response.json();
         let responseStatus = response.status
-        console.log(responseStatus);
-        console.log(responseData);
-        if (responseStatus === 200) {
-            let isUserExsists = responseData.isUserExsists;
-            
-            if (isUserExsists) {
-                hintMsg.innerHTML = '帳號或密碼錯誤，請點擊按鈕註冊或找回密碼';
-            }
-            else if (isUserExsists === false) {
-                hintMsg.innerHTML = '帳號不存在，請點擊按鈕註冊';
-            }
+        let responseData = await response.json();
 
-            // let token = responseData.token;
-            // localStorage.setItem('token', token);
-            // hintMsg.innerHTML = '登入成功';
+        if (responseStatus === 200) {
+            let token = responseData.token;
+            localStorage.setItem('token', token);
+            hintMsg.innerHTML = '登入成功';
             // window.location.href = '/msg.html';
         }
         else if (responseStatus === 401) {
-            console.log('401 err');
+            let isUserExsists = responseData.data.isUserExsists;
+            console.log(isUserExsists);
+            hintMsg.innerHTML = isUserExsists ? '帳號或密碼錯誤，可重置密碼' : '帳號不存在，可註冊';
         }
         else if (responseStatus === 500) {
-            hintMsg.innerHTML = `伺服器錯誤 ${response.status}`;
+            hintMsg.innerHTML = responseData.message;
         }
     }
     catch (err) {
-        hintMsg.innerHTML = `發生錯誤: ${err.message}`;
+        hintMsg.innerHTML = `前端發生例外錯誤： ${err.message}`;
     }
 });
 

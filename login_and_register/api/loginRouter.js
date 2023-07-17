@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
             let userid = await mdb.findIdByUsername(username); // get userid
             token = await auth.generateToken(userid, username); // generate jwt
             res.status(200).json({ // return token to client
-                message: 'login success',
+                message: '登入成功',
                 data: null,
                 token: token
             });
@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
         else { // username and password not match
             let isUserExsists = await mdb.isUserExsists(username);
             res.status(401).json({
-                message: 'username and password not match',
+                message: '帳號或密碼錯誤',
                 data: {isUserExsists: isUserExsists},
                 token: null
             });
@@ -34,8 +34,8 @@ module.exports = async (req, res) => {
     }
     catch (err) { // error handle
         res.status(500).json({
-            message: `unexpected error occurred: ${err.message}`,
-            data: {isUserExsists: isUserExsists},
+            message: `後端發生例外錯誤： ${err.message}`,
+            data: null,
             token: null
         });
     }

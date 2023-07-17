@@ -41,7 +41,7 @@ loginButton.addEventListener('click', async function(event) {
 });
 
 
-let restoreButton = document.getElementById('restore-btn');
+let restoreButton = document.getElementById('forgot-password-btn');
 restoreButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
     if (username !== null && username !== undefined && username !== '' && isEmailFormatValid(username)) {

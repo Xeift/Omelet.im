@@ -1,8 +1,4 @@
 const express = require('express');
-// const router = express.Router();
-// const bodyParser = require('body-parser');
-// router.use(bodyParser.json());
-
 const mdb = require('../config/mongodb.js');
 const auth = require('../config/auth.js');
 

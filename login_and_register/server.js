@@ -41,9 +41,9 @@ app.post('/api/auth/register', async (req, res) => { // set register router
 });
 
 
-app.post('/api/auth/restore', async (req, res) => { // set restore router
+app.post('/api/auth/reset-password', async (req, res) => { // set restore router
     let emailData = req.body.email;
-    
+    console.log('resetpwd');
     try {
         let isEmailExsists = await mdb.isEmailExsists(emailData);
         if (isEmailExsists) { 

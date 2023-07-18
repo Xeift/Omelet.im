@@ -16,7 +16,7 @@ resetPasswordButton.addEventListener('click', async function(event) {
     };
 
     try {
-        let response = await fetch('/api/auth/restore', {
+        let response = await fetch('/api/auth/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

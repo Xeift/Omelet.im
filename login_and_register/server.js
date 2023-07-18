@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.get('/', require('./api/homeAPI.js'));
 app.post('/api/auth/login', require('./api/loginAPI.js'));
-
+app.get('/forgot-password', require('./api/forgotPasswordAPI.js'))
 
 
 

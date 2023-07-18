@@ -47,7 +47,7 @@ forgotPasswordButton.addEventListener('click', async function(event) {
     if (username !== null && username !== undefined && username !== '' && isEmailFormatValid(username)) {
         localStorage.setItem('tempEmailForRestore', username);
     }
-    window.location.href = '/restore.html';
+    window.location.href = '/forgot-password';
 })
 
 

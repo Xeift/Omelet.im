@@ -8,8 +8,8 @@ window.onload = function() {
 }
 
 
-let restoreButton = document.getElementById('restore-btn');
-restoreButton.addEventListener('click', async function(event) {
+let resetPasswordButton = document.getElementById('reset-password-btn');
+resetPasswordButton.addEventListener('click', async function(event) {
     let email = document.getElementById('email').value;
     let data = {
         email: email

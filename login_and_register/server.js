@@ -14,8 +14,7 @@ app.use(bodyParser.json());
 app.get('/', require('./api/homeAPI.js'));
 app.post('/api/auth/login', require('./api/loginAPI.js'));
 app.get('/forgot-password', require('./api/forgotPasswordAPI.js'))
-
-
+app.post('/api/auth/reset-password', require('./api/resetPasswordAPI.js'));
 
 
 
@@ -41,26 +40,7 @@ app.post('/api/auth/register', async (req, res) => { // set register router
 });
 
 
-app.post('/api/auth/reset-password', async (req, res) => { // set restore router
-    let emailData = req.body.email;
-    console.log('resetpwd');
-    try {
-        let isEmailExsists = await mdb.isEmailExsists(emailData);
-        if (isEmailExsists) { 
-            const code = await auth.generateRestorePasswordToken(emailData);
-            await mdb.saveResetTempCode(emailData, code);
-            await email.sendMail(emailData, code);
-            res.json({ success: true });
-        }
-        else {
-            res.json({ success: false });
-        }
-    }
-    catch (err) {
-        console.log(err);
-        res.json({ success: false});
-    }
-});
+
 
 
 app.get('/protected-resource', auth.authenticateToken, (req, res) => { // protected resource (jwt required)

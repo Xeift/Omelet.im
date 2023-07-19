@@ -8,6 +8,7 @@ window.onload = function() {
 }
 
 
+let hintMsg = document.getElementById('hint-msg');
 let resetPasswordButton = document.getElementById('reset-password-btn');
 resetPasswordButton.addEventListener('click', async function(event) {
     let email = document.getElementById('email').value;
@@ -23,23 +24,20 @@ resetPasswordButton.addEventListener('click', async function(event) {
             },
             body: JSON.stringify(data)
         });
+        let responseStatus = response.status
+        let responseData = await response.json();
 
-        if (response.ok) {
-            let data = await response.json();
-
-            if (data.success) {
-                document.getElementById('hint-msg').innerHTML = '已寄出';
-                // window.location.href = '/msg.html';
-            }
-            else {
-                document.getElementById('hint-msg').innerHTML = '不存在';
-            }
+        if (responseStatus === 200) {
+            hintMsg.innerHTML = 'email 已成功寄出';
         }
-        else {
-            alert('Server error: ' + response.status);
+        else if (responseStatus === 401) {
+            hintMsg.innerHTML = 'email 不存在';
+        }
+        else if (responseStatus === 500) {
+            hintMsg.innerHTML = responseData.message;
         }
     }
     catch (err) {
-        alert('Error: ' + err.message);
+        hintMsg.innerHTML = `前端發生例外錯誤： ${err.message}`;
     }
 });

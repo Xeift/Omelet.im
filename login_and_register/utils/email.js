@@ -23,7 +23,6 @@ async function sendMail(email, code) {
         transporter.sendMail(mailOptions);
     }
     catch (err) {
-        console.log('eeeerrrr');
         console.log(err);
         return false;
     }

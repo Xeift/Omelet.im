@@ -5,13 +5,11 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res) => {
     try {
-        // Get the code and password from the request body
         const { code, password } = req.body;
-        // Verify the code as a jwt token with the secret key
         const decoded = jwt.verify(code, 'your-secret-key');
         console.log(decoded);
-        console.log(decoded.id);
-        // Get the user id from the decoded payload
+        console.log(decoded.email);
+        // Get the user id from the decoded payload // TODO: DB Update pwd
         // const userId = decoded.id;
         // // Find the user by id in the database (use your own logic here)
         // const user = await User.findById(userId);

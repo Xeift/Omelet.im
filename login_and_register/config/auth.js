@@ -11,11 +11,11 @@ async function generateToken(_userid, _username) {
     return jwt.sign(data, secret, { expiresIn });
 }
 
-async function generateRestorePasswordToken(_userid) {
+async function generateRestorePasswordToken(_email) {
     const expiresIn = '10m';
     const secret = 'your-secret-key';
     const data = {
-        id: _userid
+        email: _email
     };
 
     return jwt.sign(data, secret, { expiresIn });

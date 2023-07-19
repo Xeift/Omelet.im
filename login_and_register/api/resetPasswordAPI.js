@@ -10,9 +10,24 @@ module.exports = async (req, res) => {
     try {
         let isEmailExsists = await mdb.isEmailExsists(emailData);
         if (isEmailExsists) { 
-            const code = await auth.generateRestorePasswordToken(emailData);
-            await mdb.saveResetTempCode(emailData, code);
-            await email.sendMail(emailData, code);
+            let code = await auth.generateRestorePasswordToken(emailData);
+            let resetTempCodeStats = await mdb.saveResetTempCode(emailData, code);
+            let emailStats = await email.sendMail(emailData, code);
+            if (resetTempCodeStats !== true) {
+                res.status(500).json({
+                    message: '資料庫異常',
+                    data: null,
+                    token: null
+                });
+            }
+            if (emailStats !== true) {
+                res.status(500).json({
+                    message: 'email 寄送失敗',
+                    data: null,
+                    token: null
+                });                
+            }
+
             res.status(200).json({
                 message: 'email 已成功寄出',
                 data: null,

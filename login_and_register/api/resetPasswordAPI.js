@@ -6,7 +6,7 @@ const email = require('../utils/email.js');
 
 module.exports = async (req, res) => {
     let emailData = req.body.email;
-    console.log('resetpwd');
+
     try {
         let isEmailExsists = await mdb.isEmailExsists(emailData);
         if (isEmailExsists) { 

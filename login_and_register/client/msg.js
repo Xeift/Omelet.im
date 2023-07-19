@@ -7,10 +7,10 @@ function getProtectRes() { // send protected requests
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('moring').innerHTML = data.decodedToken.id + data.decodedToken.username; // display protected data
+        document.getElementById('moring').innerHTML = data.decodedToken.id +'<br>'+ data.decodedToken.username; // display protected data
     })
     .catch(error => {
-        console.error('请求发生错误:', error);
+        console.error('錯誤', error);
     });
 }
 

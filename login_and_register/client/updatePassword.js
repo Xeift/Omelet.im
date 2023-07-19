@@ -1,9 +1,10 @@
-const code = new URLSearchParams(window.location.search).get('code');
-console.log(code);
-const password = document.getElementById('new-password').value;
 const resetBtn = document.getElementById('reset-btn');
 resetBtn.addEventListener('click', async function(event) {
     try {
+        const code = new URLSearchParams(window.location.search).get('code');
+        console.log(`code: ${code}`);
+        const password = document.getElementById('new-password').value;
+        console.log(`password: ${password}`);
         const response = await fetch('/update-password', {
             method: 'POST',
             headers: {

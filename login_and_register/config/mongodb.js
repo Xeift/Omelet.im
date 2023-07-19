@@ -3,15 +3,17 @@ require('dotenv').config();
 const MONGO_URI = process.env.MONGO_URI;
 const utils = require('.././utils/user_utils.js')
 
+
 mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}); // connect to mongodb
+
 const UserSchema = new mongoose.Schema({
     username: { type: String, unique: true },
     email: { type: String, unique: true },
     password: String,
     reset_temp_code: { type: String, unique: true },
 });
-
 const UserModel = mongoose.model('User', UserSchema);
+
 
 async function isUserExsists(input) {
     try {
@@ -27,6 +29,7 @@ async function isUserExsists(input) {
     }
 }
 
+
 async function isEmailExsists(input) {
     try {
         if (await UserModel.findOne({email: input})) { // email exsists
@@ -40,6 +43,7 @@ async function isEmailExsists(input) {
         console.log(`mongodb.js: ${err}`);
     }
 }
+
 
 async function isPasswordMatch(username, password) {
     try {
@@ -56,6 +60,7 @@ async function isPasswordMatch(username, password) {
         console.log(`mongodb.js: ${err}`);
     }
 }
+
 
 async function register(username, email, password ) {
     try {
@@ -82,6 +87,7 @@ async function findIdByUsername(_username) {
     }
 };
 
+
 async function saveResetTempCode(email, newResetTempCode) {
     try {
         const updatedUser = await UserModel.findOneAndUpdate({ email: email }, { reset_temp_code: newResetTempCode }, { new: true });
@@ -98,5 +104,21 @@ async function saveResetTempCode(email, newResetTempCode) {
 }
 
 
+async function updatePasswordByEmail(email, newPassword) {
+    try {
+        console.log('new');
+        console.log(newPassword);
+        const user = await UserModel.findOne({ email });
+        user.password = newPassword;
+        await user.save();
+        console.log('使用者密碼更新成功');
+        return true;
+    }
+    catch (error) {
+        console.error('更新使用者密碼失敗:', error.message);
+        return false;
+    }
+}
 
-module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode }
+
+module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode, updatePasswordByEmail }

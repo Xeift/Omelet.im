@@ -14,7 +14,7 @@ resetBtn.addEventListener('click', async function(event) {
                 password: password 
             })
         });
-        // Parse the response as JSON
+        let responseStatus = response.status
         const responseData = await response.json();
         console.log(responseData);
     }

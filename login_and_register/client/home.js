@@ -3,11 +3,7 @@ loginButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
     let hintMsg = document.getElementById('hint-msg');
-    
-    let requestData = {
-        username: username,
-        password: password
-    };
+
     
     try {
         let response = await fetch('/api/auth/login', {
@@ -15,7 +11,10 @@ loginButton.addEventListener('click', async function(event) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(requestData)
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
         });
         let responseStatus = response.status
         let responseData = await response.json();

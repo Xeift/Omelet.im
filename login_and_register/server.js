@@ -15,9 +15,13 @@ app.get('/', require('./api/homeAPI.js'));
 app.post('/api/auth/login', require('./api/loginAPI.js'));
 app.get('/forgot-password', require('./api/forgotPasswordAPI.js'))
 app.post('/api/auth/reset-password', require('./api/resetPasswordAPI.js'));
+app.get('/msg', require('./api/msgAPI.js'));
 
 
-
+app.get('/protected-resource', auth.authenticateToken, (req, res) => { // protected resource (jwt required)
+    const decodedToken = req.user; // decoded jwt
+    res.send({'decodedToken': decodedToken});
+});
 
 app.post('/api/auth/register', async (req, res) => { // set register router
     let username = req.body.username;
@@ -43,10 +47,7 @@ app.post('/api/auth/register', async (req, res) => { // set register router
 
 
 
-app.get('/protected-resource', auth.authenticateToken, (req, res) => { // protected resource (jwt required)
-    const decodedToken = req.user; // decoded jwt
-    res.send({'decodedToken': decodedToken});
-});
+
 
 
 app.post('/reset', async (req, res) => {

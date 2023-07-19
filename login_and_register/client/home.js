@@ -24,7 +24,7 @@ loginButton.addEventListener('click', async function(event) {
             let token = responseData.token;
             localStorage.setItem('token', token);
             hintMsg.innerHTML = '登入成功';
-            // window.location.href = '/msg.html';
+            window.location.href = '/msg';
         }
         else if (responseStatus === 401) {
             let isUserExsists = responseData.data.isUserExsists;

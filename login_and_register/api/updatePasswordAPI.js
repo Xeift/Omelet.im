@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
             }
         }
         else {
-            res.status(500).json({
+            res.status(401).json({
                 message: 'email 不存在',
                 data: null,
                 token: null

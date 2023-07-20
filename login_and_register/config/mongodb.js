@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 const MONGO_URI = process.env.MONGO_URI;
-const utils = require('../utils/userUtils.js')
 
 
 mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}); // connect to mongodb

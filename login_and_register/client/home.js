@@ -50,21 +50,25 @@ registerButton.addEventListener('click', async function(event) {
 
     if (isEmailFormatValid(username)) { // username = email, username2 = username
         document.getElementById('usernameLabel').innerText = 'email';
+
     }
     else { // username = username, username2 = email
         document.getElementById('usernameLabel').innerText = '使用者名稱';
     }
-    // if (isThirdBoxVisible === false) {
-    //     isThirdBoxVisible = true;
-    //     let passwordDiv = ` 
-    //         <div>
-    //             <label id="usernameLabel2" for="username2">username2</label>
-    //             <input type="text" id="username2" name="username2" required>
-    //         </div>
-    //     `;
-    //     document.getElementById('password').insertAdjacentHTML('afterend', passwordDiv); // insert another input box
-    // }
-    // TODO: make sure all info is correct
+
+    function addThirdInputBox(content) {
+        if (isThirdBoxVisible === false) {
+            isThirdBoxVisible = true;
+            let passwordDiv = ` 
+                <div>
+                    <label id="usernameLabel2" for="username2">username2</label>
+                    <input type="text" id="username2" name="username2" required>
+                </div>
+            `;
+            document.getElementById('password').insertAdjacentHTML('afterend', passwordDiv); // insert another input box
+        }
+    }
+
     try {
         if (isEmailFormatValid(username)) {
             let response = await fetch('/api/auth/register', { // TODO: backend check

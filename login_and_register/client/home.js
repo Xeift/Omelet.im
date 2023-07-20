@@ -41,6 +41,7 @@ loginButton.addEventListener('click', async function(event) {
 
 
 let isThirdBoxVisible = false;
+let isEmailCodeBoxVisible = false;
 let registerButton = document.getElementById('register-btn');
 registerButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
@@ -50,15 +51,15 @@ registerButton.addEventListener('click', async function(event) {
 
     if (isThirdBoxVisible === false) {
         isThirdBoxVisible = true;
-        var passwordDiv = `
+        let passwordDiv = ` 
             <div>
-                <label for="email">email</label>
-                <input type="text" id="email" name="email" required>
+                <label for="username2">username2</label>
+                <input type="text" id="username2" name="username2" required>
             </div>
         `;
-        
-        document.getElementById('password').insertAdjacentHTML('afterend', passwordDiv);
+        document.getElementById('password').insertAdjacentHTML('afterend', passwordDiv); // insert another input box
     }
+    // TODO: make sure all info is correct
     try {
         if (isEmailFormatValid(username)) {
             let response = await fetch('/api/auth/register', { // TODO: backend check

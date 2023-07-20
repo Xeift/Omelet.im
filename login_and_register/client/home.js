@@ -40,6 +40,7 @@ loginButton.addEventListener('click', async function(event) {
 });
 
 
+let isThirdBoxVisible = false;
 let registerButton = document.getElementById('register-btn');
 registerButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
@@ -47,34 +48,52 @@ registerButton.addEventListener('click', async function(event) {
     let hintMsg = document.getElementById('hint-msg');
 
 
+    if (isThirdBoxVisible === false) {
+        isThirdBoxVisible = true;
+        var passwordDiv = `
+            <div>
+                <label for="email">email</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+        `;
+        
+        document.getElementById('password').insertAdjacentHTML('afterend', passwordDiv);
+    }
     try {
-        let response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        });
-        let responseStatus = response.status
-        let responseData = await response.json();
+        if (isEmailFormatValid(username)) {
+            let response = await fetch('/api/auth/register', { // TODO: backend check
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+            let responseStatus = response.status
+            let responseData = await response.json();
+    
+            if (responseStatus === 200) {
+                let token = responseData.token;
+                localStorage.setItem('token', token);
+                hintMsg.innerHTML = '登入成功';
+                window.location.href = '/msg';
+            }
+            else if (responseStatus === 401) {
+                let isUserExsists = responseData.data.isUserExsists;
+                console.log(isUserExsists);
+                hintMsg.innerHTML = isUserExsists ? '帳號或密碼錯誤，可重置密碼' : '帳號不存在，可註冊';
+            }
+            else if (responseStatus === 500) {
+                hintMsg.innerHTML = responseData.message;
+            }
+        }
+        else {
+            hintMsg.innerHTML = '';
+        }
 
-        if (responseStatus === 200) {
-            let token = responseData.token;
-            localStorage.setItem('token', token);
-            hintMsg.innerHTML = '登入成功';
-            window.location.href = '/msg';
-        }
-        else if (responseStatus === 401) {
-            let isUserExsists = responseData.data.isUserExsists;
-            console.log(isUserExsists);
-            hintMsg.innerHTML = isUserExsists ? '帳號或密碼錯誤，可重置密碼' : '帳號不存在，可註冊';
-        }
-        else if (responseStatus === 500) {
-            hintMsg.innerHTML = responseData.message;
-        }
+
     }
     catch (err) {
         hintMsg.innerHTML = `前端發生例外錯誤： ${err.message}`;

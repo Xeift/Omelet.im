@@ -49,7 +49,7 @@ registerButton.addEventListener('click', async function(event) {
     let emailPost;
     let password = document.getElementById('password').value;
 
-
+    
     if (isEmailFormatValid(username)) { // username = email, username2 = username
         document.getElementById('usernameLabel').innerText = 'email';
         addThirdInputBox('使用者名稱');
@@ -87,7 +87,7 @@ registerButton.addEventListener('click', async function(event) {
     try {
         if (isThirdBoxVisible) {
             if (isEmailFormatValid(username)) {
-                let response = await fetch('/api/auth/register', { // TODO: backend check
+                let response = await fetch('/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -139,7 +139,3 @@ forgotPasswordButton.addEventListener('click', async function(event) {
 })
 
 
-function isEmailFormatValid(input) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(input);
-}

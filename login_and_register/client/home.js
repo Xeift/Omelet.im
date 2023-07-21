@@ -67,7 +67,7 @@ registerButton.addEventListener('click', async function(event) {
                     <input type="text" id="username2" name="username2" required>
                 </div>
             `;
-            document.getElementById('password').insertAdjacentHTML('afterend', passwordDiv); // insert another input box
+            document.getElementById('username').insertAdjacentHTML('afterend', passwordDiv); // insert another input box
         }
     }
 

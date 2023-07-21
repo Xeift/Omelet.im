@@ -1,38 +1,56 @@
 const express = require('express');
 const mdb = require('../config/mongodb.js');
 const auth = require('../config/auth.js');
+const email = require('../utils/email.js');
 
 
 module.exports = async (req, res) => {
-    let email = req.body.email; // username in req
+    let emailData = req.body.email;
 
     try {
-        console.log(`${email} `);
-        // let user = await mdb.isPasswordMatch(username, password); // verify password
+        let isEmailExsists = await mdb.isEmailExsists(emailData);
+        if (!isEmailExsists) { 
+            let code = await auth.generateRestorePasswordToken(emailData);
+            let resetTempCodeStats = await mdb.saveRegisterTempCode(emailData, code);
+            let emailStats = await email.sendMail(emailData, code);
+            console.log(resetTempCodeStats);
+            if (resetTempCodeStats !== true) {
+                res.status(500).json({
+                    message: '資料庫異常',
+                    data: null,
+                    token: null
+                });
+            }
+            else if (emailStats !== true) {
+                res.status(500).json({
+                    message: 'email 寄送失敗',
+                    data: null,
+                    token: null
+                });                
+            }
+            else {
+                res.status(200).json({
+                    message: 'email 已成功寄出',
+                    data: null,
+                    token: null
+                });
+            }
 
-        // if (user) { // username and password match
-        //     let userid = await mdb.findIdByUsername(username); // get userid
-        //     token = await auth.generateToken(userid, username); // generate jwt
-        //     res.status(200).json({ // return token to client
-        //         message: '登入成功',
-        //         data: null,
-        //         token: token
-        //     });
-        // }
-        // else { // username and password not match
-        //     let isUserExsists = await mdb.isUserExsists(username);
-        //     res.status(401).json({
-        //         message: '帳號或密碼錯誤',
-        //         data: {isUserExsists: isUserExsists},
-        //         token: null
-        //     });
-        // }
+        }
+        else {
+            res.status(401).json({
+                message: 'email 已存在',
+                data: null,
+                token: null
+            });
+        }
     }
-    catch (err) { // error handle
-        res.status(500).json({
-            message: `後端發生例外錯誤： ${err.message}`,
-            data: null,
-            token: null
-        });
+    catch (err) {
+        // res.status(500).json({
+        //     message: `後端發生例外錯誤： ${err.message}`,
+        //     data: null,
+        //     token: null
+        // });
+        console.log(err);
     }
 };

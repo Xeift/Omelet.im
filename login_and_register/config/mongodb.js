@@ -14,6 +14,12 @@ const UserSchema = new mongoose.Schema({
 const UserModel = mongoose.model('User', UserSchema);
 
 
+const UnverifiedUserSchema = new mongoose.Schema({
+    email: { type: String, unique: true },
+    reset_temp_code: { type: String, unique: true },
+});
+const UnverifiedUserModel = mongoose.model('UnverifiedUser', UnverifiedUserSchema);
+
 async function isUserExsists(input) {
     try {
         if (await UserModel.findOne({username: input}) || await UserModel.findOne({email: input})) { // username or email exsists
@@ -103,6 +109,23 @@ async function saveResetTempCode(email, newResetTempCode) {
 }
 
 
+async function saveRegisterTempCode(email, newResetTempCode) { // TODO: new collection
+    try {
+        console.log(`${email} ${newResetTempCode}`);
+        const updatedUserr = await UnverifiedUserModel.create({ email: email, reset_temp_code: newResetTempCode });
+        if (updatedUserr) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        return `後端發生例外錯誤： ${err.message}`;
+    }
+}
+
+
 async function updatePasswordByEmail(email, newPassword) {
     try {
         console.log('new');
@@ -120,4 +143,4 @@ async function updatePasswordByEmail(email, newPassword) {
 }
 
 
-module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode, updatePasswordByEmail }
+module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode, saveRegisterTempCode, updatePasswordByEmail }

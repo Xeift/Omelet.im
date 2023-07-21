@@ -29,4 +29,30 @@ async function sendMail(email, code) {
     return true;
 }
 
-module.exports = { sendMail }
+async function sendRegisterMail(email, code) {
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'elpma.res@gmail.com',
+                pass: GMAIL_APP_PASSWORD
+            }
+        });
+        
+        const mailOptions = {
+            from: 'elpma.res@gmail.com',
+            to: email,
+            subject: 'Omelet - 帳號註冊',
+            html: `<h1>Omelet - 帳號註冊</h1><p>我們收到您帳號註冊的申請。<br>若您並未請求註冊帳號，請忽略此郵件。<br>若您要註冊帳號，請點擊下方藍字並按照網頁中的指示操作。</p><a href="http://localhost:3000/register?code=${code}">按我註冊帳號<a>`
+        };
+        
+        transporter.sendMail(mailOptions);
+    }
+    catch (err) {
+        console.log(err);
+        return false;
+    }
+    return true;
+}
+
+module.exports = { sendMail, sendRegisterMail }

@@ -21,7 +21,7 @@ registerButton.addEventListener('click', async function(event) {
             hintMsg.innerHTML = 'email 已成功寄出';
         }
         else if (responseStatus === 401) {
-            hintMsg.innerHTML = 'email 不存在';
+            hintMsg.innerHTML = 'email 已存在';
         }
         else if (responseStatus === 500) {
             hintMsg.innerHTML = responseData.message;

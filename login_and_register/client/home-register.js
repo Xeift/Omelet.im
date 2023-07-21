@@ -2,7 +2,6 @@ let registerButton = document.getElementById('register-btn');
 registerButton.addEventListener('click', async function(event) {
     let hintMsg = document.getElementById('hint-msg');
     let email = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
     let data = {
         email: email
     };

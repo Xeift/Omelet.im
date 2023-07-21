@@ -50,7 +50,7 @@ registerButton.addEventListener('click', async function(event) {
     let password = document.getElementById('password').value;
 
     
-    if (isEmailFormatValid(username)) { // username = email, username2 = username
+    if (isEmailFormatValid(username)) { // id:username = email, id:username2 = username
         document.getElementById('usernameLabel').innerText = 'email';
         addThirdInputBox('使用者名稱');
         hintMsg.innerText = '請輸入使用者名稱';
@@ -59,7 +59,7 @@ registerButton.addEventListener('click', async function(event) {
         emailPost = document.getElementById('username').value;
         console.log(`email username:${usernamePost} email:${emailPost}`);
     }
-    else { // username = username, username2 = email
+    else { // id:username = username, id:username2 = email
         document.getElementById('usernameLabel').innerText = '使用者名稱';
         addThirdInputBox('email');
         hintMsg.innerText = '請輸入email';

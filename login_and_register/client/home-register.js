@@ -26,17 +26,17 @@ registerButton.addEventListener('click', async function(event) {
     }
 
 
-    if (isThirdBoxVisible) {
-        //TODO:
-        console.log('visible');
-        console.log(`使用者名稱：${usernamePost} email：${emailPost} 密碼：${password}`);
-        let emptyHintMsg = '請輸入';
+    if (isThirdBoxVisible) { // make sure username2 exists
+        let emptyHintMsg = '請輸入'; // make sure fill all fields
         if (isInputEmpty(usernamePost)) { emptyHintMsg = emptyHintMsg + '使用者名稱 ';console.log('a'); }
         if (isInputEmpty(emailPost)) { emptyHintMsg = emptyHintMsg + 'email ';console.log('b'); }
         if (isInputEmpty(password)) { emptyHintMsg = emptyHintMsg + '密碼 ';console.log('c'); }
-        console.log(`empthint: ${emptyHintMsg}`);
-        console.log(`isInputEmpty(password): ${isInputEmpty(password)} password:[${password}]`);
-        if (emptyHintMsg !== '請輸入') { hintMsg.innerHTML = emptyHintMsg; console.log('change!'); }
+        if (emptyHintMsg !== '請輸入') { hintMsg.innerHTML = emptyHintMsg; console.log(`change!${emptyHintMsg}`); }
+        else { // all fields filled
+            //TODO: send email verify code
+            console.log('send email verify code');
+        }
+        
     }    
 
     // else {

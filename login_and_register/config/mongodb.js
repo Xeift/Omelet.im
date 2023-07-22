@@ -111,7 +111,6 @@ async function saveResetTempCode(email, newResetTempCode) {
 
 async function saveRegisterTempCode(email, newResetTempCode) {
     try {
-        console.log(`${email} ${newResetTempCode}`);
         const existingUser = await UnverifiedUserModel.findOne({ email });
         let updatedUser;
         if (existingUser) {

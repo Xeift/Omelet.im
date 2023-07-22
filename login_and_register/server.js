@@ -19,9 +19,10 @@ app.get('/msg', require('./api/msgAPI.js'));
 app.get('/protected-resource', auth.authenticateToken, require('./api/protectedResourceAPI.js'));
 app.get('/update-password', require('./api/updatePasswordPage.js'));
 app.post('/update-password', require('./api/updatePasswordAPI.js'));
+
 app.post('/api/auth/verify-email', require('./api/verifyEmailAPI.js'));
 app.get('/register', require('./api/registerPage.js'));
-// app.post('/api/auth/register', require('./api/registerAPI.js'));
+app.post('/api/auth/register', require('./api/registerAPI.js'));
 
 app.listen(3000, () => { // start server at port 3000
     console.log('伺服器已啟動\nhttp://localhost:3000');

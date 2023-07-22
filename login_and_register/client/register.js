@@ -1,22 +1,18 @@
-window.onload = function() {
-    let tempEmailForRestore = localStorage.getItem('tempEmailForRestore');
-    if ( !(tempEmailForRestore === null || tempEmailForRestore === undefined) ) {
-        document.getElementById('email').value = tempEmailForRestore;
-    }
-    localStorage.removeItem('tempEmailForRestore');
-}
-
-
 let hintMsg = document.getElementById('hint-msg');
-let resetPasswordButton = document.getElementById('reset-password-btn');
-resetPasswordButton.addEventListener('click', async function(event) {
-    let email = document.getElementById('email').value;
-    let data = {
-        email: email
-    };
-
+let registerButton = document.getElementById('register-btn');
+registerButton.addEventListener('click', async function(event) {
     try {
-        let response = await fetch('/api/auth/reset-password', {
+        const code = new URLSearchParams(window.location.search).get('code');
+        let username = document.getElementById('username').value;
+        let password = document.getElementById('password').value;
+        let data = {
+            code: code,
+            username: username,
+            password: password
+        };
+    
+        
+        let response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

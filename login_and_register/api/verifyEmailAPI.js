@@ -13,7 +13,6 @@ module.exports = async (req, res) => {
             let code = await auth.generateRestorePasswordToken(emailData);
             let resetTempCodeStats = await mdb.saveRegisterTempCode(emailData, code);
             let emailStats = await email.sendRegisterMail(emailData, code);
-            console.log(resetTempCodeStats);
             if (resetTempCodeStats !== true) {
                 res.status(500).json({
                     message: '資料庫異常',
@@ -46,11 +45,11 @@ module.exports = async (req, res) => {
         }
     }
     catch (err) {
-        // res.status(500).json({
-        //     message: `後端發生例外錯誤： ${err.message}`,
-        //     data: null,
-        //     token: null
-        // });
+        res.status(500).json({
+            message: `後端發生例外錯誤： ${err.message}`,
+            data: null,
+            token: null
+        });
         console.log(err);
     }
 };

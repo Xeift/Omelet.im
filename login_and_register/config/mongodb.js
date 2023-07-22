@@ -109,7 +109,7 @@ async function saveResetTempCode(email, newResetTempCode) {
 }
 
 
-async function saveRegisterTempCode(email, newResetTempCode) { // TODO: new collection
+async function saveRegisterTempCode(email, newResetTempCode) {
     try {
         console.log(`${email} ${newResetTempCode}`);
         const existingUser = await UnverifiedUserModel.findOne({ email });

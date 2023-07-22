@@ -18,7 +18,7 @@ registerButton.addEventListener('click', async function(event) {
         let responseData = await response.json();
 
         if (responseStatus === 200) {
-            hintMsg.innerHTML = 'email 已成功寄出';
+            hintMsg.innerHTML = 'email 已成功寄出，請查看信箱並依照指示註冊';
         }
         else if (responseStatus === 401) {
             hintMsg.innerHTML = 'email 已存在';

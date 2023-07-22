@@ -112,8 +112,17 @@ async function saveResetTempCode(email, newResetTempCode) {
 async function saveRegisterTempCode(email, newResetTempCode) { // TODO: new collection
     try {
         console.log(`${email} ${newResetTempCode}`);
-        const updatedUserr = await UnverifiedUserModel.create({ email: email, reset_temp_code: newResetTempCode });
-        if (updatedUserr) {
+        const existingUser = await UnverifiedUserModel.findOne({ email });
+        let updatedUser;
+        if (existingUser) {
+            existingUser.reset_temp_code = newResetTempCode;
+            updatedUser = await existingUser.save();
+        }
+        else {
+            updatedUser = await UnverifiedUserModel.create({ email: email, reset_temp_code: newResetTempCode });
+        }
+
+        if (updatedUser) {
             return true;
         }
         else {

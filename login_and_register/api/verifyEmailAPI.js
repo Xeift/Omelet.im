@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
         if (!isEmailExsists) { 
             let code = await auth.generateRestorePasswordToken(emailData);
             let resetTempCodeStats = await mdb.saveRegisterTempCode(emailData, code);
-            let emailStats = await email.sendMail(emailData, code);
+            let emailStats = await email.sendRegisterMail(emailData, code);
             console.log(resetTempCodeStats);
             if (resetTempCodeStats !== true) {
                 res.status(500).json({

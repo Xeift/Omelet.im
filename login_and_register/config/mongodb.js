@@ -150,5 +150,21 @@ async function updatePasswordByEmail(email, newPassword) {
     }
 }
 
+async function createNewUser(email, username, password) {
+    try {
+        updatedUser = await UserModel.create({ email: email, username: username, password: password });
 
-module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode, saveRegisterTempCode, updatePasswordByEmail }
+
+        if (updatedUser) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        return `後端發生例外錯誤： ${err.message}`;
+    }
+}
+
+module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode, saveRegisterTempCode, updatePasswordByEmail, createNewUser }

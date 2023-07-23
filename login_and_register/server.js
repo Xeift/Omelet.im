@@ -7,8 +7,8 @@ const email = require('./utils/email.js');
 const jwt = require('jsonwebtoken');
 
 
-app.use(express.static(__dirname + '/client')); // set express static file path
-app.use(bodyParser.json());
+app.use(express.static(__dirname + '/client')); // set express static folder path
+app.use(bodyParser.json()); // deal with json requests
 
 
 app.get('/', require('./api/homeAPI.js'));

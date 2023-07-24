@@ -3,10 +3,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const auth = require('./config/auth.js');
 
-// const mdb = require('./config/mongodb.js');
-// const email = require('./utils/email.js');
-// const jwt = require('jsonwebtoken');
-
 
 app.use(express.static(__dirname + '/client')); // set express static folder path
 app.use(bodyParser.json()); // deal with json requests
@@ -19,15 +15,12 @@ app.get('/protected-resource', auth.authenticateToken, require('./api/get/protec
 app.get('/update-password', require('./api/get/updatePasswordPage.js'));
 app.get('/register', require('./api/get/registerPage.js'));
 
+
 app.post('/api/auth/login', require('./api/post/loginAPI.js'));
 app.post('/api/auth/reset-password', require('./api/post/resetPasswordAPI.js'));
 app.post('/update-password', require('./api/post/updatePasswordAPI.js'));
 app.post('/api/auth/verify-email', require('./api/post/verifyEmailAPI.js'));
 app.post('/api/auth/register', require('./api/post/registerAPI.js'));
-
-
-
-
 
 
 app.listen(3000, () => { // start server at port 3000

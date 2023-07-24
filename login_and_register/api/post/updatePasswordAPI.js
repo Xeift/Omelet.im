@@ -1,7 +1,4 @@
-const express = require('express');
-const path = require('path');
 const jwt = require('jsonwebtoken');
-const auth = require('../../config/auth')
 const mdb = require('../../config/mongodb.js');
 
 

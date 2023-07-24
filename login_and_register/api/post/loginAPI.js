@@ -1,4 +1,3 @@
-const express = require('express');
 const mdb = require('../../config/mongodb.js');
 const auth = require('../../config/auth.js');
 

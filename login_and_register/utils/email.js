@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+require('dotenv').config({ path: 'config/.env' });
 const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 const auth = require('./../utils/auth.js');
 

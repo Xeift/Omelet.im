@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const mdb = require('../../config/mongodb.js');
+const mdb = require('../../utils/mongodb.js');
 
 
 module.exports = async (req, res) => {

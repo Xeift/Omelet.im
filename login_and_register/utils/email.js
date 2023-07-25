@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
-const auth = require('./../config/auth.js');
+const auth = require('./../utils/auth.js');
 
 async function sendMail(email, code) {
     try {

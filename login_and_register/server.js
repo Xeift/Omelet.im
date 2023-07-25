@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const auth = require('./config/auth.js');
+const auth = require('./utils/auth.js');
 
 
 app.use(express.static(__dirname + '/client')); // set express static folder path

@@ -1,5 +1,5 @@
-const mdb = require('../../config/mongodb.js');
-const auth = require('../../config/auth.js');
+const mdb = require('../../utils/mongodb.js');
+const auth = require('../../utils/auth.js');
 const email = require('../../utils/email.js');
 
 

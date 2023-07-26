@@ -1,10 +1,10 @@
 let loginButton = document.getElementById('login-btn');
-let hintMsg = document.getElementById('hint-msg');
 loginButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
-
+    let hintMsg = document.getElementById('hint-msg');
     
+
     try {
         let response = await fetch('/api/auth/login', {
             method: 'POST',
@@ -19,6 +19,7 @@ loginButton.addEventListener('click', async function(event) {
         let responseStatus = response.status
         let responseData = await response.json();
 
+
         if (responseStatus === 200) {
             let token = responseData.token;
             localStorage.setItem('token', token);
@@ -27,7 +28,6 @@ loginButton.addEventListener('click', async function(event) {
         }
         else if (responseStatus === 401) {
             let isUserExsists = responseData.data.isUserExsists;
-            console.log(isUserExsists);
             hintMsg.innerHTML = isUserExsists ? '帳號或密碼錯誤，可重置密碼' : '帳號不存在，可註冊';
         }
         else if (responseStatus === 500) {

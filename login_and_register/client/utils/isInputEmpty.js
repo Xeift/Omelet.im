@@ -1,5 +1,8 @@
 function isInputEmpty(input) {
-    if (input === null || input === undefined || input === '') {
+    if (input === null || input === undefined) {
+        return true;
+    }
+    else if (input.trim() === '') {
         return true;
     }
     else {

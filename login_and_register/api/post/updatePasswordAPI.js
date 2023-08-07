@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const mdb = require('../../utils/mongodb.js');
 
 
-module.exports = async (req, res) => {
+module.exports = async(req, res) => {
     try {
         const { code, password } = req.body;
         const decoded = jwt.verify(code, 'your-secret-key');

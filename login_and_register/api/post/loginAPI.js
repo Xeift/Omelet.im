@@ -2,7 +2,7 @@ const mdb = require('../../utils/mongodb.js');
 const auth = require('../../utils/auth.js');
 
 
-module.exports = async (req, res) => {
+module.exports = async(req, res) => {
     let username = req.body.username; // username in req
     let password = req.body.password; // password in req
 
@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
 
         if (user) { // username and password match
             let userid = await mdb.findIdByUsername(username); // get userid
-            token = await auth.generateToken(userid, username); // generate jwt
+            let token = await auth.generateToken(userid, username); // generate jwt
             res.status(200).json({ // return token to client
                 message: '登入成功',
                 data: null,

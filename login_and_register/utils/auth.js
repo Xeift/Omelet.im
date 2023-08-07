@@ -24,13 +24,13 @@ async function generateRestorePasswordToken(_email) {
 function authenticateToken(req, res, next) { // jwt verify middleware
     const token = req.headers['authorization']; // get jwt in header
     if (!token) {
-        console.log('no token')
+        console.log('no token');
         return res.status(401).json({ success: false, message: '未提供身份驗證令牌' });
     }
 
     jwt.verify(token, 'your-secret-key', (err, decoded) => { // verify jwt
         if (err) {
-            console.log('token invalid')
+            console.log('token invalid');
             return res.status(401).json({ success: false, message: '身份驗證令牌無效' });
         }
 
@@ -39,4 +39,4 @@ function authenticateToken(req, res, next) { // jwt verify middleware
     });
 }
 
-module.exports = { generateToken, generateRestorePasswordToken, authenticateToken }
+module.exports = { generateToken, generateRestorePasswordToken, authenticateToken };

@@ -90,7 +90,7 @@ async function findIdByUsername(_username) {
     catch (error) {
         console.error(error);
     }
-};
+}
 
 
 async function saveResetTempCode(email, newResetTempCode) {
@@ -152,7 +152,7 @@ async function updatePasswordByEmail(email, newPassword) {
 
 async function createNewUser(email, username, password) {
     try {
-        updatedUser = await UserModel.create({ email: email, username: username, password: password });
+        let updatedUser = await UserModel.create({ email: email, username: username, password: password });
 
 
         if (updatedUser) {
@@ -167,4 +167,4 @@ async function createNewUser(email, username, password) {
     }
 }
 
-module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode, saveRegisterTempCode, updatePasswordByEmail, createNewUser }
+module.exports = { isUserExsists, isEmailExsists, isPasswordMatch, register, findIdByUsername, saveResetTempCode, saveRegisterTempCode, updatePasswordByEmail, createNewUser };

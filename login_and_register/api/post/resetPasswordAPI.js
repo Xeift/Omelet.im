@@ -3,7 +3,7 @@ const auth = require('../../utils/auth.js');
 const email = require('../../utils/email.js');
 
 
-module.exports = async (req, res) => {
+module.exports = async(req, res) => {
     let emailData = req.body.email;
 
     try {

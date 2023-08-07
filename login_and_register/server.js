@@ -9,7 +9,7 @@ app.use(bodyParser.json()); // deal with json requests
 
 
 app.get('/', require('./api/get/homePage.js'));
-app.get('/forgot-password', require('./api/get/forgotPasswordPage.js'))
+app.get('/forgot-password', require('./api/get/forgotPasswordPage.js'));
 app.get('/msg', require('./api/get/msgPage.js'));
 app.get('/protected-resource', auth.authenticateToken, require('./api/get/protectedResourcePage.js'));
 app.get('/update-password', require('./api/get/updatePasswordPage.js'));

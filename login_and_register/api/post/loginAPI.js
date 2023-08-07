@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
             let isUserExsists = await mdb.isUserExsists(username);
             res.status(401).json({
                 message: '帳號或密碼錯誤',
-                data: {isUserExsists: isUserExsists},
+                data: { isUserExsists: isUserExsists },
                 token: null
             });
         }

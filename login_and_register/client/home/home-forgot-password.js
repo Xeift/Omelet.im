@@ -5,4 +5,4 @@ forgotPasswordButton.addEventListener('click', async function(event) {
         localStorage.setItem('tempEmailForRestore', username);
     }
     window.location.href = '/forgot-password';
-})
+});

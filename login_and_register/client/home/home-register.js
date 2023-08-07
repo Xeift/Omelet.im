@@ -14,7 +14,7 @@ registerButton.addEventListener('click', async function(event) {
             },
             body: JSON.stringify(data)
         });
-        let responseStatus = response.status
+        let responseStatus = response.status;
         let responseData = await response.json();
 
         if (responseStatus === 200) {
@@ -31,4 +31,4 @@ registerButton.addEventListener('click', async function(event) {
         hintMsg.innerHTML = `前端發生例外錯誤： ${err.message}`;
     }
 
-})
+});

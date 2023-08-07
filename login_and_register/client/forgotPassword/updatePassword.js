@@ -15,11 +15,11 @@ resetBtn.addEventListener('click', async function(event) {
                 password: password 
             })
         });
-        let responseStatus = response.status
+        let responseStatus = response.status;
         const responseData = await response.json();
         console.log(responseData);
     }
     catch (error) {
         console.log(error);
     }
-})
+});

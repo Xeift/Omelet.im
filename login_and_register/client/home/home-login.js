@@ -5,9 +5,15 @@ loginButton.addEventListener('click', async function(event) {
     let hintMsg = document.getElementById('hint-msg');
     
 
-    if (isInputEmpty(username) && isInputEmpty(password)) { hintMsg.innerText = '請填寫 帳號/email 及 密碼 欄位' }
-    else if (isInputEmpty(password)) { hintMsg.innerText = '請填寫 密碼 欄位' }
-    else if (isInputEmpty(username)) { hintMsg.innerText = '請填寫 帳號/email 欄位' }
+    if (isInputEmpty(username) && isInputEmpty(password)) {
+        hintMsg.innerText = '請填寫 帳號/email 及 密碼 欄位'; 
+    }
+    else if (isInputEmpty(password)) {
+        hintMsg.innerText = '請填寫 密碼 欄位'; 
+    }
+    else if (isInputEmpty(username)) {
+        hintMsg.innerText = '請填寫 帳號/email 欄位'; 
+    }
     else {
         try {
             let response = await fetch('/api/auth/login', {
@@ -20,7 +26,7 @@ loginButton.addEventListener('click', async function(event) {
                     password: password
                 })
             });
-            let responseStatus = response.status
+            let responseStatus = response.status;
             let responseData = await response.json();
     
     

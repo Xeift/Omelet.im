@@ -4,7 +4,7 @@ window.onload = function() {
         document.getElementById('email').value = tempEmailForRestore;
     }
     localStorage.removeItem('tempEmailForRestore');
-}
+};
 
 
 let hintMsg = document.getElementById('hint-msg');
@@ -23,7 +23,7 @@ resetPasswordButton.addEventListener('click', async function(event) {
             },
             body: JSON.stringify(data)
         });
-        let responseStatus = response.status
+        let responseStatus = response.status;
         let responseData = await response.json();
 
         if (responseStatus === 200) {

@@ -9,8 +9,9 @@
 
 1. 確定終端機路徑為 C:\Users\你的使用者名稱\Desktop（我是放在桌面）\social-platform>
 2. cd login_and_register
-3. node server.js
-4. 在瀏覽器輸入 http://localhost:3000
+3. npm i
+4. node server.js
+5. 在瀏覽器輸入 http://localhost:3000
 
 ## 資料夾介紹
 

@@ -37,7 +37,8 @@
         "brace-style": [
             "warn",
             "stroustrup"
-        ]
+        ],
+        "no-unused-vars": [0]
         
     }
 }

@@ -19,7 +19,7 @@ registerButton.addEventListener('click', async function(event) {
             },
             body: JSON.stringify(data)
         });
-        let responseStatus = response.status
+        let responseStatus = response.status;
         let responseData = await response.json();
 
         if (responseStatus === 200) {

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 let loginButton = document.getElementById('login-btn');
 loginButton.addEventListener('click', async function(event) {
     let username = document.getElementById('username').value;

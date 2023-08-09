@@ -1,11 +1,20 @@
 const mdb = require('../../utils/mongodb.js');
 const auth = require('../../utils/auth.js');
+const isInputEmpty = require('../../utils/isInputEmpty.js');
 
 
 module.exports = async(req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
+    if (isInputEmpty(username) || isInputEmpty(password)) {
+        res.status(422).json({
+            message: '輸入不可為空',
+            data: null,
+            token: null
+        });
+        return;
+    }
     try {
         let user = await mdb.isPasswordMatch(username, password); // verify password
 

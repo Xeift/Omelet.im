@@ -3,8 +3,8 @@ const auth = require('../../utils/auth.js');
 
 
 module.exports = async(req, res) => {
-    let username = req.body.username; // username in req
-    let password = req.body.password; // password in req
+    let username = req.body.username;
+    let password = req.body.password;
 
     try {
         let user = await mdb.isPasswordMatch(username, password); // verify password

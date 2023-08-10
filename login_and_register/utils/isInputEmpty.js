@@ -1,4 +1,4 @@
-function isInputEmpty(input) {
+module.exports = (input) => {
     if (input === null || input === undefined) {
         return true;
     }
@@ -8,4 +8,4 @@ function isInputEmpty(input) {
     else {
         return false;
     }
-}
+};

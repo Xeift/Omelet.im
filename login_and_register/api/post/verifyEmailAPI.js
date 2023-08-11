@@ -1,11 +1,20 @@
 const mdb = require('../../utils/mongodb.js');
 const auth = require('../../utils/auth.js');
 const email = require('../../utils/email.js');
+const isInputEmpty = require('../../utils/isInputEmpty.js');
 
 
 module.exports = async(req, res) => {
     let emailData = req.body.email;
 
+    if (isInputEmpty(emailData)) {
+        res.status(422).json({
+            message: 'email輸入不可為空',
+            data: null,
+            token: null
+        });
+        return;
+    }
     try {
         let isEmailExsists = await mdb.isEmailExsists(emailData);
         if (!isEmailExsists) { 

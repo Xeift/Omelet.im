@@ -9,7 +9,7 @@ module.exports = async(req, res) => {
         console.log(`[registerAPI.js] 註冊 ${decoded.email} ${username} ${password}`);
 
         if (!await mdb.isEmailExsists(decoded.email)) {
-            let updateStatus = await mdb.createNewUser(decoded.email, username, password); // TODO: 寫入資料庫
+            let updateStatus = await mdb.createNewUser(decoded.email, username, password);
             if (updateStatus) {
                 res.status(200).json({
                     message: '註冊成功',

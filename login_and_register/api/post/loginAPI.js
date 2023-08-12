@@ -21,11 +21,21 @@ module.exports = async(req, res) => {
         if (user) { // username and password match
             let userid = await mdb.findIdByUsername(username); // get userid
             let token = await jwt.generateLoginJWT(userid, username); // generate jwt
-            res.status(200).json({ // return token to client
-                message: '登入成功',
-                data: null,
-                token: token
-            });
+            if (token !== false) {
+                res.status(200).json({ // return token to client
+                    message: '登入成功',
+                    data: null,
+                    token: token
+                });
+            }
+            else {
+                res.status(500).json({
+                    message: 'jwt產生失敗',
+                    data: null,
+                    token: token
+                });
+            }
+
         }
         else { // username and password not match
             let isUserExsists = await mdb.isUserExsists(username);

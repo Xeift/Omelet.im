@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('../../utils/jwt.js');
 const mdb = require('../../utils/mongodb.js');
 
 
 module.exports = async(req, res) => {
     try {
         const { code, username, password } = req.body;
-        const decoded = jwt.verify(code, 'your-secret-key');
+        const decoded = jwt.verifyJWT(code, 'your-secret-key');
         console.log(`[registerAPI.js] 註冊 ${decoded.email} ${username} ${password}`);
 
         if (!await mdb.isEmailExsists(decoded.email)) {

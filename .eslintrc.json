@@ -38,7 +38,11 @@
             "warn",
             "stroustrup"
         ],
-        "no-unused-vars": [0]
+        "no-unused-vars": [0],
+        "object-curly-spacing": [
+            "warn",
+            "always"
+        ]
         
     }
 }

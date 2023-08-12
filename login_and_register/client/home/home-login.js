@@ -30,7 +30,6 @@ loginButton.addEventListener('click', async function(event) {
             let responseStatus = response.status;
             let responseData = await response.json();
     
-    
             if (responseStatus === 200) {
                 let token = responseData.token;
                 localStorage.setItem('token', token);

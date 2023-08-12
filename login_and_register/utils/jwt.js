@@ -3,21 +3,40 @@ require('dotenv').config({ path: 'config/.env' });
 const JWT_SECRET = process.env.JWT_SECRET;
 
 
+// async function generateLoginJWT(_userid, _username) {
+//     jwt.sign(
+//         { id: _userid, username: _username },
+//         JWT_SECRET,
+//         { expiresIn: '1d' },
+//         (err, token) => {
+//             if (err) {
+//                 return false;
+//             }
+//             else {
+//                 return token;
+//             }
+//         }
+//     );
+// }
 async function generateLoginJWT(_userid, _username) {
-    jwt.sign(
-        { id: _userid, username: _username },
-        JWT_SECRET,
-        { expiresIn: '1d' },
-        (err, token) => {
-            if (err) {
-                return false;
+    return new Promise((resolve, reject) => {
+        jwt.sign(
+            { id: _userid, username: _username },
+            JWT_SECRET,
+            { expiresIn: '1d' },
+            (err, token) => {
+                if (err) {
+                    reject(false);
+                }
+                else {
+                    resolve(token);
+                }
             }
-            else {
-                return token;
-            }
-        }
-    );
+        );
+    });
 }
+  
+  
 
 async function generateRestorePasswordJWT(_email) {
     jwt.sign(

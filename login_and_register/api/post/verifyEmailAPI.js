@@ -1,5 +1,5 @@
 const mdb = require('../../utils/mongodb.js');
-const auth = require('../../utils/auth.js');
+const jwt = require('../../utils/jwt.js');
 const email = require('../../utils/email.js');
 const isInputEmpty = require('../../utils/isInputEmpty.js');
 
@@ -18,7 +18,7 @@ module.exports = async(req, res) => {
     try {
         let isEmailExsists = await mdb.isEmailExsists(emailData);
         if (!isEmailExsists) { 
-            let code = await auth.generateRestorePasswordToken(emailData);
+            let code = await jwt.generateRestorePasswordToken(emailData);
             let resetTempCodeStats = await mdb.saveRegisterTempCode(emailData, code);
             let emailStats = await email.sendRegisterMail(emailData, code);
             if (resetTempCodeStats !== true) {

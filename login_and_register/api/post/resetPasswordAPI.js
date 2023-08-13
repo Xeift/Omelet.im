@@ -9,7 +9,7 @@ module.exports = async(req, res) => {
     try {
         let isEmailExsists = await mdb.isEmailExsists(emailData);
         if (isEmailExsists) { 
-            let code = await jwt.generateRestorePasswordToken(emailData);
+            let code = await jwt.generateRestorePasswordJWT(emailData);
             // let resetTempCodeStats = await mdb.saveResetTempCode(emailData, code);
             let emailStats = await email.sendMail(emailData, code);
             // if (resetTempCodeStats !== true) {
@@ -20,7 +20,7 @@ module.exports = async(req, res) => {
             //     });
             // }
 
-            if (emailStats !== true) {
+            if (emailStats === true) {
                 res.status(200).json({
                     message: 'email 已成功寄出',
                     data: null,

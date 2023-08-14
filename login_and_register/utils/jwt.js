@@ -39,22 +39,36 @@ async function generateRestorePasswordJWT(_email) {
     });
 }
 
-async function verifyJWT(req, res, next) { // jwt verify middleware
-    const token = req.headers['authorization']; // get jwt in header
-    if (!token) {
-        return res.status(401).json({ success: false, message: '未提供JWT' });
-    }
-    jwt.verify(
-        token,
-        JWT_SECRET,
-        (err, decoded) => { // verify jwt
+// async function verifyJWT(req, res, next) { // jwt verify middleware
+//     const token = req.headers['authorization']; // get jwt in header
+//     if (!token) {
+//         return res.status(401).json({ success: false, message: '未提供JWT' });
+//     }
+//     jwt.verify(
+//         token,
+//         JWT_SECRET,
+//         (err, decoded) => { // verify jwt
+//             if (err) {
+//                 return res.status(401).json({ success: false, message: 'JWT已失效' });
+//             }
+//             req.user = decoded; // user information
+//             next();
+//         }
+//     );
+// }
+
+async function verifyJWT(token) {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, JWT_SECRET, (err, decoded) => {
             if (err) {
-                return res.status(401).json({ success: false, message: 'JWT已失效' });
+                reject(err);
             }
-            req.user = decoded; // user information
-            next();
-        }
-    );
+            else {
+                resolve(decoded);
+            }
+        });
+    });
 }
+
 
 module.exports = { generateLoginJWT, generateRestorePasswordJWT, verifyJWT };

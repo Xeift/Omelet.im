@@ -14,19 +14,5 @@ module.exports = async(req, res, next) => { // jwt verify middleware TODO: verif
     }
     catch (err) {
         return res.status(401).json({ success: false, message: err });
-        // console.log('err');
-        // console.log(err);
     }
-
-    // jwt.verify(
-    //     token,
-    //     JWT_SECRET,
-    //     (err, decoded) => { // verify jwt
-    //         if (err) {
-    //             return res.status(401).json({ success: false, message: 'JWT已失效' });
-    //         }
-    //         req.user = decoded; // user information
-    //         next();
-    //     }
-    // );
 };

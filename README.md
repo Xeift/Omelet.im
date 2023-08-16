@@ -1,5 +1,5 @@
-# social-platform
-創新社交平臺
+# Omelet-Social-Platform
+蛋餅 - 創新社交平臺
 
 # login_and_register
 

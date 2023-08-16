@@ -21,7 +21,7 @@ module.exports = async(req, res) => {
         if (user) { // username and password match
             let userid = await mdb.findIdByUsername(username); // get userid
             let token = await jwt.generateLoginJWT(userid, username); // generate jwt
-            console.log(token);
+            console.dir(`[loginAPI.js]\n${token}\n`);
             if (token !== false) {
                 res.status(200).json({ // return token to client
                     message: '登入成功',

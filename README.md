@@ -16,7 +16,7 @@
 ## 資料夾介紹
 
 `api`
-分為 get 與 post，存放所有 API 的 JS 檔案
+分為 get / post / middleware，存放所有 API 的 JS 檔案
 
 `client`
 前端不同頁面的 Html 和 JS 檔案

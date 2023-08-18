@@ -7,8 +7,8 @@ module.exports = async(req, res, next) => {
     }
 
     try {
-        let re = await jwt.verifyJWT(token);
-        req.user = re; // user information
+        let userInfo = await jwt.verifyJWT(token);
+        req.user = userInfo;
         next();
     }
     catch (err) {

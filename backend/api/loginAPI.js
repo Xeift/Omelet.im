@@ -1,26 +1,26 @@
-const mdb = require('../../utils/mongodb.js');
-const jwt = require('../../utils/jwt.js');
-const isInputEmpty = require('../../utils/isInputEmpty.js');
+const mdb = require('../utils/mongodb.js');
+const jwt = require('../utils/jwt.js');
 
 
 module.exports = async(req, res) => {
-    let username = req.body.username;
+    let username = req.body.username; // username 可為 username 或 email
     let password = req.body.password;
+    console.log(username, password);
 
-    if (isInputEmpty(username) || isInputEmpty(password)) {
+    if (!username || !password) {
         res.status(422).json({
-            message: '輸入不可為空',
+            message: '帳號密碼不可為空',
             data: null,
             token: null
         });
         return;
     }
     try {
-        let user = await mdb.isPasswordMatch(username, password); // verify password
+        let user = await mdb.isPasswordMatch(username, password);
 
-        if (user) { // username and password match
-            let userid = await mdb.findIdByUsername(username); // get userid
-            let token = await jwt.generateLoginJWT(userid, username); // generate jwt
+        if (user) {
+            let userid = await mdb.findIdByUsername(username);
+            let token = await jwt.generateLoginJWT(userid, username);
             console.dir(`[loginAPI.js]\n${token}\n`);
             if (token !== false) {
                 res.status(200).json({ // return token to client
@@ -38,16 +38,15 @@ module.exports = async(req, res) => {
             }
 
         }
-        else { // username and password not match
-            let isUserExsists = await mdb.isUserExsists(username);
+        else {
             res.status(401).json({
                 message: '帳號或密碼錯誤',
-                data: { isUserExsists: isUserExsists },
+                data: null,
                 token: null
             });
         }
     }
-    catch (err) { // error handle
+    catch (err) {
         res.status(500).json({
             message: `後端發生例外錯誤： ${err.message}`,
             data: null,

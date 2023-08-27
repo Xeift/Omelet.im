@@ -14,7 +14,7 @@ app.use(express.static(__dirname + '/client')); // set express static folder pat
 app.use(bodyParser.json()); // deal with json requests
 
 
-app.post('/api/auth/login', require('./api/post/loginAPI.js'));
+app.post('/api/auth/login', require('./api/loginAPI.js'));
 
 
 app.listen(3000, () => { // start server at port 3000

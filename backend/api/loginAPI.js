@@ -5,7 +5,6 @@ const jwt = require('../utils/jwt.js');
 module.exports = async(req, res) => {
     let username = req.body.username; // username 可為 username 或 email
     let password = req.body.password;
-    console.log(username, password);
 
     if (!username || !password) {
         res.status(422).json({
@@ -21,9 +20,8 @@ module.exports = async(req, res) => {
         if (user) {
             let userid = await mdb.findIdByUsername(username);
             let token = await jwt.generateLoginJWT(userid, username);
-            console.dir(`[loginAPI.js]\n${token}\n`);
             if (token !== false) {
-                res.status(200).json({ // return token to client
+                res.status(200).json({
                     message: '登入成功',
                     data: null,
                     token: token

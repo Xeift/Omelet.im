@@ -3,7 +3,7 @@ require('dotenv').config({ path: 'config/.env' });
 const MONGO_URI = process.env.MONGO_URI;
 
 
-mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}); // connect to mongodb
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }); // connect to mongodb
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, unique: true },
@@ -22,7 +22,7 @@ const UnverifiedUserModel = mongoose.model('UnverifiedUser', UnverifiedUserSchem
 
 async function isUserExsists(input) {
     try {
-        if (await UserModel.findOne({username: input}) || await UserModel.findOne({email: input})) { // username or email exsists
+        if (await UserModel.findOne({ username: input }) || await UserModel.findOne({ email: input })) { // username or email exsists
             return true;
         }
         else { // username or email not exsists
@@ -37,7 +37,7 @@ async function isUserExsists(input) {
 
 async function isEmailExsists(input) {
     try {
-        if (await UserModel.findOne({email: input})) { // email exsists
+        if (await UserModel.findOne({ email: input })) { // email exsists
             return true;
         }
         else { // email not exsists

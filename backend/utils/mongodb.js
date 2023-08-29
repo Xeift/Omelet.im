@@ -44,4 +44,18 @@ async function findIdByUsername(_username) {
     }
 }
 
-module.exports = { isPasswordMatch, findIdByUsername };
+async function isUserExsists(input) {
+    try {
+        if (await UserModel.findOne({ username: input }) || await UserModel.findOne({ email: input })) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        console.log(`mongodb.js: ${err}`);
+    }
+}
+
+module.exports = { isPasswordMatch, findIdByUsername, isUserExsists };

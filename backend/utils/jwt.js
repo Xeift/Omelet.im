@@ -20,4 +20,22 @@ async function generateLoginJWT(_userid, _username) {
     });
 }
 
-module.exports = { generateLoginJWT };
+async function generateRestorePasswordJWT(_email) {
+    return new Promise((resolve, reject) => {
+        jwt.sign(
+            { email: _email },
+            JWT_SECRET,
+            { expiresIn: '5m' },
+            (err, token) => {
+                if (err) {
+                    reject(false);
+                }
+                else {
+                    resolve(token);
+                }
+            }
+        );
+    });
+}
+
+module.exports = { generateLoginJWT, generateRestorePasswordJWT };

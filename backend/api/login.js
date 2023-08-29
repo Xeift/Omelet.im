@@ -1,8 +1,9 @@
 const mdb = require('../utils/mongodb.js');
 const jwt = require('../utils/jwt.js');
+const express = require('express');
+const router = express.Router();
 
-
-module.exports = async(req, res) => {
+router.post('/', async(req, res) => {
     let username = req.body.username; // username 可為 username 或 email
     let password = req.body.password;
 
@@ -51,4 +52,7 @@ module.exports = async(req, res) => {
             token: null
         });
     }
-};
+});
+
+
+module.exports = router;

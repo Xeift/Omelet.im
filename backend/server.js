@@ -14,8 +14,8 @@ app.use(cors({ // set cors
 app.use(express.static(__dirname + '/client')); // set express static folder path
 app.use(bodyParser.json()); // deal with json requests
 
-
-app.post('/api/v1/login', require('./api/login.js'));
+// app.post('/api/v1/login', require('./api/login.js'));
+app.use('/api/v1/login', require('./api/login.js'));
 
 app.post('*', require('./api/notfound.js'));
 

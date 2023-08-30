@@ -71,4 +71,22 @@ async function isEmailExsists(input) {
         console.log(`mongodb.js: ${err}`);
     }
 }
-module.exports = { isPasswordMatch, findIdByUsername, isUserExsists, isEmailExsists };
+
+async function createNewUser(email, username, password) {
+    try {
+        let updatedUser = await UserModel.create({ email: email, username: username, password: password });
+
+
+        if (updatedUser) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        return `後端發生例外錯誤： ${err.message}`;
+    }
+}
+
+module.exports = { isPasswordMatch, findIdByUsername, isUserExsists, isEmailExsists, createNewUser };

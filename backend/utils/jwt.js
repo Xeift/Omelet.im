@@ -38,4 +38,17 @@ async function generateRestorePasswordJWT(_email) {
     });
 }
 
-module.exports = { generateLoginJWT, generateRestorePasswordJWT };
+async function verifyJWT(token) {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, JWT_SECRET, (err, decoded) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(decoded);
+            }
+        });
+    });
+}
+
+module.exports = { generateLoginJWT, generateRestorePasswordJWT, verifyJWT };

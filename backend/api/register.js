@@ -19,15 +19,7 @@ router.post('/', async(req, res) => {
         let isEmailExsists = await mdb.isEmailExsists(emailData);
         if (!isEmailExsists) { 
             let code = await jwt.generateRestorePasswordJWT(emailData);
-            // let resetTempCodeStats = await mdb.saveRegisterTempCode(emailData, code);
             let emailStats = await email.sendRegisterMail(emailData, code);
-            // if (resetTempCodeStats !== true) {
-            //     res.status(500).json({
-            //         message: '資料庫異常',
-            //         data: null,
-            //         token: null
-            //     });
-            // }
             if (emailStats !== true) {
                 res.status(500).json({
                     message: 'email 寄送失敗',

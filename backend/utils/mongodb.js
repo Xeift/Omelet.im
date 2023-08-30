@@ -60,10 +60,10 @@ async function isUserExsists(input) {
 
 async function isEmailExsists(input) {
     try {
-        if (await UserModel.findOne({ email: input })) { // email exsists
+        if (await UserModel.findOne({ email: input })) {
             return true;
         }
-        else { // email not exsists
+        else {
             return false;
         }
     }

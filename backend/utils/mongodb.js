@@ -76,7 +76,6 @@ async function createNewUser(email, username, password) {
     try {
         let updatedUser = await UserModel.create({ email: email, username: username, password: password });
 
-
         if (updatedUser) {
             return true;
         }

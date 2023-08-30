@@ -88,4 +88,17 @@ async function createNewUser(email, username, password) {
     }
 }
 
-module.exports = { isPasswordMatch, findIdByUsername, isUserExsists, isEmailExsists, createNewUser };
+async function updatePasswordByEmail(email, newPassword) {
+    try {
+        const user = await UserModel.findOne({ email });
+        user.password = newPassword;
+        await user.save();
+        return true;
+    }
+    catch (error) {
+        console.error('更新使用者密碼失敗:', error.message);
+        return false;
+    }
+}
+
+module.exports = { isPasswordMatch, findIdByUsername, isUserExsists, isEmailExsists, createNewUser, updatePasswordByEmail };

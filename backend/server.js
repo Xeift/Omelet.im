@@ -18,8 +18,9 @@ app.use(bodyParser.json()); // deal with json requests
 
 app.use('/api/v1/login', require('./api/login.js'));
 app.use('/api/v1/register', require('./api/register.js'));
+app.use('/api/v1/reset-password', require('./api/resetPassword.js'));
 
-app.use('*', require('./api/notfound.js'));
+app.use('*', require('./api/notFound.js'));
 
 app.listen(BACKEND_PORT, () => { // start server at port 3000
     console.log(`伺服器已啟動\n${BACKEND_URL}`);

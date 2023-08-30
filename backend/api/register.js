@@ -58,7 +58,6 @@ router.post('/submit-info', async(req, res) => {
     try {
         const { code, username, password } = req.body;
         const decoded = await jwt.verifyJWT(code);
-        console.log(`[registerAPI.js] 註冊 ${decoded.email} ${username} ${password}`);
 
         if (!await mdb.isEmailExsists(decoded.email)) {
             let updateStatus = await mdb.createNewUser(decoded.email, username, password);
@@ -94,6 +93,5 @@ router.post('/submit-info', async(req, res) => {
         });
     }
 });
-
 
 module.exports = router;

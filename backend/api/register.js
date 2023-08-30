@@ -4,7 +4,7 @@ const email = require('../utils/email.js');
 const express = require('express');
 const router = express.Router();
 
-router.post('/', async(req, res) => {
+router.post('/send-mail', async(req, res) => {
     let emailData = req.body.email;
 
     if (!emailData) {

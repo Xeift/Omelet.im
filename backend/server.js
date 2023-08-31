@@ -9,19 +9,19 @@ const BACKEND_URL = process.env.BACKEND_URL;
 
 const app = express();
 
-app.use(cors({ // set cors
+app.use(cors({
     origin: FRONTEND_URL,
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
     preflightContinue: false,
 }));
-app.use(express.static(__dirname + '/client')); // set express static folder path
-app.use(bodyParser.json()); // deal with json requests
+app.use(express.static(__dirname + '/client'));
+app.use(bodyParser.json());
 app.use('/api/v1/login', rateLimit.authLimiter, require('./api/login.js'));
 app.use('/api/v1/register', rateLimit.authLimiter, require('./api/register.js'));
 app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/resetPassword.js'));
 
 app.use('*', require('./api/notFound.js'));
 
-app.listen(BACKEND_PORT, () => { // start server at port 3000
+app.listen(BACKEND_PORT, () => {
     console.log(`伺服器已啟動\n${BACKEND_URL}`);
 });

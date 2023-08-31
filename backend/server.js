@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const rateLimit = require('./utils/rateLimit.js');
 require('dotenv').config({ path: 'config/.env' });
 const BACKEND_PORT = process.env.BACKEND_PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
@@ -15,10 +16,9 @@ app.use(cors({ // set cors
 }));
 app.use(express.static(__dirname + '/client')); // set express static folder path
 app.use(bodyParser.json()); // deal with json requests
-
-app.use('/api/v1/login', require('./api/login.js'));
-app.use('/api/v1/register', require('./api/register.js'));
-app.use('/api/v1/reset-password', require('./api/resetPassword.js'));
+app.use('/api/v1/login', rateLimit.authLimiter, require('./api/login.js'));
+app.use('/api/v1/register', rateLimit.authLimiter, require('./api/register.js'));
+app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/resetPassword.js'));
 
 app.use('*', require('./api/notFound.js'));
 

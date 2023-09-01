@@ -16,6 +16,7 @@ app.use(cors({
 }));
 app.use(express.static(__dirname + '/client'));
 app.use(bodyParser.json());
+
 app.use('/api/v1/login', rateLimit.authLimiter, require('./api/login.js'));
 app.use('/api/v1/register', rateLimit.authLimiter, require('./api/register.js'));
 app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/resetPassword.js'));

@@ -24,5 +24,5 @@ app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/resetPas
 app.use('*', require('./api/notFound.js'));
 
 app.listen(BACKEND_PORT, () => {
-    console.log(`伺服器已啟動\n${BACKEND_URL}`);
+    console.log(`後端伺服器已啟動\n${BACKEND_URL}`);
 });

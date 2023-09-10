@@ -14,10 +14,8 @@ const io = require('socket.io')(server, {
         origin: 'http://localhost:3001'
     }
 });
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.emit('message', '後端asdaasfasfsa');
-});
+
+const socket = require('./utils/socket.js')(io); // handle socket events
 
 app.use(cors({
     origin: FRONTEND_URL,

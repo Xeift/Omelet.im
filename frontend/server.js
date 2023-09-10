@@ -9,5 +9,5 @@ app.get('/', require('./route/homePage.js'));
 app.get('/msg_test', require('./route/msg_test.js'));
 
 app.listen(3001, () => { // start server at port 3001
-    console.log('伺服器已啟動\nhttp://localhost:3001');
+    console.log('前端伺服器已啟動\nhttp://localhost:3001');
 });

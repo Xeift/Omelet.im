@@ -8,6 +8,16 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 const BACKEND_URL = process.env.BACKEND_URL;
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: 'http://localhost:3001'
+    }
+});
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.emit('message', '後端asdaasfasfsa');
+});
 
 app.use(cors({
     origin: FRONTEND_URL,
@@ -23,6 +33,6 @@ app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/resetPas
 
 app.use('*', require('./api/notFound.js'));
 
-app.listen(BACKEND_PORT, () => {
+server.listen(BACKEND_PORT, () => {
     console.log(`後端伺服器已啟動\n${BACKEND_URL}`);
 });

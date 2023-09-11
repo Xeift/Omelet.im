@@ -11,17 +11,10 @@ module.exports = function(io) {
         
         // TODO: 4 receive private message from client
         socket.on('newPrivateMsg', (receiverId, message) => {
-            // 向接收者的room發送私訊事件和資料
+            // TODO: 5 向接收者的room發送私訊事件和資料
             socket.to(receiverId).emit('newPrivateMsg', socket.id, message);
         });
 
-        // TODO: (5) [another client] receive private message from backend
-        socket.on('private-message', function(data) {
-            // 獲取消息內容和發送者的信息
-            var message = data.message;
-            var from = data.from;
-            // 在聊天界面顯示消息
-            console.log(message, from);
-        });
+
     });
 };

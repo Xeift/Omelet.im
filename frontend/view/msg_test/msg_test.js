@@ -6,12 +6,20 @@ socket.on('connect', function(){
     socket.on('roomID', (roomID) => {
         localStorage.setItem('roomID', roomID);
         console.log(roomID);
-    });
 
-    // TODO: 3 send private message to backend
-    let msg = 'mdfk';
-    let targetRoomId = '';
-    socket.to(targetRoomId).emit('newPrivateMsg', msg);
+        // TODO: 3 send private message to backend
+        let msg = 'mdfk';
+        let targetRoomId = roomID;
+        socket.to(targetRoomId).emit('newPrivateMsg', msg);
+    });
+    // TODO: (6) [another client] receive private message from backend
+    socket.on('newPrivateMsg', function(data) {
+        // 獲取消息內容和發送者的信息
+        var message = data.message;
+        var from = data.from;
+        // 在聊天界面顯示消息
+        console.log(message, from);
+    });
 });
 
 

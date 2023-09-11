@@ -66,6 +66,12 @@ code {
   display: flex;
   justify-content: center;
   margin-top:40px;
+  caret-color: none;
+  outline:none;
+  caret-color: transparent;
+}
+input:focus{
+  outline:none;
 }
 
 .loginForm input{

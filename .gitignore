@@ -142,6 +142,6 @@ dist
 .svelte-kit
 
 #test-maple 
-.test.txt
+test.txt
 
 # End of https://www.toptal.com/developers/gitignore/api/node

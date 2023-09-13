@@ -10,8 +10,14 @@ const UserSchema = new mongoose.Schema({ // 建立 UserSchema
     password: String,
     reset_temp_code: { type: String, unique: true },
 });
-
 const UserModel = mongoose.model('User', UserSchema); // 建立 UserModel
+
+// const ChatSchema = new mongoose.Schema({ // 建立 ChatSchema
+//     id: { type: String, unique: true },
+
+// });
+// const ChatModel = mongoose.model('Chat', ChatSchema); // 建立 ChatModel
+
 
 async function isPasswordMatch(username, password) {
     try {

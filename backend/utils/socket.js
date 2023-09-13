@@ -5,7 +5,7 @@ module.exports = function(io) {
         console.log('----------------\n[utils/socket.js] a user connected\n----------------\n');
 
         // TODO: 1 generate roomID
-        socket.id = uuidv4();
+        socket.id = uuidv4();   
         socket.join(socket.id);
         socket.emit('roomID', socket.id);
         

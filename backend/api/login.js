@@ -19,7 +19,6 @@ router.post('/', async(req, res) => {
         let user = await mdb.isPasswordMatch(username, password);
 
         if (user) {
-            // let userid = await mdb.findIdByUsername(username);
             let token = await jwt.generateLoginJWT(
                 user.uid,
                 user.username,

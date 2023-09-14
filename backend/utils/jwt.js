@@ -2,13 +2,13 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: 'config/.env' });
 const JWT_SECRET = process.env.JWT_SECRET;
 
-async function generateLoginJWT(_userid, _username) {
+async function generateLoginJWT(_uid, _username, _email) {
     return new Promise((resolve, reject) => {
         jwt.sign(
             {
-                id: _userid,
+                id: _uid,
                 username: _username,
-                
+                email: _email
             },
             JWT_SECRET,
             { expiresIn: '1d' },

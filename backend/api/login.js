@@ -19,8 +19,12 @@ router.post('/', async(req, res) => {
         let user = await mdb.isPasswordMatch(username, password);
 
         if (user) {
-            let userid = await mdb.findIdByUsername(username);
-            let token = await jwt.generateLoginJWT(userid, username);
+            // let userid = await mdb.findIdByUsername(username);
+            let token = await jwt.generateLoginJWT(
+                user.uid,
+                user.username,
+                user.email
+            );
             if (token !== false) {
                 res.status(200).json({
                     message: '登入成功',

@@ -26,7 +26,7 @@ async function isPasswordMatch(username, password) {
         let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
 
         if (user) { // username or email match password
-            return true;
+            return user;
         }
         else { // username or email not match password
             return false;
@@ -51,6 +51,7 @@ async function findIdByUsername(_username) {
         console.error(error);
     }
 }
+
 
 async function isUserExsists(input) {
     try {

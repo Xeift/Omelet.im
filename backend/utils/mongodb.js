@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({ // 建立 UserSchema
     username: { type: String, unique: true },
     email: { type: String, unique: true },
     password: String,
-    reset_temp_code: { type: String, unique: true },
+    // reset_temp_code: { type: String },
 });
 const UserModel = mongoose.model('User', UserSchema); // 建立 UserModel
 

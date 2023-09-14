@@ -61,6 +61,7 @@ router.post('/submit-info', async(req, res) => {
 
         if (!await mdb.isEmailExsists(decoded.email)) {
             let updateStatus = await mdb.createNewUser(decoded.email, username, password);
+            console.log(updateStatus);
             if (updateStatus) {
                 res.status(200).json({
                     message: '註冊成功',

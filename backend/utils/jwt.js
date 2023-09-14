@@ -5,7 +5,11 @@ const JWT_SECRET = process.env.JWT_SECRET;
 async function generateLoginJWT(_userid, _username) {
     return new Promise((resolve, reject) => {
         jwt.sign(
-            { id: _userid, username: _username },
+            {
+                id: _userid,
+                username: _username,
+                
+            },
             JWT_SECRET,
             { expiresIn: '1d' },
             (err, token) => {

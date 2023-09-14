@@ -39,9 +39,9 @@ async function isPasswordMatch(username, password) {
 
 async function findIdByUsername(_username) {
     try {
-        const user = await UserModel.findOne({ username: _username });
+        const user = await UserModel.findOne({ username: _username }); // TODO: FIX username or email Bug
         if (user) {
-            return user.id;
+            return user.uid;
         }
         else {
             return false;

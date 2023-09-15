@@ -1,11 +1,11 @@
-const { v4: uuidv4 } = require('uuid');
+const generateId = require('./generateId');
 
 module.exports = function(io) {
     io.on('connection', (socket) => {
         console.log('----------------\n[utils/socket.js] a user connected\n----------------\n');
 
         // TODO: 1 generate roomID
-        socket.id = uuidv4();   
+        socket.id = generateId();
         socket.join(socket.id);
         socket.emit('roomID', socket.id);
         

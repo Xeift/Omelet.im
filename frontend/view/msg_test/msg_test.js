@@ -1,4 +1,4 @@
-var socket = io('http://localhost:3000');
+let socket = io('http://localhost:3000');
 socket.on('connect', function(){
     console.log('已連接到後端');
 
@@ -10,7 +10,7 @@ socket.on('connect', function(){
         // TODO: 3 send private message to backend
         let msg = 'mdfk';
         let targetRoomId = roomID;
-        socket.to(targetRoomId).emit('newPrivateMsg', msg);
+        socket.emit('newPrivateMsg', msg);
     });
     // TODO: (6) [another client] receive private message from backend
     socket.on('newPrivateMsg', function(data) {

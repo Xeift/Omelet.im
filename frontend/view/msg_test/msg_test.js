@@ -22,7 +22,9 @@ socket.on('connect', function(){
     });
 });
 
-
+document.getElementById('create-room-btn').onclick = () => {
+    console.log('clicked create');
+};
 
 
 

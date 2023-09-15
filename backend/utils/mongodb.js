@@ -14,11 +14,12 @@ const UserSchema = new mongoose.Schema({ // 建立 UserSchema
 });
 const UserModel = mongoose.model('User', UserSchema); // 建立 UserModel
 
-// const ChatSchema = new mongoose.Schema({ // 建立 ChatSchema
-//     id: { type: String, unique: true },
+const RoomSchema = new mongoose.Schema({ // 建立 RoomSchema
+    id: { type: String, unique: true },
+    members: { type: Array }
 
-// });
-// const ChatModel = mongoose.model('Chat', ChatSchema); // 建立 ChatModel
+});
+const RoomModel = mongoose.model('Chat', RoomSchema); // 建立 RoomModel
 
 
 async function isPasswordMatch(username, password) {

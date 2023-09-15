@@ -15,9 +15,10 @@ const UserSchema = new mongoose.Schema({ // 建立 UserSchema
 const UserModel = mongoose.model('User', UserSchema); // 建立 UserModel
 
 const RoomSchema = new mongoose.Schema({ // 建立 RoomSchema
-    id: { type: String, unique: true },
+    rid: { type: Number, unique: true },
+    name: { type: String },
+    timestamp: { type: Number },
     members: { type: Array }
-
 });
 const RoomModel = mongoose.model('Chat', RoomSchema); // 建立 RoomModel
 
@@ -53,10 +54,23 @@ async function findIdByUsername(_username) {
     }
 }
 
-
 async function isUserExsists(input) {
     try {
         if (await UserModel.findOne({ username: input }) || await UserModel.findOne({ email: input })) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        console.log(`mongodb.js: ${err}`);
+    }
+}
+
+async function isUserIdExsists(input) {
+    try {
+        if (await UserModel.findOne({ uid: input })) {
             return true;
         }
         else {
@@ -103,6 +117,28 @@ async function createNewUser(email, username, password) {
     }
 }
 
+async function createNewRoom(name, type) {
+    try {
+        let updatedRoom = await RoomModel.create({
+            rid: generateId(),
+            name: name,
+            type: type,
+            timestamp: Date.now(),
+            members: []
+        });
+
+        if (updatedRoom) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        return `後端發生例外錯誤： ${err.message}`;
+    }
+}
+
 async function updatePasswordByEmail(email, newPassword) {
     try {
         const user = await UserModel.findOne({ email });
@@ -116,4 +152,13 @@ async function updatePasswordByEmail(email, newPassword) {
     }
 }
 
-module.exports = { isPasswordMatch, findIdByUsername, isUserExsists, isEmailExsists, createNewUser, updatePasswordByEmail };
+module.exports = {
+    isPasswordMatch,
+    findIdByUsername,
+    isUserExsists,
+    isUserIdExsists,
+    isEmailExsists,
+    createNewUser,
+    createNewRoom,
+    updatePasswordByEmail
+};

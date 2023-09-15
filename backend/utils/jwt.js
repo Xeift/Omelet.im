@@ -6,7 +6,7 @@ async function generateLoginJWT(_uid, _username, _email) {
     return new Promise((resolve, reject) => {
         jwt.sign(
             {
-                id: _uid,
+                uid: _uid,
                 username: _username,
                 email: _email
             },

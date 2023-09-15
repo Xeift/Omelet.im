@@ -28,6 +28,7 @@ app.use(bodyParser.json());
 app.use('/api/v1/login', rateLimit.authLimiter, require('./api/login.js'));
 app.use('/api/v1/register', rateLimit.authLimiter, require('./api/register.js'));
 app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/resetPassword.js'));
+app.use('/api/v1/message', rateLimit.authLimiter, require('./api/message.js'));
 
 app.use('*', require('./api/notFound.js'));
 

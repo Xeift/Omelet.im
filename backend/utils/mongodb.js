@@ -7,8 +7,8 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const UserSchema = new mongoose.Schema({ // 建立 UserSchema
     uid: { type: String, unique: true },
-    username: { type: String, unique: true },
     timestamp: { type: Number },
+    username: { type: String, unique: true },
     email: { type: String, unique: true },
     password: { type: String }
     // reset_temp_code: { type: String },
@@ -17,8 +17,8 @@ const UserModel = mongoose.model('User', UserSchema, 'users'); // 建立 UserMod
 
 const RoomSchema = new mongoose.Schema({ // 建立 RoomSchema
     rid: { type: String, unique: true },
-    name: { type: String },
     timestamp: { type: Number },
+    name: { type: String },
     members: { type: Array }
 });
 const RoomModel = mongoose.model('Room', RoomSchema, 'rooms'); // 建立 RoomModel

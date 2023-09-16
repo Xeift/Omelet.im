@@ -8,11 +8,12 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const UserSchema = new mongoose.Schema({ // 建立 UserSchema
     uid: { type: String, unique: true },
     username: { type: String, unique: true },
+    timestamp: { type: Number },
     email: { type: String, unique: true },
     password: { type: String }
     // reset_temp_code: { type: String },
 });
-const UserModel = mongoose.model('User', UserSchema); // 建立 UserModel
+const UserModel = mongoose.model('User', UserSchema, 'users'); // 建立 UserModel
 
 const RoomSchema = new mongoose.Schema({ // 建立 RoomSchema
     rid: { type: String, unique: true },
@@ -20,7 +21,7 @@ const RoomSchema = new mongoose.Schema({ // 建立 RoomSchema
     timestamp: { type: Number },
     members: { type: Array }
 });
-const RoomModel = mongoose.model('Chat', RoomSchema); // 建立 RoomModel
+const RoomModel = mongoose.model('Room', RoomSchema, 'rooms'); // 建立 RoomModel
 
 
 async function isPasswordMatch(username, password) {
@@ -98,10 +99,12 @@ async function isEmailExsists(input) {
 
 async function createNewUser(email, username, password) {
     try {
+        let uid = snowflakeId.generateId();
         let updatedUser = await UserModel.create({
-            uid: snowflakeId.generateId(),
-            email: email,
+            uid: uid,
+            timestamp: snowflakeId.extractTimeStampFromId(uid),
             username: username,
+            email: email,
             password: password
         });
 
@@ -119,11 +122,12 @@ async function createNewUser(email, username, password) {
 
 async function createNewRoom(name, type) {
     try {
+        let rid = snowflakeId.generateId();
         let updatedRoom = await RoomModel.create({
-            rid: snowflakeId.generateId(),
+            rid: rid,
             name: name,
             type: type,
-            timestamp: Date.now(),
+            timestamp: snowflakeId.extractTimeStampFromId(rid),
             members: []
         });
 

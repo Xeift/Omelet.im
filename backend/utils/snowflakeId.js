@@ -9,6 +9,7 @@ function generateId() {
 
 function extractTimeStampFromId(_id) {
     const timestamp = parseInt(snowflake.deconstruct(_id).timestamp);
+    return timestamp;
 }
 
 module.exports = {

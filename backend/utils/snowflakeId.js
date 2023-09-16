@@ -7,10 +7,10 @@ function generateId() {
     return id;
 }
 
-function decodeId(_id) {
-    const des = parseInt(snowflake.deconstruct(_id).timestamp);
+function extractTimeStampFromId(_id) {
+    const timestamp = parseInt(snowflake.deconstruct(_id).timestamp);
 }
 
 module.exports = {
-    generateId, decodeId
+    generateId, extractTimeStampFromId
 };

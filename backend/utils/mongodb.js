@@ -6,7 +6,7 @@ const generateId = require('./generateId');
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }); // 連接至 Mongodb
 
 const UserSchema = new mongoose.Schema({ // 建立 UserSchema
-    uid: { type: Number, unique: true },
+    uid: { type: String, unique: true },
     username: { type: String, unique: true },
     email: { type: String, unique: true },
     password: { type: String }
@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({ // 建立 UserSchema
 const UserModel = mongoose.model('User', UserSchema); // 建立 UserModel
 
 const RoomSchema = new mongoose.Schema({ // 建立 RoomSchema
-    rid: { type: Number, unique: true },
+    rid: { type: String, unique: true },
     name: { type: String },
     timestamp: { type: Number },
     members: { type: Array }

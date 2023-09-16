@@ -14,6 +14,7 @@
 ```
 Omelet-Social-Platform
 ├──.vscode                      工作區設定
+│
 ├──backend                      後端資料夾
 │       ├──api                  所有後端API的JS檔案
 │       ├──config               放 .env（環境變數）的地方
@@ -30,6 +31,7 @@ Omelet-Social-Platform
 │       ├──package-lock.json    記錄用了哪些函式庫，還有 函式庫用了哪些其他的函式庫
 │       ├──package.json         記錄用了哪些函式庫
 │       └──server.js            前端主程式
+│
 ├──.eslintrc.json               ESLint設定文件
 ├──.gitignore                   gitignore設定文件
 ├──LICENSE                      版權宣告

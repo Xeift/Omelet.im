@@ -22,6 +22,7 @@ Omelet-Social-Platform
 │       ├──package-lock.json    記錄用了哪些函式庫，還有 函式庫用了哪些其他的函式庫
 │       ├──package.json         記錄用了哪些函式庫
 │       └──server.js            後端主程式
+│
 ├──frontend                     前端資料夾
 │       ├──node_modules         安裝的函式庫都存在這，沒事不會特別動
 │       ├──route                單純GET前端網頁的API

@@ -7,7 +7,7 @@
 2. cd backend （後端） cd frontend （前端）
 3. npm i
 4. nodemon server.js
-5. 在瀏覽器輸入 http://localhost:3000 （後端）http://localhost:3001 （前端）
+5. 在瀏覽器輸入 http://localhost:3001 （前端）或者用 Postman 測試 http://localhost:3000 （後端）
 
 ## 資料夾介紹
 

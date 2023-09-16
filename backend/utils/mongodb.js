@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config({ path: 'config/.env' });
 const MONGO_URI = process.env.MONGO_URI;
-const generateId = require('./generateId');
+const snowflakeId = require('./snowflakeId');
 
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }); // 連接至 Mongodb
 
@@ -99,7 +99,7 @@ async function isEmailExsists(input) {
 async function createNewUser(email, username, password) {
     try {
         let updatedUser = await UserModel.create({
-            uid: generateId(),
+            uid: snowflakeId.generateId(),
             email: email,
             username: username,
             password: password
@@ -120,7 +120,7 @@ async function createNewUser(email, username, password) {
 async function createNewRoom(name, type) {
     try {
         let updatedRoom = await RoomModel.create({
-            rid: generateId(),
+            rid: snowflakeId.generateId(),
             name: name,
             type: type,
             timestamp: Date.now(),

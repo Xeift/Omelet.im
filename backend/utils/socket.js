@@ -1,4 +1,4 @@
-const generateId = require('./generateId');
+const generateId = require('./snowflakeId');
 
 module.exports = function(io) {
     io.on('connection', (socket) => {

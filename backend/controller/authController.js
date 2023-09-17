@@ -1,4 +1,4 @@
-const UserModel = require('./../model/userModel');
+const UserModel = require('../model/userModel');
 
 async function isPasswordMatch(username, password) {
     try {

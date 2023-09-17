@@ -1,4 +1,4 @@
-const auth = require('../controller/auth.js');
+const authController = require('../controller/authController.js');
 const jwt = require('../utils/jwt.js');
 const express = require('express');
 const router = express.Router();
@@ -16,7 +16,7 @@ router.post('/', async(req, res) => {
         return;
     }
     try {
-        let user = await auth.isPasswordMatch(username, password);
+        let user = await authController.isPasswordMatch(username, password);
 
         if (user) {
             let token = await jwt.generateLoginJWT(

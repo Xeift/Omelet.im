@@ -25,7 +25,7 @@ const RoomSchema = new mongoose.Schema({ // 建立 RoomSchema
 const RoomModel = mongoose.model('Room', RoomSchema, 'rooms'); // 建立 RoomModel
 
 
-async function isPasswordMatch(username, password) {
+async function isPasswordMatch(username, password) { // TODO:
     try {
         let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
 
@@ -70,7 +70,7 @@ async function isUserExsists(input) {
     }
 }
 
-async function isUserIdExsists(input) {
+async function isUserIdExsists(input) { // TODO:
     try {
         if (await UserModel.findOne({ uid: input })) {
             return true;
@@ -121,7 +121,7 @@ async function createNewUser(email, username, password) {
     }
 }
 
-async function createNewRoom(name, type) {
+async function createNewRoom(name, type) { // TODO:
     try {
         let rid = snowflakeId.generateId();
         let updatedRoom = await RoomModel.create({

@@ -10,7 +10,8 @@ const UserSchema = new mongoose.Schema({ // 建立 UserSchema
     timestamp: { type: Number },
     username: { type: String, unique: true },
     email: { type: String, unique: true },
-    password: { type: String }
+    password: { type: String },
+    room_joined: { type: [String], default: [] },
     // reset_temp_code: { type: String },
 });
 const UserModel = mongoose.model('User', UserSchema, 'users'); // 建立 UserModel
@@ -19,7 +20,7 @@ const RoomSchema = new mongoose.Schema({ // 建立 RoomSchema
     rid: { type: String, unique: true },
     timestamp: { type: Number },
     name: { type: String },
-    members: { type: Array }
+    members: { type: [String], default: [] }
 });
 const RoomModel = mongoose.model('Room', RoomSchema, 'rooms'); // 建立 RoomModel
 
@@ -105,7 +106,7 @@ async function createNewUser(email, username, password) {
             timestamp: snowflakeId.extractTimeStampFromId(uid),
             username: username,
             email: email,
-            password: password
+            password: password,
         });
 
         if (updatedUser) {

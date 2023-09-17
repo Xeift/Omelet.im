@@ -1,4 +1,3 @@
-// const mdb = require('../utils/dis_mongodb.js');
 const auth = require('../controller/auth.js');
 const jwt = require('../utils/jwt.js');
 const express = require('express');

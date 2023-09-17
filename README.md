@@ -18,6 +18,8 @@ Omelet-Social-Platform
 ├──backend                      後端資料夾
 │       ├──api                  所有後端API的JS檔案
 │       ├──config               放 .env（環境變數）的地方
+│       ├──controller           MongoDB控制器
+│       ├──model                MongoDB模型
 │       ├──node_modules         安裝的函式庫都存在這，沒事不會特別動
 │       ├──utils                一些雜七雜八的 JS 檔案，後端會用到
 │       ├──package-lock.json    記錄用了哪些函式庫，還有 函式庫用了哪些其他的函式庫

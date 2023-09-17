@@ -84,7 +84,7 @@ async function isUserIdExsists(input) { // TODO:
     }
 }
 
-async function isEmailExsists(input) {
+async function isEmailExsists(input) {//TODO:
     try {
         if (await UserModel.findOne({ email: input })) {
             return true;

@@ -1,3 +1,4 @@
+const snowflakeId = require('../utils/snowflakeId');
 const UserModel = require('../model/userModel');
 
 async function isPasswordMatch(username, password) {
@@ -30,7 +31,46 @@ async function isUserIdExsists(input) {
     }
 }
 
+async function isEmailExsists(input) {
+    try {
+        if (await UserModel.findOne({ email: input })) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        console.log(`mongodb.js: ${err}`);
+    }
+}
+
+async function createNewUser(email, username, password) {
+    try {
+        let uid = snowflakeId.generateId();
+        let updatedUser = await UserModel.create({
+            uid: uid,
+            timestamp: snowflakeId.extractTimeStampFromId(uid),
+            username: username,
+            email: email,
+            password: password,
+        });
+
+        if (updatedUser) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        return `後端發生例外錯誤： ${err.message}`;
+    }
+}
+
 module.exports = {
     isPasswordMatch,
-    isUserIdExsists
+    isUserIdExsists,
+    isEmailExsists,
+    createNewUser
 };

@@ -1,4 +1,4 @@
-const mdb = require('../utils/mongodb.js');
+// const mdb = require('../utils/mongodb.js');
 const jwt = require('../utils/jwt.js');
 const email = require('../utils/email.js');
 const express = require('express');

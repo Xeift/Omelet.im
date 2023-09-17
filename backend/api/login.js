@@ -1,4 +1,5 @@
-const mdb = require('../utils/mongodb.js');
+// const mdb = require('../utils/dis_mongodb.js');
+const auth = require('../controller/auth.js');
 const jwt = require('../utils/jwt.js');
 const express = require('express');
 const router = express.Router();
@@ -16,7 +17,7 @@ router.post('/', async(req, res) => {
         return;
     }
     try {
-        let user = await mdb.isPasswordMatch(username, password);
+        let user = await auth.isPasswordMatch(username, password);
 
         if (user) {
             let token = await jwt.generateLoginJWT(

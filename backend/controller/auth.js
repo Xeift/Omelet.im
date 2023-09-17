@@ -16,6 +16,21 @@ async function isPasswordMatch(username, password) {
     }
 }
 
+async function isUserIdExsists(input) {
+    try {
+        if (await UserModel.findOne({ uid: input })) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    catch (err) {
+        console.log(`mongodb.js: ${err}`);
+    }
+}
+
 module.exports = {
-    isPasswordMatch
+    isPasswordMatch,
+    isUserIdExsists
 };

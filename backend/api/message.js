@@ -1,4 +1,5 @@
-// const mdb = require('../utils/mongodb.js');
+const message = require('../controller/message');
+const auth = require('../controller/auth.js');
 const jwt = require('../utils/jwt.js');
 const email = require('../utils/email.js');
 const express = require('express');
@@ -8,8 +9,8 @@ router.post('/create-room', async(req, res) => {
     try {
         const { code, name, type } = req.body;
         const decoded = await jwt.verifyJWT(code);
-        if (await mdb.isUserIdExsists(decoded.uid)) {
-            let updateStatus = await mdb.createNewRoom(name, type);
+        if (await auth.isUserIdExsists(decoded.uid)) {
+            let updateStatus = await message.createNewRoom(name, type);
             if (updateStatus) {
                 res.status(200).json({
                     message: 'room 建立成功',

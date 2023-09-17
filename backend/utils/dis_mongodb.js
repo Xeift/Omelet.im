@@ -98,7 +98,7 @@ async function isEmailExsists(input) {//TODO:
     }
 }
 
-async function createNewUser(email, username, password) {
+async function createNewUser(email, username, password) { //TODO:
     try {
         let uid = snowflakeId.generateId();
         let updatedUser = await UserModel.create({

@@ -1,4 +1,4 @@
-// const mdb = require('../utils/mongodb.js');
+const authController = require('../controller/authController.js');
 const jwt = require('../utils/jwt.js');
 const email = require('../utils/email.js');
 const express = require('express');
@@ -8,7 +8,7 @@ router.post('/send-mail', async(req, res) => {
     let emailData = req.body.email;
 
     try {
-        let isEmailExsists = await mdb.isEmailExsists(emailData);
+        let isEmailExsists = await authController.isEmailExsists(emailData);
         if (isEmailExsists) { 
             let code = await jwt.generateRestorePasswordJWT(emailData);
             let emailStats = await email.sendResetPasswordMail(emailData, code);
@@ -50,8 +50,8 @@ router.post('/submit-info', async(req, res) => {
         const { code, password } = req.body;
         const decoded = await jwt.verifyJWT(code);
 
-        if (await mdb.isEmailExsists(decoded.email)) {
-            let updateStatus = await mdb.updatePasswordByEmail(decoded.email, password);
+        if (await authController.isEmailExsists(decoded.email)) {
+            let updateStatus = await authController.updatePasswordByEmail(decoded.email, password);
             if (updateStatus) {
                 res.status(200).json({
                     message: '成功重置密碼',

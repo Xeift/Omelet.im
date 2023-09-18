@@ -54,7 +54,7 @@ async function createNewUser(email, username, password) {
             email: email,
             password: password,
         });
-
+        console.log(`[authController.js] updatedUser: ${updatedUser}`);
         if (updatedUser) {
             return true;
         }
@@ -63,7 +63,12 @@ async function createNewUser(email, username, password) {
         }
     }
     catch (err) {
-        return `後端發生例外錯誤： ${err.message}`;
+        if(err.code === 11000) {
+            return '使用者名稱或 email 不可重複';
+        }
+        else {
+            return `後端發生例外錯誤： ${err.message}`;
+        }
     }
 }
 

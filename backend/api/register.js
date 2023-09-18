@@ -59,10 +59,9 @@ router.post('/submit-info', async(req, res) => {
         const { code, username, password } = req.body;
         const decoded = await jwt.verifyJWT(code);
 
-        if (!await authController.isEmailExsists(decoded.email)) { // TODO: add info check no duplicates
+        if (!await authController.isEmailExsists(decoded.email)) {
             let updateStatus = await authController.createNewUser(decoded.email, username, password);
-            console.log(updateStatus);
-            if (updateStatus) {
+            if (updateStatus === true) {
                 res.status(200).json({
                     message: '註冊成功',
                     data: null,
@@ -71,7 +70,7 @@ router.post('/submit-info', async(req, res) => {
             }
             else {
                 res.status(500).json({
-                    message: '資料庫異常',
+                    message: updateStatus,
                     data: null,
                     token: null
                 });

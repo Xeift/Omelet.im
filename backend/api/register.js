@@ -59,7 +59,7 @@ router.post('/submit-info', async(req, res) => {
         const { code, username, password } = req.body;
         const decoded = await jwt.verifyJWT(code);
 
-        if (!await authController.isEmailExsists(decoded.email)) {
+        if (!await authController.isEmailExsists(decoded.email)) { // TODO: add info check no duplicates
             let updateStatus = await authController.createNewUser(decoded.email, username, password);
             console.log(updateStatus);
             if (updateStatus) {

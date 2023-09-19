@@ -15,38 +15,29 @@ router.post('/', async(req, res) => {
         });
         return;
     }
+
     try {
         let user = await authController.isPasswordMatch(username, password);
-
-        if (user) {
-            let token = await jwt.generateLoginJWT(
-                user.uid,
-                user.username,
-                user.email
-            );
-            if (token !== false) {
-                res.status(200).json({
-                    message: '登入成功',
-                    data: null,
-                    token: token
-                });
-            }
-            else {
-                res.status(500).json({
-                    message: 'jwt產生失敗',
-                    data: null,
-                    token: token
-                });
-            }
-
-        }
-        else {
+        
+        if (!user) {
             res.status(401).json({
                 message: '帳號或密碼錯誤',
                 data: null,
                 token: null
             });
+            return;
         }
+
+        let token = await jwt.generateLoginJWT(
+            user.uid,
+            user.username,
+            user.email
+        );
+        res.status(200).json({
+            message: '登入成功',
+            data: null,
+            token: token
+        });
     }
     catch (err) {
         res.status(500).json({

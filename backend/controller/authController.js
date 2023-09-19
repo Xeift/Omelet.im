@@ -2,18 +2,8 @@ const snowflakeId = require('../utils/snowflakeId');
 const UserModel = require('../model/userModel');
 
 async function isPasswordMatch(username, password) {
-    try {
-        let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
-        if (user) {
-            return user;
-        }
-        else {
-            return false;
-        }
-    }
-    catch (err) {
-        console.log(`mongodb.js: ${err}`);
-    }
+    let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
+    return user;
 }
 
 async function isUserIdExsists(input) {

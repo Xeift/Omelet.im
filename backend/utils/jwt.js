@@ -3,56 +3,30 @@ require('dotenv').config({ path: 'config/.env' });
 const JWT_SECRET = process.env.JWT_SECRET;
 
 async function generateLoginJWT(_uid, _username, _email) {
-    return new Promise((resolve, reject) => {
-        jwt.sign(
-            {
-                uid: _uid,
-                username: _username,
-                email: _email
-            },
-            JWT_SECRET,
-            { expiresIn: '1d' },
-            (err, token) => {
-                if (err) {
-                    reject(false);
-                }
-                else {
-                    resolve(token);
-                }
-            }
-        );
-    });
+    const token = jwt.sign(
+        { _uid, _username, _email },
+        JWT_SECRET,
+        { expiresIn: '1d' }
+    );
+    return token;
 }
 
 async function generateRestorePasswordJWT(_email) {
-    return new Promise((resolve, reject) => {
-        jwt.sign(
-            { email: _email },
-            JWT_SECRET,
-            { expiresIn: '5m' },
-            (err, token) => {
-                if (err) {
-                    reject(false);
-                }
-                else {
-                    resolve(token);
-                }
-            }
-        );
-    });
+    const token = jwt.sign(
+        { email: _email },
+        JWT_SECRET,
+        { expiresIn: '5m' },
+    );
+    return token;
 }
 
 async function verifyJWT(token) {
-    return new Promise((resolve, reject) => {
-        jwt.verify(token, JWT_SECRET, (err, decoded) => {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve(decoded);
-            }
-        });
-    });
+    const decoded_token = jwt.verify(token, JWT_SECRET);
+    return decoded_token;
 }
 
-module.exports = { generateLoginJWT, generateRestorePasswordJWT, verifyJWT };
+module.exports = {
+    generateLoginJWT,
+    generateRestorePasswordJWT,
+    verifyJWT
+};

@@ -3,7 +3,7 @@ const snowflakeId = require('../utils/snowflakeId');
 
 async function createNewRoom(name, type) {
     let rid = snowflakeId.generateId();
-    let updatedRoom = await RoomModel.create({
+    await RoomModel.create({
         rid: rid,
         name: name,
         type: type,

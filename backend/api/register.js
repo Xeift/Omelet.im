@@ -86,11 +86,20 @@ router.post('/submit-info', async(req, res) => {
 
     }
     catch (err) {
-        res.status(500).json({
-            message: `後端發生例外錯誤： ${err.message}`,
-            data: null,
-            token: null
-        });
+        if(err.code === 11000) {
+            res.status(500).json({
+                message: '使用者名稱或 email 不可重複',
+                data: null,
+                token: null
+            });
+        }
+        else {
+            res.status(500).json({
+                message: `後端發生例外錯誤： ${err.message}`,
+                data: null,
+                token: null
+            });
+        }
     }
 });
 

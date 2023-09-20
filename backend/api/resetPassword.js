@@ -51,21 +51,13 @@ router.post('/submit-info', async(req, res) => {
         const decoded = await jwt.verifyJWT(code);
 
         if (await authController.isEmailExsists(decoded.email)) {
-            let updateStatus = await authController.updatePasswordByEmail(decoded.email, password);
-            if (updateStatus) {
-                res.status(200).json({
-                    message: '成功重置密碼',
-                    data: null,
-                    token: null
-                });
-            }
-            else {
-                res.status(500).json({
-                    message: '資料庫異常',
-                    data: null,
-                    token: null
-                });
-            }
+            await authController.updatePasswordByEmail(decoded.email, password);
+
+            res.status(200).json({
+                message: '成功重置密碼',
+                data: null,
+                token: null
+            });
         }
         else {
             res.status(401).json({

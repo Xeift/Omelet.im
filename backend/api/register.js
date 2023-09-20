@@ -59,31 +59,12 @@ router.post('/submit-info', async(req, res) => {
         const { code, username, password } = req.body;
         const decoded = await jwt.verifyJWT(code);
 
-        if (!await authController.isEmailExsists(decoded.email)) {
-            let updateStatus = await authController.createNewUser(decoded.email, username, password);
-            if (updateStatus === true) {
-                res.status(200).json({
-                    message: '註冊成功',
-                    data: null,
-                    token: null
-                });
-            }
-            else {
-                res.status(500).json({
-                    message: updateStatus,
-                    data: null,
-                    token: null
-                });
-            }
-        }
-        else {
-            res.status(401).json({
-                message: '該 email 已註冊',
-                data: null,
-                token: null
-            });            
-        }
-
+        await authController.createNewUser(decoded.email, username, password);
+        res.status(200).json({
+            message: '註冊成功',
+            data: null,
+            token: null
+        });
     }
     catch (err) {
         if(err.code === 11000) {

@@ -3,7 +3,7 @@ const UserModel = require('../model/userModel');
 
 async function isPasswordMatch(username, password) {
     let user = await UserModel.findOne({ username: username, password: password }) || await UserModel.findOne({ email: username, password: password });
-    return user;
+    return !!user;
 }
 
 async function isUserIdExsists(input) {
@@ -21,16 +21,11 @@ async function isUserIdExsists(input) {
 }
 
 async function isEmailExsists(input) {
-    try {
-        if (await UserModel.findOne({ email: input })) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    if (await UserModel.findOne({ email: input })) {
+        return true;
     }
-    catch (err) {
-        console.log(`mongodb.js: ${err}`);
+    else {
+        return false;
     }
 }
 

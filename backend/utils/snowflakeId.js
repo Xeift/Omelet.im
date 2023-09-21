@@ -13,5 +13,6 @@ function extractTimeStampFromId(_id) {
 }
 
 module.exports = {
-    generateId, extractTimeStampFromId
+    generateId,
+    extractTimeStampFromId
 };

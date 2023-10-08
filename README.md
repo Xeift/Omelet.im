@@ -1,5 +1,5 @@
 # Omelet-Social-Platform
-蛋餅 - 創新社交平臺
+蛋餅 - 創新通訊軟體
 
 ## 使用方法
 

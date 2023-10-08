@@ -64,10 +64,8 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
     // socket.onDisconnect((_) => print('disconnect'));
     // socket.on('fromServer', (_) => print(_));
 
-    print('-------------\n');
-    print(idController.text);
-    print(contentController.text);
-    print('-------------\n');
+    print('[main.dart] ${idController.text}');
+    print('[main.dart] ${contentController.text}');
     setState(() {
       msgContent =
           "接收者 id: ${idController.text}\n發送內容： ${contentController.text}"; // 更新msgContent的值為"hello"

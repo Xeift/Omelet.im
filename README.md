@@ -26,7 +26,7 @@ Omelet-Social-Platform
 │       ├──package.json         記錄用了哪些函式庫
 │       └──server.js            後端主程式
 │
-├──frontend                     前端資料夾
+├──frontend                     前端資料夾（Web 客戶端已棄用，轉為 Flutter）
 │       ├──node_modules         安裝的函式庫都存在這，沒事不會特別動
 │       ├──route                單純GET前端網頁的API
 │       ├──view                 前端Html、CSS檔案

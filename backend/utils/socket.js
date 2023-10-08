@@ -5,7 +5,7 @@ module.exports = function(io) {
         console.log('----------------\n[utils/socket.js] a user connected\n----------------\n');
 
         // TODO: 1 generate roomID
-        socket.id = generateId();
+        socket.id = generateId.generateId();
         socket.join(socket.id);
         socket.emit('roomID', socket.id);
         
@@ -15,6 +15,8 @@ module.exports = function(io) {
             socket.to(receiverId).emit('newPrivateMsg', socket.id, message);
         });
 
-
+        socket.on('helloFromDartClient', (msg) => {
+            console.log(`來自客戶端的訊息：${msg}`);
+        });
     });
 };

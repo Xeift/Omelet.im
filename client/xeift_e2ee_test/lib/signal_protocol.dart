@@ -3,12 +3,14 @@
 import 'dart:convert'; // 用於編碼和解碼字串
 import 'dart:typed_data'; // 用於處理字節數組
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart'; // 用於實現信號協議
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> install() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
   final registrationId = generateRegistrationId(false); // 生成註冊ID
   final preKeys = generatePreKeys(0, 110); // 生成預先金鑰列表
   final signedPreKey = generateSignedPreKey(identityKeyPair, 0); // 生成簽名預先金鑰
+
   print('-------------------------   debug 內容開始   -------------------------');
   print(
       '[signal_protocol.dart] identityKeyPair 內容： ${identityKeyPair.serialize()}');
@@ -93,4 +95,19 @@ Future<void> install() async {
     });
   }
   print('-------------------------   debug 內容結束   -------------------------\n');
+}
+
+Future<void> onWriteBtnPressed1(String key, String value) async {
+  print('write');
+  print('$key $value');
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString(key, value);
+}
+
+Future<void> onReadBtnPressed1(String key) async {
+  print('read');
+  print(key);
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String? testKey = prefs.getString(key);
+  print('test_key內容: $testKey');
 }

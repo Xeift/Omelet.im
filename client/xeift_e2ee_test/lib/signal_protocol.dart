@@ -13,12 +13,12 @@ Future<void> install() async {
 
   print('-------------------------   debug 內容開始   -------------------------');
   print(
-      '[signal_protocol.dart] identityKeyPair 內容： ${identityKeyPair.serialize()}'); // TODO: need to serialize
-  print('[signal_protocol.dart] registrationId 內容： ${registrationId}');
+      '[signal_protocol.dart] identityKeyPair 內容： ${identityKeyPair.serialize()}'); // need to serialize
+  print('[signal_protocol.dart] registrationId 內容： $registrationId');
   print(
-      '[signal_protocol.dart] preKeys 內容： ${preKeys[0].serialize()}'); // TODO: need to serialize
+      '[signal_protocol.dart] preKeys 內容： ${preKeys[0].serialize()}'); // need to serialize
   print(
-      '[signal_protocol.dart] signedPreKey 內容： ${signedPreKey.serialize()}'); // TODO: need to serialize
+      '[signal_protocol.dart] signedPreKey 內容： ${signedPreKey.serialize()}'); // need to serialize
   final sessionStore = InMemorySessionStore(); // 建立會話儲存方式
   final preKeyStore = InMemoryPreKeyStore(); // 建立預先金鑰儲存方式
   final signedPreKeyStore = InMemorySignedPreKeyStore(); // 建立簽名預先金鑰儲存方式

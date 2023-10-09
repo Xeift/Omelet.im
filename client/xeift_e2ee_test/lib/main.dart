@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 // import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'signal_protocol_1.dart';
+import 'signal_protocol.dart';
 
 void main() {
   runApp(const MyMsgWidget());

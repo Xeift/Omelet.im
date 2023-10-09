@@ -9,9 +9,9 @@ Future<void> install() async {
   final registrationId = generateRegistrationId(false); // 生成註冊ID
   final preKeys = generatePreKeys(0, 110); // 生成預先金鑰列表
   final signedPreKey = generateSignedPreKey(identityKeyPair, 0); // 生成簽名預先金鑰
-  print('\n-------------------------   debug 內容開始   -------------------------');
+  print('-------------------------   debug 內容開始   -------------------------');
   print(
-      '[signal_protocol_1.dart] identityKeyPair 內容： ${identityKeyPair.serialize()}');
+      '[signal_protocol.dart] identityKeyPair 內容： ${identityKeyPair.serialize()}');
 
   // 建立儲存方式，使用內存儲存方式
   final sessionStore = InMemorySessionStore(); // 建立會話儲存方式

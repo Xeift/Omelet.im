@@ -59,12 +59,14 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               child: const Text("發送訊息"),
             ),
             ElevatedButton(
-              onPressed: onWriteBtnPressed,
+              onPressed: () async => await onWriteBtnPressed(
+                  spKeyController.text, spValueController.text),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               child: const Text("寫入內容"),
             ),
             ElevatedButton(
-              onPressed: onReadBtnPressed,
+              onPressed: () async =>
+                  await onReadBtnPressed(spKeyController.text),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
               child: const Text("讀取內容"),
             ),
@@ -93,20 +95,5 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
           "接收者 id: ${idController.text}\n發送內容： ${contentController.text}"; // 更新msgContent的值為"hello"
     });
   }
-
-  Future<void> onWriteBtnPressed() async {
-    await onWriteBtnPressed1(spKeyController.text, spValueController.text);
-  }
-
-  Future<void> onReadBtnPressed() async {
-    await onReadBtnPressed1(spKeyController.text);
-  }
 }
 // ref: https://youtu.be/n8eY4qb7Dgw
-
-
-
-
-
-
-

@@ -97,17 +97,17 @@ Future<void> install() async {
   print('-------------------------   debug 內容結束   -------------------------\n');
 }
 
-Future<void> onWriteBtnPressed1(String key, String value) async {
+Future<void> onWriteBtnPressed(String key, String value) async {
   print('write');
   print('$key $value');
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString(key, value);
 }
 
-Future<void> onReadBtnPressed1(String key) async {
+Future<void> onReadBtnPressed(String key) async {
   print('read');
   print(key);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final String? testKey = prefs.getString(key);
-  print('test_key內容: $testKey');
+  final String? value = prefs.getString(key);
+  print('$key 內容: $value');
 }

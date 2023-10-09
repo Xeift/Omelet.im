@@ -13,9 +13,12 @@ Future<void> install() async {
 
   print('-------------------------   debug 內容開始   -------------------------');
   print(
-      '[signal_protocol.dart] identityKeyPair 內容： ${identityKeyPair.serialize()}');
-
-  // 建立儲存方式，使用內存儲存方式
+      '[signal_protocol.dart] identityKeyPair 內容： ${identityKeyPair.serialize()}'); // TODO: need to serialize
+  print('[signal_protocol.dart] registrationId 內容： ${registrationId}');
+  print(
+      '[signal_protocol.dart] preKeys 內容： ${preKeys[0].serialize()}'); // TODO: need to serialize
+  print(
+      '[signal_protocol.dart] signedPreKey 內容： ${signedPreKey.serialize()}'); // TODO: need to serialize
   final sessionStore = InMemorySessionStore(); // 建立會話儲存方式
   final preKeyStore = InMemoryPreKeyStore(); // 建立預先金鑰儲存方式
   final signedPreKeyStore = InMemorySignedPreKeyStore(); // 建立簽名預先金鑰儲存方式
@@ -68,8 +71,8 @@ Future<void> install() async {
   final ciphertext = await sessionCipher // 使用會話密碼器加密訊息，得到密文物件
       .encrypt(Uint8List.fromList(utf8.encode('Hello Mixin🤣')));
 
-  print(ciphertext); // 印出密文物件的資訊
-  print(ciphertext.serialize()); // 印出密文物件的序列化字節數組
+  // print(ciphertext); // 印出密文物件的資訊
+  // print(ciphertext.serialize()); // 印出密文物件的序列化字節數組
 
   //deliver(ciphertext); // 將密文物件傳送給遠端
 
@@ -91,7 +94,7 @@ Future<void> install() async {
     // 如果密文物件是預先金鑰訊息類型，則使用遠端的會話密碼器解密訊息，並提供回呼函數處理明文
     await remoteSessionCipher
         .decryptWithCallback(ciphertext as PreKeySignalMessage, (plaintext) {
-      print(utf8.decode(plaintext)); // 印出明文的字串
+      // print(utf8.decode(plaintext)); // 印出明文的字串
     });
   }
   print('-------------------------   debug 內容結束   -------------------------\n');

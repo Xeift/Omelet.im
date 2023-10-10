@@ -3,7 +3,7 @@
 import 'dart:convert'; // 用於編碼和解碼字串
 import 'dart:typed_data'; // 用於處理字節數組
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart'; // 用於實現信號協議
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<void> install() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
@@ -103,14 +103,18 @@ Future<void> install() async {
 Future<void> onWriteBtnPressed(String key, String value) async {
   print('write');
   print('$key $value');
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString(key, value);
+  // final SharedPreferences prefs = await SharedPreferences.getInstance();
+  // await prefs.setString(key, value);
+  const storage = FlutterSecureStorage();
+  await storage.write(key: key, value: value);
 }
 
 Future<void> onReadBtnPressed(String key) async {
   print('read');
   print(key);
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final String? value = prefs.getString(key);
+  // final SharedPreferences prefs = await SharedPreferences.getInstance();
+  // final String? value = prefs.getString(key);
+  const storage = FlutterSecureStorage();
+  String? value = await storage.read(key: key);
   print('$key 內容: $value');
 }

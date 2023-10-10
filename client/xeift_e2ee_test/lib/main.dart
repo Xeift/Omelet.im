@@ -70,6 +70,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
               child: const Text("讀取內容"),
             ),
+            ElevatedButton(
+              onPressed: () async => await onGenerateKeyBtnPressed(),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              child: const Text("生成並儲存金鑰"),
+            ),
           ],
         ),
       ),

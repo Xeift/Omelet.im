@@ -19,6 +19,7 @@ Future<void> install() async {
       '[signal_protocol.dart] preKeys 內容： ${preKeys[0].serialize()}'); // need to serialize
   print(
       '[signal_protocol.dart] signedPreKey 內容： ${signedPreKey.serialize()}'); // need to serialize
+
   final sessionStore = InMemorySessionStore(); // 建立會話儲存方式
   final preKeyStore = InMemoryPreKeyStore(); // 建立預先金鑰儲存方式
   final signedPreKeyStore = InMemorySignedPreKeyStore(); // 建立簽名預先金鑰儲存方式
@@ -113,4 +114,40 @@ Future<void> onReadBtnPressed(String key) async {
   const storage = FlutterSecureStorage();
   String? value = await storage.read(key: key);
   print('$key 內容: $value');
+}
+
+Future<void> onGenerateKeyBtnPressed() async {
+  final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
+  final registrationId = generateRegistrationId(false); // 生成註冊ID
+  final preKeys = generatePreKeys(0, 110); // 生成預先金鑰列表
+  final signedPreKey = generateSignedPreKey(identityKeyPair, 0); // 生成簽名預先金鑰
+
+  String sessionStore = 'empty'; // TODO:
+  Map<String, dynamic> preKeyStoreTemp = {};
+  for (final p in preKeys) {
+    preKeyStoreTemp[p.id.toString()] = p.serialize();
+  }
+  String preKeyStore = jsonEncode(preKeyStoreTemp); // TODO:
+  final signedPreKeyStore = jsonEncode(signedPreKey.serialize()); // TODO:
+  final identityStore = jsonEncode(// TODO:
+      {jsonEncode(identityKeyPair.serialize()): registrationId.toString()});
+
+  const storage = FlutterSecureStorage();
+  await storage.write(key: 'sessionStore', value: sessionStore);
+  await storage.write(key: 'preKeyStore', value: preKeyStore);
+  await storage.write(key: 'signedPreKeyStore', value: signedPreKeyStore);
+  await storage.write(key: 'identityStore', value: identityStore);
+
+  print('儲存完畢');
+
+  // print('-------------------------   debug 內容開始   -------------------------');
+  // print(
+  //     '[signal_protocol.dart] identityKeyPair 內容： ${identityKeyPair.serialize().runtimeType}'); // need to serialize
+  // print(
+  //     '[signal_protocol.dart] registrationId 內容： ${registrationId.toString().runtimeType}');
+  // print(
+  //     '[signal_protocol.dart] preKeys 內容： ${preKeys[0].serialize().runtimeType}'); // need to serialize
+  // print(
+  //     '[signal_protocol.dart] signedPreKey 內容： ${signedPreKey.serialize().runtimeType}'); // need to serialize
+  // print('-------------------------   debug 內容結束   -------------------------');
 }

@@ -4,6 +4,7 @@ import 'dart:convert'; // 用於編碼和解碼字串
 import 'dart:typed_data'; // 用於處理字節數組
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart'; // 用於實現信號協議
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'safe_pre_key_store.dart';
 
 Future<void> install() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
@@ -21,6 +22,7 @@ Future<void> install() async {
       '[signal_protocol.dart] signedPreKey 內容： ${signedPreKey.serialize()}'); // need to serialize
 
   final sessionStore = InMemorySessionStore(); // 建立會話儲存方式
+  // final preKeyStore = InMemoryPreKeyStore(); // 建立預先金鑰儲存方式
   final preKeyStore = InMemoryPreKeyStore(); // 建立預先金鑰儲存方式
   final signedPreKeyStore = InMemorySignedPreKeyStore(); // 建立簽名預先金鑰儲存方式
   final identityStore =
@@ -108,12 +110,49 @@ Future<void> onWriteBtnPressed(String key, String value) async {
   await storage.write(key: key, value: value);
 }
 
+Future<void> onWriteJsonBtnPressed() async {
+  print('write json');
+  const storage = FlutterSecureStorage();
+  final mp = {
+    "1": jsonEncode(
+      Uint8List.fromList([8, 0, 18, 33, 5, 228, 236, 194, 131, 236, 141, 85, 50, 237, 231, 62, 31, 45, 92, 207, 47, 117, 13, 189, 189, 162, 94, 37, 15, 81, 119, 133, 74, 59, 124, 148, 102, 26, 32, 176, 43, 202, 119, 190, 25, 178, 221, 110, 127, 162, 173, 223, 74, 188, 161, 186, 173, 239, 203, 216, 96, 253, 228, 175, 66, 23, 100, 137, 90, 191, 109])
+    ),
+    "2": jsonEncode(
+      Uint8List.fromList([8, 0, 18, 33, 5, 228, 236, 194, 131, 236, 141, 85, 50, 237, 231, 62, 31, 45, 92, 207, 47, 117, 13, 189, 189, 162, 94, 37, 15, 81, 119, 133, 74, 59, 124, 148, 102, 26, 32, 176, 43, 202, 119, 190, 25, 178, 221, 110, 127, 162, 173, 223, 74, 188, 161, 186, 173, 239, 203, 216, 96, 253, 228, 175, 66, 23, 100, 137, 90, 191, 109])
+    ),
+  };
+  await storage.write(
+    key: 'preKey',
+    value: jsonEncode(mp)
+  ); //
+}
+
+Future<void> onRemoveBtnPressed(String key) async {
+  print('remove');
+  print(key);
+  const storage = FlutterSecureStorage();
+  await storage.delete(key: key);
+}
+
+Future<void> onRemoveAllBtnPressed() async {
+  print('remove all');
+  const storage = FlutterSecureStorage();
+  await storage.deleteAll();
+}
+
 Future<void> onReadBtnPressed(String key) async {
   print('read');
   print(key);
   const storage = FlutterSecureStorage();
   String? value = await storage.read(key: key);
-  print('$key 內容: $value');
+  print('$key 內容: $value 內容形態: ${value.runtimeType}');
+}
+
+Future<void> onReadNumber2PreKeyPressed() async {
+  final preKeyStore =
+      SafePreKeyStore(const FlutterSecureStorage()); // 建立預先金鑰儲存方式
+  final x = await preKeyStore.loadPreKey(2);
+  print('x: ${x.serialize()}');
 }
 
 Future<void> onGenerateKeyBtnPressed() async {
@@ -122,21 +161,29 @@ Future<void> onGenerateKeyBtnPressed() async {
   final preKeys = generatePreKeys(0, 110); // 生成預先金鑰列表
   final signedPreKey = generateSignedPreKey(identityKeyPair, 0); // 生成簽名預先金鑰
 
-  String sessionStore = 'empty'; // TODO:
-  Map<String, dynamic> preKeyStoreTemp = {};
-  for (final p in preKeys) {
-    preKeyStoreTemp[p.id.toString()] = p.serialize();
-  }
-  String preKeyStore = jsonEncode(preKeyStoreTemp); // TODO:
-  final signedPreKeyStore = jsonEncode(signedPreKey.serialize()); // TODO:
-  final identityStore = jsonEncode(// TODO:
-      {jsonEncode(identityKeyPair.serialize()): registrationId.toString()});
+  final preKeyStore =
+      SafePreKeyStore(const FlutterSecureStorage()); // 建立預先金鑰儲存方式
 
-  const storage = FlutterSecureStorage();
-  await storage.write(key: 'sessionStore', value: sessionStore);
-  await storage.write(key: 'preKeyStore', value: preKeyStore);
-  await storage.write(key: 'signedPreKeyStore', value: signedPreKeyStore);
-  await storage.write(key: 'identityStore', value: identityStore);
+  for (final p in preKeys) {
+    print(p.serialize());
+    preKeyStore.storePreKey(p.id, p);
+  }
+
+  // String sessionStore = 'empty'; // TODO:
+  // Map<String, dynamic> preKeyStoreTemp = {};
+  // for (final p in preKeys) {
+  //   preKeyStoreTemp[p.id.toString()] = p.serialize();
+  // }
+  // String preKeyStore = jsonEncode(preKeyStoreTemp); // TODO:
+  // final signedPreKeyStore = jsonEncode(signedPreKey.serialize()); // TODO:
+  // final identityStore = jsonEncode(// TODO:
+  //     {jsonEncode(identityKeyPair.serialize()): registrationId.toString()});
+
+  // const storage = FlutterSecureStorage();
+  // await storage.write(key: 'sessionStore', value: sessionStore);
+  // await storage.write(key: 'preKeyStore', value: preKeyStore);
+  // await storage.write(key: 'signedPreKeyStore', value: signedPreKeyStore);
+  // await storage.write(key: 'identityStore', value: identityStore);
 
   print('儲存完畢');
 

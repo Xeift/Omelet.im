@@ -65,10 +65,33 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               child: const Text("寫入內容"),
             ),
             ElevatedButton(
+              onPressed: () async => await onWriteJsonBtnPressed(),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
+              child: const Text("寫入json內容"),
+            ),
+            ElevatedButton(
+              onPressed: () async =>
+                  await onRemoveBtnPressed(spKeyController.text),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan),
+              child: const Text("移除內容"),
+            ),
+            ElevatedButton(
+              onPressed: () async => await onRemoveAllBtnPressed(),
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+              child: const Text("移除所有內容"),
+            ),
+            ElevatedButton(
               onPressed: () async =>
                   await onReadBtnPressed(spKeyController.text),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
               child: const Text("讀取內容"),
+            ),
+            ElevatedButton(
+              onPressed: () async =>
+                  await onReadNumber2PreKeyPressed(),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 72, 220, 124)),
+              child: const Text("讀取2號preKey"),
             ),
             ElevatedButton(
               onPressed: () async => await onGenerateKeyBtnPressed(),

@@ -15,15 +15,14 @@ class SafePreKeyStore implements PreKeyStore {
 
   @override
   Future<bool> containsPreKey(int preKeyId) async { // TODO:
-    // Read the map from storage
-    final value = await storage.read(key: preKey);
-    if (value == null) {
-      return false;
+    final preKeys = jsonDecode((await storage.read(key: preKey)).toString());
+    if (preKeys == null) {
+      throw InvalidKeyIdException('no prekey found');
     }
-    final map = jsonDecode(value) as Map;
-    // Get the value from the map by preKeyId
-    final record = map[preKeyId.toString()];
-    return record != null;
+
+    final singlePreKey = preKeys[preKeyId.toString()];
+
+    return singlePreKey != null;
   }
 
   @override

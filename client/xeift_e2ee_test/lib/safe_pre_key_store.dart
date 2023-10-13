@@ -14,7 +14,7 @@ class SafePreKeyStore implements PreKeyStore {
   static const String preKey = 'preKey';
 
   @override
-  Future<bool> containsPreKey(int preKeyId) async {
+  Future<bool> containsPreKey(int preKeyId) async { // TODO:
     // Read the map from storage
     final value = await storage.read(key: preKey);
     if (value == null) {
@@ -33,7 +33,7 @@ class SafePreKeyStore implements PreKeyStore {
       throw InvalidKeyIdException('no prekey found');
     }
 
-    final singlePreKey =  preKeys[preKeyId.toString()];
+    final singlePreKey = preKeys[preKeyId.toString()];
     if (singlePreKey == null) {
       throw InvalidKeyIdException('No such prekey record: $preKeyId');
     }
@@ -42,7 +42,7 @@ class SafePreKeyStore implements PreKeyStore {
   }
 
   @override
-  Future<void> removePreKey(int preKeyId) async {
+  Future<void> removePreKey(int preKeyId) async { // TODO:
     // Read the map from storage
     final value = await storage.read(key: preKey);
     if (value == null) {
@@ -58,7 +58,7 @@ class SafePreKeyStore implements PreKeyStore {
   // 儲存：String →
   // 讀取：String →
   @override
-  Future<void> storePreKey(int preKeyId, PreKeyRecord record) async {
+  Future<void> storePreKey(int preKeyId, PreKeyRecord record) async { // TODO:
     print(record); // <PreKeyRecord> Instance of 'PreKeyRecord'
     print(record
         .serialize()); // <Uint8List> [8, 109, 18, 33, 5, 67, 164, 221, 199, 239, 218, 92, 200, 22, 68, 106, 53, 31, 203, 199, 66, 27, 246, 237, 60, 53, 24, 204, 146, 97, 242, 25, 163, 143, 38, 131, 118, 26, 32, 72, 142, 39, 4, 40, 168, 227, 114, 192, 167, 113, 202, 196, 112, 9, 28, 2, 157, 220, 226, 23, 10, 203, 191, 130, 175, 150, 148, 12, 90, 206, 67]

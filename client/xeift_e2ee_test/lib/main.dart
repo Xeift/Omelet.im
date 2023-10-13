@@ -23,6 +23,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   TextEditingController contentController = TextEditingController();
   TextEditingController spKeyController = TextEditingController();
   TextEditingController spValueController = TextEditingController();
+  TextEditingController safePreKeyStoreController = TextEditingController();
 
   String msgContent = "這是內容";
 
@@ -85,6 +86,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
 
             const SizedBox(height: 10),
 
+            TextField(
+              controller: safePreKeyStoreController,
+              decoration: const InputDecoration(hintText: "輸入 preKey id"),
+            ),
             ElevatedButton(
               onPressed: () async => await onWriteJsonBtnPressed(),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
@@ -100,6 +105,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               onPressed: () async => await onGenerateKeyBtnPressed(),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               child: const Text("生成並儲存金鑰"),
+            ),
+            ElevatedButton(
+              onPressed: () async => await onContainsPreKeyBtnPressed(safePreKeyStoreController.text),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
+              child: const Text("containsPreKey()"),
             ),
           ],
         ),

@@ -14,7 +14,7 @@ class SafePreKeyStore implements PreKeyStore {
   static const String preKey = 'preKey';
 
   @override
-  Future<bool> containsPreKey(int preKeyId) async { // TODO:
+  Future<bool> containsPreKey(int preKeyId) async {
     final preKeys = jsonDecode((await storage.read(key: preKey)).toString());
     if (preKeys == null) {
       throw InvalidKeyIdException('no prekey found');

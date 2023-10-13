@@ -41,21 +41,20 @@ class SafePreKeyStore implements PreKeyStore {
   }
 
   @override
-  Future<void> removePreKey(int preKeyId) async { // TODO:
-    // Read the map from storage
-    final value = await storage.read(key: preKey);
-    if (value == null) {
-      return;
+  Future<void> removePreKey(int preKeyId) async {
+    var preKeys = jsonDecode((await storage.read(key: preKey)).toString());
+    if (preKeys == null) {
+      throw InvalidKeyIdException('no prekey found');
     }
-    final map = jsonDecode(value) as Map;
-    // Remove the key-value pair from the map by preKeyId
-    map.remove(preKeyId.toString());
-    // Convert the updated map to a JSON string and write it to storage
-    await storage.write(key: preKey, value: jsonEncode(map));
+
+    preKeys.remove(preKeyId.toString());
+
+    await storage.write(
+      key: preKey,
+      value: jsonEncode(preKeys)
+    );
   }
 
-  // 儲存：String →
-  // 讀取：String →
   @override
   Future<void> storePreKey(int preKeyId, PreKeyRecord record) async { // TODO:
     print(record); // <PreKeyRecord> Instance of 'PreKeyRecord'

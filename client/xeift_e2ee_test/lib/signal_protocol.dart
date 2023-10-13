@@ -162,6 +162,12 @@ Future<void> onContainsPreKeyBtnPressed(String id) async {
   print('x: $x');
 }
 
+Future<void> onRemovePreKeyBtnPressed(String id) async {
+  final preKeyStore =
+      SafePreKeyStore(const FlutterSecureStorage()); // 建立預先金鑰儲存方式
+  await preKeyStore.removePreKey(int.parse(id));
+}
+
 Future<void> onGenerateKeyBtnPressed() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
   final registrationId = generateRegistrationId(false); // 生成註冊ID

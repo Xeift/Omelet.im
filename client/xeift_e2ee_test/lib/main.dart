@@ -111,6 +111,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
               child: const Text("containsPreKey()"),
             ),
+            ElevatedButton(
+              onPressed: () async => await onRemovePreKeyBtnPressed(safePreKeyStoreController.text),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
+              child: const Text("removePreKey()"),
+            ),
           ],
         ),
       ),

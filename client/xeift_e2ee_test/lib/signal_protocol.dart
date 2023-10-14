@@ -118,7 +118,7 @@ Future<void> onWriteJsonBtnPressed() async {
       Uint8List.fromList([8, 0, 18, 33, 5, 228, 236, 194, 131, 236, 141, 85, 50, 237, 231, 62, 31, 45, 92, 207, 47, 117, 13, 189, 189, 162, 94, 37, 15, 81, 119, 133, 74, 59, 124, 148, 102, 26, 32, 176, 43, 202, 119, 190, 25, 178, 221, 110, 127, 162, 173, 223, 74, 188, 161, 186, 173, 239, 203, 216, 96, 253, 228, 175, 66, 23, 100, 137, 90, 191, 109])
     ),
     "2": jsonEncode(
-      Uint8List.fromList([8, 0, 18, 33, 5, 228, 236, 194, 131, 236, 141, 85, 50, 237, 231, 62, 31, 45, 92, 207, 47, 117, 13, 189, 189, 162, 94, 37, 15, 81, 119, 133, 74, 59, 124, 148, 102, 26, 32, 176, 43, 202, 119, 190, 25, 178, 221, 110, 127, 162, 173, 223, 74, 188, 161, 186, 173, 239, 203, 216, 96, 253, 228, 175, 66, 23, 100, 137, 90, 191, 109])
+      Uint8List.fromList([8, 1, 18, 33, 5, 103, 198, 162, 44, 148, 68, 65, 113, 71, 193, 134, 167, 41, 166, 225, 160, 162, 96, 203, 151, 113, 226, 84, 183, 37, 46, 82, 144, 238, 98, 225, 123, 26, 32, 104, 225, 51, 209, 98, 176, 189, 86, 233, 209, 52, 66, 76, 212, 171, 110, 209, 236, 67, 61, 95, 9, 72, 0, 139, 44, 73, 57, 141, 187, 125, 112])
     ),
   };
   await storage.write(
@@ -148,10 +148,10 @@ Future<void> onReadBtnPressed(String key) async {
   print('$key 內容: $value 內容形態: ${value.runtimeType}');
 }
 
-Future<void> onReadNumber2PreKeyPressed() async {
+Future<void> onLoadPreKeyBtnPressed(String id) async {
   final preKeyStore =
       SafePreKeyStore(const FlutterSecureStorage()); // 建立預先金鑰儲存方式
-  final x = await preKeyStore.loadPreKey(2);
+  final x = await preKeyStore.loadPreKey(int.parse(id));
   print('x: ${x.serialize()}');
 }
 
@@ -178,7 +178,7 @@ Future<void> onGenerateKeyBtnPressed() async {
       SafePreKeyStore(const FlutterSecureStorage()); // 建立預先金鑰儲存方式
 
   for (final p in preKeys) {
-    print(p.serialize());
+    print('${p.id}                ${p.serialize()}');
     preKeyStore.storePreKey(p.id, p);
   }
 

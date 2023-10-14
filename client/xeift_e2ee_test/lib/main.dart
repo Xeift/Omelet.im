@@ -96,15 +96,15 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               child: const Text("寫入json內容"),
             ),
             ElevatedButton(
-              onPressed: () async =>
-                  await onReadNumber2PreKeyPressed(),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 72, 220, 124)),
-              child: const Text("讀取2號preKey"),
-            ),
-            ElevatedButton(
               onPressed: () async => await onGenerateKeyBtnPressed(),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               child: const Text("生成並儲存金鑰"),
+            ),
+            ElevatedButton(
+              onPressed: () async =>
+                  await onLoadPreKeyBtnPressed(safePreKeyStoreController.text),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
+              child: const Text("loadPreKey()"),
             ),
             ElevatedButton(
               onPressed: () async => await onContainsPreKeyBtnPressed(safePreKeyStoreController.text),

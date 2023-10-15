@@ -193,21 +193,7 @@ Future<void> onGenerateKeyBtnPressed() async {
     preKeyStore.storePreKey(p.id, p);
   }
 
-  // String sessionStore = 'empty'; 
-  // Map<String, dynamic> preKeyStoreTemp = {};
-  // for (final p in preKeys) {
-  //   preKeyStoreTemp[p.id.toString()] = p.serialize();
-  // }
-  // String preKeyStore = jsonEncode(preKeyStoreTemp); 
-  // final signedPreKeyStore = jsonEncode(signedPreKey.serialize()); 
-  // final identityStore = jsonEncode(
-  //     {jsonEncode(identityKeyPair.serialize()): registrationId.toString()});
-
-  // const storage = FlutterSecureStorage();
-  // await storage.write(key: 'sessionStore', value: sessionStore);
-  // await storage.write(key: 'preKeyStore', value: preKeyStore);
-  // await storage.write(key: 'signedPreKeyStore', value: signedPreKeyStore);
-  // await storage.write(key: 'identityStore', value: identityStore);
+ 
 
   print('儲存完畢');
 

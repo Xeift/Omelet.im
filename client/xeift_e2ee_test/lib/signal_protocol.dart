@@ -185,15 +185,14 @@ Future<void> onGenerateKeyBtnPressed() async {
   final preKeys = generatePreKeys(0, 110); // 生成預先金鑰列表
   final signedPreKey = generateSignedPreKey(identityKeyPair, 0); // 生成簽名預先金鑰
 
-  final preKeyStore =
-      SafePreKeyStore(const FlutterSecureStorage()); // 建立預先金鑰儲存方式
+  final preKeyStore = SafePreKeyStore(const FlutterSecureStorage());
 
   for (final p in preKeys) {
     print('${p.id}                ${p.serialize()}');
     preKeyStore.storePreKey(p.id, p);
   }
 
- 
+  
 
   print('儲存完畢');
 

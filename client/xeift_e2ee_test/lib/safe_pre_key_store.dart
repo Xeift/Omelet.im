@@ -57,10 +57,7 @@ class SafePreKeyStore implements PreKeyStore {
 
   @override
   Future<void> storePreKey(int preKeyId, PreKeyRecord record) async {
-    final preKeys = jsonDecode((await storage.read(key: preKey)).toString());
-    if (preKeys == null) {
-      throw InvalidKeyIdException('no prekey found');
-    }
+    Map<String, dynamic> preKeys = jsonDecode((await storage.read(key: preKey)).toString()) ?? {};
 
     preKeys[preKeyId.toString()] = jsonEncode(record.serialize());
 

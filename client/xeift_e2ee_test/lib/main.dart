@@ -24,6 +24,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   TextEditingController spKeyController = TextEditingController();
   TextEditingController spValueController = TextEditingController();
   TextEditingController safePreKeyStoreController = TextEditingController();
+  TextEditingController safePreKeyStoreController2 = TextEditingController();
 
   String msgContent = "這是內容";
 
@@ -90,6 +91,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               controller: safePreKeyStoreController,
               decoration: const InputDecoration(hintText: "輸入 preKey id"),
             ),
+            TextField(
+              controller: safePreKeyStoreController2,
+              decoration: const InputDecoration(hintText: "輸入 preKey record"),
+            ),
             ElevatedButton(
               onPressed: () async => await onWriteJsonBtnPressed(),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
@@ -115,6 +120,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               onPressed: () async => await onRemovePreKeyBtnPressed(safePreKeyStoreController.text),
               style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
               child: const Text("removePreKey()"),
+            ),
+            ElevatedButton(
+              onPressed: () async => await onStorePreKeyBtnPressed(),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
+              child: const Text("storePreKey()"),
             ),
           ],
         ),

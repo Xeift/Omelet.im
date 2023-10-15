@@ -168,6 +168,17 @@ Future<void> onRemovePreKeyBtnPressed(String id) async {
   await preKeyStore.removePreKey(int.parse(id));
 }
 
+Future<void> onStorePreKeyBtnPressed() async {
+  final preKeyStore =
+      SafePreKeyStore(const FlutterSecureStorage()); // 建立預先金鑰儲存方式
+
+  final preKeys = generatePreKeys(0, 110); // 生成預先金鑰列表
+  
+  for (final p in preKeys) {
+    await preKeyStore.storePreKey(p.id, p);
+  }
+}
+
 Future<void> onGenerateKeyBtnPressed() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
   final registrationId = generateRegistrationId(false); // 生成註冊ID
@@ -182,14 +193,14 @@ Future<void> onGenerateKeyBtnPressed() async {
     preKeyStore.storePreKey(p.id, p);
   }
 
-  // String sessionStore = 'empty'; // TODO:
+  // String sessionStore = 'empty'; 
   // Map<String, dynamic> preKeyStoreTemp = {};
   // for (final p in preKeys) {
   //   preKeyStoreTemp[p.id.toString()] = p.serialize();
   // }
-  // String preKeyStore = jsonEncode(preKeyStoreTemp); // TODO:
-  // final signedPreKeyStore = jsonEncode(signedPreKey.serialize()); // TODO:
-  // final identityStore = jsonEncode(// TODO:
+  // String preKeyStore = jsonEncode(preKeyStoreTemp); 
+  // final signedPreKeyStore = jsonEncode(signedPreKey.serialize()); 
+  // final identityStore = jsonEncode(
   //     {jsonEncode(identityKeyPair.serialize()): registrationId.toString()});
 
   // const storage = FlutterSecureStorage();

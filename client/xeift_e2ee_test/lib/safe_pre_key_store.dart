@@ -37,7 +37,8 @@ class SafePreKeyStore implements PreKeyStore {
       throw InvalidKeyIdException('No such prekey record: $preKeyId');
     }
 
-    return PreKeyRecord.fromBuffer(Uint8List.fromList( jsonDecode(singlePreKey).cast<int>().toList() ));
+    return PreKeyRecord.fromBuffer(
+        Uint8List.fromList(jsonDecode(singlePreKey).cast<int>().toList()));
   }
 
   @override
@@ -49,21 +50,16 @@ class SafePreKeyStore implements PreKeyStore {
 
     preKeys.remove(preKeyId.toString());
 
-    await storage.write(
-      key: preKey,
-      value: jsonEncode(preKeys)
-    );
+    await storage.write(key: preKey, value: jsonEncode(preKeys));
   }
 
   @override
   Future<void> storePreKey(int preKeyId, PreKeyRecord record) async {
-    Map<String, dynamic> preKeys = jsonDecode((await storage.read(key: preKey)).toString()) ?? {};
+    Map<String, dynamic> preKeys =
+        jsonDecode((await storage.read(key: preKey)).toString()) ?? {};
 
     preKeys[preKeyId.toString()] = jsonEncode(record.serialize());
 
-    await storage.write(
-      key: preKey,
-      value: jsonEncode(preKeys)
-    );
+    await storage.write(key: preKey, value: jsonEncode(preKeys));
   }
 }

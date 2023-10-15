@@ -108,22 +108,28 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             ElevatedButton(
               onPressed: () async =>
                   await onLoadPreKeyBtnPressed(safePreKeyStoreController.text),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
               child: const Text("loadPreKey()"),
             ),
             ElevatedButton(
-              onPressed: () async => await onContainsPreKeyBtnPressed(safePreKeyStoreController.text),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
+              onPressed: () async => await onContainsPreKeyBtnPressed(
+                  safePreKeyStoreController.text),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
               child: const Text("containsPreKey()"),
             ),
             ElevatedButton(
-              onPressed: () async => await onRemovePreKeyBtnPressed(safePreKeyStoreController.text),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
+              onPressed: () async => await onRemovePreKeyBtnPressed(
+                  safePreKeyStoreController.text),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
               child: const Text("removePreKey()"),
             ),
             ElevatedButton(
               onPressed: () async => await onStorePreKeyBtnPressed(),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
               child: const Text("storePreKey()"),
             ),
           ],

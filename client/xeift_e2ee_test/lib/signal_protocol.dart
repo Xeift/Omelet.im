@@ -326,7 +326,7 @@ Future<void> onGenerateKeyBtnPressed() async {
 
   for (final p in preKeys) {
     print('${p.id}                ${p.serialize()}');
-    preKeyStore.storePreKey(p.id, p);
+    await preKeyStore.storePreKey(p.id, p);
   }
 
   print('儲存完畢');

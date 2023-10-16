@@ -47,14 +47,26 @@ class _HomePageState extends State<HomePage>{
           padding:const EdgeInsets.symmetric(horizontal: 20),
           children: [
             const SizedBox(height:kToolbarHeight),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             buildTitle(),
             const SizedBox(height: 30),
             buildEmailTextField(),
             const SizedBox(height: 30),
             buildPasswordTextField(),
-            const SizedBox(height: 60),
-            buildLoingButton(),
+            buildForgetPassword(),
+            const SizedBox(height: 20),
+            Container(
+              child:Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildLoingButton(),
+                  const SizedBox(width: 30,),
+                  buildSigninButton(),
+                ],
+              ),
+
+            ),
+
           ],
         ),
       ),
@@ -115,8 +127,16 @@ class _HomePageState extends State<HomePage>{
   Widget buildForgetPassword(){
     return Padding(
       padding:const EdgeInsets.only(top:8),
+      child:Align(
+        alignment: Alignment.centerRight,
+        child:TextButton(
+          onPressed: (){
+            //TOGO forget pages
+          },
+          child:Text('Forget password'),
+        ),
+      ),
     );
-
 
   }
 
@@ -124,20 +144,44 @@ class _HomePageState extends State<HomePage>{
     return Align(
       child:SizedBox(
         height: 50,
-        width: 200,
+        width: 140,
         child: ElevatedButton(
 
           style:ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.black),
           ),
             child:Text('Login',
-              style:Theme.of(context).primaryTextTheme.headline6),
+              style:Theme.of(context).primaryTextTheme.labelLarge),
             onPressed:(){
               if((_formKey.currentState as FormState).validate()){
                 (_formKey.currentState as FormState).save();
                 print('email:$_email,password:$_password');
               }
             },
+          autofocus: true,
+        ),
+      ),
+    );
+  }
+  
+  Widget buildSigninButton(){
+    return Align(
+      child:SizedBox(
+        height: 50,
+        width: 140,
+        child: ElevatedButton(
+
+          style:ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.grey),
+            minimumSize: MaterialStateProperty.all(Size(100,50)),
+              side:MaterialStateProperty.all(BorderSide(color:Colors.grey,width: 1)),
+
+          ),
+          child:Text('Sign ',
+          style:Theme.of(context).primaryTextTheme.labelLarge),
+          onPressed:(){
+            //TOGO
+          },
           autofocus: true,
         ),
       ),

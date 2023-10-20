@@ -55,7 +55,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             // const TextField(decoration: InputDecoration(hintText: "輸入訊息")),
             Text(msgContent, textDirection: TextDirection.ltr),
             ElevatedButton(
-              onPressed: onBtnPressed,
+              onPressed: onSendMsgBtnPressed,
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               child: const Text("發送訊息"),
             ),
@@ -137,20 +137,26 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
     );
   }
 
-  Future<void> onBtnPressed() async {
-    await install();
+  Future<void> onSendMsgBtnPressed() async {
     io.Socket socket = io.io('http://localhost:3000',
         io.OptionBuilder().setTransports(['websocket']).build());
     socket.onConnect((_) {
-      print('connected');
+      // return jwt
+      socket.emit('clientReturnJwt', 'GET_JWT_FROM_STORGE');
+      print('backend connected');
     });
-    socket.emit('helloFromDartClient', contentController.text);
+
+    socket.emit('sendMsgToBackend', {
+      'senderID': 'q1a2s3d4f5g6',
+      'receiverID': idController.text,
+      'msg': contentController.text
+    });
     // socket.on('event', (data) => print(data));
     // socket.onDisconnect((_) => print('disconnect'));
     // socket.on('fromServer', (_) => print(_));
 
-    print('[main.dart] ${idController.text}');
-    print('[main.dart] ${contentController.text}');
+    socket.on('sendMsgToClient', (content) => {print('client已接收 $content')});
+
     setState(() {
       msgContent =
           "接收者 id: ${idController.text}\n發送內容： ${contentController.text}"; // 更新msgContent的值為"hello"

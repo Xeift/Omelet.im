@@ -1,5 +1,5 @@
-# Omelet-Social-Platform
-蛋餅 - 創新通訊軟體
+# Omelet.im
+蛋餅 Omelet - 具備高隱私與個人化之創新即時通訊軟體
 
 ## 使用方法
 

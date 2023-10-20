@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'loginAPI.dart';
 
 void main() {
   runApp(const MyApp());
@@ -162,12 +163,14 @@ class _HomePageState extends State<HomePage> {
             'Login',
             style: Theme.of(context).primaryTextTheme!.headline6,
           ),
-          onPressed: () {
+          onPressed: () async {
             //連接後端API,登入button，pressed event，當按下它會執行下方程式
             _email = emailTextFieldController.text; //_email字串存入_email變數
             _password = passwordTextFieldController.text; //_email字串存入_email變數
             // _password = passwordTextFieldController.text;
             print('email: $_email, password: $_password'); //測試使用
+            final res = await loginAPI(_email, _password);
+            print(res);
           },
         ),
       ),

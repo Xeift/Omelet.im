@@ -12,5 +12,6 @@ Future<Map<String, dynamic>> loginAPI(
     body: jsonEncode(
         <String, String>{'username': _username, 'password': _password}),
   );
+  print(res.statusCode);
   return jsonDecode(res.body);
 }

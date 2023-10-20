@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'loginAPI.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,16 +31,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late String _email = '', _password = '';
+  late String _email ='',_password ='';
   final GlobalKey _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
   bool _EmailAutoFocus = true;
   bool _EmailFieldisEmpty = true;
   Color _eyeColor = Colors.grey;
-  var emailTextFieldController, passwordTextFieldController;
+  var emailTextFieldController,passwordTextFieldController;
   @override
-  void initState() {
-    //初始化
+  void initState() {//初始化
     super.initState();
     emailTextFieldController = TextEditingController();
     passwordTextFieldController = TextEditingController();
@@ -60,18 +58,18 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 50),
             buildTitle(),
             const SizedBox(height: 30),
-            buildEmailTextField(), //Email輸入框控件呼叫
+            buildEmailTextField(),//Email輸入框控件呼叫
             const SizedBox(height: 30),
-            buildPasswordTextField(), //Password輸入框控件呼叫
+            buildPasswordTextField(),//Password輸入框控件呼叫
             buildForgetPassword(),
             const SizedBox(height: 20),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildLoingButton(), //登入button控件呼叫
+                  buildLoingButton(),//登入button控件呼叫
                   const SizedBox(width: 30),
-                  buildSignupButton(), //註冊button控件呼叫
+                  buildSignupButton(),//註冊button控件呼叫
                 ],
               ),
             ),
@@ -81,37 +79,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildTitle() {
-    //Login字樣
+  Widget buildTitle() {//Login字樣
     return const Padding(
       padding: EdgeInsets.all(8),
       child: Text(
-        'Login',
+        'Loing',
         style: TextStyle(fontSize: 40),
       ),
     );
   }
 
-  Widget buildPasswordTextField() {
-    //密碼輸入匡
+  Widget buildPasswordTextField() {//密碼輸入匡
     return TextFormField(
       obscureText: _isObscure,
-      controller: passwordTextFieldController,
-      decoration: InputDecoration(
-        //密碼遮蔽button
+      controller:passwordTextFieldController,
+      decoration: InputDecoration(//密碼遮蔽button
         labelText: 'Password',
         suffixIcon: IconButton(
           icon: Icon(
             Icons.remove_red_eye,
             color: _eyeColor,
           ),
-          onPressed: () {
-            //密碼遮蔽button，onpress event
+          onPressed: () {//密碼遮蔽button，onpress event
             setState(() {
               _isObscure = !_isObscure;
-              _eyeColor = (_isObscure
-                  ? Colors.grey
-                  : Theme.of(context).iconTheme.color)!;
+              _eyeColor = (_isObscure ? Colors.grey : Theme.of(context).iconTheme.color)!;
             });
           },
         ),
@@ -119,22 +111,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildEmailTextField() {
-    //Email輸入框
+  Widget buildEmailTextField() {//Email輸入框
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Email Address'),
-      validator: (v) {
-        //驗證機制，限制只能輸入A-Z,a-z,0-9,@,目前先不用它
-        var emailReg = RegExp(
-            r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
-      },
-      // onSaved: (v) => _email = v!,
-      controller: emailTextFieldController,
+      validator: (v) {//驗證機制，限制只能輸入A-Z,a-z,0-9,@,目前先不用它
+        var emailReg = RegExp(r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
+    },
+    // onSaved: (v) => _email = v!,
+      controller:emailTextFieldController,
     );
   }
 
-  Widget buildForgetPassword() {
-    //忘記密碼
+  Widget buildForgetPassword() {//忘記密碼
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Align(
@@ -149,8 +137,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildLoingButton() {
-    //登入按鈕，按下可以送出表單
+  Widget buildLoingButton() {//登入按鈕，按下可以送出表單
     return Align(
       child: SizedBox(
         height: 50,
@@ -163,14 +150,11 @@ class _HomePageState extends State<HomePage> {
             'Login',
             style: Theme.of(context).primaryTextTheme!.headline6,
           ),
-          onPressed: () async {
-            //連接後端API,登入button，pressed event，當按下它會執行下方程式
-            _email = emailTextFieldController.text; //_email字串存入_email變數
-            _password = passwordTextFieldController.text; //_email字串存入_email變數
+          onPressed: () {//連接後端API,登入button，pressed event，當按下它會執行下方程式
+            _email = emailTextFieldController.text;//_email字串存入_email變數
+            _password = passwordTextFieldController.text;//_email字串存入_email變數
             // _password = passwordTextFieldController.text;
-            print('email: $_email, password: $_password'); //測試使用
-            final res = await loginAPI(_email, _password);
-            print(res);
+            print('email: $_email, password: $_password');//測試使用
           },
         ),
       ),
@@ -186,19 +170,21 @@ class _HomePageState extends State<HomePage> {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.grey),
             minimumSize: MaterialStateProperty.all(const Size(100, 50)),
-            side: MaterialStateProperty.all(
-                const BorderSide(color: Colors.grey, width: 1)),
+            side: MaterialStateProperty.all(const BorderSide(color: Colors.grey, width: 1)),
+          ),
+          child: Text(
+            'Sign Up',
+            style: Theme.of(context).primaryTextTheme!.headline6,
           ),
           onPressed: () {
             //TOGO
           },
           autofocus: true,
-          child: Text(
-            'Sign Up',
-            style: Theme.of(context).primaryTextTheme!.headline6,
-          ),
         ),
       ),
     );
   }
 }
+
+
+

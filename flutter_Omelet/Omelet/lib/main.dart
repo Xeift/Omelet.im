@@ -58,18 +58,18 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 50),
             buildTitle(),
             const SizedBox(height: 30),
-            buildEmailTextField(),
+            buildEmailTextField(),//Email輸入框控件呼叫
             const SizedBox(height: 30),
-            buildPasswordTextField(),
+            buildPasswordTextField(),//Password輸入框控件呼叫
             buildForgetPassword(),
             const SizedBox(height: 20),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildLoingButton(),
+                  buildLoingButton(),//登入button控件呼叫
                   const SizedBox(width: 30),
-                  buildSignupButton(),
+                  buildSignupButton(),//註冊button控件呼叫
                 ],
               ),
             ),
@@ -93,14 +93,14 @@ class _HomePageState extends State<HomePage> {
     return TextFormField(
       obscureText: _isObscure,
       controller:passwordTextFieldController,
-      decoration: InputDecoration(
+      decoration: InputDecoration(//密碼遮蔽button
         labelText: 'Password',
         suffixIcon: IconButton(
           icon: Icon(
             Icons.remove_red_eye,
             color: _eyeColor,
           ),
-          onPressed: () {
+          onPressed: () {//密碼遮蔽button，onpress event
             setState(() {
               _isObscure = !_isObscure;
               _eyeColor = (_isObscure ? Colors.grey : Theme.of(context).iconTheme.color)!;
@@ -114,9 +114,8 @@ class _HomePageState extends State<HomePage> {
   Widget buildEmailTextField() {//Email輸入框
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Email Address'),
-      validator: (v) {
+      validator: (v) {//驗證機制，限制只能輸入A-Z,a-z,0-9,@,目前先不用它
         var emailReg = RegExp(r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
-
     },
     // onSaved: (v) => _email = v!,
       controller:emailTextFieldController,
@@ -151,7 +150,7 @@ class _HomePageState extends State<HomePage> {
             'Login',
             style: Theme.of(context).primaryTextTheme!.headline6,
           ),
-          onPressed: () {//連接後端API
+          onPressed: () {//連接後端API,登入button，pressed event，當按下它會執行下方程式
             _email = emailTextFieldController.text;//_email字串存入_email變數
             _password = passwordTextFieldController.text;//_email字串存入_email變數
             // _password = passwordTextFieldController.text;

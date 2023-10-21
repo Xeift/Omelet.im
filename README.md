@@ -3,11 +3,16 @@
 
 ## 使用方法
 
-1. 確定終端機路徑為 C:\Users\你的使用者名稱\Desktop（我是放在桌面）\social-platform>
-2. cd backend （後端） cd frontend （前端）
+### 後端伺服器
+
+1. 確定終端機路徑為 C:\Users\你的使用者名稱\Desktop（我是放在桌面）\Omelet.im>
+2. cd backend
 3. npm i
 4. nodemon server.js
-5. 在瀏覽器輸入 http://localhost:3001 （前端）或者用 Postman 測試 http://localhost:3000 （後端）
+5. 用 Postman 測試 http://localhost:3000 （後端）
+
+### Flutter 客戶端
+1. flutter pub get
 
 ## 資料夾介紹
 

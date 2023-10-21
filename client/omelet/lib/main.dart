@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'loginAPI.dart';
+import 'login_api.dart';
 
 void main() {
   runApp(const MyApp());
@@ -143,7 +145,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             //TOGO forget pages
           },
-          child: Text('Forget password'),
+          child: const Text('Forget password'),
         ),
       ),
     );
@@ -170,7 +172,22 @@ class _HomePageState extends State<HomePage> {
             // _password = passwordTextFieldController.text;
             print('email: $_email, password: $_password'); //測試使用
             final res = await loginAPI(_email, _password);
-            print(res);
+
+            print(res.statusCode); // http 狀態碼
+            print(jsonDecode(res.body)); // 登入 API 回應內容
+            print(
+                jsonDecode(res.body)['message']); // 取得登入 API 回應內容中的 message 內容
+
+            if (res.statusCode == 200) {
+              print('登入成功( •̀ ω •́ )✧');
+              // 這裡要寫登入成功時的邏輯，比如提示使用者密碼錯誤
+            } else if (res.statusCode == 401) {
+              // 帳號密碼錯誤
+            } else if (res.statusCode == 422) {
+              // 帳號密碼為空
+            } else if (res.statusCode == 500) {
+              // 後端其他錯誤
+            }
           },
         ),
       ),

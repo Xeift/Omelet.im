@@ -1,8 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<Map<String, dynamic>> loginAPI(
-    String _username, String _password) async {
+Future<http.Response> loginAPI(String _username, String _password) async {
   final res = await http.post(
     Uri.parse('http://localhost:3000/api/v1/login'),
     headers: <String, String>{
@@ -11,6 +12,5 @@ Future<Map<String, dynamic>> loginAPI(
     body: jsonEncode(
         <String, String>{'username': _username, 'password': _password}),
   );
-  print(res.statusCode);
-  return jsonDecode(res.body);
+  return res;
 }

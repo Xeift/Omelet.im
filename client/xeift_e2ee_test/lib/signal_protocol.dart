@@ -6,7 +6,6 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart'; // 用於
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'safe_pre_key_store.dart';
 import 'login_api.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 Future<void> install() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對

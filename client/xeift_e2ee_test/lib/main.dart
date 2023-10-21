@@ -174,8 +174,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   }
 
   Future<void> onSendMsgBtnPressed() async {
-    io.Socket socket = io.io('http://localhost:3000',
-        io.OptionBuilder().setTransports(['websocket']).build());
+    String apiBaseUrl = apiBaseUrlController.text;
+
+    io.Socket socket = io.io(
+        apiBaseUrl, io.OptionBuilder().setTransports(['websocket']).build());
 
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');

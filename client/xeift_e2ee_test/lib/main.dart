@@ -35,10 +35,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        // appBar: AppBar(
-        //   title: const Text("Omelet.im test"),
-        // ),
-        body: Column(
+          // appBar: AppBar(
+          //   title: const Text("Omelet.im test"),
+          // ),
+          body: SingleChildScrollView(
+        child: Column(
           children: [
             TextField(
               controller: spKeyController,
@@ -158,7 +159,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 
@@ -196,7 +197,12 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
 
     socket.onDisconnect((_) => print('disconnect'));
 
-    socket.on('sendMsgToClient', (content) => {print('client已接收 $content')});
+    socket.on('serverForwardMsgToClient', (content) {
+      print('client已接收 $content');
+      setState(() {
+        msgContent = "client已接收 $content";
+      });
+    });
 
     setState(() {
       msgContent =

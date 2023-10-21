@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/', async(req, res) => {
     let username = req.body.username; // username 可為 username 或 email
     let password = req.body.password;
-
+    console.log(username);
     if (!username || !password) {
         res.status(422).json({
             message: '帳號密碼不可為空',

@@ -28,12 +28,16 @@ module.exports = function(io) {
             let decodedToken = await jwt.verifyJWT(content.token);
             let senderUid = decodedToken['_uid'];
             let receiverUid = content.receiverUid;
+            let msg = content.msg;
 
             console.log(receiverUid);
             console.log(userIdToRoomId);
-            
+
             if (receiverUid in userIdToRoomId) {
                 console.log('online');
+                socket
+                    .to(userIdToRoomId[receiverUid])
+                    .emit('serverForwardMsgToClient', msg);
             }
             else {
                 console.log('offline');
@@ -41,7 +45,6 @@ module.exports = function(io) {
             // let receiverSocketId = userIdToRoomId[receiverUid];
             // console.log(`內容： ${content.msg}`);
             // console.log(receiverSocketId);
-            // socket.to(content.receiverID).emit('sendMsgToClient', content.msg);
         });
 
         socket.on('disconnect', () => {

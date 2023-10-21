@@ -131,6 +131,13 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
                   backgroundColor: const Color.fromARGB(255, 116, 167, 209)),
               child: const Text("storePreKey()"),
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () async => await onStoreJWTBtnPressed(),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
+              child: const Text("儲存jwt(模擬登入功能)"),
+            ),
           ],
         ),
       ),

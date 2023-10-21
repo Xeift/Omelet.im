@@ -5,6 +5,7 @@ import 'dart:typed_data'; // 用於處理字節數組
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart'; // 用於實現信號協議
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'safe_pre_key_store.dart';
+import 'login_api.dart';
 
 Future<void> install() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
@@ -314,6 +315,14 @@ Future<void> onStorePreKeyBtnPressed() async {
   for (final p in preKeys) {
     await preKeyStore.storePreKey(p.id, p);
   }
+}
+
+Future<void> onStoreJWTBtnPressed() async {
+  print('storeJWTBtnPressed-----------');
+  final storage = new FlutterSecureStorage();
+  final res = await loginAPI('xeift.c@gmail.com', 'abc');
+  final resBody = jsonDecode(res.body);
+  await storage.write(key: 'jwt', value: resBody['token']);
 }
 
 Future<void> onGenerateKeyBtnPressed() async {

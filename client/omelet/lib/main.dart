@@ -186,6 +186,8 @@ class _HomePageState extends State<HomePage> {
               // 帳號密碼錯誤
             } else if (statusCode == 422) {
               // 帳號密碼為空
+            } else if (statusCode == 429) {
+              // 速率限制，請求次數過多（5分鐘內超過10次）
             } else if (statusCode == 500) {
               // 後端其他錯誤
             }

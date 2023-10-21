@@ -3,7 +3,12 @@ const UserModel = require('../model/userModel');
 
 async function isPasswordMatch(username, password) {
     let user = await UserModel.findOne({ $or: [{ username: username }, { email: username }] });
-    return !!(password === user.password);
+    if (password === user.password) {
+        return user;
+    }
+    else {
+        return false;
+    }
 }
 
 async function isUserIdExsists(input) {

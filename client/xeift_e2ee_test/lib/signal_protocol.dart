@@ -322,7 +322,7 @@ Future<void> onStoreJWTBtnPressed() async {
   final storage = new FlutterSecureStorage();
   final res = await loginAPI('xeift.c@gmail.com', 'abc');
   final resBody = jsonDecode(res.body);
-  await storage.write(key: 'jwt', value: resBody['token']);
+  await storage.write(key: 'token', value: resBody['token']);
 }
 
 Future<void> onGenerateKeyBtnPressed() async {

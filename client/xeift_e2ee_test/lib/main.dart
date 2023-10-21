@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'signal_protocol.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized(); // 確保Flutter初始化
@@ -147,17 +148,20 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   Future<void> onSendMsgBtnPressed() async {
     io.Socket socket = io.io('http://localhost:3000',
         io.OptionBuilder().setTransports(['websocket']).build());
-    socket.onConnect((_) {
-      // return jwt
-      socket.emit('clientReturnJwt', 'GET_JWT_FROM_STORGE');
+    socket.onConnect((_) async {
+      final storage = new FlutterSecureStorage();
+      final token = await storage.read(key: 'token');
+      print(token);
+      socket.emit('clientReturnJwtToServer', token);
       print('backend connected');
     });
 
-    socket.emit('sendMsgToBackend', {
-      'senderID': 'q1a2s3d4f5g6',
-      'receiverID': idController.text,
-      'msg': contentController.text
-    });
+    // socket.emit('sendMsgToBackend', {
+    //   'token': 'q1a2s3d4f5g6',
+    //   'receiverID': idController.text,
+    //   'msg': contentController.text
+    // });
+
     // socket.on('event', (data) => print(data));
     // socket.onDisconnect((_) => print('disconnect'));
     // socket.on('fromServer', (_) => print(_));

@@ -1,4 +1,5 @@
 const generateId = require('./snowflakeId');
+const jwt = require('./jwt');
 
 let userIdToRoomId = {};
 
@@ -17,7 +18,13 @@ module.exports = function(io) {
         //     socket.to(receiverId).emit('newPrivateMsg', socket.id, message);
         // });
 
-        userIdToRoomId[uid] = socket.id;
+        socket.on('clientReturnJwtToServer', async(token) => {
+            let decodedToken = await jwt.verifyJWT(token);
+            let uid = decodedToken['_uid'];
+            userIdToRoomId[uid] = socket.id;
+            console.log(userIdToRoomId);
+        });
+        
 
         socket.on('sendMsgToBackend', (content) => {
             userIdToRoomId[content.senderID] = socket.id;

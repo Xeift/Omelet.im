@@ -18,7 +18,7 @@ router.post('/', async(req, res) => {
 
     try {
         let user = await authController.isPasswordMatch(username, password);
-        
+        console.log(user);
         if (!user) {
             res.status(401).json({
                 message: '帳號或密碼錯誤',

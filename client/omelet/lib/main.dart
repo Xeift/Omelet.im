@@ -169,23 +169,24 @@ class _HomePageState extends State<HomePage> {
             //連接後端API,登入button，pressed event，當按下它會執行下方程式
             _email = emailTextFieldController.text; //_email字串存入_email變數
             _password = passwordTextFieldController.text; //_email字串存入_email變數
-            // _password = passwordTextFieldController.text;
-            print('email: $_email, password: $_password'); //測試使用
+
             final res = await loginAPI(_email, _password);
+            final statusCode = res.statusCode;
+            final resBody = jsonDecode(res.body);
 
-            print(res.statusCode); // http 狀態碼
-            print(jsonDecode(res.body)); // 登入 API 回應內容
-            print(
-                jsonDecode(res.body)['message']); // 取得登入 API 回應內容中的 message 內容
+            print(statusCode); // http 狀態碼
+            print(resBody); // 登入 API 回應內容
+            print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
 
-            if (res.statusCode == 200) {
+            if (statusCode == 200) {
               print('登入成功( •̀ ω •́ )✧');
               // 這裡要寫登入成功時的邏輯，比如提示使用者密碼錯誤
-            } else if (res.statusCode == 401) {
+              // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
+            } else if (statusCode == 401) {
               // 帳號密碼錯誤
-            } else if (res.statusCode == 422) {
+            } else if (statusCode == 422) {
               // 帳號密碼為空
-            } else if (res.statusCode == 500) {
+            } else if (statusCode == 500) {
               // 後端其他錯誤
             }
           },

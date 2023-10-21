@@ -41,6 +41,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
           body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 50),
             TextField(
               controller: spKeyController,
               decoration: const InputDecoration(hintText: "輸入要儲存/讀取的key"),

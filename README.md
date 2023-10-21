@@ -27,6 +27,8 @@ Omelet-Social-Platform
 │       └──server.js            後端主程式
 │
 ├──client                       Flutter 客戶端資料夾
+│       ├──omelet               主要客戶端程式
+│       └──xeift_e2ee_test      用於測試通訊、API
 │
 ├──frontend                     前端資料夾（Web 客戶端已棄用，轉為 Flutter）
 │       ├──node_modules         安裝的函式庫都存在這，沒事不會特別動

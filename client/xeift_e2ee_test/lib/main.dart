@@ -160,7 +160,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
 
     socket.emit('clientSendMsgToServer', {
       'token': token,
-      'receiverID': idController.text,
+      'receiverUid': idController.text,
       'msg': contentController.text
     });
 

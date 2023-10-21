@@ -148,23 +148,23 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   Future<void> onSendMsgBtnPressed() async {
     io.Socket socket = io.io('http://localhost:3000',
         io.OptionBuilder().setTransports(['websocket']).build());
+
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+
     socket.onConnect((_) async {
-      final storage = new FlutterSecureStorage();
-      final token = await storage.read(key: 'token');
       print(token);
       socket.emit('clientReturnJwtToServer', token);
       print('backend connected');
     });
 
-    // socket.emit('sendMsgToBackend', {
-    //   'token': 'q1a2s3d4f5g6',
-    //   'receiverID': idController.text,
-    //   'msg': contentController.text
-    // });
+    socket.emit('clientSendMsgToServer', {
+      'token': token,
+      'receiverID': idController.text,
+      'msg': contentController.text
+    });
 
-    // socket.on('event', (data) => print(data));
-    // socket.onDisconnect((_) => print('disconnect'));
-    // socket.on('fromServer', (_) => print(_));
+    socket.onDisconnect((_) => print('disconnect'));
 
     socket.on('sendMsgToClient', (content) => {print('client已接收 $content')});
 

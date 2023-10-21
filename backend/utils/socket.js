@@ -25,20 +25,15 @@ module.exports = function(io) {
             console.log(userIdToRoomId);
         });
 
-        socket.on('sendMsgToBackend', (content) => {
-            userIdToRoomId[content.senderID] = socket.id;
+        socket.on('clientSendMsgToServer', (content) => { // TODO:
+            console.log(`內容： ${content.msg}`);
             console.log(content);
-            console.log(userIdToRoomId);
-            socket.to(content.receiverID).emit('sendMsgToClient', content.msg);
+            // socket.to(content.receiverID).emit('sendMsgToClient', content.msg);
         });
 
         socket.on('disconnect', () => {
             let disconnectorUid = Object.keys(userIdToRoomId).find(key => userIdToRoomId[key] === socket.id);
             delete userIdToRoomId[disconnectorUid];
-            console.log(socket.rooms);
-            console.log(socket.id);
-            console.log(userIdToRoomId);
-            // socket.rooms.size === 0
         });
     });
 };

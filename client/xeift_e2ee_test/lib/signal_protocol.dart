@@ -6,6 +6,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart'; // 用於
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'safe_pre_key_store.dart';
 import 'login_api.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
 Future<void> install() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
@@ -278,14 +279,6 @@ Future<void> onRemoveAllBtnPressed() async {
   await storage.deleteAll();
 }
 
-Future<void> onReadBtnPressed(String key) async {
-  print('read');
-  print(key);
-  const storage = FlutterSecureStorage();
-  String? value = await storage.read(key: key);
-  print('$key 內容: $value 內容形態: ${value.runtimeType}');
-}
-
 Future<void> onLoadPreKeyBtnPressed(String id) async {
   final preKeyStore =
       SafePreKeyStore(const FlutterSecureStorage()); // 建立預先金鑰儲存方式
@@ -317,10 +310,10 @@ Future<void> onStorePreKeyBtnPressed() async {
   }
 }
 
-Future<void> onStoreJWTBtnPressed() async {
+Future<void> onStoreJWTBtnPressed(String acc, String pwd) async {
   print('storeJWTBtnPressed-----------');
   final storage = new FlutterSecureStorage();
-  final res = await loginAPI('xeift.c@gmail.com', 'abc');
+  final res = await loginAPI(acc, pwd);
   final resBody = jsonDecode(res.body);
   await storage.write(key: 'token', value: resBody['token']);
 }

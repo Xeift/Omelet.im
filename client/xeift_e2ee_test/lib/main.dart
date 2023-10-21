@@ -25,6 +25,8 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   TextEditingController spValueController = TextEditingController();
   TextEditingController safePreKeyStoreController = TextEditingController();
   TextEditingController safePreKeyStoreController2 = TextEditingController();
+  TextEditingController accController = TextEditingController();
+  TextEditingController pwdController = TextEditingController();
 
   String msgContent = "這是內容";
 
@@ -32,19 +34,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Omelet.im test"),
-        ),
+        // appBar: AppBar(
+        //   title: const Text("Omelet.im test"),
+        // ),
         body: Column(
           children: [
-            TextField(
-              controller: idController,
-              decoration: const InputDecoration(hintText: "輸入發送對象的id"),
-            ),
-            TextField(
-              controller: contentController,
-              decoration: const InputDecoration(hintText: "輸入要傳送的訊息"),
-            ),
             TextField(
               controller: spKeyController,
               decoration: const InputDecoration(hintText: "輸入要儲存/讀取的key"),
@@ -55,11 +49,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             ),
             // const TextField(decoration: InputDecoration(hintText: "輸入訊息")),
             Text(msgContent, textDirection: TextDirection.ltr),
-            ElevatedButton(
-              onPressed: onSendMsgBtnPressed,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text("發送訊息"),
-            ),
+
             ElevatedButton(
               onPressed: () async => await onWriteBtnPressed(
                   spKeyController.text, spValueController.text),
@@ -84,8 +74,19 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
               child: const Text("讀取內容"),
             ),
-
-            const SizedBox(height: 10),
+            TextField(
+              controller: idController,
+              decoration: const InputDecoration(hintText: "輸入發送對象的id"),
+            ),
+            TextField(
+              controller: contentController,
+              decoration: const InputDecoration(hintText: "輸入要傳送的訊息"),
+            ),
+            ElevatedButton(
+              onPressed: onSendMsgBtnPressed,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text("發送訊息"),
+            ),
 
             TextField(
               controller: safePreKeyStoreController,
@@ -133,16 +134,36 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               child: const Text("storePreKey()"),
             ),
             const SizedBox(height: 10),
+            TextField(
+              controller: accController,
+              decoration: const InputDecoration(hintText: "輸入帳號"),
+            ),
+            TextField(
+              controller: pwdController,
+              decoration: const InputDecoration(hintText: "輸入密碼"),
+            ),
             ElevatedButton(
-              onPressed: () async => await onStoreJWTBtnPressed(),
+              onPressed: () async => await onStoreJWTBtnPressed(
+                  accController.text, pwdController.text),
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
-              child: const Text("儲存jwt(模擬登入功能)"),
+              child: const Text("登入並儲存jwt)"),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> onReadBtnPressed(String key) async {
+    print('read');
+    print(key);
+    const storage = FlutterSecureStorage();
+    String value = (await storage.read(key: key)).toString();
+    print('$key 內容: $value 內容形態: ${value.runtimeType}');
+    setState(() {
+      msgContent = value; // 更新msgContent的值為"hello"
+    });
   }
 
   Future<void> onSendMsgBtnPressed() async {

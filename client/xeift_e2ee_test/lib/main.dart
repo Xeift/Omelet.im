@@ -27,6 +27,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   TextEditingController safePreKeyStoreController2 = TextEditingController();
   TextEditingController accController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
+  TextEditingController apiBaseUrlController = TextEditingController();
 
   String msgContent = "這是內容";
 
@@ -81,6 +82,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             TextField(
               controller: contentController,
               decoration: const InputDecoration(hintText: "輸入要傳送的訊息"),
+            ),
+            TextField(
+              controller: apiBaseUrlController,
+              decoration: const InputDecoration(hintText: "輸入 API Base URL"),
             ),
             ElevatedButton(
               onPressed: onSendMsgBtnPressed,
@@ -144,7 +149,9 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             ),
             ElevatedButton(
               onPressed: () async => await onStoreJWTBtnPressed(
-                  accController.text, pwdController.text),
+                  apiBaseUrlController.text,
+                  accController.text,
+                  pwdController.text),
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
               child: const Text("登入並儲存jwt)"),

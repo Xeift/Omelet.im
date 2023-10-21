@@ -310,10 +310,11 @@ Future<void> onStorePreKeyBtnPressed() async {
   }
 }
 
-Future<void> onStoreJWTBtnPressed(String acc, String pwd) async {
+Future<void> onStoreJWTBtnPressed(
+    String apiBaseUrl, String acc, String pwd) async {
   print('storeJWTBtnPressed-----------');
   final storage = new FlutterSecureStorage();
-  final res = await loginAPI(acc, pwd);
+  final res = await loginAPI(apiBaseUrl, acc, pwd);
   final resBody = jsonDecode(res.body);
   await storage.write(key: 'token', value: resBody['token']);
 }

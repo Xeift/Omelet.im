@@ -24,13 +24,21 @@ module.exports = function(io) {
             userIdToRoomId[uid] = socket.id;
             console.log(userIdToRoomId);
         });
-        
 
         socket.on('sendMsgToBackend', (content) => {
             userIdToRoomId[content.senderID] = socket.id;
             console.log(content);
             console.log(userIdToRoomId);
             socket.to(content.receiverID).emit('sendMsgToClient', content.msg);
+        });
+
+        socket.on('disconnect', () => {
+            let disconnectorUid = Object.keys(userIdToRoomId).find(key => userIdToRoomId[key] === socket.id);
+            delete userIdToRoomId[disconnectorUid];
+            console.log(socket.rooms);
+            console.log(socket.id);
+            console.log(userIdToRoomId);
+            // socket.rooms.size === 0
         });
     });
 };

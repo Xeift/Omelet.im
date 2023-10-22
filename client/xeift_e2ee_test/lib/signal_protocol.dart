@@ -332,15 +332,4 @@ Future<void> onGenerateKeyBtnPressed() async {
   }
 
   print('儲存完畢');
-
-  // print('-------------------------   debug 內容開始   -------------------------');
-  // print(
-  //     '[signal_protocol.dart] identityKeyPair 內容： ${identityKeyPair.serialize().runtimeType}'); // need to serialize
-  // print(
-  //     '[signal_protocol.dart] registrationId 內容： ${registrationId.toString().runtimeType}');
-  // print(
-  //     '[signal_protocol.dart] preKeys 內容： ${preKeys[0].serialize().runtimeType}'); // need to serialize
-  // print(
-  //     '[signal_protocol.dart] signedPreKey 內容： ${signedPreKey.serialize().runtimeType}'); // need to serialize
-  // print('-------------------------   debug 內容結束   -------------------------');
 }

@@ -111,7 +111,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             ElevatedButton(
               onPressed: () async => await onGenerateKeyBtnPressed(),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-              child: const Text("生成並儲存金鑰"),
+              child: const Text("生成並儲存preKey"),
             ),
             ElevatedButton(
               onPressed: () async =>

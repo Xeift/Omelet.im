@@ -44,11 +44,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             const SizedBox(height: 50),
             TextField(
               controller: spKeyController,
-              decoration: const InputDecoration(hintText: "輸入要儲存/讀取的key"),
+              decoration: const InputDecoration(hintText: "輸入要儲存/讀取/移除的key"),
             ),
             TextField(
               controller: spValueController,
-              decoration: const InputDecoration(hintText: "輸入要儲存的value"),
+              decoration: const InputDecoration(hintText: "輸入要儲存/讀取/移除的value"),
             ),
             // const TextField(decoration: InputDecoration(hintText: "輸入訊息")),
             Text(msgContent, textDirection: TextDirection.ltr),
@@ -79,7 +79,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             ),
             TextField(
               controller: idController,
-              decoration: const InputDecoration(hintText: "輸入發送對象的id"),
+              decoration: const InputDecoration(hintText: "輸入發送對象的uid"),
             ),
             TextField(
               controller: contentController,

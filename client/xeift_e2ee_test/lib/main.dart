@@ -87,7 +87,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             ),
             TextField(
               controller: apiBaseUrlController,
-              decoration: const InputDecoration(hintText: "輸入 API Base URL"),
+              decoration: const InputDecoration(hintText: "輸入後端伺服器 Base URL"),
             ),
             ElevatedButton(
               onPressed: onSendMsgBtnPressed,

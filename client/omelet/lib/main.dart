@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'api/login_api.dart';
+import 'componets/alert/AlertMsg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,8 +37,7 @@ class _HomePageState extends State<HomePage> {
   late String _email = '', _password = '';
   final GlobalKey _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
-  bool _EmailAutoFocus = true;
-  bool _EmailFieldisEmpty = true;
+
   Color _eyeColor = Colors.grey;
   var emailTextFieldController, passwordTextFieldController;
   @override
@@ -77,6 +76,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            testAlertButton() 
           ],
         ),
       ),
@@ -173,6 +173,7 @@ class _HomePageState extends State<HomePage> {
             final res = await loginAPI(_email, _password);
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
+
             print('$_email');
             print(statusCode); // http 狀態碼
             print(resBody); // 登入 API 回應內容
@@ -184,12 +185,16 @@ class _HomePageState extends State<HomePage> {
               // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
             } else if (statusCode == 401) {
               // 帳號密碼錯誤
+              LoginEorroMsg(context,'帳號密碼錯誤');
             } else if (statusCode == 422) {
               // 帳號密碼為空
+              LoginEorroMsg(context,'請輸入帳號密碼');
             } else if (statusCode == 429) {
               // 速率限制，請求次數過多（5分鐘內超過10次）
+              LoginEorroMsg(context,'請稍候在重新輸入');
             } else if (statusCode == 500) {
               // 後端其他錯誤
+              LoginEorroMsg(context,'Another Eorro for server');
             }
           },
         ),
@@ -210,6 +215,7 @@ class _HomePageState extends State<HomePage> {
                 const BorderSide(color: Colors.grey, width: 1)),
           ),
           onPressed: () {
+            //TOGOd
             //TOGO
           },
           autofocus: true,
@@ -221,4 +227,19 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  Widget testAlertButton() {//警告視窗測試button
+  //忘記密碼
+  return Padding(
+    padding: const EdgeInsets.only(top: 8),
+    child: Align(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+        onPressed: () {
+          LoginEorroMsg(context,'帳號密碼錯誤');
+        },
+        child: const Text('test'),
+      ),
+    ),
+  );
+}
 }

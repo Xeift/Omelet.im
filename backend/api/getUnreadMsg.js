@@ -6,11 +6,15 @@ const verifyJWT = require('./../utils/verifyJWT.js');
 router.get('/', verifyJWT.verifyToken, async(req, res) => {
 
     try {
-        console.log(req.decodedToken); // jwt
+        let decodedToken = req.decodedToken;
+        let uid = decodedToken._uid;
+
+        // let msg = getMessage
+
         res.status(200).json({
             message: '測試',
             data: null,
-            // token: res
+            token: null
         });
     }
     catch (err) {

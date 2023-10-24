@@ -1,14 +1,16 @@
-// const authController = require('../controller/msgController.js');
+const msgController = require('../controller/msgController.js');
 const express = require('express');
 const router = express.Router();
+const verifyJWT = require('./../utils/verifyJWT.js');
 
-router.get('/', async(req, res) => {
+router.get('/', verifyJWT.verifyToken, async(req, res) => {
 
     try {
+        console.log(req.decodedToken); // jwt
         res.status(200).json({
             message: '測試',
             data: null,
-            token: null
+            // token: res
         });
     }
     catch (err) {

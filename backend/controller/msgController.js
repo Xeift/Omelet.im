@@ -12,4 +12,15 @@ async function createNewRoom(name, type) {
     });
 }
 
+async function storeUnreadMsg(name, type) {
+    // let rid = snowflakeId.generateId();
+    // await RoomModel.create({
+    //     rid: rid,
+    //     name: name,
+    //     type: type,
+    //     timestamp: snowflakeId.extractTimeStampFromId(rid),
+    //     members: []
+    // });
+}
+
 module.exports = { createNewRoom };

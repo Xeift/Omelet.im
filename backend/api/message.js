@@ -1,4 +1,4 @@
-const messageController = require('../controller/messageController');
+const messageController = require('../controller/msgController');
 const authController = require('../controller/authController.js');
 const jwt = require('../utils/jwt.js');
 const email = require('../utils/email.js');

@@ -1,7 +1,7 @@
 const mongoose = require('./mongoose');
 
 const UnreadMsgSchema = new mongoose.Schema({
-    timestamp: { type: Date, required: true },
+    timestamp: { type: Number, required: true },
     type: { type: String, enum: ['text', 'image'], required: true },
     receiver: { type: String, required: true },
     sender: { type: String, required: true },

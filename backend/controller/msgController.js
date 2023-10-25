@@ -27,9 +27,11 @@ async function readUnreadMsg(receiver) {
     let unreadMsgs = [];
     let query = { receiver: receiver };
     let cursor = await MsgModel.find(query);
-    await cursor.forEach(msg => {
+    cursor.forEach(msg => {
         unreadMsgs.push(msg);
     });
+
+    await MsgModel.deleteMany(query);
 
     return unreadMsgs;
 }

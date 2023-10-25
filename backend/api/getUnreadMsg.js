@@ -9,11 +9,11 @@ router.get('/', verifyJWT.verifyToken, async(req, res) => {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
 
-        // let msg = getMessage
+        let msg = await msgController.readUnreadMsg(uid);
 
         res.status(200).json({
-            message: '測試',
-            data: null,
+            message: '成功讀取未讀訊息',
+            data: msg,
             token: null
         });
     }

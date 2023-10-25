@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'api/login_api.dart';
-import 'componets/alert/AlertMsg.dart';
+import '../api/login_api.dart';
+import '../componets/alert/AlertMsg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Omelet Login Page',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),

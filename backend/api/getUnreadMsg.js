@@ -4,7 +4,6 @@ const router = express.Router();
 const verifyJWT = require('./../utils/verifyJWT.js');
 
 router.get('/', verifyJWT.verifyToken, async(req, res) => {
-
     try {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;

@@ -30,7 +30,6 @@ app.use('/api/v1/register', rateLimit.authLimiter, require('./api/register.js'))
 app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/resetPassword.js'));
 app.use('/api/v1/message', rateLimit.authLimiter, require('./api/message.js'));
 app.use('/api/v1/get-unread-msg', rateLimit.authLimiter, require('./api/getUnreadMsg.js'));
-// TODO: msgLimiter
 
 // const msgController = require('./controller/msgController.js');
 // msgController.storeUnreadMsg(1698143242, 'text', '491437500754038784', '504619688634880000', '原神啟動')

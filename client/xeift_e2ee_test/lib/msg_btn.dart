@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'safe_msg_store.dart';
 
 Future<void> onSaveMsgBtnPressed(String uid) async {

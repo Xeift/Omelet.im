@@ -1,5 +1,6 @@
 const generateId = require('./snowflakeId');
 const jwt = require('./jwt');
+const msgController = require('./../controller/msgController');
 
 let userIdToRoomId = {};
 
@@ -24,14 +25,14 @@ module.exports = function(io) {
             userIdToRoomId[uid] = socket.id;
         });
 
-        socket.on('clientSendMsgToServer', async(msg) => { // TODO:
+        socket.on('clientSendMsgToServer', async(msg) => {
             let decodedToken = await jwt.verifyJWT(msg['token']);
             let senderUid = decodedToken['_uid'];
             let receiverUid = msg['receiver'];
 
             let newMsg = {
                 'timestamp': msg['timestamp'],
-                'type': msg['text'],
+                'type': msg['type'],
                 'receiver': receiverUid,
                 'sender': senderUid,
                 'content': msg['content']
@@ -46,7 +47,13 @@ module.exports = function(io) {
                     .emit('serverForwardMsgToClient', newMsg);
             }
             else {
-                // TODO: save unread msg
+                await msgController.storeUnreadMsg(
+                    msg['timestamp'],
+                    msg['type'],
+                    receiverUid,
+                    senderUid,
+                    msg['content']
+                );
                 console.log('offline');
             }
             // let receiverSocketId = userIdToRoomId[receiverUid];

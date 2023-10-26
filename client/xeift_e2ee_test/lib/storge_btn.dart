@@ -21,3 +21,9 @@ Future<void> onRemoveAllBtnPressed() async {
   const storage = FlutterSecureStorage();
   await storage.deleteAll();
 }
+
+Future<void> onReadAllBtnPressed() async {
+  const storage = FlutterSecureStorage();
+  final res = await storage.readAll();
+  print(res);
+}

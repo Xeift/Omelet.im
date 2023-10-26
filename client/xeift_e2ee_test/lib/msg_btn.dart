@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
 import 'safe_msg_store.dart';
 import 'get_unread_msg_api.dart';
 
@@ -37,5 +38,17 @@ Future<void> onReadMsgBtnPressed(String uid) async {
 Future<void> onGetUnreadMsgBtnPressed(String apiBaseUrl) async {
   print('read unread');
   final res = await getUnreadMsgAPI(apiBaseUrl);
-  print(res.body);
+  final unreadMsgs = jsonDecode(res.body)['data'];
+
+  for (var unreadMsg in unreadMsgs) {
+    final safeMsgStore = SafeMsgStore();
+    print(unreadMsg);
+    await safeMsgStore.writeMsg(unreadMsg['sender'], {
+      'timestamp': unreadMsg['timestamp'],
+      'type': unreadMsg['type'],
+      'receiver': 'self',
+      'sender': unreadMsg['sender'],
+      'content': unreadMsg['content']
+    });
+  }
 }

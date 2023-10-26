@@ -84,6 +84,12 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
               child: const Text("讀取內容"),
             ),
+            ElevatedButton(
+              onPressed: () async => await onReadAllBtnPressed(),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 72, 207, 117)),
+              child: const Text("讀取所有內容"),
+            ),
             TextField(
               controller: idController,
               decoration: const InputDecoration(hintText: "輸入發送對象的uid"),

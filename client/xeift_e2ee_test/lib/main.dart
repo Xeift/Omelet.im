@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:xeift_e2ee_test/safe_msg_store.dart';
 import 'signal_protocol.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'storge_btn.dart';
@@ -207,20 +208,30 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       print('backend connected');
     });
 
+    // send msg
     socket.emit('clientSendMsgToServer', {
       'token': token,
-      'receiverUid': idController.text,
-      'msg': contentController.text
+      'timestamp': 1694867028600,
+      'type': 'text',
+      'receiver': idController.text,
+      'sender': '1702182743607218200',
+      'content': contentController.text
     });
+
+    final safeMsgStore = SafeMsgStore();
+    // TODO: store msg
 
     socket.onDisconnect((_) => print('disconnect'));
 
-    socket.on('serverForwardMsgToClient', (content) {
-      print('client已接收 $content');
+    // receive msg
+    socket.on('serverForwardMsgToClient', (msg) {
+      print('client已接收 $msg');
       setState(() {
-        msgContent = "client已接收 $content";
+        msgContent = "client已接收 $msg";
       });
-
+      // TODO: store msg
+      // final safeMsgStore = SafeMsgStore();
+      // safeMsgStore.writeMsg(msg[''], msg);
       // store msg
     });
 

@@ -15,7 +15,7 @@ class SafeMsgStore {
     await storage.write(key: key, value: msgJson);
   }
 
-  Future<String> readMsg(String friendUid, int index) async {
+  Future<Map<String, dynamic>> readMsg(String friendUid, int index) async {
     String key = uidToKey(friendUid, index);
     return jsonDecode((await storage.read(key: key)).toString());
   }

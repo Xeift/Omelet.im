@@ -362,6 +362,6 @@ Future<void> onSaveMsgBtnPressed(String uid) async {
 
 Future<void> onReadMsgBtnPressed(String uid) async {
   final safeMsgStore = SafeMsgStore();
-  final msg = await safeMsgStore.readMsg(uid, 0);
+  final msg = await safeMsgStore.readMsg(uid, 1);
   print(msg);
 }

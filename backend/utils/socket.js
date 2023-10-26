@@ -47,6 +47,7 @@ module.exports = function(io) {
                     .emit('serverForwardMsgToClient', newMsg);
             }
             else {
+                console.log('offline');
                 await msgController.storeUnreadMsg(
                     msg['timestamp'],
                     msg['type'],
@@ -54,11 +55,7 @@ module.exports = function(io) {
                     senderUid,
                     msg['content']
                 );
-                console.log('offline');
             }
-            // let receiverSocketId = userIdToRoomId[receiverUid];
-            // console.log(`內容： ${content.msg}`);
-            // console.log(receiverSocketId);
         });
 
         socket.on('disconnect', () => {

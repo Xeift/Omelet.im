@@ -1,13 +1,15 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:xeift_e2ee_test/safe_msg_store.dart';
 import 'signal_protocol.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'storge_btn.dart';
 import 'msg_btn.dart';
 import 'login_btn.dart';
+import 'safe_msg_store.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized(); // 確保Flutter初始化
@@ -208,18 +210,24 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       print('backend connected');
     });
 
-    // send msg
+    // sent msg
     socket.emit('clientSendMsgToServer', {
       'token': token,
-      'timestamp': 1694867028600,
+      'timestamp': '1694867028600',
+      'type': 'text',
+      'receiver': idController.text,
+      'content': contentController.text
+    });
+
+    // store msg sent
+    final safeMsgStore = SafeMsgStore();
+    safeMsgStore.writeMsg(idController.text, {
+      'timestamp': '1694867028600',
       'type': 'text',
       'receiver': idController.text,
       'sender': 'self',
       'content': contentController.text
     });
-
-    final safeMsgStore = SafeMsgStore();
-    // TODO: store msg
 
     socket.onDisconnect((_) => print('disconnect'));
 
@@ -229,10 +237,13 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       setState(() {
         msgContent = "client已接收 $msg";
       });
-      // TODO: store msg
-      // final safeMsgStore = SafeMsgStore();
-      // safeMsgStore.writeMsg(msg[''], msg);
-      // store msg
+      // store received msg
+      final safeMsgStore = SafeMsgStore();
+
+      print(msg.runtimeType);
+      print(jsonDecode(msg).runtimeType);
+
+      safeMsgStore.writeMsg(msg['sender'], jsonDecode(msg));
     });
 
     setState(() {

@@ -18,9 +18,9 @@ const io = require('socket.io')(server, {
 const socket = require('./utils/socket.js')(io); // handle socket events
 
 app.use(cors({
-    origin: FRONTEND_URL,
-    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
-    preflightContinue: false,
+    // origin: FRONTEND_URL,
+    // methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+    // preflightContinue: false,
 }));
 app.use(express.static(__dirname + '/client'));
 app.use(bodyParser.json());

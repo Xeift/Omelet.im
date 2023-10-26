@@ -24,12 +24,18 @@ module.exports = function(io) {
             userIdToRoomId[uid] = socket.id;
         });
 
-        socket.on('clientSendMsgToServer', async(content) => { // TODO:
-            let decodedToken = await jwt.verifyJWT(content.token);
+        socket.on('clientSendMsgToServer', async(msg) => { // TODO:
+            let decodedToken = await jwt.verifyJWT(msg['token']);
             let senderUid = decodedToken['_uid'];
-            let receiverUid = content.receiverUid;
-            let msg = content.msg;
+            let receiverUid = msg['receiver'];
 
+            let newMsg = {
+                'timestamp': msg['timestamp'],
+                'type': msg['text'],
+                'receiver': receiverUid,
+                'sender': senderUid,
+                'content': msg['content']
+            };
             console.log(receiverUid);
             console.log(userIdToRoomId);
 
@@ -37,7 +43,7 @@ module.exports = function(io) {
                 console.log('online');
                 socket
                     .to(userIdToRoomId[receiverUid])
-                    .emit('serverForwardMsgToClient', msg);
+                    .emit('serverForwardMsgToClient', newMsg);
             }
             else {
                 console.log('offline');

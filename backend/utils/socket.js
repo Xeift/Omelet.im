@@ -46,6 +46,7 @@ module.exports = function(io) {
                     .emit('serverForwardMsgToClient', newMsg);
             }
             else {
+                // TODO: save unread msg
                 console.log('offline');
             }
             // let receiverSocketId = userIdToRoomId[receiverUid];

@@ -238,12 +238,12 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         msgContent = "client已接收 $msg";
       });
       // store received msg
-      final safeMsgStore = SafeMsgStore();
 
+      print(msg);
       print(msg.runtimeType);
-      print(jsonDecode(msg).runtimeType);
 
-      safeMsgStore.writeMsg(msg['sender'], jsonDecode(msg));
+      final safeMsgStore = SafeMsgStore();
+      safeMsgStore.writeMsg(msg['sender'], msg);
     });
 
     setState(() {

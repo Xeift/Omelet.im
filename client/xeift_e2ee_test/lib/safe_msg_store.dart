@@ -9,7 +9,7 @@ class SafeMsgStore {
     return 'msg_${friendUid}_$index';
   }
 
-  Future<void> writeMsg(String friendUid, Map<String, Object> msg) async {
+  Future<void> writeMsg(String friendUid, Map<String, dynamic> msg) async {
     final msgJson = jsonEncode(msg);
     String key = uidToKey(friendUid, await getMsgCount(friendUid) + 1);
     await storage.write(key: key, value: msgJson);

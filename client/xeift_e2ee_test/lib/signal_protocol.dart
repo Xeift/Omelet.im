@@ -5,8 +5,6 @@ import 'dart:typed_data'; // 用於處理字節數組
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart'; // 用於實現信號協議
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'safe_pre_key_store.dart';
-import 'login_api.dart';
-import 'safe_msg_store.dart';
 
 Future<void> install() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
@@ -290,15 +288,6 @@ Future<void> onStorePreKeyBtnPressed() async {
   }
 }
 
-Future<void> onStoreJWTBtnPressed(
-    String apiBaseUrl, String acc, String pwd) async {
-  print('storeJWTBtnPressed-----------');
-  const storage = FlutterSecureStorage();
-  final res = await loginAPI(apiBaseUrl, acc, pwd);
-  final resBody = jsonDecode(res.body);
-  await storage.write(key: 'token', value: resBody['token']);
-}
-
 Future<void> onGenerateKeyBtnPressed() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
   final registrationId = generateRegistrationId(false); // 生成註冊ID
@@ -313,35 +302,4 @@ Future<void> onGenerateKeyBtnPressed() async {
   }
 
   print('儲存完畢');
-}
-
-Future<void> onSaveMsgBtnPressed(String uid) async {
-  final safeMsgStore = SafeMsgStore();
-  await safeMsgStore.writeMsg(uid, {
-    "_id": "65390ef1d9b39ec893d6e4e4",
-    "timestamp": 1698143242,
-    "type": "text",
-    "receiver": "491437500754038784",
-    "sender": "504619688634880000",
-    "content": "原神啟動",
-    "__v": 0
-  });
-  await safeMsgStore.writeMsg(
-    uid,
-    {
-      "_id": "65390ef1d9b39ec893d6e4e7",
-      "timestamp": 1698143246,
-      "type": "text",
-      "receiver": "491437500754038784",
-      "sender": "504620939263086593",
-      "content": "蹦蹦炸彈",
-      "__v": 0
-    },
-  );
-}
-
-Future<void> onReadMsgBtnPressed(String uid) async {
-  final safeMsgStore = SafeMsgStore();
-  final msg = await safeMsgStore.readMsg(uid, 1);
-  print(msg);
 }

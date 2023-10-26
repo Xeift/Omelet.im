@@ -32,3 +32,7 @@ Future<void> onReadMsgBtnPressed(String uid) async {
   final msg = await safeMsgStore.readMsg(uid, 1);
   print(msg);
 }
+
+Future<void> onGetUnreadMsgBtnPressed(String uid) async {
+  print('read unread');
+}

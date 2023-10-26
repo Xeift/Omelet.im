@@ -112,6 +112,19 @@ Future<void> onWriteBtnPressed(String key, String value) async {
   await storage.write(key: key, value: value);
 }
 
+Future<void> onRemoveBtnPressed(String key) async {
+  print('remove');
+  print(key);
+  const storage = FlutterSecureStorage();
+  await storage.delete(key: key);
+}
+
+Future<void> onRemoveAllBtnPressed() async {
+  print('remove all');
+  const storage = FlutterSecureStorage();
+  await storage.deleteAll();
+}
+
 Future<void> onWriteJsonBtnPressed() async {
   print('write json');
   const storage = FlutterSecureStorage();
@@ -264,19 +277,6 @@ Future<void> onWriteJsonBtnPressed() async {
     ])),
   };
   await storage.write(key: 'preKey', value: jsonEncode(mp)); //
-}
-
-Future<void> onRemoveBtnPressed(String key) async {
-  print('remove');
-  print(key);
-  const storage = FlutterSecureStorage();
-  await storage.delete(key: key);
-}
-
-Future<void> onRemoveAllBtnPressed() async {
-  print('remove all');
-  const storage = FlutterSecureStorage();
-  await storage.deleteAll();
 }
 
 Future<void> onLoadPreKeyBtnPressed(String id) async {

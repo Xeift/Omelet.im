@@ -6,6 +6,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart'; // 用於
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'safe_pre_key_store.dart';
 import 'login_api.dart';
+import 'safe_msg_store.dart';
 
 Future<void> install() async {
   final identityKeyPair = generateIdentityKeyPair(); // 生成身份金鑰對
@@ -312,7 +313,7 @@ Future<void> onStorePreKeyBtnPressed() async {
 Future<void> onStoreJWTBtnPressed(
     String apiBaseUrl, String acc, String pwd) async {
   print('storeJWTBtnPressed-----------');
-  final storage = new FlutterSecureStorage();
+  const storage = FlutterSecureStorage();
   final res = await loginAPI(apiBaseUrl, acc, pwd);
   final resBody = jsonDecode(res.body);
   await storage.write(key: 'token', value: resBody['token']);
@@ -332,4 +333,16 @@ Future<void> onGenerateKeyBtnPressed() async {
   }
 
   print('儲存完畢');
+}
+
+Future<void> onSaveMsgBtnPressed(String uid) async {
+  final safeMsgStore = SafeMsgStore();
+  await safeMsgStore.writeMsg(uid, '原神 啟動');
+  await safeMsgStore.writeMsg(uid, '我最喜歡玩原神了');
+}
+
+Future<void> onReadMsgBtnPressed(String uid) async {
+  final safeMsgStore = SafeMsgStore();
+  final msg = await safeMsgStore.readMsg(uid, 0);
+  print(msg);
 }

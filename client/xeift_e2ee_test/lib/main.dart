@@ -158,6 +158,20 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
                   backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
               child: const Text("登入並儲存jwt)"),
             ),
+            ElevatedButton(
+              onPressed: () async =>
+                  await onSaveMsgBtnPressed('504623456789012345'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
+              child: const Text("儲存訊息"),
+            ),
+            ElevatedButton(
+              onPressed: () async =>
+                  await onReadMsgBtnPressed('504623456789012345'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
+              child: const Text("讀取訊息"),
+            ),
           ],
         ),
       )),
@@ -203,6 +217,8 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       setState(() {
         msgContent = "client已接收 $content";
       });
+
+      // store msg
     });
 
     setState(() {

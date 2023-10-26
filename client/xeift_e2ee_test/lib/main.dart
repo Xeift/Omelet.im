@@ -214,7 +214,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       'timestamp': 1694867028600,
       'type': 'text',
       'receiver': idController.text,
-      'sender': '1702182743607218200',
+      'sender': 'self',
       'content': contentController.text
     });
 

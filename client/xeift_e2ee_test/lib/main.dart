@@ -156,7 +156,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
                   pwdController.text),
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
-              child: const Text("登入並儲存jwt)"),
+              child: const Text("登入並儲存jwt"),
             ),
             ElevatedButton(
               onPressed: () async =>

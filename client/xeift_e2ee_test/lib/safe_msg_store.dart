@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SafeMsgStore {
@@ -7,14 +9,15 @@ class SafeMsgStore {
     return 'msg_${friendUid}_$index';
   }
 
-  Future<void> writeMsg(String friendUid, String message) async {
+  Future<void> writeMsg(String friendUid, Map<String, Object> msg) async {
+    final msgJson = jsonEncode(msg);
     String key = uidToKey(friendUid, await getMsgCount(friendUid) + 1);
-    await storage.write(key: key, value: message);
+    await storage.write(key: key, value: msgJson);
   }
 
   Future<String> readMsg(String friendUid, int index) async {
     String key = uidToKey(friendUid, index);
-    return (await storage.read(key: key)).toString();
+    return jsonDecode((await storage.read(key: key)).toString());
   }
 
   Future<void> deleteMsg(String friendUid, int index) async {

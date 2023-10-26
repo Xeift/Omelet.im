@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'safe_msg_store.dart';
+import 'get_unread_msg_api.dart';
 
 Future<void> onSaveMsgBtnPressed(String uid) async {
   final safeMsgStore = SafeMsgStore();
@@ -33,6 +34,8 @@ Future<void> onReadMsgBtnPressed(String uid) async {
   print(msg);
 }
 
-Future<void> onGetUnreadMsgBtnPressed(String uid) async {
+Future<void> onGetUnreadMsgBtnPressed(String apiBaseUrl) async {
   print('read unread');
+  final res = await getUnreadMsgAPI(apiBaseUrl);
+  print(res.body);
 }

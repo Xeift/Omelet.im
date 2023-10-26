@@ -10,6 +10,7 @@ import 'storge_btn.dart';
 import 'msg_btn.dart';
 import 'login_btn.dart';
 import 'safe_msg_store.dart';
+import 'msg_btn.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized(); // 確保Flutter初始化
@@ -177,6 +178,13 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
               child: const Text("讀取訊息"),
+            ),
+            ElevatedButton(
+              onPressed: () async =>
+                  await onGetUnreadMsgBtnPressed(apiBaseUrlController.text),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
+              child: const Text("取得未讀訊息"),
             ),
           ],
         ),

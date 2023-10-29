@@ -41,7 +41,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               decoration: const InputDecoration(hintText: '輸入密碼'),
             ),
             ElevatedButton(
-              onPressed: onLoginBtnPressed,
+              onPressed: () async => await onLoginBtnPressed(
+                  serverUriController.text,
+                  accController.text,
+                  pwdController.text),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               child: const Text('登入'),
             ),

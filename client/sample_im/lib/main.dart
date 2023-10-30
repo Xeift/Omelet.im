@@ -1,9 +1,9 @@
 // required lib
 import 'package:flutter/material.dart';
 
-// login form
 import 'widgets/login_widget.dart';
 import 'widgets/reset_widget.dart';
+import 'widgets/msg_widget.dart';
 
 void main() async {
   runApp(const MyMsgWidget());
@@ -29,6 +29,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             const SizedBox(height: 50), // keep top space
             LoginWidget(updateHintMsg), // login widget
             RemoveAllWidget(updateHintMsg), // remove all widget
+            MsgWidget(updateHintMsg), // remove all widget
             Text(hintMsg,
                 textDirection: TextDirection.ltr), // display hint message
           ],

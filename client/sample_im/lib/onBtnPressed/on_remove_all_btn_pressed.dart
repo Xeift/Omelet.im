@@ -4,5 +4,6 @@ Future<void> onRemoveAllBtnPressed(Function updateHintMsg) async {
   print('[on_remove_all_btn_pressed.dart] remove all');
   const storage = FlutterSecureStorage();
   await storage.deleteAll();
-  updateHintMsg('已刪除所有 secure storage 中之資料：）');
+  updateHintMsg(
+      '已刪除所有 secure storage 中之資料：）\n目前所有資料為：${await storage.readAll()}');
 }

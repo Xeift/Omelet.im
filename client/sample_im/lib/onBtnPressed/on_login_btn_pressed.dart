@@ -24,5 +24,5 @@ Future<void> onLoginBtnPressed(String apiBaseUrl, String username,
 
   await storage.write(key: 'token', value: resBody['token']);
   updateHintMsg(
-      '${resBody["data"]["uid"]} ${resBody["data"]["username"]} ${resBody["data"]["email"]} 已登入');
+      '歡迎登入，${resBody["data"]["username"]}\n您的id為：${resBody["data"]["uid"]}');
 }

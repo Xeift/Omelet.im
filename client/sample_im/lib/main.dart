@@ -19,6 +19,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   TextEditingController serverUriController = TextEditingController();
   TextEditingController accController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
+  String hintMsg = '未登入';
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +45,21 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               onPressed: () async => await onLoginBtnPressed(
                   serverUriController.text,
                   accController.text,
-                  pwdController.text),
+                  pwdController.text,
+                  updateHintMsg),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               child: const Text('登入'),
             ),
+            Text(hintMsg, textDirection: TextDirection.ltr),
           ],
         ),
       )),
     );
+  }
+
+  void updateHintMsg(String newHintMsg) {
+    setState(() {
+      hintMsg = newHintMsg;
+    });
   }
 }

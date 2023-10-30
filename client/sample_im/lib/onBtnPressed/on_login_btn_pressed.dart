@@ -4,8 +4,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<void> onLoginBtnPressed(
-    String apiBaseUrl, String username, String password) async {
+Future<void> onLoginBtnPressed(String apiBaseUrl, String username,
+    String password, Function updateHintMsg) async {
   print('test');
 
   final res = await http.post(
@@ -23,4 +23,5 @@ Future<void> onLoginBtnPressed(
   print(resBody);
 
   await storage.write(key: 'token', value: resBody['token']);
+  updateHintMsg('已登入');
 }

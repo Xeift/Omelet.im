@@ -1,8 +1,8 @@
 // required lib
 import 'package:flutter/material.dart';
 
-// btn
-import 'onBtnPressed/on_login_btn_pressed.dart';
+// login form
+import 'widgets/login_form.dart';
 
 void main() async {
   runApp(const MyMsgWidget());
@@ -16,9 +16,6 @@ class MyMsgWidget extends StatefulWidget {
 }
 
 class _MyMsgWidgetState extends State<MyMsgWidget> {
-  TextEditingController serverUriController = TextEditingController();
-  TextEditingController accController = TextEditingController();
-  TextEditingController pwdController = TextEditingController();
   String hintMsg = '未登入';
 
   @override
@@ -29,27 +26,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         child: Column(
           children: [
             const SizedBox(height: 50), // keep top space
-            TextField(
-              controller: serverUriController,
-              decoration: const InputDecoration(hintText: '輸入後端伺服器 URI'),
-            ),
-            TextField(
-              controller: accController,
-              decoration: const InputDecoration(hintText: '輸入帳號'),
-            ),
-            TextField(
-              controller: pwdController,
-              decoration: const InputDecoration(hintText: '輸入密碼'),
-            ),
-            ElevatedButton(
-              onPressed: () async => await onLoginBtnPressed(
-                  serverUriController.text,
-                  accController.text,
-                  pwdController.text,
-                  updateHintMsg),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('登入'),
-            ),
+            LoginForm(updateHintMsg), // login widget
             Text(hintMsg, textDirection: TextDirection.ltr),
           ],
         ),

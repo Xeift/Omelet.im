@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api, non_constant_identifier_names, use_build_context_synchronously, unnecessary_string_interpolations, avoid_print, deprecated_member_use, avoid_unnecessary_containers
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../api/login_api.dart';
+import 'package:omelet/pages/ForgetPage.dart';
+import '../api/all_login_api.dart';
 import '../componets/alert/AlertMsg.dart';
 
 void main() {
@@ -17,7 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'Omelet Login Page',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
-      ),
+      ), 
+      initialRoute: "/",
       routes: {
         "/": (context) => const HomePage(title: "Login"),
       },
@@ -34,7 +38,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late String _email = '', _password = '';
+  late String _Email = '', _Password = '';
   final GlobalKey _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
 
@@ -125,12 +129,6 @@ class _HomePageState extends State<HomePage> {
     //Email輸入框
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Email Address'),
-      validator: (v) {
-        //驗證機制，限制只能輸入A-Z,a-z,0-9,@,目前先不用它
-        var emailReg = RegExp(
-            r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
-      },
-      // onSaved: (v) => _email = v!,
       controller: emailTextFieldController,
     );
   }
@@ -143,7 +141,9 @@ class _HomePageState extends State<HomePage> {
         alignment: Alignment.centerRight,
         child: TextButton(
           onPressed: () {
-            //TOGO forget pages
+             Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const ForgetPage(t: 'wsdfs s'))
+            );
           },
           child: const Text('Forget password'),
         ),
@@ -163,18 +163,18 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Text(
             'Login',
-            style: Theme.of(context).primaryTextTheme!.headline6,
+            style: Theme.of(context).primaryTextTheme.headline6,
           ),
           onPressed: () async {
             //連接後端API,登入button，pressed event，當按下它會執行下方程式
-            _email = emailTextFieldController.text; //_email字串存入_email變數
-            _password = passwordTextFieldController.text; //_email字串存入_email變數
+            _Email = emailTextFieldController.text; //_email字串存入_email變數
+            _Password = passwordTextFieldController.text; //_email字串存入_email變數
 
-            final res = await loginAPI(_email, _password);
+            final res = await loginAPI(_Email, _Password);
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
 
-            print('$_email');
+            print('$_Email');
             print(statusCode); // http 狀態碼
             print(resBody); // 登入 API 回應內容
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容

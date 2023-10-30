@@ -1,16 +1,11 @@
-// login_form.dart
 // required lib
 import 'package:flutter/material.dart';
 
 // btn
 import '../onBtnPressed/on_login_btn_pressed.dart';
 
-// define a widget class for login form
 class LoginWidget extends StatefulWidget {
-  // constructor with a callback function as parameter
   const LoginWidget(this.updateHintMsg, {super.key});
-
-  // define the callback function as a field
   final Function updateHintMsg;
 
   @override
@@ -18,7 +13,6 @@ class LoginWidget extends StatefulWidget {
 }
 
 class LoginWidgetState extends State<LoginWidget> {
-  // define the controller as fields
   final TextEditingController serverUriController = TextEditingController();
   final TextEditingController accController = TextEditingController();
   final TextEditingController pwdController = TextEditingController();
@@ -44,8 +38,7 @@ class LoginWidgetState extends State<LoginWidget> {
               serverUriController.text,
               accController.text,
               pwdController.text,
-              widget
-                  .updateHintMsg), // use widget to access the callback function
+              widget.updateHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
           child: const Text('登入'),
         ),

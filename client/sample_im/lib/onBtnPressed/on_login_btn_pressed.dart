@@ -20,5 +20,7 @@ Future<void> onLoginBtnPressed(
 
   final resBody = jsonDecode(res.body);
 
+  print(resBody);
+
   await storage.write(key: 'token', value: resBody['token']);
 }

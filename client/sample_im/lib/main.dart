@@ -37,7 +37,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               decoration: const InputDecoration(hintText: '輸入帳號'),
             ),
             TextField(
-              controller: accController,
+              controller: pwdController,
               decoration: const InputDecoration(hintText: '輸入密碼'),
             ),
             ElevatedButton(

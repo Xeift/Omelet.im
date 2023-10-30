@@ -23,5 +23,6 @@ Future<void> onLoginBtnPressed(String apiBaseUrl, String username,
   print(resBody);
 
   await storage.write(key: 'token', value: resBody['token']);
-  updateHintMsg('已登入');
+  updateHintMsg(
+      '${resBody["data"]["uid"]} ${resBody["data"]["username"]} ${resBody["data"]["email"]} 已登入');
 }

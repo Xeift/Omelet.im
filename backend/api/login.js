@@ -6,7 +6,6 @@ const router = express.Router();
 router.post('/', async(req, res) => {
     let username = req.body.username; // username 可為 username 或 email
     let password = req.body.password;
-    console.log(username);
     if (!username || !password) {
         res.status(422).json({
             message: '帳號密碼不可為空',
@@ -18,6 +17,7 @@ router.post('/', async(req, res) => {
 
     try {
         let user = await authController.isPasswordMatch(username, password);
+        console.log(user);
         if (!user) {
             res.status(401).json({
                 message: '帳號或密碼錯誤',
@@ -34,7 +34,11 @@ router.post('/', async(req, res) => {
         );
         res.status(200).json({
             message: '登入成功',
-            data: null,
+            data: {
+                uid: user.uid,
+                username: user.username,
+                email: user.email
+            },
             token: token
         });
     }

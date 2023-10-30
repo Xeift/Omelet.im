@@ -27,7 +27,8 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
           children: [
             const SizedBox(height: 50), // keep top space
             LoginWidget(updateHintMsg), // login widget
-            Text(hintMsg, textDirection: TextDirection.ltr),
+            Text(hintMsg,
+                textDirection: TextDirection.ltr), // display hint message
           ],
         ),
       )),

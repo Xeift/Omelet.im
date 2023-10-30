@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import '../onBtnPressed/on_login_btn_pressed.dart';
 
 // define a widget class for login form
-class LoginForm extends StatefulWidget {
+class LoginWidget extends StatefulWidget {
   // constructor with a callback function as parameter
-  const LoginForm(this.updateHintMsg, {super.key});
+  const LoginWidget(this.updateHintMsg, {super.key});
 
   // define the callback function as a field
   final Function updateHintMsg;
 
   @override
-  LoginFormState createState() => LoginFormState();
+  LoginWidgetState createState() => LoginWidgetState();
 }
 
-class LoginFormState extends State<LoginForm> {
+class LoginWidgetState extends State<LoginWidget> {
   // define the controller as fields
   final TextEditingController serverUriController = TextEditingController();
   final TextEditingController accController = TextEditingController();

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // login form
-import 'widgets/login_form.dart';
+import 'widgets/login_widget.dart';
 
 void main() async {
   runApp(const MyMsgWidget());
@@ -26,7 +26,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         child: Column(
           children: [
             const SizedBox(height: 50), // keep top space
-            LoginForm(updateHintMsg), // login widget
+            LoginWidget(updateHintMsg), // login widget
             Text(hintMsg, textDirection: TextDirection.ltr),
           ],
         ),

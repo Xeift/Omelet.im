@@ -21,7 +21,7 @@ class RemoveAllWidgetState extends State<RemoveAllWidget> {
           onPressed: () async =>
               await onRemoveAllBtnPressed(widget.updateHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-          child: const Text('全部重置 - Debug 用'),
+          child: const Text('清除全部儲存空間 - Debug 用'),
         ),
       ],
     );

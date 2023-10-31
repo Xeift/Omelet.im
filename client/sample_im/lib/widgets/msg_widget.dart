@@ -13,7 +13,6 @@ class MsgWidget extends StatefulWidget {
 }
 
 class MsgWidgetState extends State<MsgWidget> {
-  final TextEditingController serverUriController = TextEditingController();
   final TextEditingController receiverController = TextEditingController();
   final TextEditingController msgContentController = TextEditingController();
 
@@ -21,10 +20,6 @@ class MsgWidgetState extends State<MsgWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(
-          controller: serverUriController,
-          decoration: const InputDecoration(hintText: '輸入後端伺服器 URI'),
-        ),
         TextField(
           controller: receiverController,
           decoration: const InputDecoration(hintText: '輸入接收者 id'),
@@ -35,7 +30,6 @@ class MsgWidgetState extends State<MsgWidget> {
         ),
         ElevatedButton(
           onPressed: () async => await onSendMsgBtnPressed(
-              serverUriController.text,
               receiverController.text,
               msgContentController.text,
               widget.updateHintMsg),

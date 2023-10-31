@@ -1,14 +1,15 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'dart:convert';
 import './../store/safe_msg_store.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-
+import './../debug_utils/debug_config.dart';
 // ignore_for_file: avoid_print
 
-Future<void> onSendMsgBtnPressed(String serverUri, String receiverId,
-    String msgContent, Function updateHintMsg) async {
+Future<void> onSendMsgBtnPressed(
+    String receiverId, String msgContent, Function updateHintMsg) async {
+  final serverUri = (await readDebugConfig())['serverUri'];
+
   print('[on_send_msg_btn_pressed.dart] $receiverId $msgContent');
-  print(serverUri);
+
   io.Socket socket =
       io.io(serverUri, io.OptionBuilder().setTransports(['websocket']).build());
 

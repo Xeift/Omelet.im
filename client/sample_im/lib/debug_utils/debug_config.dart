@@ -9,12 +9,12 @@ Future<Map<String, dynamic>> readDebugConfig() async {
 }
 
 Future<void> writeDebugConfig(
-    String apiBaseUrl, String username, String password) async {
+    String serverUri, String username, String password) async {
   const storage = FlutterSecureStorage();
   await storage.write(
       key: 'debug_config',
       value: jsonEncode({
-        'apiBaseUrl': apiBaseUrl,
+        'serverUri': serverUri,
         'username': username,
         'password': password
       }));

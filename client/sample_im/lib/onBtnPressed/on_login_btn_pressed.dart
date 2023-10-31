@@ -22,5 +22,4 @@ Future<void> onLoginBtnPressed(String apiBaseUrl, String username,
   updateHintMsg(
       '歡迎登入，${resBody["data"]["username"]}\n您的id為：${resBody["data"]["uid"]}');
   await writeDebugConfig(apiBaseUrl, username, password);
-  print(await readDebugConfig());
 }

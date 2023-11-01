@@ -16,13 +16,13 @@ Future<http.Response> loginAPI(String _username, String _password) async {
 }
 
 Future<http.Response> forgetemailAPI(String _forgetEamil) async {
-  final res = await http.post(
-    Uri.parse('http://localhost:3000/api/v1/login'),
+  final forgetemailres = await http.post(
+    Uri.parse('http://localhost:3000/api/v1/reset-password'),
     headers: <String,String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(
-        <String>{'username': _username, 'password': _password}),
+        <String,String>{'email':_forgetEamil}),
   );
-  return res;
+  return forgetemailres;
 }

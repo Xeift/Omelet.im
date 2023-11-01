@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:omelet/api/all_login_api.dart';
-import 'ForgetValidator.dart';
 
 class ForgetPage extends StatefulWidget {
   const ForgetPage({Key? key, required this.t}) : super(key: key);
@@ -10,7 +11,7 @@ class ForgetPage extends StatefulWidget {
 }
 
 class _ForgetPageState extends State<ForgetPage>{
-  late String _forgetEmail = '';
+  late String _ForgetEmail = '';
   bool _clicked_Textfield = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var forgetEamilcontroller;
@@ -41,7 +42,7 @@ class _ForgetPageState extends State<ForgetPage>{
             buildForget_emailTextField(),
             const SizedBox(height:30),
             buildForget_submitButton(),
-            if(_clicked_Textfield == true) buildValidation_textField(),
+          
           ],
         ),
       ),
@@ -66,17 +67,6 @@ class _ForgetPageState extends State<ForgetPage>{
     ),
     controller: forgetEamilcontroller,
   );
-}
-  Widget buildValidation_textField(){
-    return const TextField(
-      decoration: InputDecoration(
-        border:OutlineInputBorder(
-          
-        ),
-        labelText: "Email Validation Input",
-      ),
-      
-    );
   }
   // ignore: non_constant_identifier_names
   Widget buildForget_submitButton(){
@@ -93,11 +83,20 @@ class _ForgetPageState extends State<ForgetPage>{
             style: Theme.of(context).primaryTextTheme.headline6,
           ),
           onPressed: () async{
-            _forgetEmail = forgetEamilcontroller.text;
-            final res_forget = await forgetemailAPI(_forgetEmail);
-             Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const ValidationPage())
-            );
+            _ForgetEmail = forgetEamilcontroller.text;
+            final forgetemailres = await forgetemailAPI(_ForgetEmail);
+            final statusCode = forgetemailres.statusCode;
+            final resBody = jsonDecode(forgetemailres.body);
+
+            print('$_ForgetEmail');
+            print(statusCode); // http 狀態碼
+            print(resBody); // 
+            print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
+
+
+
+
+             //build await function after complet date transform
           },
           ),
       ),

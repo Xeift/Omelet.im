@@ -21,5 +21,15 @@ class _ValidationPageState extends State<ValidationPage>{
       ),
     );
   }
-
+  Widget buildValidation_textField(){
+      return const TextField(
+        decoration: InputDecoration(
+          border:OutlineInputBorder(
+            
+          ),
+          labelText: "Email Validation Input",
+        ),
+        
+      );
+    }
 }

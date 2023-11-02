@@ -6,23 +6,18 @@ let userIdToRoomId = {};
 
 module.exports = function(io) {
     io.on('connection', (socket) => {
-        console.log('----------------\n[utils/socket.js] a user connected\n----------------\n');
-
-        // // TODO: 1 generate roomID
-        // socket.id = generateId.generateId();
-        // socket.join(socket.id);
-        // socket.emit('roomID', socket.id);
-        
-        // // TODO: 4 receive private message from client
-        // socket.on('newPrivateMsg', (receiverId, message) => {
-        //     // TODO: 5 向接收者的room發送私訊事件和資料
-        //     socket.to(receiverId).emit('newPrivateMsg', socket.id, message);
-        // });
+        console.log('--------------------------------');
+        console.log(`${socket.id} connected to backend server`);
+        console.log('room content');
+        console.log(userIdToRoomId);
+        console.log('--------------------------------\n');
 
         socket.on('clientReturnJwtToServer', async(token) => {
             let decodedToken = await jwt.verifyJWT(token);
             let uid = decodedToken['_uid'];
             userIdToRoomId[uid] = socket.id;
+            console.log(`${uid} ${socket.id}`);
+            console.log(userIdToRoomId);
         });
 
         socket.on('clientSendMsgToServer', async(msg) => {
@@ -37,14 +32,17 @@ module.exports = function(io) {
                 'sender': senderUid,
                 'content': msg['content']
             };
+            console.log('--------------------------------');
             console.log(receiverUid);
             console.log(userIdToRoomId);
+            console.log('--------------------------------');
 
             if (receiverUid in userIdToRoomId) {
                 console.log('online');
                 socket
                     .to(userIdToRoomId[receiverUid])
                     .emit('serverForwardMsgToClient', newMsg);
+                console.log('done emit serverForwardMsgToClient');
             }
             else {
                 console.log('offline');

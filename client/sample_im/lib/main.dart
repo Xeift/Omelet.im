@@ -51,7 +51,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       socket.on('serverForwardMsgToClient', (msg) {
         print('client已接收 $msg');
 
-        updateHintMsg('client已接收 $msg');
+        catHintMsg('$msg');
 
         // store received msg
         final safeMsgStore = SafeMsgStore();
@@ -69,7 +69,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         child: Column(
           children: [
             const SizedBox(height: 50), // keep top space
-            LoginWidget(updateHintMsg), // login widget
+            LoginWidget(updateHintMsg, catHintMsg), // login widget
             RemoveAllWidget(updateHintMsg), // remove all widget
             MsgWidget(updateHintMsg), // remove all widget
             Text(
@@ -86,6 +86,12 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   void updateHintMsg(String newHintMsg) {
     setState(() {
       hintMsg = newHintMsg;
+    });
+  }
+
+  void catHintMsg(String newHintMsg) {
+    setState(() {
+      hintMsg = '$hintMsg\n$newHintMsg';
     });
   }
 }

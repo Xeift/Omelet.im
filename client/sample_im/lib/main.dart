@@ -31,11 +31,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    initSocket();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
+  Future<void> initSocket() async {
     final serverUri = (await readDebugConfig())['serverUri'];
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');

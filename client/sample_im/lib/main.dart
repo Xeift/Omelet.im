@@ -12,30 +12,10 @@ import 'widgets/reset_widget.dart';
 import 'widgets/msg_widget.dart';
 
 late io.Socket socket;
+final hintMsgKey = GlobalKey();
 
 void main() async {
   runApp(const MyMsgWidget());
-  final serverUri = (await readDebugConfig())['serverUri'];
-  const storage = FlutterSecureStorage();
-  final token = await storage.read(key: 'token');
-
-  socket =
-      io.io(serverUri, io.OptionBuilder().setTransports(['websocket']).build());
-
-  socket.onConnect((_) async {
-    socket.emit('clientReturnJwtToServer', token);
-    print('backend connected');
-
-    // receive msg
-    socket.on('serverForwardMsgToClient', (msg) {
-      print('client已接收 $msg');
-      // updateHintMsg('client已接收 $msg');
-
-      // store received msg
-      final safeMsgStore = SafeMsgStore();
-      safeMsgStore.writeMsg(msg['sender'], msg);
-    });
-  });
 }
 
 class MyMsgWidget extends StatefulWidget {
@@ -49,6 +29,40 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   String hintMsg = '未登入';
 
   @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    final serverUri = (await readDebugConfig())['serverUri'];
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+
+    // ----------------------------------------------------------------
+    socket = io.io(
+        serverUri, io.OptionBuilder().setTransports(['websocket']).build());
+
+    socket.onConnect((_) async {
+      socket.emit('clientReturnJwtToServer', token);
+      print('backend connected');
+
+      // receive msg
+      socket.on('serverForwardMsgToClient', (msg) {
+        print('client已接收 $msg');
+
+        updateHintMsg('client已接收 $msg');
+
+        // store received msg
+        final safeMsgStore = SafeMsgStore();
+        safeMsgStore.writeMsg(msg['sender'], msg);
+      });
+    });
+    // ----------------------------------------------------------------
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -59,8 +73,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             LoginWidget(updateHintMsg), // login widget
             RemoveAllWidget(updateHintMsg), // remove all widget
             MsgWidget(updateHintMsg), // remove all widget
-            Text(hintMsg,
-                textDirection: TextDirection.ltr), // display hint message
+            Text(
+              hintMsg,
+              textDirection: TextDirection.ltr,
+              key: hintMsgKey,
+            ), // display hint message
           ],
         ),
       )),

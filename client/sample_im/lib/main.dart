@@ -51,7 +51,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       socket.on('serverForwardMsgToClient', (msg) {
         print('client已接收 $msg');
 
-        catHintMsg('$msg');
+        catHintMsg('${msg['sender']}: ${msg['content']}');
 
         // store received msg
         final safeMsgStore = SafeMsgStore();

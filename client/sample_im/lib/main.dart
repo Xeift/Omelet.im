@@ -1,6 +1,8 @@
 // required lib
 // ignore_for_file: avoid_print
 
+import 'dart:ffi';
+
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import './../debug_utils/debug_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,6 +15,7 @@ import 'widgets/reset_widget.dart';
 import 'widgets/msg_widget.dart';
 
 import './utils/get_unread_msg_api.dart';
+import './store/safe_msg_store.dart';
 
 late io.Socket socket;
 final hintMsgKey = GlobalKey();
@@ -53,6 +56,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       final res = await getUnreadMsgAPI(serverUri);
       final unreadMsgs = jsonDecode(res.body)['data'];
 
+      // store unread msg
       for (var unreadMsg in unreadMsgs) {
         final safeMsgStore = SafeMsgStore();
         print(unreadMsg);
@@ -63,6 +67,15 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
           'sender': unreadMsg['sender'],
           'content': unreadMsg['content']
         });
+      }
+
+      final safeMsgStore = SafeMsgStore();
+      final historyMsgs = await safeMsgStore.readAllMsg('491437500754038784');
+
+      for (var historyMsg in historyMsgs) {
+        final decodedHistoryMsg = jsonDecode(historyMsg);
+        catHintMsg(
+            '${decodedHistoryMsg['sender']}: ${decodedHistoryMsg['content']}');
       }
 
       // receive msg

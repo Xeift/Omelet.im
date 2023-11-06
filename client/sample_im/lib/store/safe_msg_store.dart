@@ -32,4 +32,16 @@ class SafeMsgStore {
         .toList();
     return filteredKeys.length;
   }
+
+  Future<List<String>> readAllMsg(String friendUid) async {
+    Map<String, String> allData = await storage.readAll();
+    List<String> filteredKeys = allData.keys
+        .where((key) => key.startsWith('msg_${friendUid}_'))
+        .toList();
+    List<String> messages = [];
+    for (String key in filteredKeys) {
+      messages.add(allData[key]!);
+    }
+    return messages;
+  }
 }

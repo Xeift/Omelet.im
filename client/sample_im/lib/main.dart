@@ -6,10 +6,13 @@ import './../debug_utils/debug_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import './store/safe_msg_store.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import 'widgets/login_widget.dart';
 import 'widgets/reset_widget.dart';
 import 'widgets/msg_widget.dart';
+
+import './utils/get_unread_msg_api.dart';
 
 late io.Socket socket;
 final hintMsgKey = GlobalKey();
@@ -46,6 +49,21 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
     socket.onConnect((_) async {
       socket.emit('clientReturnJwtToServer', token);
       print('backend connected');
+
+      final res = await getUnreadMsgAPI(serverUri);
+      final unreadMsgs = jsonDecode(res.body)['data'];
+
+      for (var unreadMsg in unreadMsgs) {
+        final safeMsgStore = SafeMsgStore();
+        print(unreadMsg);
+        await safeMsgStore.writeMsg(unreadMsg['sender'], {
+          'timestamp': unreadMsg['timestamp'],
+          'type': unreadMsg['type'],
+          'receiver': 'self',
+          'sender': unreadMsg['sender'],
+          'content': unreadMsg['content']
+        });
+      }
 
       // receive msg
       socket.on('serverForwardMsgToClient', (msg) {

@@ -33,5 +33,5 @@ Future<void> onSendMsgBtnPressed(
 
   socket.onDisconnect((_) => print('disconnect'));
 
-  updateHintMsg('接收者 id: $receiverId\n發送內容： $msgContent');
+  // updateHintMsg('接收者 id: $receiverId\n發送內容： $msgContent');
 }

@@ -5,7 +5,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 Future<Map<String, dynamic>> readDebugConfig() async {
   const storage = FlutterSecureStorage();
   final res = jsonDecode((await storage.read(key: 'debug_config')).toString());
-  return res;
+  if (res == null) {
+    return {};
+  } else {
+    return res;
+  }
 }
 
 Future<void> writeDebugConfig(

@@ -10,11 +10,12 @@ Future<void> onSendMsgBtnPressed(
 
   const storage = FlutterSecureStorage();
   final token = await storage.read(key: 'token');
+  final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // sent msg
   socket.emit('clientSendMsgToServer', {
     'token': token,
-    'timestamp': '1694867028600',
+    'timestamp': currentTimestamp,
     'type': 'text',
     'receiver': receiverId,
     'content': msgContent
@@ -23,7 +24,7 @@ Future<void> onSendMsgBtnPressed(
   // store msg sent
   final safeMsgStore = SafeMsgStore();
   safeMsgStore.writeMsg(receiverId, {
-    'timestamp': '1694867028600',
+    'timestamp': currentTimestamp,
     'type': 'text',
     'receiver': receiverId,
     'sender': 'self',

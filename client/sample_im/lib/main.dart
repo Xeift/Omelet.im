@@ -1,8 +1,6 @@
 // required lib
 // ignore_for_file: avoid_print
 
-import 'dart:ffi';
-
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import './../debug_utils/debug_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -15,7 +13,6 @@ import 'widgets/reset_widget.dart';
 import 'widgets/msg_widget.dart';
 
 import './utils/get_unread_msg_api.dart';
-import './store/safe_msg_store.dart';
 
 late io.Socket socket;
 final hintMsgKey = GlobalKey();

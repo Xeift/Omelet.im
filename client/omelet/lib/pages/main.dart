@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api, non_constant_identifier_names, use_build_context_synchronously, unnecessary_string_interpolations, avoid_print, deprecated_member_use, avoid_unnecessary_containers
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:omelet/pages/ForgetPage.dart';
 import '../api/all_login_api.dart';
 import '../componets/alert/AlertMsg.dart';
-
+import '../pages/SignUpPage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';//login animation
 void main() {
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -28,7 +27,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -76,11 +74,10 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   buildLoingButton(), //登入button控件呼叫
                   const SizedBox(width: 30),
-                  buildSignupButton(), //註冊button控件呼叫
+                  buildSignupPageButton(), //註冊button控件呼叫
                 ],
               ),
             ),
-            testAlertButton() 
           ],
         ),
       ),
@@ -142,7 +139,7 @@ class _HomePageState extends State<HomePage> {
         child: TextButton(
           onPressed: () {
              Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const ForgetPage(t: 'wsdfs s'))
+                MaterialPageRoute(builder: (_) => const ForgetPage())
             );
           },
           child: const Text('Forget password'),
@@ -152,6 +149,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildLoingButton() {
+    const loginspinkit = SpinKitChasingDots(
+  color: Colors.white,
+  size: 50.0,
+);
+
     //登入按鈕，按下可以送出表單
     return Align(
       child: SizedBox(
@@ -202,7 +204,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildSignupButton() {
+  Widget buildSignupPageButton() {
     return Align(
       child: SizedBox(
         height: 50,
@@ -215,31 +217,18 @@ class _HomePageState extends State<HomePage> {
                 const BorderSide(color: Colors.grey, width: 1)),
           ),
           onPressed: () {
-            //TOGOd
-            //TOGO
+             Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const SignUpPage())
+            );
           },
           autofocus: true,
           child: Text(
             'Sign Up',
-            style: Theme.of(context).primaryTextTheme!.headline6,
+            style: Theme.of(context).primaryTextTheme.headline6,
           ),
         ),
       ),
     );
   }
-  Widget testAlertButton() {//警告視窗測試button
-  //忘記密碼
-  return Padding(
-    padding: const EdgeInsets.only(top: 8),
-    child: Align(
-      alignment: Alignment.centerRight,
-      child: TextButton(
-        onPressed: () {
-          LoginEorroMsg(context,'帳號密碼錯誤');
-        },
-        child: const Text('test'),
-      ),
-    ),
-  );
-}
+
 }

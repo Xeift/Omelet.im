@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ValidationPage extends StatefulWidget{
-  const ValidationPage({Key? key}):super(key: key);
+class ForgetValidator extends StatefulWidget{
+  const ForgetValidator({Key? key}):super(key: key);
   @override
-  _ValidationPageState createState() => _ValidationPageState();
+  _ValidationPage createState() => _ValidationPage();
 }
 
-class _ValidationPageState extends State<ValidationPage>{
+class _ValidationPage extends State<ForgetValidator>{
   late String _ValidationNum = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override

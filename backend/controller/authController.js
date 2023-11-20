@@ -2,7 +2,12 @@ const snowflakeId = require('../utils/snowflakeId');
 const UserModel = require('../model/userModel');
 
 async function isPasswordMatch(username, password) {
-    let user = await UserModel.findOne({ $or: [{ username: username }, { email: username }] });
+    let user = await UserModel.findOne({
+        $or: [
+            { username: username },
+            { email: username }
+        ]
+    });
     if (password === user.password) {
         return user;
     }

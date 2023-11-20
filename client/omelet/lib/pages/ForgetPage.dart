@@ -1,18 +1,18 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:omelet/api/all_login_api.dart';
+import 'package:omelet/componets/alert/AlertMsg.dart';
 
 class ForgetPage extends StatefulWidget {
-  const ForgetPage({Key? key, required this.t}) : super(key: key);
-  final String t;
+  const ForgetPage({Key? key}) : super(key: key);
   @override
    _ForgetPageState createState() =>  _ForgetPageState();
 }
 
 class _ForgetPageState extends State<ForgetPage>{
   late String _ForgetEmail = '';
-  bool _clicked_Textfield = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var forgetEamilcontroller;
   @override
@@ -22,10 +22,13 @@ class _ForgetPageState extends State<ForgetPage>{
   }
   @override
   Widget build(BuildContext context){
+    
     return Scaffold(
       appBar: AppBar(
+        backgroundColor:Colors.white,
+        elevation: 0,
         leading: IconButton(
-          icon:const Icon(Icons.arrow_back_ios),
+          icon:const Icon(Icons.arrow_back_ios,color:Colors.black),
           onPressed: () => Navigator.pop(context),
           ),
       ),
@@ -38,7 +41,7 @@ class _ForgetPageState extends State<ForgetPage>{
             const SizedBox(height: kToolbarHeight),
             const SizedBox(height: 30),
             buildForget_title(),
-            const SizedBox(height: 30),
+            const SizedBox(height:120),
             buildForget_emailTextField(),
             const SizedBox(height:30),
             buildForget_submitButton(),
@@ -53,7 +56,7 @@ class _ForgetPageState extends State<ForgetPage>{
     return const Padding(
       padding: EdgeInsets.all(8),
       child:Text(
-          'Sign Up',
+          'Forget Password',
           style: TextStyle(fontSize: 40),
       ),
     );
@@ -79,7 +82,7 @@ class _ForgetPageState extends State<ForgetPage>{
           backgroundColor: MaterialStateProperty.all(Colors.black),
           ),
           child: Text(
-            'Login',
+            'Submit',
             style: Theme.of(context).primaryTextTheme.headline6,
           ),
           onPressed: () async{
@@ -87,15 +90,19 @@ class _ForgetPageState extends State<ForgetPage>{
             final forgetemailres = await forgetemailAPI(_ForgetEmail);
             final statusCode = forgetemailres.statusCode;
             final resBody = jsonDecode(forgetemailres.body);
+            if(statusCode == 200){
+              LoginEorroMsg(context,'email 已成功寄出');
+            }else if(statusCode == 401){
+              LoginEorroMsg(context, 'Eamil 不存在，請先註冊');
+            }else if(statusCode == 500){
+              LoginEorroMsg(context, 'Eorror server');
+            }
+
 
             print('$_ForgetEmail');
             print(statusCode); // http 狀態碼
             print(resBody); // 
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
-
-
-
-
              //build await function after complet date transform
           },
           ),

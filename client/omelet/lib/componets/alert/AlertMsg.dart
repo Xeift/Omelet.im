@@ -1,12 +1,12 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
-
+// ignore_for_file: non_constant_identifier_names
 void LoginEorroMsg(BuildContext context,String message){
 showDialog(
   context:context,
   builder:(BuildContext context){
-  var Msg= context;
   return AlertDialog(
-    title:Text('提示'),
+    title:const Text('提示'),
     backgroundColor:Colors.white,
     content: Text(message),
     actions: <Widget>[
@@ -14,7 +14,7 @@ showDialog(
           onPressed: () {
             Navigator.pop(context, true);
           },
-          child: Text(
+          child: const Text(
             "CLOSE",
             style: TextStyle(color: Colors.black),
           ),

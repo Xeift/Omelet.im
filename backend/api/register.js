@@ -29,7 +29,7 @@ router.post('/send-mail', async(req, res) => {
 
         }
         else {
-            res.status(401).json({
+            res.status(409).json({
                 message: 'email 已存在',
                 data: null,
                 token: null
@@ -60,7 +60,7 @@ router.post('/submit-info', async(req, res) => {
     }
     catch (err) {
         if(err.code === 11000) {
-            res.status(500).json({
+            res.status(409).json({
                 message: '使用者名稱或 email 不可重複',
                 data: null,
                 token: null

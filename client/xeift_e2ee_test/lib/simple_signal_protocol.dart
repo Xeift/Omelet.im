@@ -31,6 +31,7 @@ Future<void> install() async {
   }
   await spkStore.storeSignedPreKey(spk.id, spk); // 儲存 SPK
 
+  // TODO: Address 預計使用註冊時的 Username
   const bobAddress =
       SignalProtocolAddress('bob', 1); // 建立 Bob 的 Signal Protocol 地址
 

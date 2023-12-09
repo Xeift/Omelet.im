@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'signal_protocol.dart';
+import 'simple_signal_protocol.dart' as sg;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'storge_btn.dart';
 import 'msg_btn.dart';
@@ -187,6 +188,12 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 142, 116, 209)),
               child: const Text("取得未讀訊息"),
+            ),
+            ElevatedButton(
+              onPressed: () async => await sg.install(),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 146, 209, 116)),
+              child: const Text("萬用測試鈕"), // TODO:
             ),
           ],
         ),

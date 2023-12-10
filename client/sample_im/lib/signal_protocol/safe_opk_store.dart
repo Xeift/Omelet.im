@@ -9,37 +9,37 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 class SafeOpkStore implements PreKeyStore {
   final storage = const FlutterSecureStorage();
 
-  static const String preKey = 'opk';
+  static const String fssKey = 'opk';
 
   @override
   Future<PreKeyRecord> loadPreKey(int preKeyId) async {
-    final preKeys = jsonDecode((await storage.read(key: preKey)).toString());
-    if (preKeys == null) {
+    final opks = jsonDecode((await storage.read(key: fssKey)).toString());
+    if (opks == null) {
       throw InvalidKeyIdException('no prekey found');
     }
 
-    final singlePreKey = preKeys[preKeyId.toString()];
-    if (singlePreKey == null) {
+    final singleOPK = opks[preKeyId.toString()];
+    if (singleOPK == null) {
       throw InvalidKeyIdException('No such prekey record: $preKeyId');
     }
 
     return PreKeyRecord.fromBuffer(
-        Uint8List.fromList(jsonDecode(singlePreKey).cast<int>().toList()));
+        Uint8List.fromList(jsonDecode(singleOPK).cast<int>().toList()));
   }
 
   @override
   Future<void> storePreKey(int preKeyId, PreKeyRecord record) async {
     Map<String, dynamic> preKeys =
-        jsonDecode((await storage.read(key: preKey)).toString()) ?? {};
+        jsonDecode((await storage.read(key: fssKey)).toString()) ?? {};
 
     preKeys[preKeyId.toString()] = jsonEncode(record.serialize());
 
-    await storage.write(key: preKey, value: jsonEncode(preKeys));
+    await storage.write(key: fssKey, value: jsonEncode(preKeys));
   }
 
   @override
   Future<bool> containsPreKey(int preKeyId) async {
-    final preKeys = jsonDecode((await storage.read(key: preKey)).toString());
+    final preKeys = jsonDecode((await storage.read(key: fssKey)).toString());
     if (preKeys == null) {
       throw InvalidKeyIdException('no prekey found');
     }
@@ -51,13 +51,13 @@ class SafeOpkStore implements PreKeyStore {
 
   @override
   Future<void> removePreKey(int preKeyId) async {
-    var preKeys = jsonDecode((await storage.read(key: preKey)).toString());
+    var preKeys = jsonDecode((await storage.read(key: fssKey)).toString());
     if (preKeys == null) {
       throw InvalidKeyIdException('no prekey found');
     }
 
     preKeys.remove(preKeyId.toString());
 
-    await storage.write(key: preKey, value: jsonEncode(preKeys));
+    await storage.write(key: fssKey, value: jsonEncode(preKeys));
   }
 }

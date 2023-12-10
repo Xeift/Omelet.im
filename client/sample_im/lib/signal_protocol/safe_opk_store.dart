@@ -9,7 +9,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 class SafeOpkStore implements PreKeyStore {
   final storage = const FlutterSecureStorage();
 
-  static const String preKey = 'preKey';
+  static const String preKey = 'opk';
 
   @override
   Future<bool> containsPreKey(int preKeyId) async {

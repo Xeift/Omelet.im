@@ -6,6 +6,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'safe_opk_store.dart';
+import 'safe_spk_store.dart';
 
 // 註冊期
 Future<void> install() async {
@@ -15,7 +16,6 @@ Future<void> install() async {
   final opks = generatePreKeys(0, 110); // 產生 OPK（短期金鑰，1 則訊息會用掉 1 個）
   // TODO: OPK 目前還在考慮一次產生多少組，未來可能不是 110
   final spk = generateSignedPreKey(ipk, 0); // 產生 SPK（中期金鑰，7 天更新一次）
-
   /* TODO:
   這裡我預計要自己 implement SessionStore、PreKeyStore、SignedPreKeyStore、IdentityKeyStore 這幾個 Interface
   改成用 flutter_secure_storge 存 session 和 OPK、SPK、IPK
@@ -24,10 +24,11 @@ Future<void> install() async {
   final sessionStore = InMemorySessionStore(); // TODO:儲存 Session 的 Instance
   final opkStore =
       SafeOpkStore(const FlutterSecureStorage()); // 儲存 OPK 的 Instance
-  final spkStore = InMemorySignedPreKeyStore();
-  TODO: // 儲存 SPK 的 Instance
+  // final spkStore = InMemorySignedPreKeyStore();
+  final spkStore = SafeSpkStore();
+  // TODO: 儲存 SPK 的 Instance
   final identityStore = InMemoryIdentityKeyStore(ipk, registrationId);
-  TODO: // 儲存 IPK 的 Instance
+  // TODO: 儲存 IPK 的 Instance
 
   for (final opk in opks) {
     await opkStore.storePreKey(opk.id, opk); // 儲存所有 OPK
@@ -48,7 +49,7 @@ Future<void> install() async {
 
   // 模擬從伺服器取得 Pre Key Bundle
   /*TODO:
-  到時候這裡會透過 API 
+  到時候這裡會透過 API
   GET https://omelet.im/get-pre-key-bundle 從後端拿某個特定 UID 的 Pre Key Bundle
   這個 API 後端還沒寫
   */
@@ -83,7 +84,7 @@ Future<void> install() async {
       .encrypt(
           Uint8List.fromList(utf8.encode("嗨 Bob 我是 Alice\n透過 Omelet.im 傳送")));
 
-  print(ciphertext.serialize()); // 印出 serialize 過的加密訊息
+  // print(ciphertext.serialize()); // 印出 serialize 過的加密訊息
 
   // TODO: 這裡會使用 socket_io_client 傳送加密訊息，並透過後端伺服器轉發訊息到 Bob 的客戶端
   // 除了 ciphertext 以外還要傳送 aliceAddress，伺服器才知道訊息要轉發給誰
@@ -108,9 +109,10 @@ Future<void> install() async {
     // 如果加密訊息的類型是 Pre Key，則使用 remoteSessionCipher 解密訊息
     await remoteSessionCipher
         .decryptWithCallback(ciphertext as PreKeySignalMessage, (plaintext) {
-      print(utf8.decode(plaintext)); // 印出明文訊息
+      // print(utf8.decode(plaintext)); // 印出明文訊息
     });
   }
   // Bob
-  print(await const FlutterSecureStorage().readAll());
+  // print(await const FlutterSecureStorage().readAll());
+  await spkStore.loadSignedPreKey(0);
 }

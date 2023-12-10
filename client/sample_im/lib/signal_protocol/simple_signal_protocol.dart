@@ -114,5 +114,4 @@ Future<void> install() async {
   }
   // Bob
   // print(await const FlutterSecureStorage().readAll());
-  await spkStore.loadSignedPreKey(0);
 }

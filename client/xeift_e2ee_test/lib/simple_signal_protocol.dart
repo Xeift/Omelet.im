@@ -83,9 +83,13 @@ Future<void> install() async {
   print(ciphertext.serialize()); // 印出 serialize 過的加密訊息
 
   // TODO: 這裡會使用 socket_io_client 傳送加密訊息，並透過後端伺服器轉發訊息到 Bob 的客戶端
+  // 除了 ciphertext 以外還要傳送 aliceAddress，伺服器才知道訊息要轉發給誰
   // 以下是模擬 Bob 的客戶端接收訊息並解密的邏輯
+  // 如果 Bob 不在線上則先透過 /get-unread-msg API 取得未讀訊息
 
-  final signalProtocolStore = InMemorySignalProtocolStore(remoteIPK, 1);
+  // Bob
+  final signalProtocolStore =
+      InMemorySignalProtocolStore(remoteIPK, 1); // 儲存 IPK
   const aliceAddress =
       SignalProtocolAddress('alice', 1); // 建立 Alice 的 Signal Protocol 地址
   final remoteSessionCipher = SessionCipher.fromStore(
@@ -94,7 +98,8 @@ Future<void> install() async {
   for (final remoteOPK in remoteOPKs) {
     await signalProtocolStore.storePreKey(remoteOPK.id, remoteOPK); // 儲存所有 OPK
   }
-  await signalProtocolStore.storeSignedPreKey(remoteSPK.id, remoteSPK);
+  await signalProtocolStore.storeSignedPreKey(
+      remoteSPK.id, remoteSPK); // 儲存 SPK
 
   if (ciphertext.getType() == CiphertextMessage.prekeyType) {
     // 如果加密訊息的類型是 Pre Key，則使用 remoteSessionCipher 解密訊息
@@ -103,4 +108,5 @@ Future<void> install() async {
       print(utf8.decode(plaintext)); // 印出明文訊息
     });
   }
+  // Bob
 }

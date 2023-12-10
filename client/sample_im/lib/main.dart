@@ -15,6 +15,7 @@ import './utils/get_unread_msg_api.dart';
 import 'widgets/login_widget.dart';
 import 'widgets/reset_widget.dart';
 import 'widgets/msg_widget.dart';
+import 'widgets/test_widget.dart';
 
 late io.Socket socket;
 final hintMsgKey = GlobalKey();
@@ -105,6 +106,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             LoginWidget(updateHintMsg, catHintMsg), // login widget
             RemoveAllWidget(updateHintMsg), // remove all widget
             MsgWidget(updateHintMsg), // remove all widget
+            TestWidget(updateHintMsg), // test widget
             Text(
               hintMsg,
               textDirection: TextDirection.ltr,

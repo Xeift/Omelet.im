@@ -3,6 +3,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'safe_opk_store.dart';
 
 // 註冊期
 Future<void> install() async {
@@ -18,11 +21,13 @@ Future<void> install() async {
   改成用 flutter_secure_storge 存 session 和 OPK、SPK、IPK
   範例程式碼提供的 Class 只能用於測試，完全不適合部署
   */
-  final sessionStore = InMemorySessionStore(); // 儲存 Session 的 Instance
-  final opkStore = InMemoryPreKeyStore(); // 儲存 OPK 的 Instance
-  final spkStore = InMemorySignedPreKeyStore(); // 儲存 SPK 的 Instance
-  final identityStore =
-      InMemoryIdentityKeyStore(ipk, registrationId); // 儲存 IPK 的 Instance
+  final sessionStore = InMemorySessionStore(); // TODO:儲存 Session 的 Instance
+  final opkStore =
+      SafeOpkStore(const FlutterSecureStorage()); // 儲存 OPK 的 Instance
+  final spkStore = InMemorySignedPreKeyStore();
+  TODO: // 儲存 SPK 的 Instance
+  final identityStore = InMemoryIdentityKeyStore(ipk, registrationId);
+  TODO: // 儲存 IPK 的 Instance
 
   for (final opk in opks) {
     await opkStore.storePreKey(opk.id, opk); // 儲存所有 OPK
@@ -107,4 +112,5 @@ Future<void> install() async {
     });
   }
   // Bob
+  print(await const FlutterSecureStorage().readAll());
 }

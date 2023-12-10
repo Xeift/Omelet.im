@@ -19,9 +19,6 @@ class SafeSpkStore implements SignedPreKeyStore {
       throw InvalidKeyIdException(
           'No such signedprekeyrecord! $signedPreKeyId');
     }
-    print('💔🤍');
-    print(Uint8List.fromList(value.cast<int>()));
-    print('💔🤍');
     return SignedPreKeyRecord.fromSerialized(
         Uint8List.fromList(value.cast<int>()));
   }

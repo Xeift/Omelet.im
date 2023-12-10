@@ -9,8 +9,8 @@ import 'package:libsignal_protocol_dart/src/identity_key_pair.dart';
 import 'package:libsignal_protocol_dart/src/signal_protocol_address.dart';
 import 'package:libsignal_protocol_dart/src/state/identity_key_store.dart';
 
-class InMemoryIdentityKeyStore extends IdentityKeyStore {
-  InMemoryIdentityKeyStore(this.identityKeyPair, this.localRegistrationId);
+class SafeIdentityKeyStore extends IdentityKeyStore {
+  SafeIdentityKeyStore(this.identityKeyPair, this.localRegistrationId);
 
   final storage = const FlutterSecureStorage();
   static const String fssKey = 'ik';

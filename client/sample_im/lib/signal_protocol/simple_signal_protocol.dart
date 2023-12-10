@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'safe_opk_store.dart';
 import 'safe_spk_store.dart';
+import 'safe_identity_store.dart';
 
 // 註冊期
 Future<void> install() async {
@@ -23,18 +24,19 @@ Future<void> install() async {
   */
   final sessionStore = InMemorySessionStore(); // TODO:儲存 Session 的 Instance
   final opkStore = SafeOpkStore(); // 儲存 OPK 的 Instance
-  // final spkStore = InMemorySignedPreKeyStore();
-  final spkStore = SafeSpkStore();
-  // 儲存 SPK 的 Instance
-  final identityStore = InMemoryIdentityKeyStore(ipk, registrationId);
+  final spkStore = SafeSpkStore(); // 儲存 SPK 的 Instance
+  // final identityStore = InMemoryIdentityKeyStore(ipk, registrationId);
+  final identityStore = SafeIdentityKeyStore(ipk, registrationId);
   // TODO: 儲存 IPK 的 Instance
+  identityStore.saveIdentity(
+      const SignalProtocolAddress('alice', 1), ipk.getPublicKey());
 
   for (final opk in opks) {
     await opkStore.storePreKey(opk.id, opk); // 儲存所有 OPK
   }
   await spkStore.storeSignedPreKey(spk.id, spk); // 儲存 SPK
 
-  // TODO: Address 預計使用註冊時的 Username
+  // TODO: Address 預計使用註冊時的 UID
   const bobAddress =
       SignalProtocolAddress('bob', 1); // 建立 Bob 的 Signal Protocol 地址
 

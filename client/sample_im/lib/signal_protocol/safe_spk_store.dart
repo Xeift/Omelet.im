@@ -7,12 +7,12 @@ import 'package:libsignal_protocol_dart/src/state/signed_pre_key_record.dart';
 import 'package:libsignal_protocol_dart/src/state/signed_pre_key_store.dart';
 
 class SafeSpkStore implements SignedPreKeyStore {
-  final _storage = const FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   @override
   Future<SignedPreKeyRecord> loadSignedPreKey(int signedPreKeyId) async {
     final value = jsonDecode(
-        (await _storage.read(key: signedPreKeyId.toString())).toString());
+        (await storage.read(key: signedPreKeyId.toString())).toString());
     if (value == null) {
       throw InvalidKeyIdException(
           'No such signedprekeyrecord! $signedPreKeyId');
@@ -24,7 +24,7 @@ class SafeSpkStore implements SignedPreKeyStore {
   @override
   Future<List<SignedPreKeyRecord>> loadSignedPreKeys() async {
     final results = <SignedPreKeyRecord>[];
-    final allValues = await _storage.readAll();
+    final allValues = await storage.readAll();
     for (final value in allValues.values) {
       results.add(SignedPreKeyRecord.fromSerialized(
           Uint8List.fromList(jsonDecode(value).cast<int>())));
@@ -35,16 +35,16 @@ class SafeSpkStore implements SignedPreKeyStore {
   @override
   Future<void> storeSignedPreKey(
       int signedPreKeyId, SignedPreKeyRecord record) async {
-    await _storage.write(
+    await storage.write(
         key: signedPreKeyId.toString(), value: jsonEncode(record.serialize()));
   }
 
   @override
   Future<bool> containsSignedPreKey(int signedPreKeyId) async =>
-      await _storage.containsKey(key: signedPreKeyId.toString());
+      await storage.containsKey(key: signedPreKeyId.toString());
 
   @override
   Future<void> removeSignedPreKey(int signedPreKeyId) async {
-    await _storage.delete(key: signedPreKeyId.toString());
+    await storage.delete(key: signedPreKeyId.toString());
   }
 }

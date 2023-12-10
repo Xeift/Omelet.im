@@ -25,7 +25,7 @@ Future<void> install() async {
   final opkStore = SafeOpkStore(); // 儲存 OPK 的 Instance
   // final spkStore = InMemorySignedPreKeyStore();
   final spkStore = SafeSpkStore();
-  // TODO: 儲存 SPK 的 Instance
+  // 儲存 SPK 的 Instance
   final identityStore = InMemoryIdentityKeyStore(ipk, registrationId);
   // TODO: 儲存 IPK 的 Instance
 

@@ -13,14 +13,14 @@ class SafeSpkStore implements SignedPreKeyStore {
 
   @override
   Future<SignedPreKeyRecord> loadSignedPreKey(int signedPreKeyId) async {
-    final value = jsonDecode(
+    final spk = jsonDecode(
         (await storage.read(key: signedPreKeyId.toString())).toString());
-    if (value == null) {
+    if (spk == null) {
       throw InvalidKeyIdException(
           'No such signedprekeyrecord! $signedPreKeyId');
     }
     return SignedPreKeyRecord.fromSerialized(
-        Uint8List.fromList(value.cast<int>()));
+        Uint8List.fromList(spk.cast<int>()));
   }
 
   @override

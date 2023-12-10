@@ -9,6 +9,8 @@ import 'package:libsignal_protocol_dart/src/state/signed_pre_key_store.dart';
 class SafeSpkStore implements SignedPreKeyStore {
   final storage = const FlutterSecureStorage();
 
+  static const String preKey = 'spk';
+
   @override
   Future<SignedPreKeyRecord> loadSignedPreKey(int signedPreKeyId) async {
     final value = jsonDecode(

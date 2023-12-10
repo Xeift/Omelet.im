@@ -12,18 +12,6 @@ class SafeOpkStore implements PreKeyStore {
   static const String preKey = 'opk';
 
   @override
-  Future<bool> containsPreKey(int preKeyId) async {
-    final preKeys = jsonDecode((await storage.read(key: preKey)).toString());
-    if (preKeys == null) {
-      throw InvalidKeyIdException('no prekey found');
-    }
-
-    final singlePreKey = preKeys[preKeyId.toString()];
-
-    return singlePreKey != null;
-  }
-
-  @override
   Future<PreKeyRecord> loadPreKey(int preKeyId) async {
     final preKeys = jsonDecode((await storage.read(key: preKey)).toString());
     if (preKeys == null) {
@@ -40,6 +28,28 @@ class SafeOpkStore implements PreKeyStore {
   }
 
   @override
+  Future<void> storePreKey(int preKeyId, PreKeyRecord record) async {
+    Map<String, dynamic> preKeys =
+        jsonDecode((await storage.read(key: preKey)).toString()) ?? {};
+
+    preKeys[preKeyId.toString()] = jsonEncode(record.serialize());
+
+    await storage.write(key: preKey, value: jsonEncode(preKeys));
+  }
+
+  @override
+  Future<bool> containsPreKey(int preKeyId) async {
+    final preKeys = jsonDecode((await storage.read(key: preKey)).toString());
+    if (preKeys == null) {
+      throw InvalidKeyIdException('no prekey found');
+    }
+
+    final singlePreKey = preKeys[preKeyId.toString()];
+
+    return singlePreKey != null;
+  }
+
+  @override
   Future<void> removePreKey(int preKeyId) async {
     var preKeys = jsonDecode((await storage.read(key: preKey)).toString());
     if (preKeys == null) {
@@ -47,16 +57,6 @@ class SafeOpkStore implements PreKeyStore {
     }
 
     preKeys.remove(preKeyId.toString());
-
-    await storage.write(key: preKey, value: jsonEncode(preKeys));
-  }
-
-  @override
-  Future<void> storePreKey(int preKeyId, PreKeyRecord record) async {
-    Map<String, dynamic> preKeys =
-        jsonDecode((await storage.read(key: preKey)).toString()) ?? {};
-
-    preKeys[preKeyId.toString()] = jsonEncode(record.serialize());
 
     await storage.write(key: preKey, value: jsonEncode(preKeys));
   }

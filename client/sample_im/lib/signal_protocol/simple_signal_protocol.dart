@@ -22,8 +22,7 @@ Future<void> install() async {
   範例程式碼提供的 Class 只能用於測試，完全不適合部署
   */
   final sessionStore = InMemorySessionStore(); // TODO:儲存 Session 的 Instance
-  final opkStore =
-      SafeOpkStore(const FlutterSecureStorage()); // 儲存 OPK 的 Instance
+  final opkStore = SafeOpkStore(); // 儲存 OPK 的 Instance
   // final spkStore = InMemorySignedPreKeyStore();
   final spkStore = SafeSpkStore();
   // TODO: 儲存 SPK 的 Instance
@@ -113,5 +112,5 @@ Future<void> install() async {
     });
   }
   // Bob
-  // print(await const FlutterSecureStorage().readAll());
+  print(await const FlutterSecureStorage().readAll());
 }

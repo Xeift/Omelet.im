@@ -7,9 +7,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 class SafeOpkStore implements PreKeyStore {
-  final FlutterSecureStorage storage;
+  final storage = const FlutterSecureStorage();
+  // final FlutterSecureStorage storage;
 
-  SafeOpkStore(this.storage);
+  // SafeOpkStore(this.storage);
 
   static const String preKey = 'preKey';
 

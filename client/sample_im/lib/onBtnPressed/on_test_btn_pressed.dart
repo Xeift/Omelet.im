@@ -1,8 +1,7 @@
 // ignore_for_file: avoid_print
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import './../signal_protocol/simple_signal_protocol.dart';
 
 Future<void> onTestBtnPressed(Function updateHintMsg) async {
   print('[on_test_btn_pressed.dart] test');
-  updateHintMsg('testt');
+  await install();
 }

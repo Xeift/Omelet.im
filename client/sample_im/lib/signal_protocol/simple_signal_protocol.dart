@@ -6,8 +6,6 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 // 註冊期
 Future<void> install() async {
-  print('aaaaaaaaaaaaaa');
-
   final ipk = generateIdentityKeyPair(); // 產生身份金鑰對（長期金鑰，平常不會動）
   final registrationId = generateRegistrationId(false); // 產生 UID
   // TODO: 正式部署時 UID 會透過後端伺服器產生，這裡的 ID 只用於測試

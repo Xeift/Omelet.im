@@ -9,7 +9,7 @@ import 'package:libsignal_protocol_dart/src/identity_key_pair.dart';
 import 'package:libsignal_protocol_dart/src/signal_protocol_address.dart';
 import 'package:libsignal_protocol_dart/src/state/identity_key_store.dart';
 
-class SafeIdentityKeyStore extends IdentityKeyStore {
+class SafeIdentityKeyStore implements IdentityKeyStore {
   SafeIdentityKeyStore(this.identityKeyPair, this.localRegistrationId);
 
   final storage = const FlutterSecureStorage();
@@ -53,6 +53,10 @@ class SafeIdentityKeyStore extends IdentityKeyStore {
   @override
   Future<bool> saveIdentity(
       SignalProtocolAddress address, IdentityKey? identityKey) async {
+    print('😎😋😎😋😊😉😉😉start func');
+    print('💜💙');
+    print(address);
+    print('💜💙');
     Map<String, dynamic> identityKeys =
         jsonDecode((await storage.read(key: fssKey)).toString()) ?? {};
 
@@ -61,10 +65,19 @@ class SafeIdentityKeyStore extends IdentityKeyStore {
       return false;
     }
     if (identityKey.serialize() != existing) {
+      print(identityKeys);
       identityKeys[address.toString()] = jsonEncode(identityKey.serialize());
       await storage.write(key: fssKey, value: jsonEncode(identityKeys));
+      print('write ik: ${jsonEncode(identityKeys)}');
+      print('code 2');
+      final aaa = await storage.read(key: fssKey);
+      print('read ik: $aaa');
+
+      print('😎😋😎😋😊😉😉😉end func\n');
+
       return true;
     } else {
+      print('code 3');
       return false;
     }
   }

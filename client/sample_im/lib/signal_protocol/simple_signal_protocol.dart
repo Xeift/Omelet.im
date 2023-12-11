@@ -27,9 +27,14 @@ Future<void> install() async {
   final spkStore = SafeSpkStore(); // 儲存 SPK 的 Instance
   // final identityStore = InMemoryIdentityKeyStore(ipk, registrationId);
   final identityStore = SafeIdentityKeyStore(ipk, registrationId);
+  print('-- end init SafeIdentityKeyStore--');
   // TODO: 儲存 IPK 的 Instance
+  // print((await identityStore.getIdentityKeyPair()).getPublicKey());
+
   identityStore.saveIdentity(
       const SignalProtocolAddress('alice', 1), ipk.getPublicKey());
+
+  print('-- end saveIdentity--');
 
   for (final opk in opks) {
     await opkStore.storePreKey(opk.id, opk); // 儲存所有 OPK
@@ -114,5 +119,5 @@ Future<void> install() async {
     });
   }
   // Bob
-  print(await const FlutterSecureStorage().readAll());
+  print(await const FlutterSecureStorage().read(key: 'ik'));
 }

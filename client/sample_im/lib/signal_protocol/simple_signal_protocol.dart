@@ -29,7 +29,6 @@ Future<void> install() async {
   final identityStore = SafeIdentityKeyStore(ipk, registrationId);
   print('-- end init SafeIdentityKeyStore--');
   // TODO: 儲存 IPK 的 Instance
-  // print((await identityStore.getIdentityKeyPair()).getPublicKey());
 
   identityStore.saveIdentity(
       const SignalProtocolAddress('alice', 1), ipk.getPublicKey());

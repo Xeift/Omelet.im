@@ -1,4 +1,4 @@
-import 'dart:collection';
+// import 'dart:collection';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -12,7 +12,7 @@ import 'package:libsignal_protocol_dart/src/state/identity_key_store.dart';
 class SafeIdentityKeyStore implements IdentityKeyStore {
   SafeIdentityKeyStore(this.identityKeyPair, this.localRegistrationId);
 
-  final storage = const FlutterSecureStorage();
+  static const storage = FlutterSecureStorage();
   static const String fssKey = 'ik';
 
   final IdentityKeyPair identityKeyPair;
@@ -53,10 +53,6 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
   @override
   Future<bool> saveIdentity(
       SignalProtocolAddress address, IdentityKey? identityKey) async {
-    print('😎😋😎😋😊😉😉😉start func');
-    print('💜💙');
-    print(address);
-    print('💜💙');
     Map<String, dynamic> identityKeys =
         jsonDecode((await storage.read(key: fssKey)).toString()) ?? {};
 
@@ -65,19 +61,26 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
       return false;
     }
     if (identityKey.serialize() != existing) {
-      print(identityKeys);
-      identityKeys[address.toString()] = jsonEncode(identityKey.serialize());
-      await storage.write(key: fssKey, value: jsonEncode(identityKeys));
-      print('write ik: ${jsonEncode(identityKeys)}');
-      print('code 2');
-      final aaa = await storage.read(key: fssKey);
-      print('read ik: $aaa');
+      print('1🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫');
+      await Future.delayed(const Duration(milliseconds: 5000));
+      await storage.write(key: 'fssKey', value: 'qwertyqqq-----'); // TODO:
+      await Future.delayed(const Duration(milliseconds: 5000));
+      final ccc = await storage.read(key: 'fssKey'); // TODO:
+      print('3 read ik: $ccc');
+      print('2🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫');
 
-      print('😎😋😎😋😊😉😉😉end func\n');
+      print('🎈🎈🎈🎈🎈🎈🎈🎈🎈start func');
+      print('1 read identityKeys $identityKeys');
+      identityKeys[address.toString()] = jsonEncode(identityKey.serialize());
+      // await storage.write(
+      //     key: fssKey, value: jsonEncode(identityKeys));
+      await storage.write(key: fssKey, value: 'qwerty'); // TODO:
+      final aaa = await storage.read(key: fssKey); // TODO:
+      print('3 read ik: $aaa');
+      print('🎈🎈🎈🎈🎈🎈🎈🎈🎈end func\n');
 
       return true;
     } else {
-      print('code 3');
       return false;
     }
   }

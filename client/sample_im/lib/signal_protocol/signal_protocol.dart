@@ -10,6 +10,4 @@ Future<void> install() async {
   final address = SignalProtocolAddress(uid.toString(), 0);
 
   final ipkStore = SafeIdentityKeyStore(ipk, uid);
-
-  // TODO: implement SafeIdentityKeyStore()
 }

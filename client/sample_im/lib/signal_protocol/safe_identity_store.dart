@@ -10,15 +10,17 @@ import 'package:libsignal_protocol_dart/src/signal_protocol_address.dart';
 import 'package:libsignal_protocol_dart/src/state/identity_key_store.dart';
 
 class SafeIdentityKeyStore implements IdentityKeyStore {
+  static const storge = FlutterSecureStorage();
+
   SafeIdentityKeyStore(this.identityKeyPair, this.localRegistrationId) {
-    const storge = FlutterSecureStorage();
     storge.write(
-        key: 'selfIpk', value: jsonEncode(identityKeyPair.serialize()));
-    print('construct successfully');
+        // constructor: 儲存自己的 IPK
+        key: 'selfIpk',
+        value: jsonEncode(identityKeyPair.serialize()));
   }
 
   static const storage = FlutterSecureStorage();
-  static const String fssKey = 'ik';
+  static const String fssKey = 'othersIpk';
 
   final IdentityKeyPair identityKeyPair;
   final int localRegistrationId;

@@ -10,7 +10,12 @@ import 'package:libsignal_protocol_dart/src/signal_protocol_address.dart';
 import 'package:libsignal_protocol_dart/src/state/identity_key_store.dart';
 
 class SafeIdentityKeyStore implements IdentityKeyStore {
-  SafeIdentityKeyStore(this.identityKeyPair, this.localRegistrationId);
+  SafeIdentityKeyStore(this.identityKeyPair, this.localRegistrationId) {
+    const storge = FlutterSecureStorage();
+    storge.write(
+        key: 'selfIpk', value: jsonEncode(identityKeyPair.serialize()));
+    print('construct successfully');
+  }
 
   static const storage = FlutterSecureStorage();
   static const String fssKey = 'ik';
@@ -61,24 +66,8 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
       return false;
     }
     if (identityKey.serialize() != existing) {
-      print('1🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫');
-      await Future.delayed(const Duration(milliseconds: 5000));
-      await storage.write(key: 'fssKey', value: 'qwertyqqq-----'); // TODO:
-      await Future.delayed(const Duration(milliseconds: 5000));
-      final ccc = await storage.read(key: 'fssKey'); // TODO:
-      print('3 read ik: $ccc');
-      print('2🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫🎫');
-
-      print('🎈🎈🎈🎈🎈🎈🎈🎈🎈start func');
-      print('1 read identityKeys $identityKeys');
       identityKeys[address.toString()] = jsonEncode(identityKey.serialize());
-      // await storage.write(
-      //     key: fssKey, value: jsonEncode(identityKeys));
-      await storage.write(key: fssKey, value: 'qwerty'); // TODO:
-      final aaa = await storage.read(key: fssKey); // TODO:
-      print('3 read ik: $aaa');
-      print('🎈🎈🎈🎈🎈🎈🎈🎈🎈end func\n');
-
+      await storage.write(key: fssKey, value: jsonEncode(identityKeys));
       return true;
     } else {
       return false;

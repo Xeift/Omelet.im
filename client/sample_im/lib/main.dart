@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 // required func
-import './../debug_utils/debug_config.dart';
+// import './../debug_utils/debug_config.dart';
 import './store/safe_msg_store.dart';
 import './utils/get_unread_msg_api.dart';
 
@@ -42,58 +42,58 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   }
 
   Future<void> initSocket() async {
-    final serverUri = (await readDebugConfig())['serverUri'];
-    const storage = FlutterSecureStorage();
-    final token = await storage.read(key: 'token');
+    // final serverUri = (await readDebugConfig())['serverUri'];
+    // const storage = FlutterSecureStorage();
+    // final token = await storage.read(key: 'token');
 
-    if (serverUri != null) {
-      // ----------------------------------------------------------------
-      socket = io.io(
-          serverUri, io.OptionBuilder().setTransports(['websocket']).build());
+    // if (serverUri != null) {
+    //   // ----------------------------------------------------------------
+    //   socket = io.io(
+    //       serverUri, io.OptionBuilder().setTransports(['websocket']).build());
 
-      socket.onConnect((_) async {
-        socket.emit('clientReturnJwtToServer', token);
-        print('backend connected');
+    //   socket.onConnect((_) async {
+    //     socket.emit('clientReturnJwtToServer', token);
+    //     print('backend connected');
 
-        final res = await getUnreadMsgAPI(serverUri);
-        final unreadMsgs = jsonDecode(res.body)['data'];
+    //     final res = await getUnreadMsgAPI(serverUri);
+    //     final unreadMsgs = jsonDecode(res.body)['data'];
 
-        // store unread msg
-        for (var unreadMsg in unreadMsgs) {
-          final safeMsgStore = SafeMsgStore();
-          print(unreadMsg);
-          await safeMsgStore.writeMsg(unreadMsg['sender'], {
-            'timestamp': unreadMsg['timestamp'],
-            'type': unreadMsg['type'],
-            'receiver': 'self',
-            'sender': unreadMsg['sender'],
-            'content': unreadMsg['content']
-          });
-        }
+    //     // store unread msg
+    //     for (var unreadMsg in unreadMsgs) {
+    //       final safeMsgStore = SafeMsgStore();
+    //       print(unreadMsg);
+    //       await safeMsgStore.writeMsg(unreadMsg['sender'], {
+    //         'timestamp': unreadMsg['timestamp'],
+    //         'type': unreadMsg['type'],
+    //         'receiver': 'self',
+    //         'sender': unreadMsg['sender'],
+    //         'content': unreadMsg['content']
+    //       });
+    //     }
 
-        final safeMsgStore = SafeMsgStore();
-        final historyMsgs = await safeMsgStore.readAllMsg('491437500754038784');
-        // 491437500754038784 x
-        // 492312533160431617 a11
-        for (var historyMsg in historyMsgs) {
-          final decodedHistoryMsg = jsonDecode(historyMsg);
-          catHintMsg(
-              '${decodedHistoryMsg['sender']}: ${decodedHistoryMsg['content']}');
-        }
+    //     final safeMsgStore = SafeMsgStore();
+    //     final historyMsgs = await safeMsgStore.readAllMsg('491437500754038784');
+    //     // 491437500754038784 x
+    //     // 492312533160431617 a11
+    //     for (var historyMsg in historyMsgs) {
+    //       final decodedHistoryMsg = jsonDecode(historyMsg);
+    //       catHintMsg(
+    //           '${decodedHistoryMsg['sender']}: ${decodedHistoryMsg['content']}');
+    //     }
 
-        // receive msg
-        socket.on('serverForwardMsgToClient', (msg) {
-          print('test client已接收 $msg');
+    //     // receive msg
+    //     socket.on('serverForwardMsgToClient', (msg) {
+    //       print('test client已接收 $msg');
 
-          catHintMsg('${msg['sender']}: ${msg['content']}');
+    //       catHintMsg('${msg['sender']}: ${msg['content']}');
 
-          // store received msg
-          final safeMsgStore = SafeMsgStore();
-          safeMsgStore.writeMsg(msg['sender'], msg);
-        });
-      });
-      // ----------------------------------------------------------------
-    }
+    //       // store received msg
+    //       final safeMsgStore = SafeMsgStore();
+    //       safeMsgStore.writeMsg(msg['sender'], msg);
+    //     });
+    //   });
+    //   // ----------------------------------------------------------------
+    // }
   }
 
   @override

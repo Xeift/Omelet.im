@@ -11,21 +11,10 @@ import 'package:libsignal_protocol_dart/src/state/identity_key_store.dart';
 
 class SafeIdentityKeyStore implements IdentityKeyStore {
   static const storage = FlutterSecureStorage();
-  static const String fssKey = 'othersIpk';
-
-  SafeIdentityKeyStore(this.identityKeyPair, this.localRegistrationId) {
-    storage.write(
-        // constructor: 儲存自己的 IPK
-        key: 'selfIpk',
-        value: jsonEncode(identityKeyPair.serialize()));
-  }
-
-  final IdentityKeyPair identityKeyPair;
-  final int localRegistrationId;
 
   @override
   Future<IdentityKey?> getIdentity(SignalProtocolAddress address) async {
-    final iks = jsonDecode((await storage.read(key: fssKey)).toString());
+    final iks = jsonDecode((await storage.read(key: 'othersIpk')).toString());
     if (iks == null) {
       return null;
     }
@@ -40,10 +29,15 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
   }
 
   @override
-  Future<IdentityKeyPair> getIdentityKeyPair() async => identityKeyPair;
+  Future<IdentityKeyPair> getIdentityKeyPair() async {
+    return IdentityKeyPair.fromSerialized(Uint8List.fromList(
+        jsonDecode((await storage.read(key: 'selfIpk')).toString())
+            .cast<int>()
+            .toList()));
+  }
 
   @override
-  Future<int> getLocalRegistrationId() async => localRegistrationId;
+  Future<int> getLocalRegistrationId() async => 1; // TODO:
 
   @override
   Future<bool> isTrustedIdentity(SignalProtocolAddress address,
@@ -59,7 +53,7 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
   Future<bool> saveIdentity(
       SignalProtocolAddress address, IdentityKey? identityKey) async {
     Map<String, dynamic> identityKeys =
-        jsonDecode((await storage.read(key: fssKey)).toString()) ?? {};
+        jsonDecode((await storage.read(key: 'othersIpk')).toString()) ?? {};
 
     final existing = identityKeys[address.toString()];
     if (identityKey == null) {
@@ -67,10 +61,17 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
     }
     if (identityKey.serialize() != existing) {
       identityKeys[address.toString()] = jsonEncode(identityKey.serialize());
-      await storage.write(key: fssKey, value: jsonEncode(identityKeys));
+      await storage.write(key: 'othersIpk', value: jsonEncode(identityKeys));
       return true;
     } else {
       return false;
     }
+  }
+
+  Future<bool> saveIdentityKeyPair(
+      IdentityKeyPair identityKeyPair, int localRegistrationId) async {
+    await storage.write(
+        key: 'selfIpk', value: jsonEncode(identityKeyPair.serialize()));
+    return true;
   }
 }

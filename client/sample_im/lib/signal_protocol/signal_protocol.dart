@@ -59,4 +59,23 @@ Future<void> install() async {
       .encrypt(Uint8List.fromList(utf8.encode('Hello Omelet.im 😎')));
   print(ciphertext);
   print(ciphertext.serialize());
+
+  // 模擬建立 Bob 的 SessionCipher，用於解密訊息
+  final signalProtocolStore = InMemorySignalProtocolStore(remoteIpk, 1);
+  final remoteSessionCipher =
+      SessionCipher.fromStore(signalProtocolStore, selfAddress);
+
+  // 模擬儲存 Bob 的 OPK 和 SPK
+  for (final remoteOpk in remoteOpks) {
+    await signalProtocolStore.storePreKey(remoteOpk.id, remoteOpk);
+  }
+  await signalProtocolStore.storeSignedPreKey(remoteSpk.id, remoteSpk);
+
+  // 解密訊息
+  if (ciphertext.getType() == CiphertextMessage.prekeyType) {
+    await remoteSessionCipher
+        .decryptWithCallback(ciphertext as PreKeySignalMessage, (plaintext) {
+      print(utf8.decode(plaintext)); // 打印解密後的明文
+    });
+  }
 }

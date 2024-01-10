@@ -51,7 +51,7 @@ class SafeSessionStore implements SessionStore {
     try {
       if (await containsSession(address)) {
         return SessionRecord.fromSerialized(
-            Uint8List.fromList(jsonDecode(sessions[address]!)));
+            Uint8List.fromList(jsonDecode(sessions[address]!).cast<int>()));
       } else {
         return SessionRecord();
       }

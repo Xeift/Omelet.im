@@ -8,6 +8,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 import 'safe_identity_store.dart';
 import 'safe_spk_store.dart';
 import 'safe_opk_store.dart';
+import 'safe_session_store.dart';
 
 Future<void> install() async {
   final ipk = generateIdentityKeyPair(); // 產生身份金鑰對（長期金鑰對，平常不會動）
@@ -24,4 +25,5 @@ Future<void> install() async {
   for (final opk in opks) {
     await opkStore.storePreKey(opk.id, opk);
   }
+  final sessionStore = SafeIdentityKeyStore();
 }

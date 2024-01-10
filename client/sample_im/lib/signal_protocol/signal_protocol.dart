@@ -75,7 +75,7 @@ Future<void> install() async {
   if (ciphertext.getType() == CiphertextMessage.prekeyType) {
     await remoteSessionCipher
         .decryptWithCallback(ciphertext as PreKeySignalMessage, (plaintext) {
-      print(utf8.decode(plaintext)); // 打印解密後的明文
+      print(utf8.decode(plaintext));
     });
   }
 }

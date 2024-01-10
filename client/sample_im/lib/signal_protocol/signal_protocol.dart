@@ -1,11 +1,12 @@
-import 'dart:convert';
-import 'dart:typed_data';
+// import 'dart:convert';
+// import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
-import 'safe_identity_store.dart';
+// import 'safe_identity_store.dart';
+import 'safe_spk_store.dart';
 
 Future<void> install() async {
   final ipk = generateIdentityKeyPair(); // 產生身份金鑰對（長期金鑰對，平常不會動）
@@ -14,6 +15,8 @@ Future<void> install() async {
   const uid = 1234567; // uid
   final address = SignalProtocolAddress(uid.toString(), 0); // SP 地址
 
-  final ipkStore = SafeIdentityKeyStore();
-  await ipkStore.saveIdentityKeyPair(ipk, uid);
+  // final ipkStore = SafeIdentityKeyStore();
+  // await ipkStore.saveIdentityKeyPair(ipk, uid);
+  // final spkStore = SafeSpkStore();
+  // await spkStore.storeSignedPreKey(0, spk);
 }

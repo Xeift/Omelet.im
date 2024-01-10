@@ -9,11 +9,9 @@ import 'package:libsignal_protocol_dart/src/state/signed_pre_key_store.dart';
 class SafeSpkStore implements SignedPreKeyStore {
   final storage = const FlutterSecureStorage();
 
-  static const String fssKey = 'spk'; // 從這行以下開始改
-
   @override
   Future<SignedPreKeyRecord> loadSignedPreKey(int signedPreKeyId) async {
-    final spks = jsonDecode((await storage.read(key: fssKey)).toString());
+    final spks = jsonDecode((await storage.read(key: 'selfSpk')).toString());
     if (spks == null) {
       throw InvalidKeyIdException('no signedprekeyrecord found');
     }
@@ -30,7 +28,7 @@ class SafeSpkStore implements SignedPreKeyStore {
   @override
   Future<List<SignedPreKeyRecord>> loadSignedPreKeys() async {
     final results = <SignedPreKeyRecord>[];
-    final spks = jsonDecode((await storage.read(key: fssKey)).toString());
+    final spks = jsonDecode((await storage.read(key: 'selfSpk')).toString());
     if (spks == null) {
       throw InvalidKeyIdException('no signedprekeyrecord found');
     }
@@ -45,17 +43,17 @@ class SafeSpkStore implements SignedPreKeyStore {
   Future<void> storeSignedPreKey(
       int signedPreKeyId, SignedPreKeyRecord record) async {
     Map<String, dynamic> signedPreKeys =
-        jsonDecode((await storage.read(key: fssKey)).toString()) ?? {};
+        jsonDecode((await storage.read(key: 'selfSpk')).toString()) ?? {};
 
     signedPreKeys[signedPreKeyId.toString()] = jsonEncode(record.serialize());
 
-    await storage.write(key: fssKey, value: jsonEncode(signedPreKeys));
+    await storage.write(key: 'selfSpk', value: jsonEncode(signedPreKeys));
   }
 
   @override
   Future<bool> containsSignedPreKey(int signedPreKeyId) async {
     final signedPreKeys =
-        jsonDecode((await storage.read(key: fssKey)).toString());
+        jsonDecode((await storage.read(key: 'selfSpk')).toString());
     if (signedPreKeys == null) {
       throw InvalidKeyIdException('no signedprekeyrecord found');
     }
@@ -68,13 +66,13 @@ class SafeSpkStore implements SignedPreKeyStore {
   @override
   Future<void> removeSignedPreKey(int signedPreKeyId) async {
     var signedPreKeys =
-        jsonDecode((await storage.read(key: fssKey)).toString());
+        jsonDecode((await storage.read(key: 'selfSpk')).toString());
     if (signedPreKeys == null) {
       throw InvalidKeyIdException('no signedprekeyrecord found');
     }
 
     signedPreKeys.remove(signedPreKeyId.toString());
 
-    await storage.write(key: fssKey, value: jsonEncode(signedPreKeys));
+    await storage.write(key: 'selfSpk', value: jsonEncode(signedPreKeys));
   }
 }

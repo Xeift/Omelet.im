@@ -37,7 +37,9 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
   }
 
   @override
-  Future<int> getLocalRegistrationId() async => 1; // TODO:
+  Future<int> getLocalRegistrationId() async {
+    return int.parse((await storage.read(key: 'selfUid')).toString());
+  }
 
   @override
   Future<bool> isTrustedIdentity(SignalProtocolAddress address,
@@ -72,6 +74,7 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
       IdentityKeyPair identityKeyPair, int localRegistrationId) async {
     await storage.write(
         key: 'selfIpk', value: jsonEncode(identityKeyPair.serialize()));
+    await storage.write(key: 'selfUid', value: localRegistrationId.toString());
     return true;
   }
 }

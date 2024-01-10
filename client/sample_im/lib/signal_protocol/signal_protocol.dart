@@ -16,10 +16,4 @@ Future<void> install() async {
 
   final ipkStore = SafeIdentityKeyStore();
   await ipkStore.saveIdentityKeyPair(ipk, uid);
-  // var a = await ipkStore.getIdentityKeyPair();
-  print('aaaa');
-  // print(a.getPublicKey().serialize());
-  print((await ipkStore.getIdentityKeyPair()).getPublicKey().serialize());
-  // print(ipkStore.getIdentityKeyPair());
-  // print(ipkStore.getIdentityKeyPair().runtimeType);
 }

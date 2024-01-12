@@ -8,7 +8,7 @@ Future<bool> isJwtExsist() async {
   return (await storage.read(key: 'token')) != null;
 }
 
-Future<bool> isJwtValid(String serverUri, Function updateHintMsg) async {
+Future<bool> isJwtValid(String serverUri) async {
   final token = await storage.read(key: 'token');
   final res = await http.post(
     Uri.parse('$serverUri/api/v1/check-jwt-status'),
@@ -17,12 +17,9 @@ Future<bool> isJwtValid(String serverUri, Function updateHintMsg) async {
       'Authorization': 'Bearer $token'
     },
   );
-  // final resBody = jsonDecode(res.body);
   if (res.statusCode == 200) {
-    print('jwt 有效✅');
     return true;
   } else {
-    print('jwt 無效❌');
     return false;
   }
 }

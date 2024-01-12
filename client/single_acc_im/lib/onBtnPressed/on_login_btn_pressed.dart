@@ -10,10 +10,13 @@ const storage = FlutterSecureStorage();
 Future<void> onLoginBtnPressed(String serverUri, String username,
     String password, Function updateHintMsg, Function catHintMsg) async {
   if (await isJwtExsist()) {
-    print('jwt exsist!✅');
-    await isJwtValid(serverUri, updateHintMsg);
+    if (await isJwtValid(serverUri)) {
+      print('jwt 存在且有效✅\n應跳轉至聊天室頁面');
+    } else {
+      print('jwt 存在但無效❌\n應跳轉至登入頁面，提示使用者重新登入');
+    }
   } else {
-    print('jwt not exsist!❌');
+    print('jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包');
   }
 
   await login(serverUri, username, password, updateHintMsg, catHintMsg);

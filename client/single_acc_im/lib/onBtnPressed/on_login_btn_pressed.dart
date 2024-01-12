@@ -24,7 +24,6 @@ Future<void> onLoginBtnPressed(String serverUri, String username,
       body: jsonEncode(
           <String, String>{'username': username, 'password': password}),
     );
-    const storage = FlutterSecureStorage();
     final resBody = jsonDecode(res.body);
 
     await storage.write(key: 'token', value: resBody['token']);

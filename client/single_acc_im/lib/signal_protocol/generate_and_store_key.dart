@@ -1,13 +1,16 @@
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'safe_identity_store.dart';
 import 'safe_spk_store.dart';
 import 'safe_opk_store.dart';
 
-Future<void> install() async {
-  const selfUid = 1234567;
-  final selfAddress =
-      SignalProtocolAddress(selfUid.toString(), 1); // Signal protocol 地址
+Future<void> generateAndStoreKey() async {
+  const storage = FlutterSecureStorage();
+
+  final selfUid = int.parse((await storage.read(key: 'uid')).toString());
+  // final selfAddress =
+  //     SignalProtocolAddress(selfUid.toString(), 1); // Signal protocol 地址
   final selfIpk = generateIdentityKeyPair(); // 產生身份金鑰對（長期金鑰對，平常不會動）
   final selfSpk = generateSignedPreKey(selfIpk, 0); // 產生 SPK（中期金鑰對，每 7 天更新一次）
   final selfOpks = generatePreKeys(0, 110); // 產生 OPK（短期金鑰對，1 則訊息會用掉 1 個）

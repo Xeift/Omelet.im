@@ -1,11 +1,10 @@
 // ignore_for_file: avoid_print
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import './../utils/jwt.dart';
 import './../utils/login.dart';
+import './../signal_protocol/generate_and_store_key.dart';
 
 // import 'package:socket_io_client/socket_io_client.dart' as io;
-const storage = FlutterSecureStorage();
 
 Future<void> onLoginBtnPressed(String username, String password,
     Function updateHintMsg, Function catHintMsg) async {
@@ -19,5 +18,6 @@ Future<void> onLoginBtnPressed(String username, String password,
   } else {
     print('jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
     await login(username, password, updateHintMsg, catHintMsg);
+    await generateAndStoreKey();
   }
 }

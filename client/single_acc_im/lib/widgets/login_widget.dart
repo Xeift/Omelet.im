@@ -14,7 +14,6 @@ class LoginWidget extends StatefulWidget {
 }
 
 class LoginWidgetState extends State<LoginWidget> {
-  final TextEditingController serverUriController = TextEditingController();
   final TextEditingController accController = TextEditingController();
   final TextEditingController pwdController = TextEditingController();
 
@@ -22,10 +21,6 @@ class LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(
-          controller: serverUriController,
-          decoration: const InputDecoration(hintText: '輸入後端伺服器 URI'),
-        ),
         TextField(
           controller: accController,
           decoration: const InputDecoration(hintText: '輸入帳號'),
@@ -35,12 +30,8 @@ class LoginWidgetState extends State<LoginWidget> {
           decoration: const InputDecoration(hintText: '輸入密碼'),
         ),
         ElevatedButton(
-          onPressed: () async => await onLoginBtnPressed(
-              serverUriController.text,
-              accController.text,
-              pwdController.text,
-              widget.updateHintMsg,
-              widget.catHintMsg),
+          onPressed: () async => await onLoginBtnPressed(accController.text,
+              pwdController.text, widget.updateHintMsg, widget.catHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
           child: const Text('登入'),
         ),

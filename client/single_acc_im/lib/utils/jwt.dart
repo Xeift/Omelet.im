@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert';
+import './../utils/server_uri.dart';
 
 const storage = FlutterSecureStorage();
 
@@ -8,7 +8,7 @@ Future<bool> isJwtExsist() async {
   return (await storage.read(key: 'token')) != null;
 }
 
-Future<bool> isJwtValid(String serverUri) async {
+Future<bool> isJwtValid() async {
   final token = await storage.read(key: 'token');
   final res = await http.post(
     Uri.parse('$serverUri/api/v1/check-jwt-status'),

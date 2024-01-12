@@ -1,9 +1,9 @@
 const msgController = require('../controller/msgController.js');
 const express = require('express');
 const router = express.Router();
-const verifyJWT = require('../utils/verifyJWT.js');
+const jwt = require('../utils/jwt.js');
 
-router.post('/', verifyJWT.verifyToken, async(req, res) => {
+router.post('/', jwt.verifyJWT, async(req, res) => {
     try {
         res.status(200).json({
             message: '此 JWT 有效',

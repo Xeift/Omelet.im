@@ -1,9 +1,9 @@
 const msgController = require('../controller/msgController.js');
 const express = require('express');
 const router = express.Router();
-const verifyJWT = require('./../utils/verifyJWT.js');
+const jwt = require('../utils/jwt.js');
 
-router.get('/', verifyJWT.verifyToken, async(req, res) => {
+router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;

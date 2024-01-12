@@ -20,9 +20,32 @@ async function generateRestorePasswordJWT(_email) {
     return encoded_token;
 }
 
-async function verifyJWT(token) {
-    const decoded_token = jwt.verify(token, JWT_SECRET);
-    return decoded_token;
+async function verifyJWT(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        res.status(401).json({
+            message: '請提供 JWT',
+            data: null,
+            token: null
+        });
+    }
+    else {
+        jwt.verify(token, JWT_SECRET, async(err, payload) => {
+            if (err) {
+                res.status(403).json({
+                    message: '此 JWT 已過期或失效',
+                    data: null,
+                    token: null
+                });
+            }
+            else {
+                req.decodedToken = payload;
+                next();
+            }
+        });
+    }
 }
 
 module.exports = {

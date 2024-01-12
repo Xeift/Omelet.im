@@ -26,12 +26,13 @@ class MyMsgWidget extends StatefulWidget {
 }
 
 class _MyMsgWidgetState extends State<MyMsgWidget> {
-  String hintMsg = '未登入';
+  String hintMsg = '這是測試訊息UwU';
 
   @override
   void initState() {
     super.initState();
     initSocket(); // 啟動 App 時直接連線到 Socket.io Server
+    // TODO:  檢查本地是否有 JWT
   }
 
   Future<void> initSocket() async {}

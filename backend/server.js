@@ -31,6 +31,7 @@ app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/resetPas
 app.use('/api/v1/message', rateLimit.authLimiter, require('./api/message.js'));
 app.use('/api/v1/get-unread-msg', rateLimit.authLimiter, require('./api/getUnreadMsg.js'));
 app.use('/api/v1/check-jwt-status', rateLimit.authLimiter, require('./api/checkJwtStatus.js'));
+app.use('/api/v1/upload_keys', rateLimit.authLimiter, require('./api/uploadKeys.js'));
 
 function testMsg() {
     const msgController = require('./controller/msgController.js');

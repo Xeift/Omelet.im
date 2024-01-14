@@ -7,7 +7,10 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: { type: String },
     room_joined: { type: [String], default: [] },
-    // reset_temp_code: { type: String },
+    ipkPub: { type: String, unique: true },
+    spkPub: { type: String, unique: true },
+    spkSig: { type: String, unique: true },
+    opkPub: { type: mongoose.Schema.Types.Mixed, unique: true },
 });
 const UserModel = mongoose.model('User', UserSchema, 'users');
 

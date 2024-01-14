@@ -43,10 +43,18 @@ async function updatePasswordByEmail(email, newPassword) {
     await user.save();
 }
 
+async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
+    await UserModel.findOneAndUpdate(
+        { uid: uid },
+        { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub }
+    );
+}
+
 module.exports = {
     isPasswordMatch,
     isUserIdExsists,
     isEmailExsists,
     createNewUser,
-    updatePasswordByEmail
+    updatePasswordByEmail,
+    uploadPreKeyBundle
 };

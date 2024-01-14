@@ -32,6 +32,8 @@ app.use('/api/v1/message', rateLimit.authLimiter, require('./api/message.js'));
 app.use('/api/v1/get-unread-msg', rateLimit.authLimiter, require('./api/getUnreadMsg.js'));
 app.use('/api/v1/check-jwt-status', rateLimit.authLimiter, require('./api/checkJwtStatus.js'));
 app.use('/api/v1/upload_keys', rateLimit.authLimiter, require('./api/uploadKeys.js'));
+app.use('/api/v1/download-pre-key-bundle', rateLimit.authLimiter, require('./api/downloadPreKeyBundle.js'));
+
 
 function testMsg() {
     const msgController = require('./controller/msgController.js');

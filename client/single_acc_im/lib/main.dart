@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'widgets/login_widget.dart';
 import 'widgets/reset_widget.dart';
 import 'widgets/readall_widget.dart';
+import 'widgets/msg_widget.dart';
 
 late io.Socket socket;
 final hintMsgKey = GlobalKey();
@@ -47,7 +48,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             LoginWidget(updateHintMsg, catHintMsg), // login widget
             RemoveAllWidget(updateHintMsg), // remove all widget
             ReadAllWidget(updateHintMsg), // test widget
-
+            MsgWidget(updateHintMsg), // remove all widget
             Text(
               hintMsg,
               textDirection: TextDirection.ltr,

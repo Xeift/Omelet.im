@@ -50,11 +50,19 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     );
 }
 
+async function downloadPreKeyBundle(uid) {
+    return await UserModel.findOne(
+        { uid: uid },
+        'ipkPub spkPub spkSig opkPub'
+    );
+}
+
 module.exports = {
     isPasswordMatch,
     isUserIdExsists,
     isEmailExsists,
     createNewUser,
     updatePasswordByEmail,
-    uploadPreKeyBundle
+    uploadPreKeyBundle,
+    downloadPreKeyBundle
 };

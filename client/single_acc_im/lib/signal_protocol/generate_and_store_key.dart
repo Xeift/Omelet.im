@@ -28,7 +28,7 @@ Future<void> generateAndStoreKey() async {
     await opkStore.storePreKey(selfOpk.id, selfOpk);
   }
 
-  final res = await http.post(Uri.parse('$serverUri/api/v1/upload_keys'),
+  final res = await http.post(Uri.parse('$serverUri/api/v1/upload-keys'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await storage.read(key: 'token')}'

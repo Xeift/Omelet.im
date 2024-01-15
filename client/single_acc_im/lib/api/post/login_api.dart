@@ -1,5 +1,7 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 import './../../utils/server_uri.dart';
 
 Future<String> loginAPI(String username, String password) async {

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:ffi';
+
 import 'package:http/http.dart' as http;
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +8,7 @@ import 'safe_identity_store.dart';
 import 'safe_spk_store.dart';
 import 'safe_opk_store.dart';
 import './../utils/server_uri.dart';
+import './../api/post/upload_keys_api.dart';
 
 Future<void> generateAndStoreKey() async {
   const storage = FlutterSecureStorage();
@@ -28,22 +29,16 @@ Future<void> generateAndStoreKey() async {
     await opkStore.storePreKey(selfOpk.id, selfOpk);
   }
 
-  final res = await http.post(Uri.parse('$serverUri/api/v1/upload-keys'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${await storage.read(key: 'token')}'
-      },
-      body: jsonEncode(<String, String>{
-        'deviceId': '1',
-        'ipkPub': jsonEncode(selfIpk.getPublicKey().serialize()),
-        'spkPub': jsonEncode(selfSpk.getKeyPair().publicKey.serialize()),
-        'spkSig': jsonEncode(selfSpk.signature),
-        'opkPub': jsonEncode({
-          for (var selfOpk in selfOpks)
-            selfOpk.id.toString():
-                jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
-        }),
+  const deviceId = '1';
+
+  final res = await uploadKeysAPI(
+      deviceId,
+      jsonEncode(selfIpk.getPublicKey().serialize()),
+      jsonEncode(selfSpk.getKeyPair().publicKey.serialize()),
+      jsonEncode(selfSpk.signature),
+      jsonEncode({
+        for (var selfOpk in selfOpks)
+          selfOpk.id.toString():
+              jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
       }));
-  final resBody = jsonDecode(res.body);
-  print(resBody);
 }

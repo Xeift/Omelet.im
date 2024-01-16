@@ -1,7 +1,5 @@
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import './../utils/server_uri.dart';
 import './../api/post/check_jwt_status_api.dart';
 
 const storage = FlutterSecureStorage();

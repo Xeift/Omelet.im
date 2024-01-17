@@ -9,7 +9,8 @@ Future<void> onSendMsgBtnPressed(
     String receiverId, String msgContent, Function updateHintMsg) async {
   final res = await downloadPreKeyBundleAPI(receiverId);
   final preKeyBundle = jsonDecode(res.body)['data'];
-
+  print(preKeyBundle);
+  // TODO: 取ID取OPK
   const opkId = '5';
   final ipkPub = IdentityKey.fromBytes(
       Uint8List.fromList(

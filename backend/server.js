@@ -33,7 +33,6 @@ app.use('/api/v1/get-unread-msg', rateLimit.authLimiter, require('./api/getUnrea
 app.use('/api/v1/check-jwt-status', rateLimit.authLimiter, require('./api/checkJwtStatus.js'));
 app.use('/api/v1/upload-pre-key-bundle', rateLimit.authLimiter, require('./api/uploadPreKeyBundle.js'));
 app.use('/api/v1/download-pre-key-bundle', rateLimit.authLimiter, require('./api/downloadPreKeyBundle.js'));
-app.use('/api/v1/get-available-opk-index', rateLimit.authLimiter, require('./api/getAvailableOpkIndex.js'));
 
 
 function testMsg() {

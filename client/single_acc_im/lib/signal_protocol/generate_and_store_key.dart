@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'safe_identity_store.dart';
 import 'safe_spk_store.dart';
 import 'safe_opk_store.dart';
-import './../api/post/upload_keys_api.dart';
+import '../api/post/upload_pre_key_bundle_api.dart';
 
 Future<void> generateAndStoreKey() async {
   const storage = FlutterSecureStorage();
@@ -27,7 +27,7 @@ Future<void> generateAndStoreKey() async {
 
   const deviceId = '1';
 
-  final res = (await uploadKeysAPI(
+  final res = (await uploadPreKeyBundleAPI(
           deviceId,
           jsonEncode(selfIpk.getPublicKey().serialize()),
           jsonEncode(selfSpk.getKeyPair().publicKey.serialize()),

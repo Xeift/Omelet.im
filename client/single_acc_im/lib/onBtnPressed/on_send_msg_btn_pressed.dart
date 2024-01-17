@@ -26,6 +26,6 @@ Future<void> onSendMsgBtnPressed(
           (jsonDecode(preKeyBundle['opkPub'][opkId])).cast<int>().toList()),
       0);
 
-  print(opkPub);
-  print(opkPub.runtimeType);
+  print(preKeyBundle);
+  print(preKeyBundle.runtimeType);
 }

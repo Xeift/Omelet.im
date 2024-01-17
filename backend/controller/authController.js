@@ -57,6 +57,15 @@ async function downloadPreKeyBundle(uid) {
     );
 }
 
+async function getAvailableOpkIndex(uid) {
+    return Object.keys((await UserModel.findOne(
+        { uid: uid },
+        'opkPub'
+    )).opkPub);
+    // let keys = Object.keys(user.name);
+    // let keysAsNumbers = keys.map(key => Number(key));
+}
+
 module.exports = {
     isPasswordMatch,
     isUserIdExsists,
@@ -64,5 +73,6 @@ module.exports = {
     createNewUser,
     updatePasswordByEmail,
     uploadPreKeyBundle,
-    downloadPreKeyBundle
+    downloadPreKeyBundle,
+    getAvailableOpkIndex
 };

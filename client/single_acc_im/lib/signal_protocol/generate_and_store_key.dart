@@ -12,7 +12,7 @@ Future<void> generateAndStoreKey() async {
   const storage = FlutterSecureStorage();
 
   final selfUid = int.parse((await storage.read(key: 'uid')).toString());
-  final selfIpk = generateIdentityKeyPair(); // 產生身份金鑰對（長期金鑰對，平常不會動）
+  final selfIpk = generateIdentityKeyPair(); // 產生 IPK（長期金鑰對，平常不會動）
   final selfSpk = generateSignedPreKey(selfIpk, 0); // 產生 SPK（中期金鑰對，每 7 天更新一次）
   final selfOpks = generatePreKeys(0, 110); // 產生 OPK（短期金鑰對，1 則訊息會用掉 1 個）
 

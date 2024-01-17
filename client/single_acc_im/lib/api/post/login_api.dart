@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import './../../utils/server_uri.dart';
 
-Future<String> loginAPI(String username, String password) async {
+Future<http.Response> loginAPI(String username, String password) async {
   final res = await http.post(
     Uri.parse('$serverUri/api/v1/login'),
     headers: <String, String>{
@@ -13,5 +13,5 @@ Future<String> loginAPI(String username, String password) async {
     body: jsonEncode(
         <String, String>{'username': username, 'password': password}),
   );
-  return res.body;
+  return res;
 }

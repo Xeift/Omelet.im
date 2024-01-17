@@ -27,14 +27,15 @@ Future<void> generateAndStoreKey() async {
 
   const deviceId = '1';
 
-  final res = await uploadKeysAPI(
-      deviceId,
-      jsonEncode(selfIpk.getPublicKey().serialize()),
-      jsonEncode(selfSpk.getKeyPair().publicKey.serialize()),
-      jsonEncode(selfSpk.signature),
-      jsonEncode({
-        for (var selfOpk in selfOpks)
-          selfOpk.id.toString():
-              jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
-      }));
+  final res = (await uploadKeysAPI(
+          deviceId,
+          jsonEncode(selfIpk.getPublicKey().serialize()),
+          jsonEncode(selfSpk.getKeyPair().publicKey.serialize()),
+          jsonEncode(selfSpk.signature),
+          jsonEncode({
+            for (var selfOpk in selfOpks)
+              selfOpk.id.toString():
+                  jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
+          })))
+      .body;
 }

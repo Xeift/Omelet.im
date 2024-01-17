@@ -5,7 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './../../utils/server_uri.dart';
 
-Future<String> uploadKeysAPI(deviceId, ipkPub, spkPub, spkSig, opkPub) async {
+Future<http.Response> uploadKeysAPI(
+    deviceId, ipkPub, spkPub, spkSig, opkPub) async {
   const storage = FlutterSecureStorage();
 
   final res = await http.post(Uri.parse('$serverUri/api/v1/upload-keys'),
@@ -20,5 +21,5 @@ Future<String> uploadKeysAPI(deviceId, ipkPub, spkPub, spkSig, opkPub) async {
         'spkSig': spkSig,
         'opkPub': opkPub,
       }));
-  return res.body;
+  return res;
 }

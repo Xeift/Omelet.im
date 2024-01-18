@@ -50,11 +50,20 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     );
 }
 
-async function downloadPreKeyBundle(uid) {
-    return await UserModel.findOne(
+async function downloadPreKeyBundle(uid, opkId) {
+    let pkb = await UserModel.findOne(
         { uid: uid },
         'ipkPub spkPub spkSig opkPub'
     );
+    pkb['opkPub'] = pkb['opkPub'][opkId];
+    return pkb;
+}
+
+async function getAvailableOpkIndex(uid) {
+    return Object.keys((await UserModel.findOne(
+        { uid: uid },
+        'opkPub'
+    )).opkPub);
 }
 
 module.exports = {
@@ -64,5 +73,6 @@ module.exports = {
     createNewUser,
     updatePasswordByEmail,
     uploadPreKeyBundle,
-    downloadPreKeyBundle
+    downloadPreKeyBundle,
+    getAvailableOpkIndex
 };

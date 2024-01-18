@@ -5,13 +5,16 @@ import 'dart:typed_data';
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import '../api/get/download_pre_key_bundle_api.dart';
+import '../api/get/get_available_opk_index.dart';
 
 Future<void> onSendMsgBtnPressed(
     String receiverId, String msgContent, Function updateHintMsg) async {
-  final res = await downloadPreKeyBundleAPI(receiverId);
+  final opkIndexRes = await getAvailableOpkIndex(receiverId);
+  final opkId = randomChoice(jsonDecode(opkIndexRes.body)['data']);
+
+  final res = await downloadPreKeyBundleAPI(receiverId, opkId);
   final preKeyBundle = jsonDecode(res.body)['data'];
 
-  final opkId = randomChoice(preKeyBundle['opkPub'].keys.toList());
   final ipkPub = IdentityKey.fromBytes(
       Uint8List.fromList(
           jsonDecode(preKeyBundle['ipkPub']).cast<int>().toList()),
@@ -24,8 +27,11 @@ Future<void> onSendMsgBtnPressed(
       jsonDecode(preKeyBundle['spkSig']).cast<int>().toList());
   final opkPub = Curve.decodePoint(
       Uint8List.fromList(
-          (jsonDecode(preKeyBundle['opkPub'][opkId])).cast<int>().toList()),
+          (jsonDecode(preKeyBundle['opkPub'])).cast<int>().toList()),
       0);
+
+  print(opkId);
+  print(opkPub.serialize());
 }
 
 T randomChoice<T>(List<T> list) {

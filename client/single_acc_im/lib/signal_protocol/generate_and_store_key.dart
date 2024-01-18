@@ -30,12 +30,16 @@ Future<void> generateAndStoreKey() async {
   final res = (await uploadPreKeyBundleAPI(
           deviceId,
           jsonEncode(selfIpk.getPublicKey().serialize()),
-          jsonEncode(selfSpk.getKeyPair().publicKey.serialize()),
-          jsonEncode(selfSpk.signature),
+          jsonEncode({
+            selfSpk.id.toString():
+                jsonEncode(selfSpk.getKeyPair().publicKey.serialize())
+          }),
+          jsonEncode({selfSpk.id.toString(): jsonEncode(selfSpk.signature)}),
           jsonEncode({
             for (var selfOpk in selfOpks)
               selfOpk.id.toString():
                   jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
           })))
       .body;
+  print(res);
 }

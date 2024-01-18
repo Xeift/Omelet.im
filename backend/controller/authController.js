@@ -55,7 +55,13 @@ async function downloadPreKeyBundle(uid, opkId) {
         { uid: uid },
         'ipkPub spkPub spkSig opkPub'
     );
+
     pkb['opkPub'] = pkb['opkPub'][opkId];
+    let latestSpkIndex = ( Math.max(...Object.keys(JSON.parse(pkb['spkPub'])).map(Number)) ).toString();
+
+    pkb['spkPub'] = JSON.parse(pkb['spkPub'])[latestSpkIndex];
+    pkb['spkSig'] = JSON.parse(pkb['spkSig'])[latestSpkIndex];
+    
     return pkb;
 }
 

@@ -14,6 +14,7 @@ Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int)>
 
   final res = await downloadPreKeyBundleAPI(receiverId, opkId);
   final preKeyBundle = jsonDecode(res.body)['data'];
+  print(preKeyBundle);
 
   final ipkPub = IdentityKey.fromBytes(
       Uint8List.fromList(

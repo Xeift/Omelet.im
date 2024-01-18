@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -9,9 +10,8 @@ Future<void> onSendMsgBtnPressed(
     String receiverId, String msgContent, Function updateHintMsg) async {
   final res = await downloadPreKeyBundleAPI(receiverId);
   final preKeyBundle = jsonDecode(res.body)['data'];
-  print(preKeyBundle);
-  // TODO: 取ID取OPK
-  const opkId = '5';
+
+  final opkId = randomChoice(preKeyBundle['opkPub'].keys.toList());
   final ipkPub = IdentityKey.fromBytes(
       Uint8List.fromList(
           jsonDecode(preKeyBundle['ipkPub']).cast<int>().toList()),
@@ -26,7 +26,9 @@ Future<void> onSendMsgBtnPressed(
       Uint8List.fromList(
           (jsonDecode(preKeyBundle['opkPub'][opkId])).cast<int>().toList()),
       0);
+}
 
-  print(preKeyBundle);
-  print(preKeyBundle.runtimeType);
+T randomChoice<T>(List<T> list) {
+  var random = Random();
+  return list[random.nextInt(list.length)];
 }

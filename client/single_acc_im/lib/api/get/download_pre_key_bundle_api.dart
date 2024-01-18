@@ -1,15 +1,7 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../utils/server_uri.dart';
-
-T randomChoice<T>(List<T> list) {
-  var random = Random();
-  return list[random.nextInt(list.length)];
-}
 
 Future<http.Response> downloadPreKeyBundleAPI(String uid) async {
   const storage = FlutterSecureStorage();

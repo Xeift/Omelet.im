@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import './../signal_protocol/download_pre_key_bundle.dart';
@@ -33,4 +36,13 @@ Future<void> onSendMsgBtnPressed(
   final retrievedPreKeyBundle = PreKeyBundle(
       registrationId, 1, opkId, opkPub, spkId, spkPub, spkSig, ipkPub);
   await sessionBuilder.processPreKeyBundle(retrievedPreKeyBundle);
+
+  // 建立 SessionCipher，用於加密訊息
+  final sessionCipher =
+      SessionCipher(sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
+  final ciphertext = await sessionCipher
+      .encrypt(Uint8List.fromList(utf8.encode('Hello Omelet.im 😎')));
+
+  print(ciphertext);
+  print(ciphertext.serialize());
 }

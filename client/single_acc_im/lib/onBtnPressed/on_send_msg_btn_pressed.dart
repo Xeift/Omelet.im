@@ -19,6 +19,7 @@ Future<void> onSendMsgBtnPressed(
   print(spkId);
 
   final ipkStore = SafeIdentityKeyStore();
+  final registrationId = await ipkStore.getLocalRegistrationId();
   final spkStore = SafeSpkStore();
   final opkStore = SafeOpkStore();
   final remoteAddress = SignalProtocolAddress(receiverId.toString(), 1);
@@ -29,7 +30,7 @@ Future<void> onSendMsgBtnPressed(
       SessionBuilder(sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
 
   // 用 sessionBuilder 處理 PreKeyBundle
-  // final retrievedPreKeyBundle = PreKeyBundle(int.parse(receiverId), 1, opkId,
-  //     opkPub, remoteSpk.id, spkPub, spkSig, ipkPub);
-  // await sessionBuilder.processPreKeyBundle(retrievedPreKeyBundle);
+  final retrievedPreKeyBundle = PreKeyBundle(
+      registrationId, 1, opkId, opkPub, spkId, spkPub, spkSig, ipkPub);
+  await sessionBuilder.processPreKeyBundle(retrievedPreKeyBundle);
 }

@@ -9,15 +9,16 @@ import 'safe_opk_store.dart';
 import '../api/post/upload_pre_key_bundle_api.dart';
 
 Future<void> generateAndStoreKey() async {
-  const storage = FlutterSecureStorage();
+  // const storage = FlutterSecureStorage();
 
-  final selfUid = int.parse((await storage.read(key: 'uid')).toString());
+  // final selfUid = int.parse((await storage.read(key: 'uid')).toString());
+  final registrationId = generateRegistrationId(false);
   final selfIpk = generateIdentityKeyPair(); // 產生 IPK（長期金鑰對，平常不會動）
   final selfSpk = generateSignedPreKey(selfIpk, 0); // 產生 SPK（中期金鑰對，每 7 天更新一次）
   final selfOpks = generatePreKeys(0, 110); // 產生 OPK（短期金鑰對，1 則訊息會用掉 1 個）
 
   final ipkStore = SafeIdentityKeyStore();
-  await ipkStore.saveIdentityKeyPair(selfIpk, selfUid);
+  await ipkStore.saveIdentityKeyPair(selfIpk, registrationId);
   final spkStore = SafeSpkStore();
   await spkStore.storeSignedPreKey(0, selfSpk);
   final opkStore = SafeOpkStore();

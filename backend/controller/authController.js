@@ -56,9 +56,11 @@ async function downloadPreKeyBundle(uid, opkId) {
         'ipkPub spkPub spkSig opkPub'
     );
 
+    pkb._doc['opkId'] = opkId;
     pkb['opkPub'] = pkb['opkPub'][opkId];
-    let latestSpkIndex = ( Math.max(...Object.keys(JSON.parse(pkb['spkPub'])).map(Number)) ).toString();
 
+    let latestSpkIndex = ( Math.max(...Object.keys(JSON.parse(pkb['spkPub'])).map(Number)) ).toString();
+    pkb._doc['spkId'] = latestSpkIndex;
     pkb['spkPub'] = JSON.parse(pkb['spkPub'])[latestSpkIndex];
     pkb['spkSig'] = JSON.parse(pkb['spkSig'])[latestSpkIndex];
     

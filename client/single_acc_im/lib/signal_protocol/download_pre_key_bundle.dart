@@ -7,7 +7,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 import '../api/get/download_pre_key_bundle_api.dart';
 import '../api/get/get_available_opk_index.dart';
 
-Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int)>
+Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
     downloadPreKeyBundle(String receiverId) async {
   final opkIndexRes = await getAvailableOpkIndex(receiverId);
   final opkId = randomChoice(jsonDecode(opkIndexRes.body)['data']);
@@ -30,8 +30,9 @@ Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int)>
       Uint8List.fromList(
           (jsonDecode(preKeyBundle['opkPub'])).cast<int>().toList()),
       0);
+  final spkId = preKeyBundle['spkId'];
 
-  return (ipkPub, spkPub, spkSig, opkPub, int.parse(opkId));
+  return (ipkPub, spkPub, spkSig, opkPub, int.parse(spkId), int.parse(opkId));
 }
 
 T randomChoice<T>(List<T> list) {

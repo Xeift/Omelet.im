@@ -8,7 +8,7 @@ import './../signal_protocol/safe_session_store.dart';
 
 Future<void> onSendMsgBtnPressed(
     String receiverId, String msgContent, Function updateHintMsg) async {
-  final (ipkPub, spkPub, spkSig, opkPub, opkId) =
+  final (ipkPub, spkPub, spkSig, opkPub, opkId, spkId) =
       await downloadPreKeyBundle(receiverId);
 
   print(ipkPub);
@@ -16,6 +16,7 @@ Future<void> onSendMsgBtnPressed(
   print(spkSig);
   print(opkPub);
   print(opkId);
+  print(spkId);
 
   final ipkStore = SafeIdentityKeyStore();
   final spkStore = SafeSpkStore();
@@ -26,7 +27,7 @@ Future<void> onSendMsgBtnPressed(
   final sessionStore = SafeSessionStore();
   final sessionBuilder =
       SessionBuilder(sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
-  // TODO:spk 加上id
+
   // 用 sessionBuilder 處理 PreKeyBundle
   // final retrievedPreKeyBundle = PreKeyBundle(int.parse(receiverId), 1, opkId,
   //     opkPub, remoteSpk.id, spkPub, spkSig, ipkPub);

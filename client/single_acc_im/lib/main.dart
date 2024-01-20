@@ -52,6 +52,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       });
 
       socket.on('jwtExpired', (data) async {
+        // 後端檢查 JWT 過期
         updateHintMsg('登入階段已過期！重新登入');
         // 跳轉至登入頁面
         await login('q', 'a', updateHintMsg, catHintMsg);

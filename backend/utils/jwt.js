@@ -8,7 +8,7 @@ async function generateLoginJWT(_uid, _username, _email) {
     const encoded_token = jwt.sign(
         { _uid, _username, _email },
         JWT_SECRET,
-        { expiresIn: '10s' }
+        { expiresIn: '1d' }
     );
     return encoded_token;
 }

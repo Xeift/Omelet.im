@@ -5,10 +5,10 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
-import 'safe_identity_store.dart';
-import 'safe_spk_store.dart';
-import 'safe_opk_store.dart';
-import 'safe_session_store.dart';
+import '../signal_protocol/safe_identity_store.dart';
+import '../signal_protocol/safe_spk_store.dart';
+import '../signal_protocol/safe_opk_store.dart';
+import '../signal_protocol/safe_session_store.dart';
 
 Future<void> install() async {
   // 自己的資訊

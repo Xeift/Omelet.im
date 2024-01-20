@@ -1,7 +1,5 @@
-// required lib
 import 'package:flutter/material.dart';
 
-// btn
 import '../onBtnPressed/on_login_btn_pressed.dart';
 
 class LoginWidget extends StatefulWidget {

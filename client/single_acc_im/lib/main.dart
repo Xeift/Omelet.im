@@ -1,12 +1,13 @@
-// ignore_for_file: avoid_print
-
-// required lib
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
-// import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-// widget
-import 'widgets/login_widget.dart';
+import 'utils/server_uri.dart';
+import 'utils/jwt.dart';
+import 'utils/login.dart';
+import 'signal_protocol/generate_and_store_key.dart';
+
+// import 'widgets/login_widget.dart';
 import 'widgets/reset_widget.dart';
 import 'widgets/readall_widget.dart';
 import 'widgets/msg_widget.dart';
@@ -31,11 +32,38 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   @override
   void initState() {
     super.initState();
-    initSocket(); // 啟動 App 時直接連線到 Socket.io Server
-    // TODO:  檢查本地是否有 JWT
+    initSocket();
   }
 
-  Future<void> initSocket() async {}
+  Future<void> initSocket() async {
+    const storage = FlutterSecureStorage();
+
+    if (await isJwtExsist()) {
+      // JWT 存在，直接連線到 Socket.io Server
+      socket = io.io(
+          serverUri, io.OptionBuilder().setTransports(['websocket']).build());
+
+      socket.onConnect((_) async {
+        socket.emit(
+            // 回傳 JWT，驗證身份
+            'clientReturnJwtToServer',
+            await storage.read(key: 'token'));
+        print('backend connected');
+      });
+
+      socket.on('jwtExpired', (data) async {
+        updateHintMsg('登入階段已過期！重新登入');
+        // 跳轉至登入頁面
+        await login('q', 'a', updateHintMsg, catHintMsg);
+        socket.emit(
+            'clientReturnJwtToServer', await storage.read(key: 'token'));
+      });
+    } else {
+      print('jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
+      await login('q', 'a', updateHintMsg, catHintMsg);
+      await generateAndStoreKey();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +73,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         child: Column(
           children: [
             const SizedBox(height: 50), // keep top space
-            LoginWidget(updateHintMsg, catHintMsg), // login widget
+            // LoginWidget(updateHintMsg, catHintMsg), // login widget
             RemoveAllWidget(updateHintMsg), // remove all widget
             ReadAllWidget(updateHintMsg), // test widget
             MsgWidget(updateHintMsg), // remove all widget

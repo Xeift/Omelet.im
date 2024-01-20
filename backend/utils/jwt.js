@@ -1,12 +1,14 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: 'config/.env' });
 const JWT_SECRET = process.env.JWT_SECRET;
+const util = require('util');
+const jwtVerify = util.promisify(jwt.verify);
 
 async function generateLoginJWT(_uid, _username, _email) {
     const encoded_token = jwt.sign(
         { _uid, _username, _email },
         JWT_SECRET,
-        { expiresIn: '1d' }
+        { expiresIn: '10s' }
     );
     return encoded_token;
 }
@@ -48,8 +50,29 @@ async function verifyJWT(req, res, next) {
     }
 }
 
+
+
+async function verifyJWTSocket(token) {
+    if (!token) {
+        console.log('請提供 JWT');
+        return null;
+    }
+    else {
+        try {
+            const payload = await jwtVerify(token, JWT_SECRET);
+            return payload;
+        }
+        catch (err) {
+            return null;
+        }
+    }
+}
+
+
+
 module.exports = {
     generateLoginJWT,
     generateRestorePasswordJWT,
-    verifyJWT
+    verifyJWT,
+    verifyJWTSocket
 };

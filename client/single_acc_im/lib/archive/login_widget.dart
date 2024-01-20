@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../onBtnPressed/on_login_btn_pressed.dart';
+// import '../onBtnPressed/on_login_btn_pressed.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget(this.updateHintMsg, this.catHintMsg, {super.key});
@@ -27,12 +27,12 @@ class LoginWidgetState extends State<LoginWidget> {
           controller: pwdController,
           decoration: const InputDecoration(hintText: '輸入密碼'),
         ),
-        ElevatedButton(
-          onPressed: () async => await onLoginBtnPressed(accController.text,
-              pwdController.text, widget.updateHintMsg, widget.catHintMsg),
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-          child: const Text('登入'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () async => await onLoginBtnPressed(accController.text,
+        //       pwdController.text, widget.updateHintMsg, widget.catHintMsg),
+        //   style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+        //   child: const Text('登入'),
+        // ),
       ],
     );
   }

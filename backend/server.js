@@ -10,18 +10,12 @@ const BACKEND_URL = process.env.BACKEND_URL;
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
-    cors: {
-        // origin: 'http://localhost:3001'
-    }
+    cors: {}
 });
 
 const socket = require('./utils/socket.js')(io); // handle socket events
 
-app.use(cors({
-    // origin: FRONTEND_URL,
-    // methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
-    // preflightContinue: false,
-}));
+app.use(cors({}));
 app.use(express.static(__dirname + '/client'));
 app.use(bodyParser.json());
 

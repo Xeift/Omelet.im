@@ -9,7 +9,7 @@ import './../signal_protocol/safe_spk_store.dart';
 import './../signal_protocol/safe_opk_store.dart';
 import './../signal_protocol/safe_session_store.dart';
 
-Future<Uint8List> encryptMessage(
+Future<String> encryptMessage(
     IdentityKey ipkPub,
     ECPublicKey spkPub,
     Uint8List spkSig,
@@ -48,5 +48,5 @@ Future<Uint8List> encryptMessage(
   final ciphertext =
       await sessionCipher.encrypt(Uint8List.fromList(utf8.encode(msgContent)));
 
-  return ciphertext.serialize();
+  return jsonEncode(ciphertext.serialize());
 }

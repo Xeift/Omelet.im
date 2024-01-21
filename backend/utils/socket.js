@@ -22,46 +22,54 @@ module.exports = function(io) {
                 userIdToRoomId[uid] = socket.id;
                 console.log(`room content👉 ${JSON.stringify(userIdToRoomId)}`);
                 console.log('--------------------------------\n');
-
-                socket.on('clientSendMsgToServer', async(msg) => {
-                    let decodedToken = await jwt.verifyJWT(msg['token']);
-                    let senderUid = decodedToken['_uid'];
-                    let receiverUid = msg['receiver'];
-        
-                    let newMsg = {
-                        'timestamp': msg['timestamp'],
-                        'type': msg['type'],
-                        'receiver': receiverUid,
-                        'sender': senderUid,
-                        'content': msg['content']
-                    };
-                    console.log('--------------------------------');
-                    console.log(receiverUid);
-                    console.log(userIdToRoomId);
-                    console.log('--------------------------------');
-        
-                    if (receiverUid in userIdToRoomId) {
-                        console.log('online');
-                        socket
-                            .to(userIdToRoomId[receiverUid])
-                            .emit('serverForwardMsgToClient', newMsg);
-                        console.log('done emit serverForwardMsgToClient');
-                    }
-                    else {
-                        console.log('offline');
-                        await msgController.storeUnreadMsg(
-                            msg['timestamp'],
-                            msg['type'],
-                            receiverUid,
-                            senderUid,
-                            msg['content']
-                        );
-                    }
-                });
             }
-
         });
 
+        socket.on('clientSendMsgToServer', async(msg) => {
+            let senderUid = Object.entries(userIdToRoomId).find(([uid, socketId]) => socketId === socket.id);
+            if (senderUid) {
+                senderUid = senderUid[0];
+                let receiverUid = msg['receiver'];
+
+                let newMsg = {
+                    'timestamp': msg['timestamp'],
+                    'receiver': receiverUid,
+                    'sender': senderUid,
+                    'type': msg['type'],
+                    'content': msg['content']
+                };
+                console.log('--------------------------------');
+                console.log('clientSendMsgToServer');
+                console.log('已連線過');
+                console.log(`newMsg👉 ${JSON.stringify(newMsg)}`);
+                console.log('--------------------------------\n');
+    
+                if (receiverUid in userIdToRoomId) {
+                    console.log('--------------------------------');
+                    console.log('receiver online');
+                    console.log('--------------------------------\n');
+                    socket
+                        .to(userIdToRoomId[receiverUid])
+                        .emit('serverForwardMsgToClient', newMsg);
+                    console.log('done emit serverForwardMsgToClient');
+                }
+                else {
+                    console.log('--------------------------------');
+                    console.log('receiver offline');
+                    console.log('--------------------------------\n');
+                    await msgController.storeUnreadMsg(
+                        msg['timestamp'],
+                        msg['type'],
+                        receiverUid,
+                        senderUid,
+                        msg['content']
+                    );
+                }
+            }
+            else {
+                console.log('第一次連線 未進行 clientReturnJwtToServer');
+            }
+        });
 
 
         socket.on('disconnect', () => {

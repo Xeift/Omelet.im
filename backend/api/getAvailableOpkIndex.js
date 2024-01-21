@@ -7,7 +7,6 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let uid = req.query.uid;
         let preKeyIndex = await authController.getAvailableOpkIndex(uid);
-        console.log(preKeyIndex);
         res.status(200).json({
             message: '成功取得 Pre Key Index',
             data: preKeyIndex,

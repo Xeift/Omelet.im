@@ -53,7 +53,14 @@ function testMsg() {
     msgController.storeUnreadMsg(1698143252, 'text', 'aaaaaaaaaaaa', '504627890123456789', '那你可以試試看原神，我覺得很有趣')
         .catch(err => console.log(err));
 }
+function testMsg2() {
+    const msgController = require('./controller/msgController.js');
+    msgController.storeUnreadMsg(1698143242, 'text', '491437500754038784', '504619688634880000', '原神啟動', true, 1, 1)
+        .catch(err => console.log(err));
+    console.log('done');
+}
 // testMsg();
+// testMsg2();
 
 
 

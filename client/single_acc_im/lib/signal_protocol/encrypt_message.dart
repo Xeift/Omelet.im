@@ -14,8 +14,8 @@ Future<String> encryptMessage(
     ECPublicKey spkPub,
     Uint8List spkSig,
     ECPublicKey opkPub,
-    int opkId,
     int spkId,
+    int opkId,
     String receiverId,
     String msgContent,
     Function updateHintMsg) async {

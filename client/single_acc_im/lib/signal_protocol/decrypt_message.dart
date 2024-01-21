@@ -13,14 +13,7 @@ import 'safe_signal_protocol_store.dart';
 
 Future<String> decryptMsg(
     int remoteUid, String ciphertext, int spkId, int opkId) async {
-  // final ipkStore = SafeIdentityKeyStore();
-  // final spkStore = SafeSpkStore();
-  // final opkStore = SafeOpkStore();
-
-  // // 模擬 Bob 的 Keys
-  // final selfIpk = await ipkStore.getIdentityKeyPair();
-  // final selfSpk = await spkStore.loadSignedPreKey(spkId);
-  // final selfOpks = await opkStore.loadPreKey(opkId);
+  print('spk🎁  $spkId');
 
   // 模擬建立 Bob 的 SessionCipher，用於解密訊息
   final signalProtocolStore = SafeSignalProtocolStore();
@@ -32,8 +25,9 @@ Future<String> decryptMsg(
   // 解密訊息
   // if (ciphertext.getType() == CiphertextMessage.prekeyType) {
   await selfSessionCipher.decryptWithCallback(
-      Uint8List.fromList(jsonDecode(ciphertext).cast<int>().toList())
-          as PreKeySignalMessage, (plaintext) {
+      PreKeySignalMessage(
+          Uint8List.fromList(jsonDecode(ciphertext).cast<int>().toList())),
+      (plaintext) {
     print(utf8.decode(plaintext));
   });
   // }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -6,6 +8,9 @@ import 'utils/server_uri.dart';
 import 'utils/jwt.dart';
 import 'utils/login.dart';
 import 'signal_protocol/generate_and_store_key.dart';
+import 'api/get/get_unread_msg_api.dart';
+import 'message/safe_msg_store.dart';
+import 'signal_protocol/decrypt_message.dart';
 
 // import 'widgets/login_widget.dart';
 import 'widgets/reset_widget.dart';
@@ -49,6 +54,27 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             'clientReturnJwtToServer',
             await storage.read(key: 'token'));
         print('backend connected');
+        final res = await getUnreadMsgAPI();
+        final unreadMsgs = jsonDecode(res.body)['data'];
+
+        // store unread msg
+        for (var unreadMsg in unreadMsgs) {
+          final safeMsgStore = SafeMsgStore();
+          final content = unreadMsg['content'];
+          print(content);
+          print(content.runtimeType);
+          print(unreadMsg);
+          print(await decryptMsg(int.parse(unreadMsg['sender']),
+              unreadMsg['content'], unreadMsg['spkId'], unreadMsg['opkId']));
+          print('\n');
+          await safeMsgStore.writeMsg(unreadMsg['sender'], {
+            'timestamp': unreadMsg['timestamp'],
+            'type': unreadMsg['type'],
+            'receiver': 'self',
+            'sender': unreadMsg['sender'],
+            'content': unreadMsg['content']
+          });
+        }
       });
 
       socket.on('jwtExpired', (data) async {

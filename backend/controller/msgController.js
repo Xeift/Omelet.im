@@ -13,13 +13,24 @@ async function createNewRoom(name, type) {
     });
 }
 
-async function storeUnreadMsg(timestamp, type, receiver, sender, content) {
+async function storeUnreadMsg(
+    timestamp, 
+    type, 
+    receiver, 
+    sender, 
+    content, 
+    isPreKeySignaleMessage,
+    spkId,
+    opkId) {
     await MsgModel.create({
         timestamp: timestamp,
         type: type,
         receiver: receiver,
         sender: sender,
-        content: content
+        content: content,
+        isPreKeySignaleMessage: isPreKeySignaleMessage,
+        spkId: spkId,
+        opkId: opkId
     });
 }
 

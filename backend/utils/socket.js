@@ -36,7 +36,10 @@ module.exports = function(io) {
                     'receiver': receiverUid,
                     'sender': senderUid,
                     'type': msg['type'],
-                    'content': msg['content']
+                    'content': msg['content'],
+                    'isPreKeySignaleMessage': msg['isPreKeySignaleMessage'],
+                    'spkId': msg['spkId'],
+                    'opkId': msg['opkId']
                 };
                 console.log('--------------------------------');
                 console.log('clientSendMsgToServer');
@@ -62,7 +65,10 @@ module.exports = function(io) {
                         msg['type'],
                         receiverUid,
                         senderUid,
-                        msg['content']
+                        msg['content'],
+                        msg['isPreKeySignaleMessage'],
+                        msg['spkId'],
+                        msg['opkId']
                     );
                 }
             }

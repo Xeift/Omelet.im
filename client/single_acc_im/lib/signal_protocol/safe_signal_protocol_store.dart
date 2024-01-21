@@ -87,9 +87,16 @@ class SafeSignalProtocolStore implements SignalProtocolStore {
     await safeSessionStore.deleteAllSessions(name);
   }
 
+  // @override
+  // Future<SignedPreKeyRecord> loadSignedPreKey(int signedPreKeyId) async =>
+  //     safeSpkStore.loadSignedPreKey(signedPreKeyId);
+
   @override
-  Future<SignedPreKeyRecord> loadSignedPreKey(int signedPreKeyId) async =>
-      safeSpkStore.loadSignedPreKey(signedPreKeyId);
+  Future<SignedPreKeyRecord> loadSignedPreKey(int signedPreKeyId) async {
+    print('🧧 $signedPreKeyId');
+
+    return (safeSpkStore.loadSignedPreKey(signedPreKeyId));
+  }
 
   @override
   Future<List<SignedPreKeyRecord>> loadSignedPreKeys() async =>

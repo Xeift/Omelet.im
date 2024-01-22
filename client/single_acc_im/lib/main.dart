@@ -64,14 +64,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       });
 
       // receive msg
-      socket.on('serverForwardMsgToClient', (msg) {
+      socket.on('serverForwardMsgToClient', (msg) async {
         print('test client已接收 $msg');
-
-        catHintMsg('${msg['sender']}: ${msg['content']}');
-
         // store received msg
         final safeMsgStore = SafeMsgStore();
-        safeMsgStore.writeMsg(msg['sender'], msg);
+        await safeMsgStore.storeReceivedMsg(msg);
       });
 
       socket.on('jwtExpired', (data) async {

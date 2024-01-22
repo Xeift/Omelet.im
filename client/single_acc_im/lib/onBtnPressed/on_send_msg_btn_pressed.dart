@@ -2,7 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './../main.dart' show socket;
 import './../message/safe_msg_store.dart';
-import './../signal_protocol/encrypt_message.dart';
+import '../signal_protocol/encrypt_msg.dart';
 import './../signal_protocol/download_pre_key_bundle.dart';
 
 Future<void> onSendMsgBtnPressed(
@@ -16,7 +16,7 @@ Future<void> onSendMsgBtnPressed(
       await downloadPreKeyBundle(remoteUid);
 
   // 加密訊息
-  final cihertext = await encryptMessage(ipkPub, spkPub, spkSig, opkPub, spkId,
+  final cihertext = await encryptMsg(ipkPub, spkPub, spkSig, opkPub, spkId,
       opkId, remoteUid, msgContent, updateHintMsg);
 
   // 發送訊息

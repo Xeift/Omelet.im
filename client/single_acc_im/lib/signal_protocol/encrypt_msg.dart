@@ -8,7 +8,7 @@ import './../signal_protocol/safe_opk_store.dart';
 import './../signal_protocol/safe_session_store.dart';
 import './../signal_protocol/safe_identity_store.dart';
 
-Future<String> encryptMessage(
+Future<String> encryptMsg(
     IdentityKey ipkPub,
     ECPublicKey spkPub,
     Uint8List spkSig,

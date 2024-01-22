@@ -8,7 +8,7 @@ import './../signal_protocol/safe_identity_store.dart';
 import './../signal_protocol/safe_spk_store.dart';
 import './../signal_protocol/safe_opk_store.dart';
 import './../signal_protocol/safe_session_store.dart';
-import './../signal_protocol/decrypt_message.dart';
+import '../signal_protocol/decrypt_msg.dart';
 
 Future<void> onDecryptMsg(
     String receiverId, String msgContent, Function updateHintMsg) async {

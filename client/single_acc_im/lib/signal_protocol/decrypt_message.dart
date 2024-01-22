@@ -2,20 +2,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
-import 'safe_identity_store.dart';
-import 'safe_spk_store.dart';
-import 'safe_opk_store.dart';
-import 'safe_session_store.dart';
 import 'safe_signal_protocol_store.dart';
 
 Future<String> decryptMsg(
     int remoteUid, String ciphertext, int spkId, int opkId) async {
-  print('spk🎁  $spkId');
-
-  // 模擬建立 Bob 的 SessionCipher，用於解密訊息
+  // 建立 SessionCipher，用於解密訊息
   final signalProtocolStore = SafeSignalProtocolStore();
   final remoteAddress =
       SignalProtocolAddress(remoteUid.toString(), 1); // Signal protocol 地址

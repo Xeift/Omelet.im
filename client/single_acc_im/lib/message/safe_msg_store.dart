@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import './../signal_protocol/decrypt_msg.dart';
+
 class SafeMsgStore {
   final storage = const FlutterSecureStorage();
 
@@ -43,5 +45,26 @@ class SafeMsgStore {
       messages.add(allData[key]!);
     }
     return messages;
+  }
+
+  Future<void> sortAndstoreUnreadMsg(List<dynamic> unreadMsgs) async {
+    unreadMsgs.sort((a, b) {
+      int timestampA = int.parse(a['timestamp']);
+      int timestampB = int.parse(b['timestamp']);
+      return timestampA.compareTo(timestampB);
+    });
+
+    for (var unreadMsg in unreadMsgs) {
+      print(await decryptMsg(int.parse(unreadMsg['sender']),
+          unreadMsg['content'], unreadMsg['spkId'], unreadMsg['opkId']));
+      print('\n');
+      await writeMsg(unreadMsg['sender'], {
+        'timestamp': unreadMsg['timestamp'],
+        'type': unreadMsg['type'],
+        'receiver': 'self',
+        'sender': unreadMsg['sender'],
+        'content': unreadMsg['content']
+      });
+    }
   }
 }

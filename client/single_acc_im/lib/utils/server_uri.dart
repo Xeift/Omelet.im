@@ -1,4 +1,4 @@
-// const serverUri =
-//     'https://f4cf-2001-b011-c009-55c1-8983-3706-aa99-466f.ngrok-free.app';
+const serverUri =
+    'https://6fa5-2001-b011-c009-5b99-fc22-d141-f35f-47c2.ngrok-free.app';
 
-const serverUri = 'http://localhost:3000';
+// const serverUri = 'http://localhost:3000';

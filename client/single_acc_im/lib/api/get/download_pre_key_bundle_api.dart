@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../utils/server_uri.dart';
+import './../../utils/server_uri.dart';
 
 Future<http.Response> downloadPreKeyBundleAPI(
     String remoteUid, String remoteOpkId) async {

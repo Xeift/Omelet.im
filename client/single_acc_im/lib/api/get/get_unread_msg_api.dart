@@ -1,5 +1,5 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './../../utils/server_uri.dart';
 
@@ -12,5 +12,6 @@ Future<http.Response> getUnreadMsgAPI() async {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token'
       });
+
   return res;
 }

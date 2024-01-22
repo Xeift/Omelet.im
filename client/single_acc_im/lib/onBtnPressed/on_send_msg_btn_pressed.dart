@@ -6,12 +6,12 @@ import '../main.dart' show socket;
 import './../message/safe_msg_store.dart';
 
 Future<void> onSendMsgBtnPressed(
-    String receiverId, String msgContent, Function updateHintMsg) async {
+    String remoteUid, String msgContent, Function updateHintMsg) async {
   final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
-      await downloadPreKeyBundle(receiverId);
+      await downloadPreKeyBundle(remoteUid);
 
   final cihertext = await encryptMessage(ipkPub, spkPub, spkSig, opkPub, spkId,
-      opkId, receiverId, msgContent, updateHintMsg);
+      opkId, remoteUid, msgContent, updateHintMsg);
 
   print('加密訊息：$cihertext');
 
@@ -25,7 +25,7 @@ Future<void> onSendMsgBtnPressed(
     'timestamp': currentTimestamp,
     'type': 'text',
     'sender': selfUid,
-    'receiver': receiverId,
+    'receiver': remoteUid,
     'content': cihertext,
     'isPreKeySignaleMessage': true,
     'spkId': spkId,
@@ -34,11 +34,11 @@ Future<void> onSendMsgBtnPressed(
 
   // store msg sent
   final safeMsgStore = SafeMsgStore();
-  safeMsgStore.writeMsg(receiverId, {
+  safeMsgStore.writeMsg(remoteUid, {
     'timestamp': currentTimestamp,
     'type': 'text',
     'sender': selfUid,
-    'receiver': receiverId,
+    'receiver': remoteUid,
     'content': msgContent,
     'isPreKeySignaleMessage': true
   });

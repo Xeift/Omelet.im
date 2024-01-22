@@ -63,6 +63,17 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         await safeMsgStore.sortAndstoreUnreadMsg(unreadMsgs);
       });
 
+      // receive msg
+      socket.on('serverForwardMsgToClient', (msg) {
+        print('test client已接收 $msg');
+
+        catHintMsg('${msg['sender']}: ${msg['content']}');
+
+        // store received msg
+        final safeMsgStore = SafeMsgStore();
+        safeMsgStore.writeMsg(msg['sender'], msg);
+      });
+
       socket.on('jwtExpired', (data) async {
         // 後端檢查 JWT 過期
         updateHintMsg('登入階段已過期！重新登入');

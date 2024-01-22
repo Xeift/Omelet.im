@@ -69,4 +69,17 @@ class SafeMsgStore {
       });
     }
   }
+
+  Future<void> storeReceivedMsg(Map<String, dynamic> receivedMsg) async {
+    final decryptedMsg = await decryptMsg(int.parse(receivedMsg['sender']),
+        receivedMsg['content'], receivedMsg['spkId'], receivedMsg['opkId']);
+    print('$decryptedMsg\n');
+    await writeMsg(receivedMsg['sender'], {
+      'timestamp': receivedMsg['timestamp'],
+      'type': receivedMsg['type'],
+      'receiver': 'self',
+      'sender': receivedMsg['sender'],
+      'content': decryptedMsg
+    });
+  }
 }

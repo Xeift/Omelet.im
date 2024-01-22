@@ -55,15 +55,15 @@ class SafeMsgStore {
     });
 
     for (var unreadMsg in unreadMsgs) {
-      print(await decryptMsg(int.parse(unreadMsg['sender']),
-          unreadMsg['content'], unreadMsg['spkId'], unreadMsg['opkId']));
-      print('\n');
+      final decryptedMsg = await decryptMsg(int.parse(unreadMsg['sender']),
+          unreadMsg['content'], unreadMsg['spkId'], unreadMsg['opkId']);
+      print('$decryptedMsg\n');
       await writeMsg(unreadMsg['sender'], {
         'timestamp': unreadMsg['timestamp'],
         'type': unreadMsg['type'],
         'receiver': 'self',
         'sender': unreadMsg['sender'],
-        'content': unreadMsg['content']
+        'content': decryptedMsg
       });
     }
   }

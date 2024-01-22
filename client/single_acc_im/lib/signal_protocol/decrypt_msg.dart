@@ -16,12 +16,11 @@ Future<String> decryptMsg(
 
   // 解密訊息
   // if (ciphertext.getType() == CiphertextMessage.prekeyType) {
-  await selfSessionCipher.decryptWithCallback(
-      PreKeySignalMessage(
-          Uint8List.fromList(jsonDecode(ciphertext).cast<int>().toList())),
-      (plaintext) {
-    print(utf8.decode(plaintext));
-  });
   // }
-  return 'a';
+
+  final plainText = utf8.decode(await selfSessionCipher.decrypt(
+      PreKeySignalMessage(
+          Uint8List.fromList(jsonDecode(ciphertext).cast<int>().toList()))));
+
+  return plainText;
 }

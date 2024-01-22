@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../utils/server_uri.dart';
 
-Future<http.Response> getAvailableOpkIndex(String uid) async {
+Future<http.Response> getAvailableOpkIndexApi(String uid) async {
   const storage = FlutterSecureStorage();
   final token = await storage.read(key: 'token');
 

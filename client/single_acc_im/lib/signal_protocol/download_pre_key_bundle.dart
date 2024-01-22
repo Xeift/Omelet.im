@@ -5,11 +5,11 @@ import 'dart:typed_data';
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import '../api/get/download_pre_key_bundle_api.dart';
-import '../api/get/get_available_opk_index.dart';
+import '../api/get/get_available_opk_index_api.dart';
 
 Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
     downloadPreKeyBundle(String receiverId) async {
-  final opkIndexRes = await getAvailableOpkIndex(receiverId);
+  final opkIndexRes = await getAvailableOpkIndexApi(receiverId);
   print('opkindexres   ${opkIndexRes.body}');
   final opkId = randomChoice(jsonDecode(opkIndexRes.body)['data']);
 

@@ -1,17 +1,13 @@
 import 'dart:convert';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'safe_identity_store.dart';
 import 'safe_spk_store.dart';
 import 'safe_opk_store.dart';
-import '../api/post/upload_pre_key_bundle_api.dart';
+import 'safe_identity_store.dart';
+import './../api/post/upload_pre_key_bundle_api.dart';
 
 Future<void> generateAndStoreKey() async {
-  // const storage = FlutterSecureStorage();
-
-  // final selfUid = int.parse((await storage.read(key: 'uid')).toString());
   final registrationId = generateRegistrationId(false);
   final selfIpk = generateIdentityKeyPair(); // 產生 IPK（長期金鑰對，平常不會動）
   final selfSpk = generateSignedPreKey(selfIpk, 0); // 產生 SPK（中期金鑰對，每 7 天更新一次）
@@ -28,19 +24,20 @@ Future<void> generateAndStoreKey() async {
 
   const deviceId = '1';
 
-  final res = (await uploadPreKeyBundleAPI(
-          deviceId,
-          jsonEncode(selfIpk.getPublicKey().serialize()),
-          jsonEncode({
-            selfSpk.id.toString():
-                jsonEncode(selfSpk.getKeyPair().publicKey.serialize())
-          }),
-          jsonEncode({selfSpk.id.toString(): jsonEncode(selfSpk.signature)}),
-          jsonEncode({
-            for (var selfOpk in selfOpks)
-              selfOpk.id.toString():
-                  jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
-          })))
-      .body;
-  print(res);
+  final res = await uploadPreKeyBundleAPI(
+      deviceId,
+      jsonEncode(selfIpk.getPublicKey().serialize()),
+      jsonEncode({
+        selfSpk.id.toString():
+            jsonEncode(selfSpk.getKeyPair().publicKey.serialize())
+      }),
+      jsonEncode({selfSpk.id.toString(): jsonEncode(selfSpk.signature)}),
+      jsonEncode({
+        for (var selfOpk in selfOpks)
+          selfOpk.id.toString():
+              jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
+      }));
+  print('--------------------------------');
+  print(res.body);
+  print('--------------------------------');
 }

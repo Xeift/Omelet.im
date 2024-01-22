@@ -10,7 +10,6 @@ import './../api/get/get_available_opk_index_api.dart';
 Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
     downloadPreKeyBundle(String remoteUid) async {
   final opkIndexRes = await getAvailableOpkIndexApi(remoteUid);
-  print('opkindexres   ${opkIndexRes.body}');
   final opkId = randomChoice(jsonDecode(opkIndexRes.body)['data']);
 
   final res = await downloadPreKeyBundleAPI(remoteUid, opkId);

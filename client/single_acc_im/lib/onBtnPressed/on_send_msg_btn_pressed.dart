@@ -21,7 +21,6 @@ Future<void> onSendMsgBtnPressed(
 
   // 發送訊息
   socket.emit('clientSendMsgToServer', {
-    'timestamp': currentTimestamp,
     'type': 'text',
     'sender': selfUid,
     'receiver': remoteUid,

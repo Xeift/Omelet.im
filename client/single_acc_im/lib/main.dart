@@ -89,6 +89,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       print('jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
       await login('q', 'a', updateHintMsg, catHintMsg);
       await generateAndStoreKey();
+      await initSocket();
     }
   }
 

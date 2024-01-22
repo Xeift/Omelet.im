@@ -8,12 +8,13 @@ import './../../utils/server_uri.dart';
 Future<http.Response> uploadPreKeyBundleAPI(
     deviceId, ipkPub, spkPub, spkSig, opkPub) async {
   const storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
 
   final res =
       await http.post(Uri.parse('$serverUri/api/v1/upload-pre-key-bundle'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer ${await storage.read(key: 'token')}'
+            'Authorization': 'Bearer $token}'
           },
           body: jsonEncode(<String, String>{
             'deviceId': deviceId,
@@ -22,5 +23,6 @@ Future<http.Response> uploadPreKeyBundleAPI(
             'spkSig': spkSig,
             'opkPub': opkPub,
           }));
+
   return res;
 }

@@ -18,19 +18,13 @@ async function storeUnreadMsg(
     type, 
     receiver, 
     sender, 
-    content, 
-    isPreKeySignaleMessage,
-    spkId,
-    opkId) {
+    content) {
     await MsgModel.create({
         timestamp: timestamp,
         type: type,
         receiver: receiver,
         sender: sender,
         content: content,
-        isPreKeySignaleMessage: isPreKeySignaleMessage,
-        spkId: spkId,
-        opkId: opkId
     });
 }
 

@@ -33,7 +33,11 @@ module.exports = function(io) {
                 let receiverUid = msg['receiver'];
                 let timestamp = Date.now().toString();
 
-                await authController.deleteOpkPub(receiverUid, msg['opkId']);
+                if (msg['opkId']) {
+                    console.log(`delete opk id: ${msg['opkId']}!!!`);
+                    await authController.deleteOpkPub(receiverUid, msg['opkId']);
+                }
+                
 
                 let newMsg = {
                     'timestamp': timestamp,
@@ -41,9 +45,6 @@ module.exports = function(io) {
                     'sender': senderUid,
                     'type': msg['type'],
                     'content': msg['content'],
-                    'isPreKeySignaleMessage': msg['isPreKeySignaleMessage'],
-                    'spkId': msg['spkId'],
-                    'opkId': msg['opkId']
                 };
                 console.log('--------------------------------');
                 console.log('clientSendMsgToServer');
@@ -69,10 +70,7 @@ module.exports = function(io) {
                         msg['type'],
                         receiverUid,
                         senderUid,
-                        msg['content'],
-                        msg['isPreKeySignaleMessage'],
-                        msg['spkId'],
-                        msg['opkId']
+                        msg['content']
                     );
                 }
             }

@@ -5,8 +5,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import 'safe_signal_protocol_store.dart';
 
-Future<String> decryptMsg(
-    int remoteUid, String ciphertext, int spkId, int opkId) async {
+Future<String> decryptMsg(int remoteUid, String ciphertext) async {
   // 建立 SessionCipher，用於解密訊息
   final signalProtocolStore = SafeSignalProtocolStore();
   final remoteAddress =

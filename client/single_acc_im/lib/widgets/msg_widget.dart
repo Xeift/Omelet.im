@@ -1,8 +1,8 @@
 // required lib
 import 'package:flutter/material.dart';
-
 // btn
-import '../onBtnPressed/on_send_msg_btn_pressed.dart';
+import './../onBtnPressed/on_send_msg_btn_pressed.dart';
+import './../onBtnPressed/on_readall_msg_btn_pressed.dart';
 
 class MsgWidget extends StatefulWidget {
   const MsgWidget(this.updateHintMsg, {super.key});
@@ -35,6 +35,11 @@ class MsgWidgetState extends State<MsgWidget> {
               widget.updateHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan),
           child: const Text('發送訊息'),
+        ),
+        ElevatedButton(
+          onPressed: () async => await onTestBtn1Pressed(widget.updateHintMsg),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+          child: const Text('萬用測試鈕1'),
         ),
       ],
     );

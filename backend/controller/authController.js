@@ -74,6 +74,15 @@ async function getAvailableOpkIndex(uid) {
     )).opkPub);
 }
 
+async function deleteOpkPub(uid, opkId) {
+    let result = await UserModel.updateOne(
+        { uid: uid },
+        { $unset: { [`opkPub.${opkId}`]: true } }
+    );
+    return result;
+}
+
+
 module.exports = {
     isPasswordMatch,
     isUserIdExsists,
@@ -82,5 +91,6 @@ module.exports = {
     updatePasswordByEmail,
     uploadPreKeyBundle,
     downloadPreKeyBundle,
-    getAvailableOpkIndex
+    getAvailableOpkIndex,
+    deleteOpkPub
 };

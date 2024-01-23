@@ -1,6 +1,7 @@
 const generateId = require('./snowflakeId');
 const jwt = require('./jwt');
 const msgController = require('./../controller/msgController');
+const authController = require('./../controller/authController');
 
 let userIdToRoomId = {};
 
@@ -30,9 +31,12 @@ module.exports = function(io) {
             if (senderUid) {
                 senderUid = senderUid[0];
                 let receiverUid = msg['receiver'];
+                let timestamp = Date.now().toString();
+
+                await authController.deleteOpkPub(receiverUid, msg['opkId']);
 
                 let newMsg = {
-                    'timestamp': msg['timestamp'],
+                    'timestamp': timestamp,
                     'receiver': receiverUid,
                     'sender': senderUid,
                     'type': msg['type'],
@@ -61,7 +65,7 @@ module.exports = function(io) {
                     console.log('receiver offline');
                     console.log('--------------------------------\n');
                     await msgController.storeUnreadMsg(
-                        msg['timestamp'],
+                        timestamp,
                         msg['type'],
                         receiverUid,
                         senderUid,

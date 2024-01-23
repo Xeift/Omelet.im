@@ -63,7 +63,7 @@ class SafeMsgStore {
       await writeMsg(unreadMsg['sender'], {
         'timestamp': unreadMsg['timestamp'],
         'type': unreadMsg['type'],
-        'receiver': 'self',
+        'receiver': unreadMsg['receiver'],
         'sender': unreadMsg['sender'],
         'content': decryptedMsg
       });
@@ -77,7 +77,7 @@ class SafeMsgStore {
     await writeMsg(receivedMsg['sender'], {
       'timestamp': receivedMsg['timestamp'],
       'type': receivedMsg['type'],
-      'receiver': 'self',
+      'receiver': receivedMsg['receiver'],
       'sender': receivedMsg['sender'],
       'content': decryptedMsg
     });

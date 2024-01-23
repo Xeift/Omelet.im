@@ -12,48 +12,41 @@ import 'package:libsignal_protocol_dart/src/state/session_store.dart';
 class SafeSessionStore implements SessionStore {
   final storage = const FlutterSecureStorage();
 
-  SafeSessionStore();
-
-  HashMap<SignalProtocolAddress, String> sessions =
-      HashMap<SignalProtocolAddress, String>();
-
   @override
-  Future<bool> containsSession(SignalProtocolAddress address) async =>
-      sessions.containsKey(address);
+  Future<bool> containsSession(SignalProtocolAddress address) async {
+    return await storage.read(key: address.toString()) != null;
+  }
 
   @override
   Future<void> deleteAllSessions(String name) async {
-    for (final k in sessions.keys.toList()) {
-      if (k.getName() == name) {
-        sessions.remove(k);
-      }
-    }
+    final allKeys = await storage.readAll();
+    allKeys.keys
+        .where((k) => k.startsWith(name))
+        .forEach((k) async => await storage.delete(key: k));
   }
 
   @override
   Future<void> deleteSession(SignalProtocolAddress address) async {
-    sessions.remove(address);
+    await storage.delete(key: address.toString());
   }
 
   @override
   Future<List<int>> getSubDeviceSessions(String name) async {
     final deviceIds = <int>[];
-
-    for (final key in sessions.keys) {
-      if (key.getName() == name && key.getDeviceId() != 1) {
-        deviceIds.add(key.getDeviceId());
-      }
-    }
-
+    final allKeys = await storage.readAll();
+    allKeys.keys
+        .where((k) => k.startsWith(name) && !k.endsWith(':1'))
+        .forEach((k) => deviceIds.add(int.parse(k.split(':')[1])));
     return deviceIds;
   }
 
   @override
   Future<SessionRecord> loadSession(SignalProtocolAddress address) async {
     try {
-      if (await containsSession(address)) {
+      final sessionData = await storage.read(key: address.toString());
+      if (sessionData != null) {
         return SessionRecord.fromSerialized(
-            Uint8List.fromList(jsonDecode(sessions[address]!).cast<int>()));
+            Uint8List.fromList(jsonDecode(sessionData).cast<int>().toList()));
       } else {
         return SessionRecord();
       }
@@ -65,7 +58,7 @@ class SafeSessionStore implements SessionStore {
   @override
   Future<void> storeSession(
       SignalProtocolAddress address, SessionRecord record) async {
-    sessions[address] = jsonEncode(record.serialize().toList());
-    await storage.write(key: address.toString(), value: sessions[address]);
+    await storage.write(
+        key: address.toString(), value: jsonEncode(record.serialize()));
   }
 }

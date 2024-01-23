@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // btn
 import './../onBtnPressed/on_send_msg_btn_pressed.dart';
 import './../onBtnPressed/on_readall_msg_btn_pressed.dart';
+import './../onBtnPressed/on_test_btn2_pressed.dart';
 
 class MsgWidget extends StatefulWidget {
   const MsgWidget(this.updateHintMsg, {super.key});
@@ -40,6 +41,11 @@ class MsgWidgetState extends State<MsgWidget> {
           onPressed: () async => await onTestBtn1Pressed(widget.updateHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
           child: const Text('萬用測試鈕1'),
+        ),
+        ElevatedButton(
+          onPressed: () async => await onTestBtn2Pressed(widget.updateHintMsg),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+          child: const Text('萬用測試鈕2'),
         ),
       ],
     );

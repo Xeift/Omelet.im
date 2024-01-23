@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import './../main.dart' show socket;
 import './../message/safe_msg_store.dart';
 import '../signal_protocol/encrypt_msg.dart';
-import './../signal_protocol/download_pre_key_bundle.dart';
 
 Future<void> onSendMsgBtnPressed(
     String remoteUid, String msgContent, Function updateHintMsg) async {
@@ -11,24 +10,34 @@ Future<void> onSendMsgBtnPressed(
   final selfUid = await storage.read(key: 'uid');
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
-  // 準備對方的 Pre Key Bundle
-  final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
-      await downloadPreKeyBundle(remoteUid);
-
   // 加密訊息
-  final cihertext = await encryptMsg(ipkPub, spkPub, spkSig, opkPub, spkId,
-      opkId, remoteUid, msgContent, updateHintMsg);
+  final (cihertext, spkId, opkId) =
+      await encryptMsg(remoteUid, msgContent, updateHintMsg);
 
-  // 發送訊息
-  socket.emit('clientSendMsgToServer', {
-    'type': 'text',
-    'sender': selfUid,
-    'receiver': remoteUid,
-    'content': cihertext,
-    'isPreKeySignaleMessage': true,
-    'spkId': spkId,
-    'opkId': opkId
-  });
+  // 第二次發送訊息
+  if (spkId == null) {
+    socket.emit('clientSendMsgToServer', {
+      'type': 'text',
+      'sender': selfUid,
+      'receiver': remoteUid,
+      'content': cihertext,
+      'spkId': spkId,
+      'opkId': opkId
+    });
+  }
+
+  // 第一次發送訊息
+  else {
+    socket.emit('clientSendMsgToServer', {
+      'type': 'text',
+      'sender': selfUid,
+      'receiver': remoteUid,
+      'content': cihertext,
+      'isPreKeySignaleMessage': true,
+      'spkId': spkId,
+      'opkId': opkId
+    });
+  }
 
   // 儲存發送的訊息
   final safeMsgStore = SafeMsgStore();
@@ -38,6 +47,5 @@ Future<void> onSendMsgBtnPressed(
     'sender': selfUid,
     'receiver': remoteUid,
     'content': msgContent,
-    'isPreKeySignaleMessage': true
   });
 }

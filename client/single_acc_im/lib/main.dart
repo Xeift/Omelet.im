@@ -64,7 +64,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
 
       // receive msg
       socket.on('serverForwardMsgToClient', (msg) async {
-        print('test client已接收 $msg');
+        print('client已接收\n$msg');
         // store received msg
         final safeMsgStore = SafeMsgStore();
         await safeMsgStore.storeReceivedMsg(msg);

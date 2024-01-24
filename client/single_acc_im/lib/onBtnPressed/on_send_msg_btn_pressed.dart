@@ -16,24 +16,23 @@ Future<void> onSendMsgBtnPressed(
 
   // 第二次發送訊息
   if (spkId == null) {
+    print('two');
     socket.emit('clientSendMsgToServer', {
       'type': 'text',
       'sender': selfUid,
       'receiver': remoteUid,
-      'content': cihertext,
-      'spkId': spkId,
-      'opkId': opkId
+      'content': cihertext
     });
   }
 
   // 第一次發送訊息
   else {
+    print('one');
     socket.emit('clientSendMsgToServer', {
       'type': 'text',
       'sender': selfUid,
       'receiver': remoteUid,
       'content': cihertext,
-      'isPreKeySignaleMessage': true,
       'spkId': spkId,
       'opkId': opkId
     });

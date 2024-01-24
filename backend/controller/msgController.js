@@ -13,19 +13,10 @@ async function createNewRoom(name, type) {
     });
 }
 
-async function storeUnreadMsg(
-    timestamp, 
-    type, 
-    receiver, 
-    sender, 
-    content) {
-    await MsgModel.create({
-        timestamp: timestamp,
-        type: type,
-        receiver: receiver,
-        sender: sender,
-        content: content,
-    });
+async function storeUnreadMsg(msg) {
+    console.log('🎈');
+    console.log(msg);
+    await MsgModel.create(msg);
 }
 
 async function readUnreadMsg(receiver) {

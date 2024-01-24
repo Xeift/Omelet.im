@@ -6,6 +6,8 @@ const UnreadMsgSchema = new mongoose.Schema({
     receiver: { type: String, required: true },
     sender: { type: String, required: true },
     content: { type: String, required: true },
+    spkId: { type: Number },
+    opkId: { type: Number },
 });
 const MsgModel = mongoose.model('UnreadMsg', UnreadMsgSchema, 'unreadmsgs');
 

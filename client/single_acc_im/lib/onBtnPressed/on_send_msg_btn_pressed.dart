@@ -18,6 +18,7 @@ Future<void> onSendMsgBtnPressed(
   if (spkId == null) {
     print('two');
     socket.emit('clientSendMsgToServer', {
+      'isPreKeySignalMessage': false,
       'type': 'text',
       'sender': selfUid,
       'receiver': remoteUid,
@@ -29,6 +30,7 @@ Future<void> onSendMsgBtnPressed(
   else {
     print('one');
     socket.emit('clientSendMsgToServer', {
+      'isPreKeySignalMessage': true,
       'type': 'text',
       'sender': selfUid,
       'receiver': remoteUid,

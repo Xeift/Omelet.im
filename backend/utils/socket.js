@@ -27,7 +27,7 @@ module.exports = function(io) {
         });
 
         socket.on('clientSendMsgToServer', async(msg) => {
-            
+            console.log('--------------------------------');
             console.log(`Msg👉 ${JSON.stringify(msg)}`);
 
             let senderUid = Object.entries(userIdToRoomId).find(([uid, socketId]) => socketId === socket.id);
@@ -36,27 +36,16 @@ module.exports = function(io) {
                 let receiverUid = msg['receiver'];
                 let timestamp = Date.now().toString();
                 let newMsg;
-                console.log(typeof(msg));
-                console.log(`🎨🎨${msg['spkId']}`);
-                console.log(`🎨🎨${msg.spkId}`);
-                console.log(`🎨🎨${msg.spkId === null}`);
 
-                if (msg['spkId'] === null) { // 第二次以後發送訊息
-                    console.log('two🧨🎇');
-                    newMsg = {
-                        'timestamp': timestamp,
-                        'type': msg['type'],
-                        'sender': senderUid,
-                        'receiver': receiverUid,
-                        'content': msg['content'],
-                    };
-                }
-                else { // 第一次發送訊息
-                    console.log('one🧨🎇');
+                console.log(`isPreKeySignalMessage🎨🎨 ${msg['isPreKeySignalMessage']}`);
+
+                if (msg['isPreKeySignalMessage']) { // 第一次發送訊息
+                    console.log('🎇one');
                     console.log(`delete opk id: ${msg['opkId']}!!!`);
                     await authController.deleteOpkPub(receiverUid, msg['opkId']);
                     newMsg = {
                         'timestamp': timestamp,
+                        'isPreKeySignalMessage': true,
                         'type': msg['type'],
                         'sender': senderUid,
                         'receiver': receiverUid,
@@ -64,25 +53,31 @@ module.exports = function(io) {
                         'spkId': msg['spkId'],
                         'opkId': msg['opkId'],
                     };
+                }
+                else { // 第二次以後發送訊息
+                    console.log('🎇two');
+                    newMsg = {
+                        'timestamp': timestamp,
+                        'isPreKeySignalMessage': false,
+                        'type': msg['type'],
+                        'sender': senderUid,
+                        'receiver': receiverUid,
+                        'content': msg['content'],
+                    };
                 }        
 
-                console.log('--------------------------------');
                 console.log('clientSendMsgToServer');
                 console.log('已連線過');
                 console.log(`newMsg👉 ${JSON.stringify(newMsg)}`);
-                console.log('--------------------------------\n');
     
                 if (receiverUid in userIdToRoomId) { // 接收者在線上
-                    console.log('--------------------------------');
                     console.log('receiver online');
-                    console.log('--------------------------------\n');
                     socket
                         .to(userIdToRoomId[receiverUid])
                         .emit('serverForwardMsgToClient', newMsg);
                     console.log('done emit serverForwardMsgToClient');
                 }
                 else { // 接收者離線
-                    console.log('--------------------------------');
                     console.log('receiver offline');
                     console.log('--------------------------------\n');
                     await msgController.storeUnreadMsg(newMsg);

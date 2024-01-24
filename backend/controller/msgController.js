@@ -14,8 +14,6 @@ async function createNewRoom(name, type) {
 }
 
 async function storeUnreadMsg(msg) {
-    console.log('🎈');
-    console.log(msg);
     await MsgModel.create(msg);
 }
 

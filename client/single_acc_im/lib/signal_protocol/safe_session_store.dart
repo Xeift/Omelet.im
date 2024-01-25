@@ -1,7 +1,6 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:convert';
-import 'dart:collection';
 import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

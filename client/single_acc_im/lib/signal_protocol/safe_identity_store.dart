@@ -39,7 +39,8 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
 
   @override
   Future<int> getLocalRegistrationId() async {
-    return int.parse((await storage.read(key: 'selfUid')).toString());
+    return int.parse(
+        (await storage.read(key: 'localRegistrationId')).toString());
   }
 
   @override
@@ -75,7 +76,8 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
       IdentityKeyPair identityKeyPair, int localRegistrationId) async {
     await storage.write(
         key: 'selfIpk', value: jsonEncode(identityKeyPair.serialize()));
-    await storage.write(key: 'selfUid', value: localRegistrationId.toString());
+    await storage.write(
+        key: 'localRegistrationId', value: localRegistrationId.toString());
     return true;
   }
 }

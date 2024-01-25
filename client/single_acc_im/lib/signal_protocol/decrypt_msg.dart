@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -11,6 +13,7 @@ Future<String> decryptMsg(
   final signalProtocolStore = SafeSignalProtocolStore();
   final remoteAddress =
       SignalProtocolAddress(remoteUid.toString(), 1); // Signal protocol 地址
+
   final selfSessionCipher =
       SessionCipher.fromStore(signalProtocolStore, remoteAddress);
   final String plainText;

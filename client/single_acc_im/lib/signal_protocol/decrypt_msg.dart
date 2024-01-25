@@ -9,23 +9,25 @@ import 'safe_session_store.dart';
 import 'safe_signal_protocol_store.dart';
 
 Future<String> decryptMsg(int remoteUid, String ciphertext) async {
-  // 建立 SessionCipher，用於解密訊息
   final signalProtocolStore = SafeSignalProtocolStore();
   final remoteAddress =
       SignalProtocolAddress(remoteUid.toString(), 1); // Signal protocol 地址
 
+  // 建立 SessionCipher，用於解密訊息
   final selfSessionCipher =
       SessionCipher.fromStore(signalProtocolStore, remoteAddress);
   final String plainText;
   final sessionStore = SafeSessionStore();
+  final isPreKeySignalMessage =
+      !(await sessionStore.containsSession(remoteAddress));
 
   // 解密訊息
-  if (!(await sessionStore.containsSession(remoteAddress))) {
-    print('use pre-key-signal!!!');
+  if (isPreKeySignalMessage) {
+    print('[receive 1st]');
     plainText = utf8.decode(await selfSessionCipher.decrypt(PreKeySignalMessage(
         Uint8List.fromList(jsonDecode(ciphertext).cast<int>().toList()))));
   } else {
-    print('use normal!!!');
+    print('[receive 2nd]');
 
     final listFormatCipherText =
         Uint8List.fromList(jsonDecode(ciphertext).cast<int>().toList());

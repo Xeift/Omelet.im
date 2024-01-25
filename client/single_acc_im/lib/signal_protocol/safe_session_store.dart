@@ -1,4 +1,4 @@
-// ignore_for_file: implementation_imports
+// ignore_for_file: implementation_imports, avoid_print
 
 import 'dart:convert';
 import 'dart:typed_data';
@@ -41,21 +41,19 @@ class SafeSessionStore implements SessionStore {
 
   @override
   Future<SessionRecord> loadSession(SignalProtocolAddress address) async {
-    // try {
-    final sessionData = await storage.read(key: address.toString());
-    print(sessionData);
-    print(sessionData.runtimeType);
-    if (sessionData != null) {
-      print('gave sesssssssss');
-      return SessionRecord.fromSerialized(
-          Uint8List.fromList(jsonDecode(sessionData).cast<int>().toList()));
-    } else {
-      print('no sesssssssssssss!!!');
-      return SessionRecord();
+    try {
+      final sessionData = await storage.read(key: address.toString());
+      print(sessionData);
+      print(sessionData.runtimeType);
+      if (sessionData != null) {
+        return SessionRecord.fromSerialized(
+            Uint8List.fromList(jsonDecode(sessionData).cast<int>().toList()));
+      } else {
+        return SessionRecord();
+      }
+    } on Exception catch (e) {
+      throw AssertionError(e);
     }
-    // } on Exception catch (e) {
-    //   throw AssertionError(e);
-    // }
   }
 
   @override

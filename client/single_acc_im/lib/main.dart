@@ -13,7 +13,6 @@ import 'signal_protocol/generate_and_store_key.dart';
 import 'api/get/get_unread_msg_api.dart';
 import 'message/safe_msg_store.dart';
 
-// import 'widgets/login_widget.dart';
 import 'widgets/reset_widget.dart';
 import 'widgets/readall_widget.dart';
 import 'widgets/msg_widget.dart';
@@ -44,29 +43,31 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   Future<void> initSocket() async {
     const storage = FlutterSecureStorage();
 
+    // JWT 存在，直接連線到 Socket.io Server
     if (await isJwtExsist()) {
-      // JWT 存在，直接連線到 Socket.io Server
       socket = io.io(
           serverUri, io.OptionBuilder().setTransports(['websocket']).build());
 
       socket.onConnect((_) async {
+        // 回傳 JWT，驗證身份
         socket.emit(
-            // 回傳 JWT，驗證身份
-            'clientReturnJwtToServer',
-            await storage.read(key: 'token'));
+            'clientReturnJwtToServer', await storage.read(key: 'token'));
         print('backend connected');
         final res = await getUnreadMsgAPI();
-        final unreadMsgs = jsonDecode(res.body)['data'];
+        final List<dynamic> unreadMsgs = jsonDecode(res.body)['data'];
 
-        // store unread msg
-        final safeMsgStore = SafeMsgStore();
-        await safeMsgStore.sortAndstoreUnreadMsg(unreadMsgs);
+        // 儲存未讀訊息
+        print(unreadMsgs);
+        if (unreadMsgs.isNotEmpty) {
+          print('store🤣🤣😂😎🤩🤩🤗🙂');
+          final safeMsgStore = SafeMsgStore();
+          await safeMsgStore.sortAndstoreUnreadMsg(unreadMsgs);
+        }
       });
 
-      // receive msg
+      // 接收伺服器轉發的訊息
       socket.on('serverForwardMsgToClient', (msg) async {
         print('client已接收\n$msg');
-        // store received msg
         final safeMsgStore = SafeMsgStore();
         await safeMsgStore.storeReceivedMsg(msg);
       });

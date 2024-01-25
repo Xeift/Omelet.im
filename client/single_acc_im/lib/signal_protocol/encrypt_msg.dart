@@ -11,8 +11,8 @@ import './../signal_protocol/safe_session_store.dart';
 import './../signal_protocol/safe_identity_store.dart';
 import './../signal_protocol/download_pre_key_bundle.dart';
 
-Future<(String, int?, int?)> encryptMsg(
-    String remoteUid, String msgContent, Function updateHintMsg) async {
+Future<(String, int?, int?)> encryptMsg(String remoteUid, String msgContent,
+    bool isPreKeySignalMessage, Function updateHintMsg) async {
   final ipkStore = SafeIdentityKeyStore();
   final registrationId = await ipkStore.getLocalRegistrationId();
   final spkStore = SafeSpkStore();
@@ -23,7 +23,7 @@ Future<(String, int?, int?)> encryptMsg(
   final sessionStore = SafeSessionStore();
 
   // 第一次傳送訊息需要 sessionBuilder
-  if (!(await sessionStore.containsSession(remoteAddress))) {
+  if (isPreKeySignalMessage) {
     print('no session!');
     // 準備對方的 Pre Key Bundle （只有第一次）
     final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =

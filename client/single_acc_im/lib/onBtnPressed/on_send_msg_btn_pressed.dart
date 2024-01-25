@@ -20,12 +20,12 @@ Future<void> onSendMsgBtnPressed(
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // 加密訊息
-  final (cihertext, spkId, opkId) =
-      await encryptMsg(remoteUid, msgContent, updateHintMsg);
+  final (cihertext, spkId, opkId) = await encryptMsg(
+      remoteUid, msgContent, isPreKeySignalMessage, updateHintMsg);
 
   // 第一次發送訊息
   if (isPreKeySignalMessage) {
-    print('one');
+    print('[send 1st]');
     socket.emit('clientSendMsgToServer', {
       'isPreKeySignalMessage': true,
       'type': 'text',
@@ -35,9 +35,10 @@ Future<void> onSendMsgBtnPressed(
       'spkId': spkId,
       'opkId': opkId
     });
-  } else {
-    // 第二次發送訊息
-    print('two');
+  }
+  // 第二次發送訊息
+  else {
+    print('[send 2nd]');
     socket.emit('clientSendMsgToServer', {
       'isPreKeySignalMessage': false,
       'type': 'text',

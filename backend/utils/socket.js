@@ -45,20 +45,19 @@ module.exports = function(io) {
                     await authController.deleteOpkPub(receiverUid, msg['opkId']);
                     newMsg = {
                         'timestamp': timestamp,
-                        'isPreKeySignalMessage': true,
+                        // 'isPreKeySignalMessage': true,
                         'type': msg['type'],
                         'sender': senderUid,
                         'receiver': receiverUid,
                         'content': msg['content'],
-                        'spkId': msg['spkId'],
-                        'opkId': msg['opkId'],
+                        // 'spkId': msg['spkId'],
+                        // 'opkId': msg['opkId'],
                     };
                 }
                 else { // 第二次以後發送訊息
                     console.log('🎇two');
                     newMsg = {
                         'timestamp': timestamp,
-                        'isPreKeySignalMessage': false,
                         'type': msg['type'],
                         'sender': senderUid,
                         'receiver': receiverUid,

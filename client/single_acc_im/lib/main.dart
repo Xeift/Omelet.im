@@ -43,6 +43,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
 
   Future<void> initSocket() async {
     const storage = FlutterSecureStorage();
+
     if (await isJwtExsist()) {
       // JWT 存在，直接連線到 Socket.io Server
       socket = io.io(

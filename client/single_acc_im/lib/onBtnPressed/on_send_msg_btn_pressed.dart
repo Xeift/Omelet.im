@@ -1,14 +1,21 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import './../main.dart' show socket;
 import './../message/safe_msg_store.dart';
-import '../signal_protocol/encrypt_msg.dart';
+import './../signal_protocol/encrypt_msg.dart';
+import './../signal_protocol/safe_session_store.dart';
 
 Future<void> onSendMsgBtnPressed(
     String remoteUid, String msgContent, Function updateHintMsg) async {
   const storage = FlutterSecureStorage();
+  final sessionStore = SafeSessionStore();
+  final remoteAddress = SignalProtocolAddress(remoteUid, 1);
+  final isPreKeySignalMessage =
+      !(await sessionStore.containsSession(remoteAddress));
+
   final selfUid = await storage.read(key: 'uid');
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -16,20 +23,8 @@ Future<void> onSendMsgBtnPressed(
   final (cihertext, spkId, opkId) =
       await encryptMsg(remoteUid, msgContent, updateHintMsg);
 
-  // 第二次發送訊息
-  if (spkId == null) {
-    print('two');
-    socket.emit('clientSendMsgToServer', {
-      'isPreKeySignalMessage': false,
-      'type': 'text',
-      'sender': selfUid,
-      'receiver': remoteUid,
-      'content': cihertext
-    });
-  }
-
   // 第一次發送訊息
-  else {
+  if (isPreKeySignalMessage) {
     print('one');
     socket.emit('clientSendMsgToServer', {
       'isPreKeySignalMessage': true,
@@ -39,6 +34,16 @@ Future<void> onSendMsgBtnPressed(
       'content': cihertext,
       'spkId': spkId,
       'opkId': opkId
+    });
+  } else {
+    // 第二次發送訊息
+    print('two');
+    socket.emit('clientSendMsgToServer', {
+      'isPreKeySignalMessage': false,
+      'type': 'text',
+      'sender': selfUid,
+      'receiver': remoteUid,
+      'content': cihertext
     });
   }
 

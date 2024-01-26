@@ -41,6 +41,9 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   }
 
   Future<void> initSocket() async {
+    const username = 'q';
+    const password = 'a';
+
     const storage = FlutterSecureStorage();
 
     // JWT 存在，直接連線到 Socket.io Server
@@ -59,7 +62,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         // 儲存未讀訊息
         print(unreadMsgs);
         if (unreadMsgs.isNotEmpty) {
-          print('store🤣🤣😂😎🤩🤩🤗🙂');
+          print('main.dart 儲存未讀訊息');
           final safeMsgStore = SafeMsgStore();
           await safeMsgStore.sortAndstoreUnreadMsg(unreadMsgs);
         }
@@ -76,13 +79,13 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         // 後端檢查 JWT 過期
         updateHintMsg('登入階段已過期！重新登入');
         // 跳轉至登入頁面
-        await login('q', 'a', updateHintMsg, catHintMsg);
+        await login(username, password, updateHintMsg, catHintMsg);
         socket.emit(
             'clientReturnJwtToServer', await storage.read(key: 'token'));
       });
     } else {
       print('jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
-      await login('q', 'a', updateHintMsg, catHintMsg);
+      await login(username, password, updateHintMsg, catHintMsg);
       await generateAndStoreKey();
       await initSocket();
     }

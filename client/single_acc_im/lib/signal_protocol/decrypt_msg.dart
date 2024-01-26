@@ -41,8 +41,7 @@ Future<String> decryptMsg(int remoteUid, String ciphertext) async {
 
     plainText = utf8.decode(await selfSessionCipher
         .decryptFromSignal(listFormatCipherTextSignalMsg));
-    print(plainText);
   }
-
+  print(plainText);
   return plainText;
 }

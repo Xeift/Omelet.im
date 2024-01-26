@@ -24,7 +24,7 @@ Future<(String, int?, int?)> encryptMsg(String remoteUid, String msgContent,
 
   // 第一次傳送訊息需要 sessionBuilder
   if (isPreKeySignalMessage) {
-    print('no session!');
+    print('[encrypt_msg.dart] no session!');
     // 準備對方的 Pre Key Bundle （只有第一次）
     final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
         await downloadPreKeyBundle(remoteUid);
@@ -41,16 +41,26 @@ Future<(String, int?, int?)> encryptMsg(String remoteUid, String msgContent,
         sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
     final ciphertext = await sessionCipher
         .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
-
+    print('end of encrypt_msg.dart--------------------------------');
     return (jsonEncode(ciphertext.serialize()), spkId, opkId);
   } else {
-    print('have session!');
+    print('[encrypt_msg.dart] have session!');
     // 建立 SessionCipher，用於加密訊息
     final sessionCipher = SessionCipher(
         sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
     final ciphertext = await sessionCipher
         .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
 
+    // // TODO: ----------------------------------------------------------------
+    // final listFormatCipherText = ciphertext.serialize();
+    // print('searialized cipherText😎 $listFormatCipherText');
+
+    // final listFormatCipherTextSignalMsg =
+    //     SignalMessage.fromSerialized(listFormatCipherText);
+    // print(
+    //     'searialized listFormatCipherTextSignalMsg $listFormatCipherTextSignalMsg');
+    // // TODO: ----------------------------------------------------------------
+    print('end of encrypt_msg.dart--------------------------------');
     return (jsonEncode(ciphertext.serialize()), null, null);
   }
 }

@@ -25,7 +25,7 @@ Future<void> onSendMsgBtnPressed(
 
   // 第一次發送訊息
   if (isPreKeySignalMessage) {
-    print('[send 1st]');
+    print('[on_send_msg_btn_pressed.dart] [send 1st]');
     socket.emit('clientSendMsgToServer', {
       'isPreKeySignalMessage': true,
       'type': 'text',
@@ -38,7 +38,7 @@ Future<void> onSendMsgBtnPressed(
   }
   // 第二次發送訊息
   else {
-    print('[send 2nd]');
+    print('[on_send_msg_btn_pressed.dart] [send 2nd]');
     socket.emit('clientSendMsgToServer', {
       'isPreKeySignalMessage': false,
       'type': 'text',

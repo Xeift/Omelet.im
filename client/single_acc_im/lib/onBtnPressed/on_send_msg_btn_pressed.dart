@@ -15,6 +15,7 @@ Future<void> onSendMsgBtnPressed(
   // 加密訊息
   final (cihertext, isPreKeySignalMessage, spkId, opkId) =
       await encryptMsg(remoteUid, msgContent, updateHintMsg);
+  print('$cihertext\n$isPreKeySignalMessage\n$spkId\n$opkId');
 
   // 訊息格式為 PreKeySignalMessage
   if (isPreKeySignalMessage) {

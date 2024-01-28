@@ -8,7 +8,8 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 import 'safe_session_store.dart';
 import 'safe_signal_protocol_store.dart';
 
-Future<String> decryptMsg(int remoteUid, String ciphertext) async {
+Future<String> decryptMsg(
+    bool isPreKeySignalMessage, int remoteUid, String ciphertext) async {
   final signalProtocolStore = SafeSignalProtocolStore();
   final remoteAddress =
       SignalProtocolAddress(remoteUid.toString(), 1); // Signal protocol 地址
@@ -17,9 +18,6 @@ Future<String> decryptMsg(int remoteUid, String ciphertext) async {
   final selfSessionCipher =
       SessionCipher.fromStore(signalProtocolStore, remoteAddress);
   final String plainText;
-  final sessionStore = SafeSessionStore();
-  final isPreKeySignalMessage =
-      !(await sessionStore.containsSession(remoteAddress));
 
   // 解密訊息
   if (isPreKeySignalMessage) {

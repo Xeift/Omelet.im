@@ -71,7 +71,7 @@ class SafeMsgStore {
     });
 
     for (var unreadMsg in unreadMsgs) {
-      final decryptedMsg = await decryptMsg(
+      final decryptedMsg = await decryptMsg(unreadMsg['isPreKeySignalMessage'],
           int.parse(unreadMsg['sender']), unreadMsg['content']);
       print('$decryptedMsg\n');
       await writeMsg(unreadMsg['sender'], {
@@ -85,7 +85,7 @@ class SafeMsgStore {
   }
 
   Future<void> storeReceivedMsg(Map<String, dynamic> receivedMsg) async {
-    final decryptedMsg = await decryptMsg(
+    final decryptedMsg = await decryptMsg(receivedMsg['isPreKeySignalMessage'],
         int.parse(receivedMsg['sender']), receivedMsg['content']);
     print('$decryptedMsg\n');
     await writeMsg(receivedMsg['sender'], {

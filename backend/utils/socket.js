@@ -43,27 +43,19 @@ module.exports = function(io) {
                     console.log('🎇one');
                     console.log(`delete opk id: ${msg['opkId']}!!!`);
                     await authController.deleteOpkPub(receiverUid, msg['opkId']);
-                    newMsg = {
-                        'timestamp': timestamp,
-                        // 'isPreKeySignalMessage': true,
-                        'type': msg['type'],
-                        'sender': senderUid,
-                        'receiver': receiverUid,
-                        'content': msg['content'],
-                        // 'spkId': msg['spkId'],
-                        // 'opkId': msg['opkId'],
-                    };
                 }
                 else { // 第二次以後發送訊息
                     console.log('🎇two');
-                    newMsg = {
-                        'timestamp': timestamp,
-                        'type': msg['type'],
-                        'sender': senderUid,
-                        'receiver': receiverUid,
-                        'content': msg['content'],
-                    };
-                }        
+                }
+                newMsg = {
+                    'isPreKeySignalMessage': msg['isPreKeySignalMessage'],
+                    'timestamp': timestamp,
+                    'type': msg['type'],
+                    'sender': senderUid,
+                    'receiver': receiverUid,
+                    'content': msg['content'],
+                };
+
 
                 console.log('clientSendMsgToServer');
                 console.log('已連線過');

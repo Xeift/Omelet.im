@@ -23,10 +23,11 @@ Future<(String, bool, int?, int?)> encryptMsg(
   final sessionStore = SafeSessionStore();
   final sessionNotExsist = !(await sessionStore.containsSession(remoteAddress));
 
-  // 沒有 Session，需要 SessionBuilder
-  if (sessionNotExsist) {
-    print('[encrypt_msg.dart] no session!');
+  // 讀取 SessionRecord
+  final sessionRecord = await sessionStore.loadSession(remoteAddress);
+  final sessionState = sessionRecord.sessionState;
 
+  Future<(String, bool, int?, int?)> encryptPreKeySignalMessage() async {
     // 準備對方的 Pre Key Bundle
     final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
         await downloadPreKeyBundle(remoteUid);
@@ -57,9 +58,9 @@ Future<(String, bool, int?, int?)> encryptMsg(
       spkId,
       opkId
     );
-  } else {
-    print('[encrypt_msg.dart] have session!');
+  }
 
+  Future<(String, bool, int?, int?)> encryptSignalMessage() async {
     // 建立 SessionCipher，用於加密訊息
     final sessionCipher = SessionCipher(
         sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
@@ -72,15 +73,6 @@ Future<(String, bool, int?, int?)> encryptMsg(
 
     print('[encrypt_msg.dart] ciphertext type: ${ciphertext.getType()}');
 
-    // // TODO: ----------------------------------------------------------------
-    // final listFormatCipherText = ciphertext.serialize();
-    // print('searialized cipherText😎 $listFormatCipherText');
-
-    // final listFormatCipherTextSignalMsg =
-    //     SignalMessage.fromSerialized(listFormatCipherText);
-    // print(
-    //     'searialized listFormatCipherTextSignalMsg $listFormatCipherTextSignalMsg');
-    // // TODO: ----------------------------------------------------------------
     print('end of encrypt_msg.dart--------------------------------');
 
     return (
@@ -89,5 +81,26 @@ Future<(String, bool, int?, int?)> encryptMsg(
       null,
       null
     );
+  }
+
+  // 沒有 Session，Message 形態為 PreKeySignal，需要 SessionBuilder
+  if (sessionNotExsist) {
+    print('[encrypt_msg.dart] no session!');
+    return await encryptPreKeySignalMessage();
+  }
+  // 有 Session
+  else {
+    print('[encrypt_msg.dart] have session!');
+
+    // 對方未確認，Message 形態為 PreKeySignalMessage
+    if (sessionState.hasUnacknowledgedPreKeyMessage()) {
+      print('[encrypt_msg.dart] have unack!');
+      return await encryptPreKeySignalMessage();
+    }
+    // 對方已確認，Message 形態為 SignalMessage
+    else {
+      print('[encrypt_msg.dart] no unack!');
+      return await encryptSignalMessage();
+    }
   }
 }

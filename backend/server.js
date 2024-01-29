@@ -28,40 +28,8 @@ app.use('/api/v1/check-jwt-status', rateLimit.authLimiter, require('./api/checkJ
 app.use('/api/v1/upload-pre-key-bundle', rateLimit.authLimiter, require('./api/uploadPreKeyBundle.js'));
 app.use('/api/v1/download-pre-key-bundle', rateLimit.authLimiter, require('./api/downloadPreKeyBundle.js'));
 app.use('/api/v1/get-available-opk-index', rateLimit.authLimiter, require('./api/getAvailableOpkIndex.js'));
-
-
-function testMsg() {
-    const msgController = require('./controller/msgController.js');
-    msgController.storeUnreadMsg(1698143242, 'text', '491437500754038784', '504619688634880000', '原神啟動')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143243, 'text', '491437500754038784', '492312533160431617', '我最喜歡玩原神了')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143244, 'text', '491437500754038784', '504619688634880000', '可莉')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143246, 'text', '491437500754038784', '504620939263086593', '蹦蹦炸彈')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143247, 'text', '491437500754038784', '504622124325933058', '這是我新買的衣服')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143248, 'text', 'aaaaaaaaaaaa', '504623456789012345', '你喜歡什麼遊戲？')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143249, 'text', '491437500754038784', '504624567890123456', '我最近在玩動物之森')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143250, 'text', '491437500754038784', '504625678901234567', '動物之森很好玩嗎？')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143251, 'text', '491437500754038784', '504626789012345678', '還不錯啦，就是有點無聊')
-        .catch(err => console.log(err));
-    msgController.storeUnreadMsg(1698143252, 'text', 'aaaaaaaaaaaa', '504627890123456789', '那你可以試試看原神，我覺得很有趣')
-        .catch(err => console.log(err));
-}
-function testMsg2() {
-    const msgController = require('./controller/msgController.js');
-    msgController.storeUnreadMsg(1698143242, 'text', '491437500754038784', '504619688634880000', '原神啟動', true, 1, 1)
-        .catch(err => console.log(err));
-    console.log('done');
-}
-// testMsg();
-// testMsg2();
-
+app.use('/api/v1/update-opk', rateLimit.authLimiter, require('./api/updateOpk.js'));
+app.use('/api/v1/get-self-opk-status', rateLimit.authLimiter, require('./api/getSelfOpkStatus.js'));
 
 
 app.use('*', require('./api/notFound.js'));

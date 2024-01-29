@@ -12,6 +12,11 @@ import 'utils/login.dart';
 import 'signal_protocol/generate_and_store_key.dart';
 import 'api/get/get_unread_msg_api.dart';
 import 'message/safe_msg_store.dart';
+import 'api/get/get_available_opk_index_api.dart';
+import 'api/post/update_opk.dart';
+import 'signal_protocol/safe_opk_store.dart';
+import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
+import 'api/get/get_self_opk_status.dart';
 
 import 'widgets/reset_widget.dart';
 import 'widgets/readall_widget.dart';
@@ -56,6 +61,29 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         socket.emit(
             'clientReturnJwtToServer', await storage.read(key: 'token'));
         print('backend connected');
+        final opkStatus = jsonDecode((await getSelfOpkStatus()).body)['data'];
+        print('opkStatus: $opkStatus');
+        final outOfOpk = opkStatus['outOfOpk'];
+        final lastBatchMaxOpkId = opkStatus['lastBatchMaxOpkId'];
+
+        if (outOfOpk) {
+          final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
+
+          final res = await updateOpk(
+              '1',
+              jsonEncode({
+                for (var newOpk in newOpks)
+                  newOpk.id.toString():
+                      jsonEncode(newOpk.getKeyPair().publicKey.serialize())
+              }));
+          print(res.body);
+
+          final opkStore = SafeOpkStore();
+          for (final newOpk in newOpks) {
+            await opkStore.storePreKey(newOpk.id, newOpk);
+          }
+        }
+
         final res = await getUnreadMsgAPI();
         final List<dynamic> unreadMsgs = jsonDecode(res.body)['data'];
 
@@ -76,7 +104,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       });
 
       socket.on('jwtExpired', (data) async {
-        // 後端檢查 JWT 過期
+        // 後端檢查 JWT 是否過期
         updateHintMsg('登入階段已過期！重新登入');
         // 跳轉至登入頁面
         await login(username, password, updateHintMsg, catHintMsg);

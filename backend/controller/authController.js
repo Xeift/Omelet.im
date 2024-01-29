@@ -46,7 +46,7 @@ async function updatePasswordByEmail(email, newPassword) {
 async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     await UserModel.findOneAndUpdate(
         { uid: uid },
-        { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub }
+        { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1] }
     );
 }
 
@@ -82,6 +82,23 @@ async function deleteOpkPub(uid, opkId) {
     return result;
 }
 
+async function updateOpk(uid, opkPub) {
+    await UserModel.findOneAndUpdate(
+        { uid: uid },
+        { opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1] }
+    );
+}
+
+async function getSelfOpkStatus(uid) {
+    let opkStatus = await UserModel.findOne(
+        { uid: uid },
+        'opkPub lastBatchMaxOpkId'
+    );
+    let outOfOpk = Object.keys(opkStatus['opkPub']).length === 0;
+    let lastBatchMaxOpkId = opkStatus['lastBatchMaxOpkId'];
+
+    return [outOfOpk, lastBatchMaxOpkId];
+}
 
 module.exports = {
     isPasswordMatch,
@@ -92,5 +109,7 @@ module.exports = {
     uploadPreKeyBundle,
     downloadPreKeyBundle,
     getAvailableOpkIndex,
-    deleteOpkPub
+    deleteOpkPub,
+    updateOpk,
+    getSelfOpkStatus
 };

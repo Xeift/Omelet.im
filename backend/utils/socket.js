@@ -41,8 +41,13 @@ module.exports = function(io) {
 
                 if (msg['isPreKeySignalMessage']) { // 第一次發送訊息
                     console.log('🎇one');
-                    console.log(`delete opk id: ${msg['opkId']}!!!`);
-                    await authController.deleteOpkPub(receiverUid, msg['opkId']);
+                    // 刪除傳送訊息時使用的 OPK
+                    console.log(`🈶🈶🈚🈚opkid: ${msg['opkId']}`);
+                    if (msg['opkId']) {
+                        console.log(`delete opk id: ${msg['opkId']}!!!`);
+                        await authController.deleteOpkPub(receiverUid, msg['opkId']);
+                    }
+
                 }
                 else { // 第二次以後發送訊息
                     console.log('🎇two');

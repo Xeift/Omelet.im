@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
-import 'safe_session_store.dart';
 import 'safe_signal_protocol_store.dart';
 
 Future<String> decryptMsg(

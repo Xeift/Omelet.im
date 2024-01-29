@@ -12,7 +12,6 @@ import 'utils/login.dart';
 import 'signal_protocol/generate_and_store_key.dart';
 import 'api/get/get_unread_msg_api.dart';
 import 'message/safe_msg_store.dart';
-import 'api/get/get_available_opk_index_api.dart';
 import 'api/post/update_opk.dart';
 import 'signal_protocol/safe_opk_store.dart';
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';

@@ -65,6 +65,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         final outOfOpk = opkStatus['outOfOpk'];
         final lastBatchMaxOpkId = opkStatus['lastBatchMaxOpkId'];
 
+        // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
         if (outOfOpk) {
           final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
 
@@ -83,6 +84,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
           }
         }
 
+        // 取得未讀訊息
         final res = await getUnreadMsgAPI();
         final List<dynamic> unreadMsgs = jsonDecode(res.body)['data'];
 

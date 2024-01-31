@@ -13,7 +13,7 @@ Future<void> generateAndStoreKey() async {
   final registrationId = generateRegistrationId(false);
   final selfIpk = generateIdentityKeyPair(); // 產生 IPK（長期金鑰對，平常不會動）
   final selfSpk = generateSignedPreKey(selfIpk, 0); // 產生 SPK（中期金鑰對，每 7 天更新一次）
-  final selfOpks = generatePreKeys(0, 10); // 產生 OPK（短期金鑰對，1 則訊息會用掉 1 個）
+  final selfOpks = generatePreKeys(0, 100); // 產生 OPK（短期金鑰對，1 則 Session 會用掉 1 個）
 
   final ipkStore = SafeIdentityKeyStore();
   await ipkStore.saveIdentityKeyPair(selfIpk, registrationId);

@@ -62,6 +62,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         print('backend connected');
         final opkStatus = jsonDecode((await getSelfOpkStatus()).body)['data'];
         print('opkStatus: $opkStatus');
+
         final outOfOpk = opkStatus['outOfOpk'];
         final lastBatchMaxOpkId = opkStatus['lastBatchMaxOpkId'];
 

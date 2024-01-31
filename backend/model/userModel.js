@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema({
     spkSig: { type: mongoose.Schema.Types.Mixed, unique: true },
     opkPub: { type: mongoose.Schema.Types.Mixed, unique: true },
     lastBatchMaxOpkId: { type: Number },
+    lastSpkUpdateTime: { type: String },
 });
 const UserModel = mongoose.model('User', UserSchema, 'users');
 

@@ -44,9 +44,10 @@ async function updatePasswordByEmail(email, newPassword) {
 }
 
 async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
+    let timestamp = Date.now().toString();
     await UserModel.findOneAndUpdate(
         { uid: uid },
-        { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1] }
+        { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastSpkUpdateTime: timestamp }
     );
 }
 

@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: { type: String },
     room_joined: { type: [String], default: [] },
+    pfp: { type: mongoose.Schema.Types.Mixed },
     ipkPub: { type: String, unique: true },
     spkPub: { type: mongoose.Schema.Types.Mixed, unique: true },
     spkSig: { type: mongoose.Schema.Types.Mixed, unique: true },

@@ -3,7 +3,6 @@ const serverUri =
 const username = 'q';
 const password = 'a';
 
-
 // const serverUri = 'http://localhost:3000';
 // const username = 'w';
 // const password = 'a';

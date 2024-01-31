@@ -1,6 +1,7 @@
 const mongoose = require('./mongoose');
 
 const UnreadMsgSchema = new mongoose.Schema({
+    isPreKeySignalMessage: { type: Boolean, required: true },
     timestamp: { type: String, required: true },
     type: { type: String, enum: ['text', 'image'], required: true },
     receiver: { type: String, required: true },

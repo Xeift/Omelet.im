@@ -8,7 +8,8 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
         let [outOfOpk, lastBatchMaxOpkId] = await authController.getSelfOpkStatus(uid);
-
+        console.log(`outOfOpk: ${outOfOpk}`);
+        console.log(`lastBatchMaxOpkId: ${lastBatchMaxOpkId}`);
         res.status(200).json({
             message: '成功取得 OPK 狀態',
             data: { 'outOfOpk': outOfOpk, 'lastBatchMaxOpkId': lastBatchMaxOpkId },

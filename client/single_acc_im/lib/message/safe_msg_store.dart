@@ -69,7 +69,9 @@ class SafeMsgStore {
       int timestampB = int.parse(b['timestamp']);
       return timestampA.compareTo(timestampB);
     });
-
+    print('unreadMsgs--------------------------------');
+    print(unreadMsgs);
+    print('unreadMsgs--------------------------------');
     for (var unreadMsg in unreadMsgs) {
       final decryptedMsg = await decryptMsg(unreadMsg['isPreKeySignalMessage'],
           int.parse(unreadMsg['sender']), unreadMsg['content']);

@@ -12,11 +12,15 @@ import 'utils/login.dart';
 import 'utils/server_uri.dart';
 
 import 'signal_protocol/safe_opk_store.dart';
+import 'signal_protocol/safe_spk_store.dart';
+import 'signal_protocol/safe_identity_store.dart';
 import 'signal_protocol/generate_and_store_key.dart';
 
 import 'api/post/update_opk.dart';
+import 'api/post/update_spk.dart';
 import 'api/get/get_unread_msg_api.dart';
 import 'api/get/get_self_opk_status.dart';
+import 'api/get/get_self_spk_status.dart';
 
 import 'message/safe_msg_store.dart';
 
@@ -60,13 +64,12 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         socket.emit(
             'clientReturnJwtToServer', await storage.read(key: 'token'));
         print('backend connected');
-        final opkStatus = jsonDecode((await getSelfOpkStatus()).body)['data'];
-        print('opkStatus: $opkStatus');
 
+        // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
+        final opkStatus = jsonDecode((await getSelfOpkStatus()).body)['data'];
         final outOfOpk = opkStatus['outOfOpk'];
         final lastBatchMaxOpkId = opkStatus['lastBatchMaxOpkId'];
 
-        // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
         if (outOfOpk) {
           final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
 
@@ -83,6 +86,30 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
           for (final newOpk in newOpks) {
             await opkStore.storePreKey(newOpk.id, newOpk);
           }
+        }
+
+        // 若伺服器中自己的 SPK 期限已到（7 天），則產生並上傳 SPK
+        final spkStatus = jsonDecode((await getSelfSpkStatus()).body)['data'];
+        final spkExpired = spkStatus['spkExpired'];
+        final lastBatchSpkId = spkStatus['lastBatchSpkId'];
+
+        if (spkExpired) {
+          final ipkStore = SafeIdentityKeyStore();
+          final selfIpk = await ipkStore.getIdentityKeyPair();
+          final newSpk = generateSignedPreKey(selfIpk, lastBatchSpkId + 1);
+
+          final res = await updateSpk(
+            '1',
+            jsonEncode({
+              newSpk.id.toString():
+                  jsonEncode(newSpk.getKeyPair().publicKey.serialize())
+            }),
+            jsonEncode({newSpk.id.toString(): jsonEncode(newSpk.signature)}),
+          );
+          print(res.body);
+
+          final spkStore = SafeSpkStore();
+          await spkStore.storeSignedPreKey(newSpk.id, newSpk);
         }
 
         // 取得未讀訊息

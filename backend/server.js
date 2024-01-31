@@ -30,6 +30,8 @@ app.use('/api/v1/download-pre-key-bundle', rateLimit.authLimiter, require('./api
 app.use('/api/v1/get-available-opk-index', rateLimit.authLimiter, require('./api/getAvailableOpkIndex.js'));
 app.use('/api/v1/update-opk', rateLimit.authLimiter, require('./api/updateOpk.js'));
 app.use('/api/v1/get-self-opk-status', rateLimit.authLimiter, require('./api/getSelfOpkStatus.js'));
+app.use('/api/v1/get-self-spk-status', rateLimit.authLimiter, require('./api/getSelfSpkStatus.js'));
+app.use('/api/v1/update-spk', rateLimit.authLimiter, require('./api/updateSpk.js'));
 
 
 app.use('*', require('./api/notFound.js'));

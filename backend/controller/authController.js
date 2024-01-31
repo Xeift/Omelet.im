@@ -44,10 +44,12 @@ async function updatePasswordByEmail(email, newPassword) {
 }
 
 async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
-    let timestamp = Date.now().toString();
+    let lastBatchSpkUpdateTime = Date.now();
+    let lastBatchSpkId = ( Math.max(...Object.keys(spkPub).map(Number)) ).toString();
+    console.log(`🎁🎁🎁${lastBatchSpkId}`);
     await UserModel.findOneAndUpdate(
         { uid: uid },
-        { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastSpkUpdateTime: timestamp }
+        { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastBatchSpkUpdateTime: lastBatchSpkUpdateTime, lastBatchSpkId: lastBatchSpkId }
     );
 }
 
@@ -101,6 +103,33 @@ async function getSelfOpkStatus(uid) {
     return [outOfOpk, lastBatchMaxOpkId];
 }
 
+async function getSelfSpkStatus(uid) {
+    let spkStatus = await UserModel.findOne(
+        { uid: uid },
+        'spkPub lastBatchSpkId lastBatchSpkUpdateTime'
+    );
+    console.log(spkStatus['lastBatchSpkUpdateTime']);
+    console.log(`🧨🧨🧨 ${Date.now() - spkStatus['lastBatchSpkUpdateTime']}`);
+    let spkExpired = (Date.now() - spkStatus['lastBatchSpkUpdateTime']) >= (7 * 24 * 60 * 60 * 1000);
+    let lastBatchSpkId = spkStatus['lastBatchSpkId'];
+    console.log(`spkExpired ${spkExpired}`);
+    console.log(`lastBatchSpkId ${lastBatchSpkId}`);
+    return [spkExpired, lastBatchSpkId];
+}
+
+async function updateSpk(uid, spkPub, spkSig) {
+    await UserModel.updateOne(
+        { uid: uid }, {
+            $set: {
+                [`spkPub.${Object.keys(spkPub)}`]: spkPub, 
+                [`spkSig.${Object.keys(spkSig)}`]: spkSig,
+                lastBatchSpkId: parseInt(Object.keys(spkPub)),
+                lastBatchSpkUpdateTime: Date.now()
+            }
+        }
+    );
+}
+
 module.exports = {
     isPasswordMatch,
     isUserIdExsists,
@@ -112,5 +141,7 @@ module.exports = {
     getAvailableOpkIndex,
     deleteOpkPub,
     updateOpk,
-    getSelfOpkStatus
+    getSelfOpkStatus,
+    getSelfSpkStatus,
+    updateSpk
 };

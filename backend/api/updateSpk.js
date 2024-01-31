@@ -1,5 +1,4 @@
 const authController = require('../controller/authController.js');
-const msgController = require('../controller/msgController.js');
 const express = require('express');
 const router = express.Router();
 const jwt = require('../utils/jwt.js');
@@ -9,24 +8,19 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let uid = decodedToken._uid;
 
     let deviceId = req.body.deviceId;
-    let ipkPub = req.body.ipkPub;
     let spkPub = JSON.parse(req.body.spkPub);
-
-    console.log('--------------------------------');
-    console.log(req.body.spkSig);
-    console.log(typeof(req.body.spkSig));
-    console.log(typeof(req.body.opkPub));
-    console.log('--------------------------------');
-    
     let spkSig = JSON.parse(req.body.spkSig);
-    let opkPub = JSON.parse(req.body.opkPub);
 
-    await authController.uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub);
+    console.log('🧧--------------------------');
+    console.log(spkPub);
+    console.log(spkSig);
+    await authController.updateSpk(uid, spkPub, spkSig);
+    console.log('🧧--------------------------');
 
 
     try {
         res.status(200).json({
-            message: '上傳成功',
+            message: 'opk 上傳成功',
             data: null,
             token: null
         });

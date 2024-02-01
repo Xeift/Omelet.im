@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';//login animation
 
 import '../api/all_login_api.dart';
 import '../componets/alert/AlertMsg.dart';
+import '../pages/chat_list_page.dart';
 import 'sign_up_page.dart';
 void main() {
   runApp(const MyApp());
@@ -184,7 +185,8 @@ class _HomePageState extends State<HomePage> {
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
 
             if (statusCode == 200) {
-              print('登入成功( •̀ ω •́ )✧');
+               Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const ChatListPage()));
               // 這裡要寫登入成功時的邏輯，比如提示使用者密碼錯誤
               // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
             } else if (statusCode == 401) {

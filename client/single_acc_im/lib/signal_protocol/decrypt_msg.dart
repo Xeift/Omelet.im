@@ -20,25 +20,18 @@ Future<String> decryptMsg(
 
   // 解密訊息
   if (isPreKeySignalMessage) {
-    print('[receive 1st]');
     plainText = utf8.decode(await selfSessionCipher.decrypt(PreKeySignalMessage(
         Uint8List.fromList(jsonDecode(ciphertext).cast<int>().toList()))));
   } else {
-    print('[receive 2nd]');
-
     final listFormatCipherText =
         Uint8List.fromList(jsonDecode(ciphertext).cast<int>().toList());
-    print(listFormatCipherText);
-    print('😎');
 
     final listFormatCipherTextSignalMsg =
         SignalMessage.fromSerialized(listFormatCipherText);
-    print(listFormatCipherTextSignalMsg);
-    print('😂1');
 
     plainText = utf8.decode(await selfSessionCipher
         .decryptFromSignal(listFormatCipherTextSignalMsg));
   }
-  print(plainText);
+  print('[decrypt_msg.dart] 已解密訊息👉 $plainText');
   return plainText;
 }

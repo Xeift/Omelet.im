@@ -63,7 +63,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         // 回傳 JWT，驗證身份
         socket.emit(
             'clientReturnJwtToServer', await storage.read(key: 'token'));
-        print('backend connected');
+
+        print('--------------------------------');
+        print('[main.dart] backend connected');
+        print('--------------------------------\n');
 
         // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
         final opkStatus = jsonDecode((await getSelfOpkStatus()).body)['data'];
@@ -80,7 +83,9 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
                   newOpk.id.toString():
                       jsonEncode(newOpk.getKeyPair().publicKey.serialize())
               }));
-          print(res.body);
+          print('--------------------------------');
+          print('[main.dart] new opk👉 ${res.body}');
+          print('--------------------------------\n');
 
           final opkStore = SafeOpkStore();
           for (final newOpk in newOpks) {
@@ -106,7 +111,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             }),
             jsonEncode({newSpk.id.toString(): jsonEncode(newSpk.signature)}),
           );
-          print(res.body);
+          print('[main.dart] 更新 SPK👉 ${res.body}');
 
           final spkStore = SafeSpkStore();
           await spkStore.storeSignedPreKey(newSpk.id, newSpk);
@@ -115,11 +120,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         // 取得未讀訊息
         final res = await getUnreadMsgAPI();
         final List<dynamic> unreadMsgs = jsonDecode(res.body)['data'];
+        print('[main.dart] 未讀訊息👉 $unreadMsgs');
 
         // 儲存未讀訊息
-        print(unreadMsgs);
         if (unreadMsgs.isNotEmpty) {
-          print('main.dart 儲存未讀訊息');
           final safeMsgStore = SafeMsgStore();
           await safeMsgStore.sortAndstoreUnreadMsg(unreadMsgs);
         }
@@ -127,7 +131,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
 
       // 接收伺服器轉發的訊息
       socket.on('serverForwardMsgToClient', (msg) async {
-        print('client已接收\n$msg');
+        print('[main.dart] 已接收訊息👉 $msg');
         final safeMsgStore = SafeMsgStore();
         await safeMsgStore.storeReceivedMsg(msg);
       });
@@ -141,7 +145,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             'clientReturnJwtToServer', await storage.read(key: 'token'));
       });
     } else {
-      print('jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
+      print('[main.dart] jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
       await login(username, password, updateHintMsg, catHintMsg);
       await generateAndStoreKey();
       await initSocket();

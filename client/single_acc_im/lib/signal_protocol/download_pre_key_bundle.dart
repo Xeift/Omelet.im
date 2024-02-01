@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:math';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -14,7 +16,7 @@ Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
 
   final res = await downloadPreKeyBundleAPI(remoteUid, opkId);
   final preKeyBundle = jsonDecode(res.body)['data'];
-  print(res.body);
+  print('[download_pre_key_bundle.dart] pkb 內容👉 ${res.body}');
 
   final ipkPub = IdentityKey.fromBytes(
       Uint8List.fromList(

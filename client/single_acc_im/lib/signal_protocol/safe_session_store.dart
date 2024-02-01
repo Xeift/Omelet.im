@@ -43,7 +43,7 @@ class SafeSessionStore implements SessionStore {
   Future<SessionRecord> loadSession(SignalProtocolAddress address) async {
     try {
       final sessionData = await storage.read(key: address.toString());
-      print('[safe_session_store.dart] sessionData: $sessionData');
+
       if (sessionData != null) {
         return SessionRecord.fromSerialized(
             Uint8List.fromList(jsonDecode(sessionData).cast<int>().toList()));

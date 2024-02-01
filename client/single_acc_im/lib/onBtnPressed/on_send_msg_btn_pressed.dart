@@ -15,11 +15,9 @@ Future<void> onSendMsgBtnPressed(
   // 加密訊息
   final (cihertext, isPreKeySignalMessage, spkId, opkId) =
       await encryptMsg(remoteUid, msgContent, updateHintMsg);
-  print('$cihertext\n$isPreKeySignalMessage\n$spkId\n$opkId');
 
   // 訊息格式為 PreKeySignalMessage
   if (isPreKeySignalMessage) {
-    print('[on_send_msg_btn_pressed.dart] [send 1st]');
     socket.emit('clientSendMsgToServer', {
       'isPreKeySignalMessage': isPreKeySignalMessage,
       'type': 'text',
@@ -33,7 +31,6 @@ Future<void> onSendMsgBtnPressed(
 
   // 訊息格式為 SignalMessage
   else {
-    print('[on_send_msg_btn_pressed.dart] [send 2nd]');
     socket.emit('clientSendMsgToServer', {
       'isPreKeySignalMessage': isPreKeySignalMessage,
       'type': 'text',

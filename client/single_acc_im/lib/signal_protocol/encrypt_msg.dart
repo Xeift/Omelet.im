@@ -49,9 +49,6 @@ Future<(String, bool, int?, int?)> encryptMsg(
     final isPreKeySignalMessage =
         ciphertext.getType() == CiphertextMessage.prekeyType;
 
-    print('[encrypt_msg.dart] ciphertext type: ${ciphertext.getType()}');
-    print('end of encrypt_msg.dart--------------------------------');
-
     return (
       jsonEncode(ciphertext.serialize()),
       isPreKeySignalMessage,
@@ -70,10 +67,6 @@ Future<(String, bool, int?, int?)> encryptMsg(
         .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
     final isPreKeySignalMessage =
         ciphertext.getType() == CiphertextMessage.prekeyType;
-
-    print('[encrypt_msg.dart] ciphertext type: ${ciphertext.getType()}');
-
-    print('end of encrypt_msg.dart--------------------------------');
 
     return (
       jsonEncode(ciphertext.serialize()),

@@ -16,16 +16,19 @@ class SafeMsgStore {
   Future<void> writeMsg(String remoteUid, Map<String, dynamic> msg) async {
     final msgJson = jsonEncode(msg);
     String key = uidToKey(remoteUid, await getMsgCount(remoteUid) + 1);
+
     await storage.write(key: key, value: msgJson);
   }
 
   Future<Map<String, dynamic>> readMsg(String remoteUid, int index) async {
     String key = uidToKey(remoteUid, index);
+
     return jsonDecode((await storage.read(key: key)).toString());
   }
 
   Future<void> deleteMsg(String remoteUid, int index) async {
     String key = uidToKey(remoteUid, index);
+
     await storage.delete(key: key);
   }
 
@@ -34,6 +37,7 @@ class SafeMsgStore {
     List<String> filteredKeys = allData.keys
         .where((key) => key.startsWith('msg_${remoteUid}_'))
         .toList();
+
     return filteredKeys.length;
   }
 
@@ -48,6 +52,7 @@ class SafeMsgStore {
     for (String key in filteredKeys.take(100)) {
       messages.add(allData[key]!);
     }
+
     return messages;
   }
 
@@ -60,6 +65,7 @@ class SafeMsgStore {
     for (String key in filteredKeys) {
       messages.add(allData[key]!);
     }
+
     return messages;
   }
 
@@ -67,15 +73,15 @@ class SafeMsgStore {
     unreadMsgs.sort((a, b) {
       int timestampA = int.parse(a['timestamp']);
       int timestampB = int.parse(b['timestamp']);
+
       return timestampA.compareTo(timestampB);
     });
-    print('unreadMsgs--------------------------------');
-    print(unreadMsgs);
-    print('unreadMsgs--------------------------------');
+
     for (var unreadMsg in unreadMsgs) {
       final decryptedMsg = await decryptMsg(unreadMsg['isPreKeySignalMessage'],
           int.parse(unreadMsg['sender']), unreadMsg['content']);
-      print('$decryptedMsg\n');
+      print('[decrypt_msg.dart] 已解密訊息👉 $decryptedMsg');
+
       await writeMsg(unreadMsg['sender'], {
         'timestamp': unreadMsg['timestamp'],
         'type': unreadMsg['type'],
@@ -89,7 +95,8 @@ class SafeMsgStore {
   Future<void> storeReceivedMsg(Map<String, dynamic> receivedMsg) async {
     final decryptedMsg = await decryptMsg(receivedMsg['isPreKeySignalMessage'],
         int.parse(receivedMsg['sender']), receivedMsg['content']);
-    print('$decryptedMsg\n');
+    print('[decrypt_msg.dart] 已解密訊息👉 $decryptedMsg');
+
     await writeMsg(receivedMsg['sender'], {
       'timestamp': receivedMsg['timestamp'],
       'type': receivedMsg['type'],

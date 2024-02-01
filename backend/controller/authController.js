@@ -59,13 +59,9 @@ async function downloadPreKeyBundle(uid, opkId) {
         { uid: uid },
         'ipkPub spkPub spkSig opkPub'
     ).lean();
-    console.log(pkb);
-    console.log('----------------------------------------------------------------');
-
     let latestSpkIndex = ( Math.max(...Object.keys(pkb['spkPub']).map(Number)) ).toString();
-    console.log(latestSpkIndex);
-
     let newPreKeyBundle = {};
+
     newPreKeyBundle['ipkPub'] = pkb['ipkPub'];
 
     newPreKeyBundle['spkId'] = latestSpkIndex;
@@ -74,8 +70,6 @@ async function downloadPreKeyBundle(uid, opkId) {
 
     newPreKeyBundle['opkId'] = opkId;
     newPreKeyBundle['opkPub'] = pkb['opkPub'][opkId];
-
-    console.log(newPreKeyBundle);
 
     return newPreKeyBundle;
 }

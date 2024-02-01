@@ -7,7 +7,7 @@ class ForgetValidator extends StatefulWidget{
 }
 
 class _ValidationPage extends State<ForgetValidator>{
-  late String _ValidationNum = '';
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context){

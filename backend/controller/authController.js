@@ -40,13 +40,14 @@ async function createNewUser(email, username, password) {
 async function updatePasswordByEmail(email, newPassword) {
     const user = await UserModel.findOne({ email });
     user.password = newPassword;
+
     await user.save();
 }
 
 async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     let lastBatchSpkUpdateTime = Date.now();
     let lastBatchSpkId = ( Math.max(...Object.keys(spkPub).map(Number)) ).toString();
-    console.log(`🎁🎁🎁${lastBatchSpkId}`);
+
     await UserModel.findOneAndUpdate(
         { uid: uid },
         { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastBatchSpkUpdateTime: lastBatchSpkUpdateTime, lastBatchSpkId: lastBatchSpkId }
@@ -57,17 +58,26 @@ async function downloadPreKeyBundle(uid, opkId) {
     let pkb = await UserModel.findOne(
         { uid: uid },
         'ipkPub spkPub spkSig opkPub'
-    );
+    ).lean();
+    console.log(pkb);
+    console.log('----------------------------------------------------------------');
 
-    pkb._doc['opkId'] = opkId;
-    pkb['opkPub'] = pkb['opkPub'][opkId];
+    let latestSpkIndex = ( Math.max(...Object.keys(pkb['spkPub']).map(Number)) ).toString();
+    console.log(latestSpkIndex);
 
-    let latestSpkIndex = ( Math.max(...Object.keys(JSON.parse(pkb['spkPub'])).map(Number)) ).toString();
-    pkb._doc['spkId'] = latestSpkIndex;
-    pkb['spkPub'] = JSON.parse(pkb['spkPub'])[latestSpkIndex];
-    pkb['spkSig'] = JSON.parse(pkb['spkSig'])[latestSpkIndex];
-    
-    return pkb;
+    let newPreKeyBundle = {};
+    newPreKeyBundle['ipkPub'] = pkb['ipkPub'];
+
+    newPreKeyBundle['spkId'] = latestSpkIndex;
+    newPreKeyBundle['spkPub'] = pkb['spkPub'][latestSpkIndex];
+    newPreKeyBundle['spkSig'] = pkb['spkSig'][latestSpkIndex];
+
+    newPreKeyBundle['opkId'] = opkId;
+    newPreKeyBundle['opkPub'] = pkb['opkPub'][opkId];
+
+    console.log(newPreKeyBundle);
+
+    return newPreKeyBundle;
 }
 
 async function getAvailableOpkIndex(uid) {
@@ -108,12 +118,9 @@ async function getSelfSpkStatus(uid) {
         { uid: uid },
         'spkPub lastBatchSpkId lastBatchSpkUpdateTime'
     );
-    console.log(spkStatus['lastBatchSpkUpdateTime']);
-    console.log(`🧨🧨🧨 ${Date.now() - spkStatus['lastBatchSpkUpdateTime']}`);
     let spkExpired = (Date.now() - spkStatus['lastBatchSpkUpdateTime']) >= (7 * 24 * 60 * 60 * 1000);
     let lastBatchSpkId = spkStatus['lastBatchSpkId'];
-    console.log(`spkExpired ${spkExpired}`);
-    console.log(`lastBatchSpkId ${lastBatchSpkId}`);
+
     return [spkExpired, lastBatchSpkId];
 }
 

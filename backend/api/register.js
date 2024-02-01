@@ -42,7 +42,6 @@ router.post('/send-mail', async(req, res) => {
             data: null,
             token: null
         });
-        console.log(err);
     }
 });
 

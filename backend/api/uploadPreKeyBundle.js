@@ -11,12 +11,6 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let deviceId = req.body.deviceId;
     let ipkPub = req.body.ipkPub;
     let spkPub = JSON.parse(req.body.spkPub);
-
-    console.log('--------------------------------');
-    console.log(req.body.spkSig);
-    console.log(typeof(req.body.spkSig));
-    console.log(typeof(req.body.opkPub));
-    console.log('--------------------------------');
     
     let spkSig = JSON.parse(req.body.spkSig);
     let opkPub = JSON.parse(req.body.opkPub);

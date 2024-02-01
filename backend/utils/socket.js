@@ -40,17 +40,16 @@ module.exports = function(io) {
                 console.log(`isPreKeySignalMessage🎨🎨 ${msg['isPreKeySignalMessage']}`);
 
                 if (msg['isPreKeySignalMessage']) { // 第一次發送訊息
-                    console.log('🎇one');
+                    console.log('[socket.js] 此訊息為 PreKeySignalMessage');
                     // 刪除傳送訊息時使用的 OPK
-                    console.log(`🈶🈶🈚🈚opkid: ${msg['opkId']}`);
                     if (msg['opkId']) {
-                        console.log(`delete opk id: ${msg['opkId']}!!!`);
+                        console.log(`[socket.js] 刪除opkid: ${msg['opkId']}`);
                         await authController.deleteOpkPub(receiverUid, msg['opkId']);
                     }
 
                 }
                 else { // 第二次以後發送訊息
-                    console.log('🎇two');
+                    console.log('[socket.js] 此訊息為 SignalMessage');
                 }
                 newMsg = {
                     'isPreKeySignalMessage': msg['isPreKeySignalMessage'],
@@ -62,8 +61,6 @@ module.exports = function(io) {
                 };
 
 
-                console.log('clientSendMsgToServer');
-                console.log('已連線過');
                 console.log(`newMsg👉 ${JSON.stringify(newMsg)}`);
     
                 if (receiverUid in userIdToRoomId) { // 接收者在線上

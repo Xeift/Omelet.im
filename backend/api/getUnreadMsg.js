@@ -9,7 +9,6 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
         let uid = decodedToken._uid;
 
         let msg = await msgController.readUnreadMsg(uid);
-        console.log(msg);
 
         res.status(200).json({
             message: '成功讀取未讀訊息',

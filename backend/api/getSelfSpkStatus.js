@@ -8,8 +8,7 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
         let [spkExpired, lastBatchSpkId] = await authController.getSelfSpkStatus(uid);
-        console.log(`spkExpired: ${spkExpired}`);
-        console.log(`lastBatchSpkId: ${lastBatchSpkId}`);
+
         res.status(200).json({
             message: '成功取得 SPK 狀態',
             data: { 'spkExpired': spkExpired, 'lastBatchSpkId': lastBatchSpkId },

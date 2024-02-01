@@ -4,7 +4,7 @@ const router = express.Router();
 const jwt = require('../utils/jwt.js');
 
 router.get('/', jwt.verifyJWT, async(req, res) => {
-    try {
+    // try {
         let uid = req.query.uid;
         let opkId = req.query.opkId;
         let preKeyBundle = await authController.downloadPreKeyBundle(uid, opkId);
@@ -14,14 +14,14 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
             data: preKeyBundle,
             token: null
         });
-    }
-    catch (err) {
-        res.status(500).json({
-            message: `後端發生例外錯誤： ${err.message}`,
-            data: null,
-            token: null
-        });
-    }
+    // }
+    // catch (err) {
+    //     res.status(500).json({
+    //         message: `後端發生例外錯誤： ${err.message}`,
+    //         data: null,
+    //         token: null
+    //     });
+    // }
 });
 
 module.exports = router;

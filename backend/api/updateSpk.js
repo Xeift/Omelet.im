@@ -11,12 +11,7 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let spkPub = JSON.parse(req.body.spkPub);
     let spkSig = JSON.parse(req.body.spkSig);
 
-    console.log('🧧--------------------------');
-    console.log(spkPub);
-    console.log(spkSig);
     await authController.updateSpk(uid, spkPub, spkSig);
-    console.log('🧧--------------------------');
-
 
     try {
         res.status(200).json({

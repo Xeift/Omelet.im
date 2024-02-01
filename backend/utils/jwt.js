@@ -54,7 +54,6 @@ async function verifyJWT(req, res, next) {
 
 async function verifyJWTSocket(token) {
     if (!token) {
-        console.log('請提供 JWT');
         return null;
     }
     else {

@@ -131,9 +131,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
 
       // 接收伺服器轉發的訊息
       socket.on('serverForwardMsgToClient', (msg) async {
+        print('--------------------------------');
         print('[main.dart] 已接收訊息👉 $msg');
         final safeMsgStore = SafeMsgStore();
         await safeMsgStore.storeReceivedMsg(msg);
+        print('--------------------------------\n');
       });
 
       socket.on('jwtExpired', (data) async {

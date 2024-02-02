@@ -8,6 +8,7 @@ import './../signal_protocol/encrypt_msg.dart';
 
 Future<void> onSendMsgBtnPressed(
     String remoteUid, String msgContent, Function updateHintMsg) async {
+  print('--------------------------------');
   const storage = FlutterSecureStorage();
   final selfUid = await storage.read(key: 'uid');
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
@@ -49,4 +50,5 @@ Future<void> onSendMsgBtnPressed(
     'receiver': remoteUid,
     'content': msgContent,
   });
+  print('--------------------------------\n');
 }

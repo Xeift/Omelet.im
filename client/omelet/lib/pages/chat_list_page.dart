@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../componets/Screen/frosted_appbr.dart';
+import '../pages/setting/setting_page.dart';
 
 
 
@@ -21,9 +22,17 @@ class _ChatListPageState extends State<ChatListPage> {
           fit: StackFit.expand,
           children: [
             FrostedAppbar(//引用AppBar套件
-                blurStrengthX: 20,
-                blurStrengthY: 20,
-                actions: const [Icon(Icons.help)],
+                blurStrengthX: 10,
+                blurStrengthY: 10,
+                actions: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => SettingPage()));
+                      },
+                      child: Icon(Icons.settings),
+                    ),
+                ],
                 leading: const Icon(Icons.account_circle),
                 title: const Center(
                   child:Text('Chat',//AppBar title 的文字

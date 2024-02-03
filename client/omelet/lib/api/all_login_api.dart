@@ -4,7 +4,7 @@ import 'dart:convert';
 
 Future<http.Response> loginAPI(String _userName, String _passWord) async {
   final res = await http.post(
-    Uri.parse('https://2006-61-63-216-180.ngrok-free.app/api/v1/login'),
+    Uri.parse('https://d7c0-61-63-216-180.ngrok-free.app/api/v1/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -16,7 +16,7 @@ Future<http.Response> loginAPI(String _userName, String _passWord) async {
 
 Future<http.Response> forgetemailAPI(String _forgetEamil) async {
   final forgetemailres = await http.post(
-    Uri.parse('https://2006-61-63-216-180.ngrok-free.app/api/v1/reset-password/send-mail'),
+    Uri.parse('https://d7c0-61-63-216-180.ngrok-free.app/api/v1/reset-password/send-mail'),
     headers: <String,String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -27,7 +27,7 @@ Future<http.Response> forgetemailAPI(String _forgetEamil) async {
 }
 Future<http.Response> signUpAPI(String _signUpEmail,String _signUpName,String _signUpPassword) async {
   final signUpData = await http.post(
-    Uri.parse('https://2006-61-63-216-180.ngrok-free.app/api/v1/register/send-mail'),
+    Uri.parse('https://d7c0-61-63-216-180.ngrok-free.app/api/v1/register/send-mail'),
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
     },

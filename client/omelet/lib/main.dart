@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:omelet/pages/forget_page.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';//login animation
 
-import '../api/all_login_api.dart';
-import '../componets/alert/AlertMsg.dart';
-import '../pages/chat_list_page.dart';
-import 'sign_up_page.dart';
+import 'api/all_login_api.dart';
+import 'componets/alert/AlertMsg.dart';
+import 'pages/chat_list_page.dart';
+import 'pages/sign_up_page.dart';
 void main() {
   runApp(const MyApp());
 }

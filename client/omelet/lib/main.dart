@@ -3,15 +3,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:omelet/pages/forget_page.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';//login animation
+import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
 
-import 'api/all_login_api.dart';
+import 'api_old/all_login_api.dart';
 import 'componets/alert/AlertMsg.dart';
 import 'pages/chat_list_page.dart';
 import 'pages/sign_up_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Omelet Login Page',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
-      ), 
+      ),
       initialRoute: "/",
       routes: {
         "/": (context) => const HomePage(title: "Login"),
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -141,9 +144,8 @@ class _HomePageState extends State<HomePage> {
         alignment: Alignment.centerRight,
         child: TextButton(
           onPressed: () {
-             Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const ForgetPage())
-            );
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const ForgetPage()));
           },
           child: const Text('Forget password'),
         ),
@@ -153,9 +155,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildLoingButton() {
     const loginspinkit = SpinKitChasingDots(
-  color: Colors.white,
-  size: 50.0,
-);
+      color: Colors.white,
+      size: 50.0,
+    );
 
     //登入按鈕，按下可以送出表單
     return Align(
@@ -185,22 +187,22 @@ class _HomePageState extends State<HomePage> {
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
 
             if (statusCode == 200) {
-               Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const ChatListPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const ChatListPage()));
               // 這裡要寫登入成功時的邏輯，比如提示使用者密碼錯誤
               // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
             } else if (statusCode == 401) {
               // 帳號密碼錯誤
-              LoginEorroMsg(context,'帳號密碼錯誤');
+              LoginEorroMsg(context, '帳號密碼錯誤');
             } else if (statusCode == 422) {
               // 帳號密碼為空
-              LoginEorroMsg(context,'請輸入帳號密碼');
+              LoginEorroMsg(context, '請輸入帳號密碼');
             } else if (statusCode == 429) {
               // 速率限制，請求次數過多（5分鐘內超過10次）
-              LoginEorroMsg(context,'請稍候在重新輸入');
+              LoginEorroMsg(context, '請稍候在重新輸入');
             } else if (statusCode == 500) {
               // 後端其他錯誤
-              LoginEorroMsg(context,'Another Eorro for server');
+              LoginEorroMsg(context, 'Another Eorro for server');
             }
           },
         ),
@@ -221,9 +223,8 @@ class _HomePageState extends State<HomePage> {
                 const BorderSide(color: Colors.grey, width: 1)),
           ),
           onPressed: () {
-             Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const SignUpPage())
-            );
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const SignUpPage()));
           },
           autofocus: true,
           child: Text(
@@ -234,5 +235,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }

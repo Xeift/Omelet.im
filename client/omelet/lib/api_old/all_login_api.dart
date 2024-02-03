@@ -4,7 +4,8 @@ import 'dart:convert';
 
 Future<http.Response> loginAPI(String _userName, String _passWord) async {
   final res = await http.post(
-    Uri.parse('https://d7c0-61-63-216-180.ngrok-free.app/api/v1/login'),
+    Uri.parse(
+        'https://d695-2001-b011-c009-903c-60b4-fa01-18d-589f.ngrok-free.app/api/v1/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -16,23 +17,29 @@ Future<http.Response> loginAPI(String _userName, String _passWord) async {
 
 Future<http.Response> forgetemailAPI(String _forgetEamil) async {
   final forgetemailres = await http.post(
-    Uri.parse('https://d7c0-61-63-216-180.ngrok-free.app/api/v1/reset-password/send-mail'),
-    headers: <String,String>{
+    Uri.parse(
+        'https://d695-2001-b011-c009-903c-60b4-fa01-18d-589f.ngrok-free.app/api/v1/reset-password/send-mail'),
+    headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(
-        <String,String>{'email':_forgetEamil}),
+    body: jsonEncode(<String, String>{'email': _forgetEamil}),
   );
   return forgetemailres;
 }
-Future<http.Response> signUpAPI(String _signUpEmail,String _signUpName,String _signUpPassword) async {
+
+Future<http.Response> signUpAPI(
+    String _signUpEmail, String _signUpName, String _signUpPassword) async {
   final signUpData = await http.post(
-    Uri.parse('https://d7c0-61-63-216-180.ngrok-free.app/api/v1/register/send-mail'),
+    Uri.parse(
+        'https://d7c0-61-63-216-180.ngrok-free.app/api/v1/register/send-mail'),
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(
-        <String,String>{'email': _signUpEmail,'username': _signUpName,'password':_signUpPassword}),
+    body: jsonEncode(<String, String>{
+      'email': _signUpEmail,
+      'username': _signUpName,
+      'password': _signUpPassword
+    }),
   );
   return signUpData;
 }

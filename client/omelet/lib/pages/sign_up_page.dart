@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-import '../api/all_login_api.dart';
+import '../api_old/all_login_api.dart';
 import '../componets/alert/AlertMsg.dart';
 
 class SignUpPage extends StatefulWidget {

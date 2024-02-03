@@ -54,7 +54,6 @@ class _HomePageState extends State<HomePage> {
 
   Color _eyeColor = Colors.grey;
   var emailTextFieldController, passwordTextFieldController;
-
   @override
   void initState() {
     //初始化
@@ -172,17 +171,38 @@ class _HomePageState extends State<HomePage> {
         height: 50,
         width: 150,
         child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.black),
-            ),
-            child: Text(
-              'Login',
-              style: Theme.of(context).primaryTextTheme.headline6,
-            ),
-            onPressed: () async => await loginLogic(
-                emailTextFieldController.text,
-                passwordTextFieldController.text,
-                context)),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+          ),
+          child: Text(
+            'Login',
+            style: Theme.of(context).primaryTextTheme.headline6,
+          ),
+          onPressed: () async {
+            //連接後端API,登入button，pressed event，當按下它會執行下方程式
+            _Email = emailTextFieldController.text; //_email字串存入_email變數
+            _Password = passwordTextFieldController.text; //_email字串存入_email變數
+
+            final statusCode = await loginLogic(_Email, _Password);
+
+            if (statusCode == 200) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const ChatListPage()));
+            } else if (statusCode == 401) {
+              // 帳號密碼錯誤
+              LoginEorroMsg(context, '帳號密碼錯誤');
+            } else if (statusCode == 422) {
+              // 帳號密碼為空
+              LoginEorroMsg(context, '請輸入帳號密碼');
+            } else if (statusCode == 429) {
+              // 速率限制，請求次數過多（5分鐘內超過10次）
+              LoginEorroMsg(context, '請稍候再重新輸入');
+            } else if (statusCode == 500) {
+              // 後端其他錯誤
+              LoginEorroMsg(context, '伺服器預期外錯誤');
+            }
+          },
+        ),
       ),
     );
   }

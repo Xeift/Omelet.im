@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   Color _eyeColor = Colors.grey;
   var emailTextFieldController, passwordTextFieldController;
+
   @override
   void initState() {
     //初始化
@@ -80,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildLoingButton(), //登入button控件呼叫
+                  buildLoginButton(), //登入button控件呼叫
                   const SizedBox(width: 30),
                   buildSignupPageButton(), //註冊button控件呼叫
                 ],
@@ -155,7 +156,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildLoingButton() {
+  Widget buildLoginButton() {
     const loginspinkit = SpinKitChasingDots(
       color: Colors.white,
       size: 50.0,

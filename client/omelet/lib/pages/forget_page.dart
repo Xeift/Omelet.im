@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:convert';
 
@@ -99,7 +99,7 @@ class _ForgetPageState extends State<ForgetPage> {
               LoginEorroMsg(context, 'Eorror server');
             }
 
-            print('$_ForgetEmail');
+            print(_ForgetEmail);
             print(statusCode); // http 狀態碼
             print(resBody); //
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容

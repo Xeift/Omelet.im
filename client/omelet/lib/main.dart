@@ -3,10 +3,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:omelet/pages/forget_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
 
-import 'api_old/all_login_api.dart';
+import 'api/post/login_api.dart';
+
+import 'utils/login_logic.dart';
+
 import 'componets/alert/alert_msg.dart';
+
 import 'pages/chat_list_page.dart';
 import 'pages/sign_up_page.dart';
 
@@ -42,12 +47,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static const storage = FlutterSecureStorage();
   late String _Email = '', _Password = '';
   final GlobalKey _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
 
   Color _eyeColor = Colors.grey;
   var emailTextFieldController, passwordTextFieldController;
+
   @override
   void initState() {
     //初始化
@@ -165,47 +172,17 @@ class _HomePageState extends State<HomePage> {
         height: 50,
         width: 150,
         child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-          child: Text(
-            'Login',
-            style: Theme.of(context).primaryTextTheme.headline6,
-          ),
-          onPressed: () async {
-            //連接後端API,登入button，pressed event，當按下它會執行下方程式
-            _Email = emailTextFieldController.text; //_email字串存入_email變數
-            _Password = passwordTextFieldController.text; //_email字串存入_email變數
-
-            final res = await loginAPI(_Email, _Password);
-            final statusCode = res.statusCode;
-            final resBody = jsonDecode(res.body);
-
-            print('$_Email');
-            print(statusCode); // http 狀態碼
-            print(resBody); // 登入 API 回應內容
-            print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
-
-            if (statusCode == 200) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const ChatListPage()));
-              // 這裡要寫登入成功時的邏輯，比如提示使用者密碼錯誤
-              // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
-            } else if (statusCode == 401) {
-              // 帳號密碼錯誤
-              LoginEorroMsg(context, '帳號密碼錯誤');
-            } else if (statusCode == 422) {
-              // 帳號密碼為空
-              LoginEorroMsg(context, '請輸入帳號密碼');
-            } else if (statusCode == 429) {
-              // 速率限制，請求次數過多（5分鐘內超過10次）
-              LoginEorroMsg(context, '請稍候在重新輸入');
-            } else if (statusCode == 500) {
-              // 後端其他錯誤
-              LoginEorroMsg(context, 'Another Eorro for server');
-            }
-          },
-        ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.black),
+            ),
+            child: Text(
+              'Login',
+              style: Theme.of(context).primaryTextTheme.headline6,
+            ),
+            onPressed: () async => await loginLogic(
+                emailTextFieldController.text,
+                passwordTextFieldController.text,
+                context)),
       ),
     );
   }

@@ -6,7 +6,7 @@ import 'package:omelet/pages/forget_page.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
 
 import 'api_old/all_login_api.dart';
-import 'componets/alert/AlertMsg.dart';
+import 'componets/alert/alert_msg.dart';
 import 'pages/chat_list_page.dart';
 import 'pages/sign_up_page.dart';
 

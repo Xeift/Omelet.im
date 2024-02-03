@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-import '../api_old/all_login_api.dart';
 import '../componets/alert/alert_msg.dart';
+import './../api/post/signup_api.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -139,7 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
             _singUppassword = passwordSignUpTextFieldController.text;
             _signUpName = nameSignUpTextFieldController.text;
             final signUpres =
-                await signUpAPI(_signUpEamil, _signUpName, _singUppassword);
+                await signupAPI(_signUpEamil, _signUpName, _singUppassword);
             final signUpstateCode = signUpres.statusCode;
             final resBody = jsonDecode(signUpres.body);
             print('$_signUpEamil');

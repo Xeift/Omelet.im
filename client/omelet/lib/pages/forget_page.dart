@@ -3,8 +3,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:omelet/api_old/all_login_api.dart';
 import 'package:omelet/componets/alert/alert_msg.dart';
+
+import './../api/post/reset_password_api.dart';
 
 class ForgetPage extends StatefulWidget {
   const ForgetPage({Key? key}) : super(key: key);
@@ -88,7 +89,7 @@ class _ForgetPageState extends State<ForgetPage> {
           ),
           onPressed: () async {
             _ForgetEmail = forgetEamilcontroller.text;
-            final forgetemailres = await forgetemailAPI(_ForgetEmail);
+            final forgetemailres = await resetPasswordSendMailAPI(_ForgetEmail);
             final statusCode = forgetemailres.statusCode;
             final resBody = jsonDecode(forgetemailres.body);
             if (statusCode == 200) {

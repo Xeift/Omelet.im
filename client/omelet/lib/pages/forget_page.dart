@@ -92,11 +92,11 @@ class _ForgetPageState extends State<ForgetPage> {
             final statusCode = forgetemailres.statusCode;
             final resBody = jsonDecode(forgetemailres.body);
             if (statusCode == 200) {
-              LoginEorroMsg(context, 'email 已成功寄出');
+              LoginErrorMsg(context, 'email 已成功寄出');
             } else if (statusCode == 401) {
-              LoginEorroMsg(context, 'Eamil 不存在，請先註冊');
+              LoginErrorMsg(context, 'Eamil 不存在，請先註冊');
             } else if (statusCode == 500) {
-              LoginEorroMsg(context, 'Eorror server');
+              LoginErrorMsg(context, 'Eorror server');
             }
 
             print(_ForgetEmail);

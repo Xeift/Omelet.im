@@ -6,10 +6,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
 
 import 'utils/login_logic.dart';
 
-import 'componets/alert/alert_msg.dart';
-
 import 'pages/chat_list_page.dart';
 import 'pages/sign_up_page.dart';
+
+import './componets/alert/alert_msg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -187,16 +187,16 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (_) => const ChatListPage()));
             } else if (statusCode == 401) {
               // 帳號密碼錯誤
-              LoginEorroMsg(context, '帳號密碼錯誤');
+              LoginErrorMsg(context, '帳號密碼錯誤');
             } else if (statusCode == 422) {
               // 帳號密碼為空
-              LoginEorroMsg(context, '請輸入帳號密碼');
+              LoginErrorMsg(context, '請輸入帳號密碼');
             } else if (statusCode == 429) {
               // 速率限制，請求次數過多（5分鐘內超過10次）
-              LoginEorroMsg(context, '請稍候再重新輸入');
+              LoginErrorMsg(context, '請稍候再重新輸入');
             } else if (statusCode == 500) {
               // 後端其他錯誤
-              LoginEorroMsg(context, '伺服器預期外錯誤');
+              LoginErrorMsg(context, '伺服器預期外錯誤');
             }
           },
         ),

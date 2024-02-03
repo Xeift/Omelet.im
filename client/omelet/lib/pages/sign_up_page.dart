@@ -153,13 +153,13 @@ class _SignUpPageState extends State<SignUpPage> {
               // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
             } else if (signUpstateCode == 401) {
               // 帳號密碼錯誤
-              LoginEorroMsg(context, 'Eamil已存在');
+              LoginErrorMsg(context, 'Eamil已存在');
             } else if (signUpstateCode == 422) {
               // 帳號密碼為空
-              LoginEorroMsg(context, '請輸入註冊資訊');
+              LoginErrorMsg(context, '請輸入註冊資訊');
             } else if (signUpstateCode == 500) {
               // 後端其他錯誤
-              LoginEorroMsg(context, 'Another Eorro for server');
+              LoginErrorMsg(context, 'Another Eorro for server');
             }
           },
           autofocus: true,

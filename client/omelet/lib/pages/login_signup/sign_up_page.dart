@@ -138,8 +138,8 @@ class _SignUpPageState extends State<SignUpPage> {
             _signUpEamil = emailSignUpTextFieldController.text;
             _singUppassword = passwordSignUpTextFieldController.text;
             _signUpName = nameSignUpTextFieldController.text;
-            final signUpres =
-                await signupAPI(_signUpEamil, _signUpName, _singUppassword);
+            final signUpres = await signupSendMailAPI(
+                _signUpEamil, _signUpName, _singUppassword);
             final signUpstateCode = signUpres.statusCode;
             final resBody = jsonDecode(signUpres.body);
             print('$_signUpEamil');

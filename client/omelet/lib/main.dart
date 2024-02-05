@@ -183,21 +183,25 @@ class _HomePageState extends State<HomePage> {
 
             final statusCode = await loginLogic(_Email, _Password);
 
-            if (statusCode == 200) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const ChatListPage()));
-            } else if (statusCode == 401) {
-              // 帳號密碼錯誤
-              LoginErrorMsg(context, '帳號密碼錯誤');
-            } else if (statusCode == 422) {
-              // 帳號密碼為空
-              LoginErrorMsg(context, '請輸入帳號密碼');
-            } else if (statusCode == 429) {
-              // 速率限制，請求次數過多（5分鐘內超過10次）
-              LoginErrorMsg(context, '請稍候再重新輸入');
-            } else if (statusCode == 500) {
-              // 後端其他錯誤
-              LoginErrorMsg(context, '伺服器預期外錯誤');
+            switch (statusCode) {
+              case 200:
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const ChatListPage()));
+                break;
+              case 401:
+                LoginErrorMsg(context, '帳號密碼錯誤');
+                break;
+              case 422:
+                LoginErrorMsg(context, '請輸入帳號密碼');
+                break;
+              case 429:
+                LoginErrorMsg(context, '請稍候再重新輸入');
+                break;
+              case 500:
+                LoginErrorMsg(context, '伺服器預期外錯誤');
+                break;
+              default:
+                LoginErrorMsg(context, '未知錯誤');
             }
           },
         ),

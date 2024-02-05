@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import '../../componets/alert/AlertMsg.dart';
+import '../../componets/alert/alert_msg.dart';
 
 import './../../api/post/signup_api.dart';
 
@@ -17,11 +17,12 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   Color _eyeColor = Colors.grey;
   bool _isObscure = true;
-  late String _signUpEamil = '', _singUppassword = '', _signUpName = '';
+  late String _signUpEamil = '', _singUpPassword = '', _signUpName = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var emailSignUpTextFieldController,
       passwordSignUpTextFieldController,
       nameSignUpTextFieldController;
+
   @override
   void initState() {
     super.initState();
@@ -116,7 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return const Padding(
       padding: EdgeInsets.all(8),
       child: Text(
-        'Reset Password',
+        'Sign Up',
         style: TextStyle(fontSize: 40),
       ),
     );
@@ -136,30 +137,30 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           onPressed: () async {
             _signUpEamil = emailSignUpTextFieldController.text;
-            _singUppassword = passwordSignUpTextFieldController.text;
+            _singUpPassword = passwordSignUpTextFieldController.text;
             _signUpName = nameSignUpTextFieldController.text;
-            final signUpres = await signupSendMailAPI(
-                _signUpEamil, _signUpName, _singUppassword);
-            final signUpstateCode = signUpres.statusCode;
-            final resBody = jsonDecode(signUpres.body);
-            print('$_signUpEamil');
-            print(signUpstateCode); // http 狀態碼
-            print(resBody); // 登入 API 回應內容
-            print(resBody['message']);
+            final res = await signUpSendMailAPI(
+                _signUpEamil, _signUpName, _singUpPassword);
+            // final resBody = jsonDecode(res.body);
+            final statusCode = res.statusCode;
 
-            if (signUpstateCode == 200) {
-              print('登入成功( •̀ ω •́ )✧');
-              // 這裡要寫登入成功時的邏輯，比如提示使用者密碼錯誤
-              // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
-            } else if (signUpstateCode == 401) {
-              // 帳號密碼錯誤
-              LoginEorroMsg(context, 'Eamil已存在');
-            } else if (signUpstateCode == 422) {
-              // 帳號密碼為空
-              LoginEorroMsg(context, '請輸入註冊資訊');
-            } else if (signUpstateCode == 500) {
-              // 後端其他錯誤
-              LoginEorroMsg(context, 'Another Eorro for server');
+            switch (statusCode) {
+              case 200:
+                break;
+              case 401:
+                LoginErrorMsg(context, 'Eamil已存在');
+                break;
+              case 422:
+                LoginErrorMsg(context, '請輸入註冊資訊');
+                break;
+              case 429:
+                LoginErrorMsg(context, '請稍候再重新輸入');
+                break;
+              case 500:
+                LoginErrorMsg(context, '伺服器預期外錯誤');
+                break;
+              default:
+                LoginErrorMsg(context, '未知錯誤');
             }
           },
           autofocus: true,

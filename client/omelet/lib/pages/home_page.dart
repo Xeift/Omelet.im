@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
 
-import '../componets/alert/AlertMsg.dart';
+import '../componets/alert/alert_msg.dart';
 import '../pages/chat_list_page.dart';
 import '../pages/login_signup/sign_up_page.dart';
 
@@ -170,16 +170,16 @@ class _HomePageState extends State<HomePage> {
               // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
             } else if (statusCode == 401) {
               // 帳號密碼錯誤
-              LoginEorroMsg(context, '帳號密碼錯誤');
+              LoginErrorMsg(context, '帳號密碼錯誤');
             } else if (statusCode == 422) {
               // 帳號密碼為空
-              LoginEorroMsg(context, '請輸入帳號密碼');
+              LoginErrorMsg(context, '請輸入帳號密碼');
             } else if (statusCode == 429) {
               // 速率限制，請求次數過多（5分鐘內超過10次）
-              LoginEorroMsg(context, '請稍候在重新輸入');
+              LoginErrorMsg(context, '請稍候在重新輸入');
             } else if (statusCode == 500) {
               // 後端其他錯誤
-              LoginEorroMsg(context, 'Another Eorro for server');
+              LoginErrorMsg(context, 'Another Eorro for server');
             }
           },
         ),

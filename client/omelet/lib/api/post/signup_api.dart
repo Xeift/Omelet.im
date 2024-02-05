@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import './../../utils/server_uri.dart';
 
-Future<http.Response> signupSendMailAPI(
+Future<http.Response> signUpSendMailAPI(
     String email, String username, String password) async {
   final res = await http.post(
     Uri.parse('$serverUri/api/v1/login'),

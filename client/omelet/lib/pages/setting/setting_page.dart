@@ -42,7 +42,7 @@ class _SettingPageState extends State<SettingPage> {
                   const SizedBox(
                     width: 5,
                   ),
-                  const Text("personal")
+                  const Text('personal')
                 ],
               )
             ],

@@ -89,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
       obscureText: _isObscure,
       controller: passwordSignUpTextFieldController,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         //密碼遮蔽button
         labelText: 'Password',
         suffixIcon: IconButton(

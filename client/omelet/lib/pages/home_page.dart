@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
 
-            print('$_Email');
+            print(_Email);
             print(statusCode); // http 狀態碼
             print(resBody); // 登入 API 回應內容
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容

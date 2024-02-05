@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Setting{
+class Setting {
   final String title;
   final String route;
   final IconData icon;
@@ -15,14 +15,13 @@ class Setting{
 
 final List<Setting> settings = [
   Setting(
-    title: "Setting ",
-    route: "/",
+    title: 'Setting ',
+    route: '/',
     icon: Icons.settings,
   ),
   Setting(
-    title: "Statements",
-    route: "/",
+    title: 'Statements',
+    route: '/',
     icon: CupertinoIcons.doc_fill,
   ),
-
 ];

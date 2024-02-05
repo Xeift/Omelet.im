@@ -142,7 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 await signupAPI(_signUpEamil, _signUpName, _singUppassword);
             final signUpstateCode = signUpres.statusCode;
             final resBody = jsonDecode(signUpres.body);
-            print('$_signUpEamil');
+            print(_signUpEamil);
             print(signUpstateCode); // http 狀態碼
             print(resBody); // 登入 API 回應內容
             print(resBody['message']);

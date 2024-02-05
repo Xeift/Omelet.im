@@ -16,7 +16,7 @@ void LoginErrorMsg(BuildContext context, String message) {
               Navigator.pop(context, true);
             },
             child: const Text(
-              "CLOSE",
+              'CLOSE',
               style: TextStyle(color: Colors.black),
             ),
           ),

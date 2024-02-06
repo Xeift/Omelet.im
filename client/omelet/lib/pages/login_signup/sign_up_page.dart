@@ -142,24 +142,27 @@ class SignUpPageState extends State<SignUpPage> {
                 _signUpEamil, _signUpName, _singUpPassword);
             // final resBody = jsonDecode(res.body);
             final statusCode = res.statusCode;
-
-            switch (statusCode) {
-              case 200:
-                break;
-              case 401:
-                loginErrorMsg(context, 'Eamil已存在');
-                break;
-              case 422:
-                loginErrorMsg(context, '請輸入註冊資訊');
-                break;
-              case 429:
-                loginErrorMsg(context, '請稍候再重新輸入');
-                break;
-              case 500:
-                loginErrorMsg(context, '伺服器預期外錯誤');
-                break;
-              default:
-                loginErrorMsg(context, '未知錯誤');
+            if(!context.mounted){
+              return;
+            }else{
+              switch (statusCode) {
+                case 200:
+                  break;
+                case 401:
+                  loginErrorMsg(context, 'Eamil已存在');
+                  break;
+                case 422:
+                  loginErrorMsg(context, '請輸入註冊資訊');
+                  break;
+                case 429:
+                  loginErrorMsg(context, '請稍候再重新輸入');
+                  break;
+                case 500:
+                  loginErrorMsg(context, '伺服器預期外錯誤');
+                  break;
+                default:
+                  loginErrorMsg(context, '未知錯誤');
+              }
             }
           },
           autofocus: true,

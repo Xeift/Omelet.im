@@ -8,10 +8,10 @@ import '../../api/post/reset_password_api.dart';
 class ForgetPage extends StatefulWidget {
   const ForgetPage({Key? key}) : super(key: key);
   @override
-  _ForgetPageState createState() => _ForgetPageState();
+  ForgetPageState createState() => ForgetPageState();
 }
 
-class _ForgetPageState extends State<ForgetPage> {
+class ForgetPageState extends State<ForgetPage> {
   late String _userForgetEmail = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -84,7 +84,7 @@ class _ForgetPageState extends State<ForgetPage> {
           ),
           child: Text(
             'Submit',
-            style: Theme.of(context).primaryTextTheme.headline6,
+            style: Theme.of(context).primaryTextTheme.titleLarge,
           ),
           onPressed: () async {
             _userForgetEmail = forgetEamilcontroller.text;

@@ -15,10 +15,10 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   late String _userEmail = '', _userPassword = '';
   final GlobalKey _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Text(
             'Login',
-            style: Theme.of(context).primaryTextTheme.headline6,
+            style: Theme.of(context).primaryTextTheme.titleLarge,
           ),
           onPressed: () async {
             //連接後端API,登入button，pressed event，當按下它會執行下方程式
@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
           autofocus: true,
           child: Text(
             'Sign Up',
-            style: Theme.of(context).primaryTextTheme.headline6,
+            style: Theme.of(context).primaryTextTheme.titleLarge,
           ),
         ),
       ),

@@ -17,6 +17,7 @@ class _ForgetPageState extends State<ForgetPage> {
   late String _ForgetEmail = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var forgetEamilcontroller;
+
   @override
   void initState() {
     super.initState();
@@ -92,11 +93,11 @@ class _ForgetPageState extends State<ForgetPage> {
             final statusCode = forgetemailres.statusCode;
             final resBody = jsonDecode(forgetemailres.body);
             if (statusCode == 200) {
-              LoginErrorMsg(context, 'email 已成功寄出');
+              loginErrorMsg(context, 'email 已成功寄出');
             } else if (statusCode == 401) {
-              LoginErrorMsg(context, 'Eamil 不存在，請先註冊');
+              loginErrorMsg(context, 'Eamil 不存在，請先註冊');
             } else if (statusCode == 500) {
-              LoginErrorMsg(context, 'Eorror server');
+              loginErrorMsg(context, 'Eorror server');
             }
 
             print('$_ForgetEmail');

@@ -170,16 +170,16 @@ class _HomePageState extends State<HomePage> {
               // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
             } else if (statusCode == 401) {
               // 帳號密碼錯誤
-              LoginErrorMsg(context, '帳號密碼錯誤');
+              loginErrorMsg(context, '帳號密碼錯誤');
             } else if (statusCode == 422) {
               // 帳號密碼為空
-              LoginErrorMsg(context, '請輸入帳號密碼');
+              loginErrorMsg(context, '請輸入帳號密碼');
             } else if (statusCode == 429) {
               // 速率限制，請求次數過多（5分鐘內超過10次）
-              LoginErrorMsg(context, '請稍候在重新輸入');
+              loginErrorMsg(context, '請稍候在重新輸入');
             } else if (statusCode == 500) {
               // 後端其他錯誤
-              LoginErrorMsg(context, 'Another Eorro for server');
+              loginErrorMsg(context, 'Another Eorro for server');
             }
           },
         ),

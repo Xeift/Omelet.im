@@ -18,7 +18,7 @@ class SignUpPageState extends State<SignUpPage> {
   bool _isObscure = true;
   late String _signUpEamil = '', _singUpPassword = '', _signUpName = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  var emailSignUpTextFieldController,
+  late TextEditingController emailSignUpTextFieldController,
       passwordSignUpTextFieldController,
       nameSignUpTextFieldController;
 
@@ -147,19 +147,19 @@ class SignUpPageState extends State<SignUpPage> {
               case 200:
                 break;
               case 401:
-                LoginErrorMsg(context, 'Eamil已存在');
+                loginErrorMsg(context, 'Eamil已存在');
                 break;
               case 422:
-                LoginErrorMsg(context, '請輸入註冊資訊');
+                loginErrorMsg(context, '請輸入註冊資訊');
                 break;
               case 429:
-                LoginErrorMsg(context, '請稍候再重新輸入');
+                loginErrorMsg(context, '請稍候再重新輸入');
                 break;
               case 500:
-                LoginErrorMsg(context, '伺服器預期外錯誤');
+                loginErrorMsg(context, '伺服器預期外錯誤');
                 break;
               default:
-                LoginErrorMsg(context, '未知錯誤');
+                loginErrorMsg(context, '未知錯誤');
             }
           },
           autofocus: true,

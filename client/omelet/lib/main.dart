@@ -1,14 +1,14 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api, non_constant_identifier_names, use_build_context_synchronously, unnecessary_string_interpolations, avoid_print, deprecated_member_use, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import 'package:omelet/pages/forget_page.dart';
+import 'package:omelet/pages/login_signup/forget_page.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
 
 import 'utils/login_logic.dart';
 
 import 'pages/chat_list_page.dart';
-import 'pages/sign_up_page.dart';
+import 'pages/login_signup/sign_up_page.dart';
 
 import './componets/alert/alert_msg.dart';
 
@@ -189,19 +189,19 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (_) => const ChatListPage()));
                 break;
               case 401:
-                LoginErrorMsg(context, '帳號密碼錯誤');
+                loginErrorMsg(context, '帳號密碼錯誤');
                 break;
               case 422:
-                LoginErrorMsg(context, '請輸入帳號密碼');
+                loginErrorMsg(context, '請輸入帳號密碼');
                 break;
               case 429:
-                LoginErrorMsg(context, '請稍候再重新輸入');
+                loginErrorMsg(context, '請稍候再重新輸入');
                 break;
               case 500:
-                LoginErrorMsg(context, '伺服器預期外錯誤');
+                loginErrorMsg(context, '伺服器預期外錯誤');
                 break;
               default:
-                LoginErrorMsg(context, '未知錯誤');
+                loginErrorMsg(context, '未知錯誤');
             }
           },
         ),

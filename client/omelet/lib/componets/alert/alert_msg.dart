@@ -1,8 +1,6 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 
-// ignore_for_file: non_constant_identifier_names
-void LoginErrorMsg(BuildContext context, String message) {
+void loginErrorMsg(BuildContext context, String message) {
   showDialog(
     context: context,
     builder: (BuildContext context) {

@@ -1,11 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_build_context_synchronously, unnecessary_string_interpolations, avoid_print, duplicate_ignore, deprecated_member_use
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:omelet/componets/alert/alert_msg.dart';
 
-import './../../api/post/reset_password_api.dart';
+import '../../componets/alert/alert_msg.dart';
+import '../../api/post/reset_password_api.dart';
 
 class ForgetPage extends StatefulWidget {
   const ForgetPage({Key? key}) : super(key: key);
@@ -14,9 +12,10 @@ class ForgetPage extends StatefulWidget {
 }
 
 class _ForgetPageState extends State<ForgetPage> {
-  late String _ForgetEmail = '';
+  late String _userForgetEmail = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  var forgetEamilcontroller;
+
+  late TextEditingController forgetEamilcontroller;
 
   @override
   void initState() {
@@ -43,18 +42,18 @@ class _ForgetPageState extends State<ForgetPage> {
           children: [
             const SizedBox(height: kToolbarHeight),
             const SizedBox(height: 30),
-            buildForget_title(),
+            buildForgetTitle(),
             const SizedBox(height: 120),
-            buildForget_emailTextField(),
+            buildForgetEmailTextField(),
             const SizedBox(height: 30),
-            buildForget_submitButton(),
+            buildForgetSubmitButton(),
           ],
         ),
       ),
     );
   }
 
-  Widget buildForget_title() {
+  Widget buildForgetTitle() {
     return const Padding(
       padding: EdgeInsets.all(8),
       child: Text(
@@ -64,7 +63,7 @@ class _ForgetPageState extends State<ForgetPage> {
     );
   }
 
-  Widget buildForget_emailTextField() {
+  Widget buildForgetEmailTextField() {
     return TextField(
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
@@ -74,7 +73,7 @@ class _ForgetPageState extends State<ForgetPage> {
     );
   }
 
-  Widget buildForget_submitButton() {
+  Widget buildForgetSubmitButton() {
     return Align(
       child: SizedBox(
         height: 50,
@@ -88,19 +87,22 @@ class _ForgetPageState extends State<ForgetPage> {
             style: Theme.of(context).primaryTextTheme.headline6,
           ),
           onPressed: () async {
-            _ForgetEmail = forgetEamilcontroller.text;
-            final forgetemailres = await resetPasswordSendMailAPI(_ForgetEmail);
+            _userForgetEmail = forgetEamilcontroller.text;
+            final forgetemailres = await resetPasswordSendMailAPI(_userForgetEmail);
             final statusCode = forgetemailres.statusCode;
             final resBody = jsonDecode(forgetemailres.body);
-            if (statusCode == 200) {
-              loginErrorMsg(context, 'email 已成功寄出');
-            } else if (statusCode == 401) {
-              loginErrorMsg(context, 'Eamil 不存在，請先註冊');
-            } else if (statusCode == 500) {
-              loginErrorMsg(context, 'Eorror server');
+            if(!context.mounted){
+              return;
+            }else{
+              if (statusCode == 200) {
+                loginErrorMsg(context, 'email 已成功寄出');
+              } else if (statusCode == 401) {
+                loginErrorMsg(context, 'Eamil 不存在，請先註冊');
+              } else if (statusCode == 500) {
+                loginErrorMsg(context, 'Eorror server');
+              }
             }
-
-            print('$_ForgetEmail');
+            print(_userForgetEmail);
             print(statusCode); // http 狀態碼
             print(resBody); //
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容

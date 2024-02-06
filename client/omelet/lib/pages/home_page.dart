@@ -1,11 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_typing_uninitialized_variables, non_constant_identifier_names, deprecated_member_use, use_build_context_synchronously, unused_local_variable
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
 import 'package:omelet/pages/login_signup/forget_page.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
 
 import '../componets/alert/alert_msg.dart';
 import '../pages/chat_list_page.dart';
@@ -21,11 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late String _Email = '', _Password = '';
+  late String _userEmail = '', _userPassword = '';
   final GlobalKey _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
   Color _eyeColor = Colors.grey;
-  var emailTextFieldController, passwordTextFieldController;
+  late TextEditingController emailTextFieldController;
+  late TextEditingController passwordTextFieldController;
 
   @override
   void initState() {
@@ -66,6 +65,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  
+
 
   Widget buildTitle() {
     //Login字樣
@@ -130,12 +132,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildLoingButton() {
-    const loginspinkit = SpinKitChasingDots(
-      color: Colors.white,
-      size: 50.0,
-    );
+  void nextPage(){
+    Navigator.push(context,
+    MaterialPageRoute(builder: (_) => const ChatListPage()));
+  }
 
+  Widget buildLoingButton() {
     //登入按鈕，按下可以送出表單
     return Align(
       child: SizedBox(
@@ -151,41 +153,46 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: () async {
             //連接後端API,登入button，pressed event，當按下它會執行下方程式
-            _Email = emailTextFieldController.text; //_email字串存入_email變數
-            _Password = passwordTextFieldController.text; //_email字串存入_email變數
-
-            final res = await loginAPI(_Email, _Password);
+            _userEmail = emailTextFieldController.text; //_email字串存入_email變數
+            _userPassword = passwordTextFieldController.text; //_email字串存入_email變數
+            print(_userPassword);
+            final res = await loginAPI(_userEmail, _userPassword);
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
-
-            print(_Email);
+            print(_userEmail);
             print(statusCode); // http 狀態碼
             print(resBody); // 登入 API 回應內容
-            print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
+            print(resBody['message']); 
 
-            if (statusCode == 200) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const ChatListPage()));
+            if(!context.mounted){
+              return;
+            }else{
+              if (statusCode == 200) {
+              nextPage();
               // 這裡要寫登入成功時的邏輯，比如提示使用者密碼錯誤
               // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
             } else if (statusCode == 401) {
               // 帳號密碼錯誤
-              loginErrorMsg(context, '帳號密碼錯誤');
+              ('帳號密碼錯誤');
             } else if (statusCode == 422) {
               // 帳號密碼為空
-              loginErrorMsg(context, '請輸入帳號密碼');
+              loginErrorMsg(context,'請輸入帳號密碼');
             } else if (statusCode == 429) {
               // 速率限制，請求次數過多（5分鐘內超過10次）
-              loginErrorMsg(context, '請稍候在重新輸入');
+              loginErrorMsg(context,'請稍候在重新輸入');
             } else if (statusCode == 500) {
               // 後端其他錯誤
-              loginErrorMsg(context, 'Another Eorro for server');
+              loginErrorMsg(context,'Another Eorro for server');
+            }
             }
           },
+          
         ),
       ),
     );
   }
+
+  
 
   Widget buildSignupPageButton() {
     return Align(

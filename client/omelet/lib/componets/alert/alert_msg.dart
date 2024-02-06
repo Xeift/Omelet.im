@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-void loginErrorMsg(BuildContext context, String message) {
-  showDialog(
+void loginErrorMsg(BuildContext context, String message) => showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
@@ -22,4 +21,3 @@ void loginErrorMsg(BuildContext context, String message) {
       );
     },
   );
-}

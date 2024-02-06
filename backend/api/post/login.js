@@ -1,5 +1,5 @@
-const authController = require('../controller/authController.js');
-const jwt = require('../utils/jwt.js');
+const authController = require('../../controller/authController.js');
+const jwt = require('../../utils/jwt.js');
 const express = require('express');
 const router = express.Router();
 

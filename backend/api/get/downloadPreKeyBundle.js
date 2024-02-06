@@ -1,18 +1,17 @@
-const msgController = require('../controller/msgController.js');
+const authController = require('../../controller/authController.js');
 const express = require('express');
 const router = express.Router();
-const jwt = require('../utils/jwt.js');
+const jwt = require('../../utils/jwt.js');
 
 router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
-        let decodedToken = req.decodedToken;
-        let uid = decodedToken._uid;
-
-        let msg = await msgController.readUnreadMsg(uid);
+        let uid = req.query.uid;
+        let opkId = req.query.opkId;
+        let preKeyBundle = await authController.downloadPreKeyBundle(uid, opkId);
 
         res.status(200).json({
-            message: '成功讀取未讀訊息',
-            data: msg,
+            message: '成功下載 Pre Key Bundle',
+            data: preKeyBundle,
             token: null
         });
     }

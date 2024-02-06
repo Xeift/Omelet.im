@@ -1,8 +1,8 @@
-const authController = require('../controller/authController.js');
-const msgController = require('../controller/msgController.js');
+const authController = require('../../controller/authController.js');
+const msgController = require('../../controller/msgController.js');
 const express = require('express');
 const router = express.Router();
-const jwt = require('../utils/jwt.js');
+const jwt = require('../../utils/jwt.js');
 
 router.post('/', jwt.verifyJWT, async(req, res) => {
     let decodedToken = req.decodedToken;

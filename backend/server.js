@@ -22,7 +22,6 @@ app.use(bodyParser.json());
 app.use('/api/v1/login', rateLimit.authLimiter, require('./api/post/login.js'));
 app.use('/api/v1/register', rateLimit.authLimiter, require('./api/post/register.js'));
 app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/post/resetPassword.js'));
-app.use('/api/v1/message', rateLimit.authLimiter, require('./api/message.js'));
 app.use('/api/v1/get-unread-msg', rateLimit.authLimiter, require('./api/get/getUnreadMsg.js'));
 app.use('/api/v1/check-jwt-status', rateLimit.authLimiter, require('./api/post/checkJwtStatus.js'));
 app.use('/api/v1/upload-pre-key-bundle', rateLimit.authLimiter, require('./api/post/uploadPreKeyBundle.js'));

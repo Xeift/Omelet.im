@@ -9,14 +9,16 @@ import './../api/post/reset_password_api.dart';
 
 class ForgetPage extends StatefulWidget {
   const ForgetPage({Key? key}) : super(key: key);
+
   @override
-  _ForgetPageState createState() => _ForgetPageState();
+  ForgetPageState createState() => ForgetPageState();
 }
 
-class _ForgetPageState extends State<ForgetPage> {
-  late String _ForgetEmail = '';
+class ForgetPageState extends State<ForgetPage> {
+  late String forgetEmail = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  var forgetEamilcontroller;
+  late TextEditingController forgetEamilcontroller;
+
   @override
   void initState() {
     super.initState();
@@ -42,9 +44,9 @@ class _ForgetPageState extends State<ForgetPage> {
           children: [
             const SizedBox(height: kToolbarHeight),
             const SizedBox(height: 30),
-            buildForget_title(),
+            buildForgetTitle(),
             const SizedBox(height: 120),
-            buildForget_emailTextField(),
+            buildForgetEmailTextField(),
             const SizedBox(height: 30),
             buildForget_submitButton(),
           ],
@@ -53,7 +55,7 @@ class _ForgetPageState extends State<ForgetPage> {
     );
   }
 
-  Widget buildForget_title() {
+  Widget buildForgetTitle() {
     return const Padding(
       padding: EdgeInsets.all(8),
       child: Text(
@@ -63,7 +65,7 @@ class _ForgetPageState extends State<ForgetPage> {
     );
   }
 
-  Widget buildForget_emailTextField() {
+  Widget buildForgetEmailTextField() {
     return TextField(
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
@@ -85,11 +87,11 @@ class _ForgetPageState extends State<ForgetPage> {
           ),
           child: Text(
             'Submit',
-            style: Theme.of(context).primaryTextTheme.headline6,
+            style: Theme.of(context).primaryTextTheme.titleLarge,
           ),
           onPressed: () async {
-            _ForgetEmail = forgetEamilcontroller.text;
-            final forgetemailres = await resetPasswordSendMailAPI(_ForgetEmail);
+            forgetEmail = forgetEamilcontroller.text;
+            final forgetemailres = await resetPasswordSendMailAPI(forgetEmail);
             final statusCode = forgetemailres.statusCode;
             final resBody = jsonDecode(forgetemailres.body);
             if (statusCode == 200) {
@@ -100,7 +102,7 @@ class _ForgetPageState extends State<ForgetPage> {
               LoginErrorMsg(context, 'Eorror server');
             }
 
-            print(_ForgetEmail);
+            print(forgetEmail);
             print(statusCode); // http 狀態碼
             print(resBody); //
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容

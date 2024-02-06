@@ -39,4 +39,6 @@ Future<void> generateAndStoreKey() async {
           selfOpk.id.toString():
               jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
       }));
+
+  print(res.body);
 }

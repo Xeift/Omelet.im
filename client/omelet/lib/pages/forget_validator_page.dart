@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class ForgetValidator extends StatefulWidget {
   const ForgetValidator({Key? key}) : super(key: key);
   @override
-  _ValidationPage createState() => _ValidationPage();
+  ValidationPage createState() => ValidationPage();
 }
 
-class _ValidationPage extends State<ForgetValidator> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class ValidationPage extends State<ForgetValidator> {
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +20,7 @@ class _ValidationPage extends State<ForgetValidator> {
     );
   }
 
-  Widget buildValidation_textField() {
+  Widget buildValidationTextField() {
     return const TextField(
       decoration: InputDecoration(
         border: OutlineInputBorder(),

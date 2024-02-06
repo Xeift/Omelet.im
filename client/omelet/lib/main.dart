@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:omelet/pages/forget_page.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:flutter_spinkit/flutter_spinkit.dart'; //login animation
 
 import 'utils/login_logic.dart';
 
@@ -44,7 +44,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const storage = FlutterSecureStorage();
+  // static const storage = FlutterSecureStorage();
   late String _Email = '', _Password = '';
   final GlobalKey _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
@@ -158,10 +158,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildLoginButton() {
-    const loginspinkit = SpinKitChasingDots(
-      color: Colors.white,
-      size: 50.0,
-    );
+    // const loginspinkit = SpinKitChasingDots(
+    //   color: Colors.white,
+    //   size: 50.0,
+    // );
 
     //登入按鈕，按下可以送出表單
     return Align(

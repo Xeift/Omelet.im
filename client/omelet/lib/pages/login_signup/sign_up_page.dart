@@ -1,6 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api
-
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -10,11 +8,12 @@ import './../../api/post/signup_api.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
+
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  SignUpPageState createState() => SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class SignUpPageState extends State<SignUpPage> {
   Color _eyeColor = Colors.grey;
   bool _isObscure = true;
   late String _signUpEamil = '', _singUpPassword = '', _signUpName = '';
@@ -166,7 +165,7 @@ class _SignUpPageState extends State<SignUpPage> {
           autofocus: true,
           child: Text(
             'Submit',
-            style: Theme.of(context).primaryTextTheme.headline6,
+            style: Theme.of(context).primaryTextTheme.titleLarge,
           ),
         ),
       ),

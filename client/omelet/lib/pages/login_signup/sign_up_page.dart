@@ -142,14 +142,14 @@ class SignUpPageState extends State<SignUpPage> {
                 _signUpEamil, _signUpName, _singUpPassword);
             // final resBody = jsonDecode(res.body);
             final statusCode = res.statusCode;
-            if(!context.mounted){
+            if (!context.mounted) {
               return;
-            }else{
+            } else {
               switch (statusCode) {
                 case 200:
                   break;
                 case 401:
-                  loginErrorMsg(context, 'Eamil已存在');
+                  loginErrorMsg(context, 'Email已存在');
                   break;
                 case 422:
                   loginErrorMsg(context, '請輸入註冊資訊');

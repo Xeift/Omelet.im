@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
@@ -88,12 +87,13 @@ class ForgetPageState extends State<ForgetPage> {
           ),
           onPressed: () async {
             _userForgetEmail = forgetEamilcontroller.text;
-            final forgetemailres = await resetPasswordSendMailAPI(_userForgetEmail);
+            final forgetemailres =
+                await resetPasswordSendMailAPI(_userForgetEmail);
             final statusCode = forgetemailres.statusCode;
             final resBody = jsonDecode(forgetemailres.body);
-            if(!context.mounted){
+            if (!context.mounted) {
               return;
-            }else{
+            } else {
               if (statusCode == 200) {
                 loginErrorMsg(context, 'email 已成功寄出');
               } else if (statusCode == 401) {
@@ -106,7 +106,7 @@ class ForgetPageState extends State<ForgetPage> {
             print(statusCode); // http 狀態碼
             print(resBody); //
             print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
-            //build await function after complet date transform
+            //build await function after complete date transform
           },
         ),
       ),

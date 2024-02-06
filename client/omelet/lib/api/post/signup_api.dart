@@ -7,7 +7,7 @@ import './../../utils/server_uri.dart';
 Future<http.Response> signUpSendMailAPI(
     String email, String username, String password) async {
   final res = await http.post(
-    Uri.parse('$serverUri/api/v1/login'),
+    Uri.parse('$serverUri/api/v1/register/send-mail'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

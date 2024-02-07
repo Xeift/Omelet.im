@@ -1,3 +1,4 @@
+const snowflakeId = require('./../../utils/snowflakeId.js');
 const authController = require('../../controller/authController.js');
 const jwt = require('../../utils/jwt.js');
 const email = require('../../utils/email.js');
@@ -6,6 +7,8 @@ const router = express.Router();
 
 router.post('/send-mail', async(req, res) => {
     let emailData = req.body.email;
+    let usernameData = req.body.username;
+    let passwordData = req.body.password;
 
     if (!emailData) {
         res.status(422).json({
@@ -15,22 +18,25 @@ router.post('/send-mail', async(req, res) => {
         });
         return;
     }
+
     try {
-        let isEmailExsists = await authController.isEmailExsists(emailData);
-        if (!isEmailExsists) { 
-            let code = await jwt.generateRestorePasswordJWT(emailData);
+        let isEmailVerified = await authController.isEmailVerified(emailData);
+
+        if (isEmailVerified) { 
+            res.status(409).json({
+                message: '此 email 已存在，請登入',
+                data: null,
+                token: null
+            });   
+        }
+        else {
+            let uid = snowflakeId.generateId();
+            let code = await jwt.generateRegisterJWT(uid);
+            await authController.createNewUnverifiedUser(uid, emailData, usernameData, passwordData);
             await email.sendRegisterMail(emailData, code);
 
             res.status(200).json({
-                message: 'email 已成功寄出',
-                data: null,
-                token: null
-            });
-
-        }
-        else {
-            res.status(409).json({
-                message: 'email 已存在',
+                message: '驗證 email 已成功寄出',
                 data: null,
                 token: null
             });

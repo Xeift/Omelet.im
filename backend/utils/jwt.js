@@ -13,6 +13,15 @@ async function generateLoginJWT(_uid, _username, _email) {
     return encoded_token;
 }
 
+async function generateRegisterJWT(_uid) {
+    const encoded_token = jwt.sign(
+        { _uid },
+        JWT_SECRET,
+        { expiresIn: '5m' }
+    );
+    return encoded_token;
+}
+
 async function generateRestorePasswordJWT(_email) {
     const encoded_token = jwt.sign(
         { email: _email },
@@ -71,6 +80,7 @@ async function verifyJWTSocket(token) {
 
 module.exports = {
     generateLoginJWT,
+    generateRegisterJWT,
     generateRestorePasswordJWT,
     verifyJWT,
     verifyJWTSocket

@@ -1,5 +1,6 @@
 const snowflakeId = require('../utils/snowflakeId');
 const UserModel = require('../model/userModel');
+const UnverifiedUserModel = require('../model/unverifiedUserModel');
 
 async function isPasswordMatch(username, password) {
     let user = await UserModel.findOne({
@@ -21,14 +22,14 @@ async function isUserIdExsists(input) {
     return !!uid;
 }
 
-async function isEmailExsists(input) {
+async function isEmailVerified(input) {
     let email = await UserModel.findOne({ email: input });
     return !!email;
 }
 
-async function createNewUser(email, username, password) {
+async function createNewUnverifiedUser(email, username, password) {
     let uid = snowflakeId.generateId();
-    await UserModel.create({
+    await UnverifiedUserModel.create({
         uid: uid,
         timestamp: snowflakeId.extractTimeStampFromId(uid),
         username: username,
@@ -134,8 +135,8 @@ async function updateSpk(uid, spkPub, spkSig) {
 module.exports = {
     isPasswordMatch,
     isUserIdExsists,
-    isEmailExsists,
-    createNewUser,
+    isEmailVerified,
+    createNewUnverifiedUser,
     updatePasswordByEmail,
     uploadPreKeyBundle,
     downloadPreKeyBundle,

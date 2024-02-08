@@ -13,9 +13,9 @@ async function generateLoginJWT(_uid, _username, _email) {
     return encoded_token;
 }
 
-async function generateRegisterJWT(_uid) {
+async function generateRegisterJWT(_uid, _email) {
     const encoded_token = jwt.sign(
-        { _uid },
+        { _uid, _email },
         JWT_SECRET,
         { expiresIn: '5m' }
     );

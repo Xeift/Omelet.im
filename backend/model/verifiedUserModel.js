@@ -1,6 +1,6 @@
 const mongoose = require('./mongoose');
 
-const UserSchema = new mongoose.Schema({
+const VerifiedUserSchema = new mongoose.Schema({
     uid: { type: String, unique: true },
     timestamp: { type: Number },
     username: { type: String, unique: true },
@@ -16,6 +16,6 @@ const UserSchema = new mongoose.Schema({
     lastBatchSpkUpdateTime: { type: Number },
     lastBatchSpkId: { type: Number },
 });
-const UserModel = mongoose.model('User', UserSchema, 'users');
+const VerifiedUserModel = mongoose.model('VerifiedUser', VerifiedUserSchema, 'verified_users');
 
-module.exports = UserModel;
+module.exports = VerifiedUserModel;

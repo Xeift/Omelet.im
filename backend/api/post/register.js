@@ -31,7 +31,7 @@ router.post('/send-mail', async(req, res) => {
         }
         else {
             let uid = snowflakeId.generateId();
-            let code = await jwt.generateRegisterJWT(uid);
+            let code = await jwt.generateRegisterJWT(uid, emailData);
             await authController.createNewUnverifiedUser(uid, emailData, usernameData, passwordData);
             await email.sendRegisterMail(emailData, code);
 

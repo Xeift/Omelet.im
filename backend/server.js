@@ -4,8 +4,7 @@ const cors = require('cors');
 const rateLimit = require('./utils/rateLimit.js');
 require('dotenv').config({ path: 'config/.env' });
 const BACKEND_PORT = process.env.BACKEND_PORT;
-const FRONTEND_URL = process.env.FRONTEND_URL;
-const BACKEND_URL = process.env.BACKEND_URL;
+const SERVER_URI = process.env.SERVER_URI;
 
 const app = express();
 const server = require('http').createServer(app);
@@ -32,9 +31,11 @@ app.use('/api/v1/get-self-opk-status', rateLimit.authLimiter, require('./api/get
 app.use('/api/v1/get-self-spk-status', rateLimit.authLimiter, require('./api/get/getSelfSpkStatus.js'));
 app.use('/api/v1/update-spk', rateLimit.authLimiter, require('./api/post/updateSpk.js'));
 
+app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confirm-register-email.js'));
+
 
 app.use('*', require('./api/notFound.js'));
 
 server.listen(BACKEND_PORT, () => {
-    console.log(`後端伺服器已啟動\n${BACKEND_URL}`);
+    console.log(`後端伺服器已啟動\n${SERVER_URI}`);
 });

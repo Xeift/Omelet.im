@@ -27,8 +27,7 @@ async function isEmailVerified(input) {
     return !!email;
 }
 
-async function createNewUnverifiedUser(email, username, password) {
-    let uid = snowflakeId.generateId();
+async function createNewUnverifiedUser(uid, email, username, password) {
     await UnverifiedUserModel.create({
         uid: uid,
         timestamp: snowflakeId.extractTimeStampFromId(uid),

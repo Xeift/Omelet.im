@@ -8,7 +8,7 @@ router.post('/send-mail', async(req, res) => {
     let emailData = req.body.email;
 
     try {
-        let isEmailExsists = await authController.isEmailExsists(emailData);
+        let isEmailExsists = await authController.isEmailVerified(emailData);
         if (isEmailExsists) { 
             let code = await jwt.generateRestorePasswordJWT(emailData);
             await email.sendResetPasswordMail(emailData, code);
@@ -39,9 +39,10 @@ router.post('/send-mail', async(req, res) => {
 router.post('/submit-info', async(req, res) => {
     try {
         const { code, password } = req.body;
-        const decoded = await jwt.verifyJWT(code);
+        console.log(`code:${code}\npwd: ${password}`);
+        const decoded = await jwt.verifyJWTSocket(code);
 
-        if (await authController.isEmailExsists(decoded.email)) {
+        if (await authController.isEmailVerified(decoded.email)) {
             await authController.updatePasswordByEmail(decoded.email, password);
 
             res.status(200).json({

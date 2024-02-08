@@ -32,6 +32,7 @@ app.use('/api/v1/get-self-spk-status', rateLimit.authLimiter, require('./api/get
 app.use('/api/v1/update-spk', rateLimit.authLimiter, require('./api/post/updateSpk.js'));
 
 app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confirm-register-email.js'));
+app.use('/confirm-reset-email', rateLimit.authLimiter, require('./page/confirm-reset-email.js'));
 
 
 app.use('*', require('./api/notFound.js'));

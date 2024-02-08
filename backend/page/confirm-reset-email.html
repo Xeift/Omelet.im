@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>忘記密碼 | Omelet.im</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+
+    input {
+        font-size: 1.2em;
+        padding: 10px;
+        margin-bottom: 20px;
+        width: 300px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+    input:focus {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    button {
+        font-size: 1.2em;
+        padding: 10px 20px;
+        background-color: #fff;
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+    }
+
+    button:active {
+        transform: scale(0.9);
+    }
+
+    .error-message {
+        color: red;
+        font-size: 1.2em;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>忘記密碼</h1>
+    <form id="passwordForm">
+        <input id="password1" type="password" placeholder="請輸入新密碼" required><br>
+        <input id="password2" type="password" placeholder="請重新輸入新密碼" required><br>
+        <button type="button" onclick="submitPassword()">確認</button>
+    </form>
+    <div id="errorMessage" class="error-message"></div>
+</div>
+
+<script>
+    async function submitPassword() {
+        var password1 = document.getElementById("password1").value;
+        var password2 = document.getElementById("password2").value;
+        var urlParams = new URLSearchParams(window.location.search);
+        var code = urlParams.get('code');
+        console.log(code);
+        if (password1 !== password2) {
+            document.getElementById("errorMessage").innerText = "兩次輸入的密碼不相符，請重新輸入。";
+            return;
+        }
+
+        document.getElementById("errorMessage").innerText = "";
+
+        const response = await fetch("http://localhost:3000/api/v1/reset-password/submit-info?code=" + code, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ code: code, password: password1 })
+        });
+
+        console.log(response.status);
+        if (response.status === 200) {
+            document.getElementById("errorMessage").innerText = "密碼重置成功，請重新登入";
+        }
+        else {
+            document.getElementById("errorMessage").innerText = response.json()['data'];
+        }
+    }
+</script>
+
+</body>
+</html>

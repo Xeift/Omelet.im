@@ -1,5 +1,6 @@
 const authController = require('../../controller/authController.js');
 const msgController = require('../../controller/msgController.js');
+const preKeyBundleController = require('../../controller/preKeyBundleController.js');
 const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
@@ -15,7 +16,7 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let spkSig = JSON.parse(req.body.spkSig);
     let opkPub = JSON.parse(req.body.opkPub);
 
-    await authController.uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub);
+    await preKeyBundleController.uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub);
 
 
     try {

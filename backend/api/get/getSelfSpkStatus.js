@@ -1,4 +1,5 @@
 const authController = require('../../controller/authController.js');
+const preKeyBundleController = require('../../controller/preKeyBundleController.js');
 const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
@@ -7,7 +8,7 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
-        let [spkExpired, lastBatchSpkId] = await authController.getSelfSpkStatus(uid);
+        let [spkExpired, lastBatchSpkId] = await preKeyBundleController.getSelfSpkStatus(uid);
 
         res.status(200).json({
             message: '成功取得 SPK 狀態',

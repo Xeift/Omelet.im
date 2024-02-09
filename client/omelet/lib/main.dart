@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './pages/home_page.dart';
 
-void main() {
+import 'signal_protocol/generate_and_store_key.dart';
+
+void main() async {
   runApp(const MyApp());
+  await generateAndStoreKey();
+  const storage = FlutterSecureStorage();
+  print(await storage.readAll());
 }
 
 class MyApp extends StatelessWidget {

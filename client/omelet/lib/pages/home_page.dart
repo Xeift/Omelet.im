@@ -1,9 +1,8 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
 import 'package:omelet/pages/login_signup/forget_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../componets/alert/alert_msg.dart';
 import '../pages/chat_list_page.dart';
@@ -65,9 +64,6 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  
-
 
   Widget buildTitle() {
     //Login字樣
@@ -132,9 +128,9 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  void nextPage(){
-    Navigator.push(context,
-    MaterialPageRoute(builder: (_) => const ChatListPage()));
+  void nextPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const ChatListPage()));
   }
 
   Widget buildLoingButton() {
@@ -154,7 +150,8 @@ class HomePageState extends State<HomePage> {
           onPressed: () async {
             //連接後端API,登入button，pressed event，當按下它會執行下方程式
             _userEmail = emailTextFieldController.text; //_email字串存入_email變數
-            _userPassword = passwordTextFieldController.text; //_email字串存入_email變數
+            _userPassword =
+                passwordTextFieldController.text; //_email字串存入_email變數
             print(_userPassword);
             final res = await loginAPI(_userEmail, _userPassword);
             final statusCode = res.statusCode;
@@ -162,37 +159,40 @@ class HomePageState extends State<HomePage> {
             print(_userEmail);
             print(statusCode); // http 狀態碼
             print(resBody); // 登入 API 回應內容
-            print(resBody['message']); 
+            print(resBody['message']);
 
-            if(!context.mounted){
+            if (!context.mounted) {
               return;
-            }else{
-              if (statusCode == 200) {
+            }
+            if (statusCode == 200) {
+              const storage = FlutterSecureStorage();
+              await storage.write(key: 'token', value: resBody['token']);
+              await storage.write(key: 'uid', value: resBody['data']['uid']);
+              await storage.write(
+                  key: 'username', value: resBody['data']['username']);
+              await storage.write(
+                  key: 'email', value: resBody['data']['email']);
+
+              print('[main.dart] 目前儲存空間所有內容：${await storage.readAll()}');
               nextPage();
-              // 這裡要寫登入成功時的邏輯，比如提示使用者密碼錯誤
-              // 所有 API 回應內容請見：Omelet.im\backend\api\login.js
             } else if (statusCode == 401) {
               // 帳號密碼錯誤
               ('帳號密碼錯誤');
             } else if (statusCode == 422) {
               // 帳號密碼為空
-              loginErrorMsg(context,'請輸入帳號密碼');
+              loginErrorMsg(context, '請輸入帳號密碼');
             } else if (statusCode == 429) {
               // 速率限制，請求次數過多（5分鐘內超過10次）
-              loginErrorMsg(context,'請稍候在重新輸入');
+              loginErrorMsg(context, '請稍候在重新輸入');
             } else if (statusCode == 500) {
               // 後端其他錯誤
-              loginErrorMsg(context,'Another Eorro for server');
-            }
+              loginErrorMsg(context, 'Another Eorro for server');
             }
           },
-          
         ),
       ),
     );
   }
-
-  
 
   Widget buildSignupPageButton() {
     return Align(

@@ -2,6 +2,7 @@ const generateId = require('./snowflakeId');
 const jwt = require('./jwt');
 const msgController = require('./../controller/msgController');
 const authController = require('./../controller/authController');
+const preKeyBundleController = require('./../controller/preKeyBundleController.js');
 
 let userIdToRoomId = {};
 
@@ -41,7 +42,7 @@ module.exports = function(io) {
                     // 刪除傳送訊息時使用的 OPK
                     if (msg['opkId']) {
                         console.log(`[socket.js] 刪除opkid👉 ${msg['opkId']}`);
-                        await authController.deleteOpkPub(receiverUid, msg['opkId']);
+                        await preKeyBundleController.deleteOpkPub(receiverUid, msg['opkId']);
                     }
 
                 }

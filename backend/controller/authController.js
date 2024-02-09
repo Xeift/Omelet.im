@@ -1,10 +1,10 @@
 const snowflakeId = require('../utils/snowflakeId');
-const UserModel = require('../model/verifiedUserModel');
+// const UserModel = require('../model/verifiedUserModel');
 const UnverifiedUserModel = require('../model/unverifiedUserModel');
 const VerifiedUserModel = require('./../model/verifiedUserModel');
 
 async function isPasswordMatch(username, password) {
-    let user = await UserModel.findOne({
+    let user = await VerifiedUserModel.findOne({
         $or: [
             { username: username },
             { email: username }
@@ -19,12 +19,12 @@ async function isPasswordMatch(username, password) {
 }
 
 async function isUserIdExsists(input) {
-    let uid = await UserModel.findOne({ uid: input });
+    let uid = await VerifiedUserModel.findOne({ uid: input });
     return !!uid;
 }
 
 async function isEmailVerified(input) {
-    let email = await UserModel.findOne({ email: input });
+    let email = await VerifiedUserModel.findOne({ email: input });
     return !!email;
 }
 
@@ -67,7 +67,7 @@ async function makeUnverifiedUserVerified(uid, email) {
 }
 
 async function updatePasswordByEmail(email, newPassword) {
-    const user = await UserModel.findOne({ email });
+    const user = await VerifiedUserModel.findOne({ email });
     user.password = newPassword;
 
     await user.save();
@@ -77,14 +77,14 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     let lastBatchSpkUpdateTime = Date.now();
     let lastBatchSpkId = ( Math.max(...Object.keys(spkPub).map(Number)) ).toString();
 
-    await UserModel.findOneAndUpdate(
+    await VerifiedUserModel.findOneAndUpdate(
         { uid: uid },
         { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastBatchSpkUpdateTime: lastBatchSpkUpdateTime, lastBatchSpkId: lastBatchSpkId }
     );
 }
 
 async function downloadPreKeyBundle(uid, opkId) {
-    let pkb = await UserModel.findOne(
+    let pkb = await VerifiedUserModel.findOne(
         { uid: uid },
         'ipkPub spkPub spkSig opkPub'
     ).lean();
@@ -104,14 +104,14 @@ async function downloadPreKeyBundle(uid, opkId) {
 }
 
 async function getAvailableOpkIndex(uid) {
-    return Object.keys((await UserModel.findOne(
+    return Object.keys((await VerifiedUserModel.findOne(
         { uid: uid },
         'opkPub'
     )).opkPub);
 }
 
 async function deleteOpkPub(uid, opkId) {
-    let result = await UserModel.updateOne(
+    let result = await VerifiedUserModel.updateOne(
         { uid: uid },
         { $unset: { [`opkPub.${opkId}`]: true } }
     );
@@ -119,14 +119,14 @@ async function deleteOpkPub(uid, opkId) {
 }
 
 async function updateOpk(uid, opkPub) {
-    await UserModel.findOneAndUpdate(
+    await VerifiedUserModel.findOneAndUpdate(
         { uid: uid },
         { opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1] }
     );
 }
 
 async function getSelfOpkStatus(uid) {
-    let opkStatus = await UserModel.findOne(
+    let opkStatus = await VerifiedUserModel.findOne(
         { uid: uid },
         'opkPub lastBatchMaxOpkId'
     );
@@ -137,7 +137,7 @@ async function getSelfOpkStatus(uid) {
 }
 
 async function getSelfSpkStatus(uid) {
-    let spkStatus = await UserModel.findOne(
+    let spkStatus = await VerifiedUserModel.findOne(
         { uid: uid },
         'spkPub lastBatchSpkId lastBatchSpkUpdateTime'
     );
@@ -148,7 +148,7 @@ async function getSelfSpkStatus(uid) {
 }
 
 async function updateSpk(uid, spkPub, spkSig) {
-    await UserModel.updateOne(
+    await VerifiedUserModel.updateOne(
         { uid: uid }, {
             $set: {
                 [`spkPub.${Object.keys(spkPub)}`]: spkPub, 

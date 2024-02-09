@@ -39,7 +39,6 @@ router.post('/send-mail', async(req, res) => {
 router.post('/submit-info', async(req, res) => {
     try {
         const { code, password } = req.body;
-        console.log(`code:${code}\npwd: ${password}`);
         const decoded = await jwt.verifyJWTSocket(code);
 
         if (await authController.isEmailVerified(decoded.email)) {

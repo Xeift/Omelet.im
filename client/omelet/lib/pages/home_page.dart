@@ -54,7 +54,7 @@ class HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildLoingButton(), //登入button控件呼叫
+                buildLoginButton(), //登入button控件呼叫
                 const SizedBox(width: 30),
                 buildSignupPageButton(), //註冊button控件呼叫
               ],
@@ -133,7 +133,7 @@ class HomePageState extends State<HomePage> {
         context, MaterialPageRoute(builder: (_) => const ChatListPage()));
   }
 
-  Widget buildLoingButton() {
+  Widget buildLoginButton() {
     //登入按鈕，按下可以送出表單
     return Align(
       child: SizedBox(

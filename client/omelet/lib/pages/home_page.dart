@@ -148,45 +148,57 @@ class HomePageState extends State<HomePage> {
             style: Theme.of(context).primaryTextTheme.titleLarge,
           ),
           onPressed: () async {
-            //連接後端API,登入button，pressed event，當按下它會執行下方程式
-            _userEmail = emailTextFieldController.text; //_email字串存入_email變數
-            _userPassword =
-                passwordTextFieldController.text; //_email字串存入_email變數
-            print(_userPassword);
+            // 登入邏輯
+            _userEmail = emailTextFieldController.text;
+            _userPassword = passwordTextFieldController.text;
+
             final res = await loginAPI(_userEmail, _userPassword);
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
-            print(_userEmail);
-            print(statusCode); // http 狀態碼
-            print(resBody); // 登入 API 回應內容
-            print(resBody['message']);
+
+            print('[home_page.dart] 登入 API 回應內容：$resBody');
 
             if (!context.mounted) {
               return;
             }
-            if (statusCode == 200) {
-              const storage = FlutterSecureStorage();
-              await storage.write(key: 'token', value: resBody['token']);
-              await storage.write(key: 'uid', value: resBody['data']['uid']);
-              await storage.write(
-                  key: 'username', value: resBody['data']['username']);
-              await storage.write(
-                  key: 'email', value: resBody['data']['email']);
 
-              print('[main.dart] 目前儲存空間所有內容：${await storage.readAll()}');
-              nextPage();
-            } else if (statusCode == 401) {
-              // 帳號密碼錯誤
-              ('帳號密碼錯誤');
-            } else if (statusCode == 422) {
-              // 帳號密碼為空
-              loginErrorMsg(context, '請輸入帳號密碼');
-            } else if (statusCode == 429) {
-              // 速率限制，請求次數過多（5分鐘內超過10次）
-              loginErrorMsg(context, '請稍候在重新輸入');
-            } else if (statusCode == 500) {
-              // 後端其他錯誤
-              loginErrorMsg(context, 'Another Eorro for server');
+            const storage = FlutterSecureStorage();
+            switch (statusCode) {
+              case 200:
+                await storage.write(key: 'token', value: resBody['token']);
+                await storage.write(key: 'uid', value: resBody['data']['uid']);
+                await storage.write(
+                    key: 'username', value: resBody['data']['username']);
+                await storage.write(
+                    key: 'email', value: resBody['data']['email']);
+
+                nextPage();
+                break;
+              case 401:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, '帳號密碼錯誤');
+                });
+                break;
+              case 422:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, '請輸入帳號密碼');
+                });
+                break;
+              case 429:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, '請稍候再重新輸入');
+                });
+                break;
+              case 500:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, '伺服器端錯誤');
+                });
+                break;
+              default:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, '發生未知錯誤');
+                });
+                break;
             }
           },
         ),

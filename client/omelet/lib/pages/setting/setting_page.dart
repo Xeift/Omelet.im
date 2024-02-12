@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './avatarcard.dart';
+import 'avatar_card.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);

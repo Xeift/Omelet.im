@@ -112,7 +112,7 @@ class SignUpPageState extends State<SignUpPage> {
   }
 
   Widget buildTitle() {
-    //Login字樣
+    // Login字樣
     return const Padding(
       padding: EdgeInsets.all(8),
       child: Text(
@@ -138,31 +138,36 @@ class SignUpPageState extends State<SignUpPage> {
             _signUpEamil = emailSignUpTextFieldController.text;
             _singUpPassword = passwordSignUpTextFieldController.text;
             _signUpName = nameSignUpTextFieldController.text;
+
             final res = await signUpSendMailAPI(
                 _signUpEamil, _signUpName, _singUpPassword);
-            // final resBody = jsonDecode(res.body);
             final statusCode = res.statusCode;
+
+            print('[sign_up_page.dart] ${res.body}');
+            print('[sign_up_page.dart] ${statusCode}');
+
             if (!context.mounted) {
               return;
-            } else {
-              switch (statusCode) {
-                case 200:
-                  break;
-                case 401:
-                  loginErrorMsg(context, 'Email已存在');
-                  break;
-                case 422:
-                  loginErrorMsg(context, '請輸入註冊資訊');
-                  break;
-                case 429:
-                  loginErrorMsg(context, '請稍候再重新輸入');
-                  break;
-                case 500:
-                  loginErrorMsg(context, '伺服器預期外錯誤');
-                  break;
-                default:
-                  loginErrorMsg(context, '未知錯誤');
-              }
+            }
+
+            switch (statusCode) {
+              case 200:
+                loginErrorMsg(context, '已寄送驗證 Email，請查看信箱');
+                break;
+              case 409:
+                loginErrorMsg(context, '此 Email 已被使用，請登入');
+                break;
+              case 422:
+                loginErrorMsg(context, '請輸入註冊資訊');
+                break;
+              case 429:
+                loginErrorMsg(context, '請稍候再重新輸入');
+                break;
+              case 500:
+                loginErrorMsg(context, '伺服器預期外錯誤');
+                break;
+              default:
+                loginErrorMsg(context, '未知錯誤');
             }
           },
           autofocus: true,

@@ -156,7 +156,7 @@ class HomePageState extends State<HomePage> {
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
 
-            print('[home_page.dart] 登入 API 回應內容：$resBody');
+            print('[home_page.dart] API 回應內容：$resBody');
 
             if (!context.mounted) {
               return;
@@ -171,7 +171,6 @@ class HomePageState extends State<HomePage> {
                     key: 'username', value: resBody['data']['username']);
                 await storage.write(
                     key: 'email', value: resBody['data']['email']);
-
                 nextPage();
                 break;
               case 401:

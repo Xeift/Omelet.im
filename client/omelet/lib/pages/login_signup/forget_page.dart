@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../componets/alert/alert_msg.dart';
 import '../../api/post/reset_password_api.dart';
@@ -14,12 +15,12 @@ class ForgetPageState extends State<ForgetPage> {
   late String _userForgetEmail = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  late TextEditingController forgetEamilcontroller;
+  late TextEditingController forgetEmailController;
 
   @override
   void initState() {
     super.initState();
-    forgetEamilcontroller = TextEditingController();
+    forgetEmailController = TextEditingController();
   }
 
   @override
@@ -68,7 +69,7 @@ class ForgetPageState extends State<ForgetPage> {
         border: OutlineInputBorder(),
         labelText: 'Email Address',
       ),
-      controller: forgetEamilcontroller,
+      controller: forgetEmailController,
     );
   }
 
@@ -86,27 +87,43 @@ class ForgetPageState extends State<ForgetPage> {
             style: Theme.of(context).primaryTextTheme.titleLarge,
           ),
           onPressed: () async {
-            _userForgetEmail = forgetEamilcontroller.text;
-            final forgetemailres =
-                await resetPasswordSendMailAPI(_userForgetEmail);
-            final statusCode = forgetemailres.statusCode;
-            final resBody = jsonDecode(forgetemailres.body);
+            // 忘記密碼邏輯
+            _userForgetEmail = forgetEmailController.text;
+
+            final res = await resetPasswordSendMailAPI(_userForgetEmail);
+            final statusCode = res.statusCode;
+            final resBody = jsonDecode(res.body);
+
+            print('[forget_page.dart] API 回應內容：$resBody');
+
             if (!context.mounted) {
               return;
-            } else {
-              if (statusCode == 200) {
-                loginErrorMsg(context, 'email 已成功寄出');
-              } else if (statusCode == 401) {
-                loginErrorMsg(context, 'Eamil 不存在，請先註冊');
-              } else if (statusCode == 500) {
-                loginErrorMsg(context, 'Eorror server');
-              }
             }
-            print(_userForgetEmail);
-            print(statusCode); // http 狀態碼
-            print(resBody); //
-            print(resBody['message']); // 取得登入 API 回應內容中的 message 內容
-            //build await function after complete date transform
+
+            const storage = FlutterSecureStorage();
+            switch (statusCode) {
+              case 200:
+                await storage.write(key: 'message', value: 'email 已成功寄出');
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, 'Email 已成功寄出');
+                });
+                break;
+              case 401:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, 'Email 信箱不存在，請先註冊');
+                });
+                break;
+              case 500:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, '伺服器端錯誤');
+                });
+                break;
+              default:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  loginErrorMsg(context, '發生未知錯誤');
+                });
+                break;
+            }
           },
         ),
       ),

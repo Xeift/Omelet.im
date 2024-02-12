@@ -12,8 +12,8 @@ class FrostedAppbar extends StatefulWidget {
   double blurStrengthX; // 修正拼寫錯誤
   double blurStrengthY;
 
-  // ignore: use_key_in_widget_constructors
   FrostedAppbar({
+    super.key,
     this.height = 70,
     required this.actions,
     required this.blurStrengthX, // 修正拼寫錯誤
@@ -23,11 +23,10 @@ class FrostedAppbar extends StatefulWidget {
     required this.title, // 修正冒號錯誤
   });
   @override
-  // ignore: library_private_types_in_public_api
-  _FrostedAppbarState createState() => _FrostedAppbarState();
+  FrostedAppbarState createState() => FrostedAppbarState();
 }
 
-class _FrostedAppbarState extends State<FrostedAppbar> {
+class FrostedAppbarState extends State<FrostedAppbar> {
   @override
   Widget build(BuildContext context) {
     var scrSize = MediaQuery.of(context).size;

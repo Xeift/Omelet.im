@@ -2,10 +2,10 @@ const mongoose = require('./mongoose');
 
 const PreKeyBundleSchema = new mongoose.Schema({
     uid: { type: String, unique: true },
-    ipkPub: { type: String, unique: true },
-    spkPub: { type: mongoose.Schema.Types.Mixed, unique: true },
-    spkSig: { type: mongoose.Schema.Types.Mixed, unique: true },
-    opkPub: { type: mongoose.Schema.Types.Mixed, unique: true },
+    ipkPub: { type: String },
+    spkPub: { type: mongoose.Schema.Types.Mixed },
+    spkSig: { type: mongoose.Schema.Types.Mixed },
+    opkPub: { type: mongoose.Schema.Types.Mixed },
     lastBatchMaxOpkId: { type: Number },
     lastBatchSpkUpdateTime: { type: Number },
     lastBatchSpkId: { type: Number },

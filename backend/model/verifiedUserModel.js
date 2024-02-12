@@ -7,14 +7,7 @@ const VerifiedUserSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: { type: String },
     room_joined: { type: [String], default: [] },
-    pfp: { type: mongoose.Schema.Types.Mixed },
-    ipkPub: { type: String, unique: true },
-    spkPub: { type: mongoose.Schema.Types.Mixed, unique: true },
-    spkSig: { type: mongoose.Schema.Types.Mixed, unique: true },
-    opkPub: { type: mongoose.Schema.Types.Mixed, unique: true },
-    lastBatchMaxOpkId: { type: Number },
-    lastBatchSpkUpdateTime: { type: Number },
-    lastBatchSpkId: { type: Number },
+    pfp: { type: mongoose.Schema.Types.Mixed }
 });
 const VerifiedUserModel = mongoose.model('VerifiedUser', VerifiedUserSchema, 'verified_users');
 

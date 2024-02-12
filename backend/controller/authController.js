@@ -1,5 +1,4 @@
 const snowflakeId = require('../utils/snowflakeId');
-// const UserModel = require('../model/verifiedUserModel');
 const UnverifiedUserModel = require('../model/unverifiedUserModel');
 const VerifiedUserModel = require('./../model/verifiedUserModel');
 

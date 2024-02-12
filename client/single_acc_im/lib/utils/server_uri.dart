@@ -1,5 +1,4 @@
-const serverUri =
-    'https://3f16-2001-b011-c009-903c-250d-a00d-c59-3cb7.ngrok-free.app';
+const serverUri = 'https://9608-111-254-221-41.ngrok-free.app';
 const username = 'xeift';
 const password = 'a';
 

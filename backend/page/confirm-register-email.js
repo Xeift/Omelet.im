@@ -15,6 +15,7 @@ router.get('/', async(req, res) => {
         res.sendFile(path.join(__dirname, 'confirm-register-email-success.html'));
     }
     catch (err) {
+        console.log(err);
         res.sendFile(path.join(__dirname, 'confirm-register-email-failed.html'));
     }
 });

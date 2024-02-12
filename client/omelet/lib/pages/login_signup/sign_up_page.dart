@@ -144,7 +144,6 @@ class SignUpPageState extends State<SignUpPage> {
             final statusCode = res.statusCode;
 
             print('[sign_up_page.dart] ${res.body}');
-            print('[sign_up_page.dart] ${statusCode}');
 
             if (!context.mounted) {
               return;

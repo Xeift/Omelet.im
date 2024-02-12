@@ -101,6 +101,7 @@ class ForgetPageState extends State<ForgetPage> {
             }
 
             const storage = FlutterSecureStorage();
+
             switch (statusCode) {
               case 200:
                 await storage.write(key: 'message', value: 'email 已成功寄出');

@@ -18,7 +18,6 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
 
     await preKeyBundleController.uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub);
 
-
     try {
         res.status(200).json({
             message: '上傳成功',

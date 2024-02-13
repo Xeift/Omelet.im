@@ -12,7 +12,6 @@ Future<http.Response> getSelfOpkStatus() async {
   final ipkStore = SafeIdentityKeyStore();
   final ipkPub = jsonEncode(
       (await ipkStore.getIdentityKeyPair()).getPublicKey().serialize());
-  print('[get_self_opk_status.dart] $ipkPub');
 
   final res = await http.get(
       Uri.parse('$serverUri/api/v1/get-self-opk-status?ipkPub=$ipkPub'),

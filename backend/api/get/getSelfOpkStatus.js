@@ -8,7 +8,10 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
-        let ipkPub = decodedToken.ipkPub;
+        let ipkPub = req.query.ipkPub;
+
+        console.log(`[getSelfOpkStatus.js]\nipkPub:${ipkPub}\nuid:${uid}`);
+
         let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(uid, ipkPub);
         console.log('[getSelfOpkStatus.js] deviceId: ' + deviceId);
         let [outOfOpk, lastBatchMaxOpkId] = await preKeyBundleController.getSelfOpkStatus(uid, deviceId);

@@ -1,17 +1,10 @@
-import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './../../utils/server_uri.dart';
-import './../../signal_protocol/safe_identity_store.dart';
+import './../../utils/load_jwt_and_ipk_pub.dart';
 
 Future<http.Response> getSelfOpkStatus() async {
-  const storage = FlutterSecureStorage();
-  final token = await storage.read(key: 'token');
-  final ipkStore = SafeIdentityKeyStore();
-  final ipkPub = jsonEncode(
-      (await ipkStore.getIdentityKeyPair()).getPublicKey().serialize());
+  final (token, ipkPub) = await loadJwtAndIpkPub();
 
   final res = await http.get(
       Uri.parse('$serverUri/api/v1/get-self-opk-status?ipkPub=$ipkPub'),

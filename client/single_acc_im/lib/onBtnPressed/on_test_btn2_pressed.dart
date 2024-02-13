@@ -2,7 +2,7 @@
 
 import './../signal_protocol/safe_session_store.dart';
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
-import 'dart:developer' as log_dev; // TODO:
+import 'dart:developer' as log_dev;
 
 Future<void> onTestBtn2Pressed(Function updateHintMsg) async {
   final safeSessionStore = SafeSessionStore();

@@ -7,7 +7,8 @@ const VerifiedUserSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: { type: String },
     room_joined: { type: [String], default: [] },
-    pfp: { type: mongoose.Schema.Types.Mixed }
+    pfp: { type: mongoose.Schema.Types.Mixed },
+    lastDeviceId: { type: Number },
 });
 const VerifiedUserModel = mongoose.model('VerifiedUser', VerifiedUserSchema, 'verified_users');
 

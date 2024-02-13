@@ -1,14 +1,16 @@
 const PreKeyBundleModel = require('./../model/preKeyBundleModel');
+const VerifiedUserModel = require('./../model/verifiedUserModel');
 
 
 async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     let lastBatchSpkUpdateTime = Date.now();
     let lastBatchSpkId = ( Math.max(...Object.keys(spkPub).map(Number)) ).toString();
+    let deviceId = (await getLastDeviceId(uid)) + 1;
 
     await PreKeyBundleModel.findOneAndUpdate(
-        { uid: uid },
-        { ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastBatchSpkUpdateTime: lastBatchSpkUpdateTime, lastBatchSpkId: lastBatchSpkId },
-        { upsert: true, new: true }
+        { uid: uid, deviceId: deviceId },
+        { deviceId: deviceId, ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastBatchSpkUpdateTime: lastBatchSpkUpdateTime, lastBatchSpkId: lastBatchSpkId },
+        { upsert: true }
     );
 }
 
@@ -54,9 +56,9 @@ async function updateOpk(uid, opkPub) {
     );
 }
 
-async function getSelfOpkStatus(uid) {
+async function getSelfOpkStatus(uid, deviceId) {
     let opkStatus = await PreKeyBundleModel.findOne(
-        { uid: uid },
+        { uid: uid, deviceId: deviceId },
         'opkPub lastBatchMaxOpkId'
     );
     let outOfOpk = Object.keys(opkStatus['opkPub']).length === 0;
@@ -70,7 +72,7 @@ async function getSelfSpkStatus(uid) {
         { uid: uid },
         'spkPub lastBatchSpkId lastBatchSpkUpdateTime'
     );
-    let spkExpired = (Date.now() - spkStatus['lastBatchSpkUpdateTime']) >= (7 * 24 * 60 * 60 * 1000);
+    let spkExpired = (Date.now() - spkStatus['lastBatchSpkUpdateTime']) >= (7 * 24 * 60 * 60 * 1000); // 7d
     let lastBatchSpkId = spkStatus['lastBatchSpkId'];
 
     return [spkExpired, lastBatchSpkId];
@@ -89,6 +91,39 @@ async function updateSpk(uid, spkPub, spkSig) {
     );
 }
 
+async function getLastDeviceId(uid) {
+    let lastDeviceId = (await VerifiedUserModel.findOne(
+        { uid: uid },
+        'lastDeviceId',
+    )).lastDeviceId;
+
+    if (lastDeviceId === undefined) {
+        lastDeviceId = -1; // last round deviceId
+        await VerifiedUserModel.findOneAndUpdate( // this round deviceId, increment 1 after read
+            { uid: uid },
+            { lastDeviceId: 0 }
+        );
+    }
+    else {
+        await VerifiedUserModel.findOneAndUpdate( // this round deviceId, increment 1 after read
+            { uid: uid },
+            { lastDeviceId: lastDeviceId + 1 }
+        );        
+    }
+
+    console.log(`[preKeyBundleController.js] lastDeviceId: ${lastDeviceId}`);
+    return lastDeviceId;
+}
+
+async function findDeviceIdByIpkPub(uid, ipkPub) {
+    let deviceId = (await PreKeyBundleModel.findOne(
+        { uid: uid, ipkPub: ipkPub },
+        'deviceId',
+    )).deviceId;
+
+    return deviceId;
+}
+
 module.exports = {
     uploadPreKeyBundle,
     downloadPreKeyBundle,
@@ -97,5 +132,6 @@ module.exports = {
     updateOpk,
     getSelfOpkStatus,
     getSelfSpkStatus,
-    updateSpk
+    updateSpk,
+    findDeviceIdByIpkPub
 };

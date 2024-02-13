@@ -1,7 +1,8 @@
 const mongoose = require('./mongoose');
 
 const PreKeyBundleSchema = new mongoose.Schema({
-    uid: { type: String, unique: true },
+    uid: { type: String },
+    deviceId: { type: Number },
     ipkPub: { type: String },
     spkPub: { type: mongoose.Schema.Types.Mixed },
     spkSig: { type: mongoose.Schema.Types.Mixed },

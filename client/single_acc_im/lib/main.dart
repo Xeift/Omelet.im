@@ -68,58 +68,62 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         print('[main.dart] backend connected');
         print('--------------------------------\n');
 
-        // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
-        final opkStatus = jsonDecode((await getSelfOpkStatus()).body)['data'];
-        final outOfOpk = opkStatus['outOfOpk'];
-        final lastBatchMaxOpkId = opkStatus['lastBatchMaxOpkId'];
+        // // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
+        // final res = await getSelfOpkStatus();
+        // final resBody = jsonDecode(res.body);
+        // print('[main.dart] resBody 內容：$resBody');
 
-        if (outOfOpk) {
-          final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
+        // final outOfOpk = resBody['data']['outOfOpk'];
+        // final lastBatchMaxOpkId = resBody['data']['lastBatchMaxOpkId'];
 
-          final res = await updateOpk(
-              '1',
-              jsonEncode({
-                for (var newOpk in newOpks)
-                  newOpk.id.toString():
-                      jsonEncode(newOpk.getKeyPair().publicKey.serialize())
-              }));
-          print('--------------------------------');
-          print('[main.dart] new opk👉 ${res.body}');
-          print('--------------------------------\n');
+        // if (outOfOpk) {
+        //   final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
 
-          final opkStore = SafeOpkStore();
-          for (final newOpk in newOpks) {
-            await opkStore.storePreKey(newOpk.id, newOpk);
-          }
-        }
+        //   final res = await updateOpk(
+        //       '1',
+        //       jsonEncode({
+        //         for (var newOpk in newOpks)
+        //           newOpk.id.toString():
+        //               jsonEncode(newOpk.getKeyPair().publicKey.serialize())
+        //       }));
+        //   print('--------------------------------');
+        //   print('[main.dart] new opk👉 ${res.body}');
+        //   print('--------------------------------\n');
 
-        // 若伺服器中自己的 SPK 期限已到（7 天），則產生並上傳 SPK
-        final spkStatus = jsonDecode((await getSelfSpkStatus()).body)['data'];
-        final spkExpired = spkStatus['spkExpired'];
-        final lastBatchSpkId = spkStatus['lastBatchSpkId'];
+        //   final opkStore = SafeOpkStore();
+        //   for (final newOpk in newOpks) {
+        //     await opkStore.storePreKey(newOpk.id, newOpk);
+        //   }
+        // }
 
-        if (spkExpired) {
-          final ipkStore = SafeIdentityKeyStore();
-          final selfIpk = await ipkStore.getIdentityKeyPair();
-          final newSpk = generateSignedPreKey(selfIpk, lastBatchSpkId + 1);
+        // // 若伺服器中自己的 SPK 期限已到（7 天），則產生並上傳 SPK
+        // final spkStatus = jsonDecode((await getSelfSpkStatus()).body)['data'];
+        // final spkExpired = spkStatus['spkExpired'];
+        // final lastBatchSpkId = spkStatus['lastBatchSpkId'];
 
-          final res = await updateSpk(
-            '1',
-            jsonEncode({
-              newSpk.id.toString():
-                  jsonEncode(newSpk.getKeyPair().publicKey.serialize())
-            }),
-            jsonEncode({newSpk.id.toString(): jsonEncode(newSpk.signature)}),
-          );
-          print('[main.dart] 更新 SPK👉 ${res.body}');
+        // if (spkExpired) {
+        //   final ipkStore = SafeIdentityKeyStore();
+        //   final selfIpk = await ipkStore.getIdentityKeyPair();
+        //   final newSpk = generateSignedPreKey(selfIpk, lastBatchSpkId + 1);
 
-          final spkStore = SafeSpkStore();
-          await spkStore.storeSignedPreKey(newSpk.id, newSpk);
-        }
+        //   final res = await updateSpk(
+        //     '1',
+        //     jsonEncode({
+        //       newSpk.id.toString():
+        //           jsonEncode(newSpk.getKeyPair().publicKey.serialize())
+        //     }),
+        //     jsonEncode({newSpk.id.toString(): jsonEncode(newSpk.signature)}),
+        //   );
+        //   print('[main.dart] 更新 SPK👉 ${res.body}');
+
+        //   final spkStore = SafeSpkStore();
+        //   await spkStore.storeSignedPreKey(newSpk.id, newSpk);
+        // }
 
         // 取得未讀訊息
-        final res = await getUnreadMsgAPI();
-        final List<dynamic> unreadMsgs = jsonDecode(res.body)['data'];
+        final getUnreadMsgAPIRes = await getUnreadMsgAPI();
+        final List<dynamic> unreadMsgs =
+            jsonDecode(getUnreadMsgAPIRes.body)['data'];
         print('[main.dart] 未讀訊息👉 $unreadMsgs');
 
         // 儲存未讀訊息

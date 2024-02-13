@@ -8,7 +8,10 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
-        let [outOfOpk, lastBatchMaxOpkId] = await preKeyBundleController.getSelfOpkStatus(uid);
+        let ipkPub = decodedToken.ipkPub;
+        let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(uid, ipkPub);
+        console.log('[getSelfOpkStatus.js] deviceId: ' + deviceId);
+        let [outOfOpk, lastBatchMaxOpkId] = await preKeyBundleController.getSelfOpkStatus(uid, deviceId);
 
         res.status(200).json({
             message: '成功取得 OPK 狀態',

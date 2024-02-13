@@ -67,9 +67,9 @@ async function getSelfOpkStatus(uid, deviceId) {
     return [outOfOpk, lastBatchMaxOpkId];
 }
 
-async function getSelfSpkStatus(uid) {
+async function getSelfSpkStatus(uid, deviceId) {
     let spkStatus = await PreKeyBundleModel.findOne(
-        { uid: uid },
+        { uid: uid, deviceId: deviceId },
         'spkPub lastBatchSpkId lastBatchSpkUpdateTime'
     );
     let spkExpired = (Date.now() - spkStatus['lastBatchSpkUpdateTime']) >= (7 * 24 * 60 * 60 * 1000); // 7d

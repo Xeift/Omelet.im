@@ -8,7 +8,10 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
-        let [spkExpired, lastBatchSpkId] = await preKeyBundleController.getSelfSpkStatus(uid);
+        let ipkPub = req.query.ipkPub;
+
+        let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(uid, ipkPub);
+        let [spkExpired, lastBatchSpkId] = await preKeyBundleController.getSelfSpkStatus(uid, deviceId);
 
         res.status(200).json({
             message: '成功取得 SPK 狀態',

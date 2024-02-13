@@ -69,12 +69,14 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         print('--------------------------------\n');
 
         // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
-        final res = await getSelfOpkStatus();
-        final resBody = jsonDecode(res.body);
-        print('[main.dart] resBody 內容：$resBody');
+        final getSelfOpkStatusRes = await getSelfOpkStatus();
+        final getSelfOpkStatusResBody = jsonDecode(getSelfOpkStatusRes.body);
+        print(
+            '[main.dart] getSelfOpkStatusResBody 內容：$getSelfOpkStatusResBody');
 
-        final outOfOpk = resBody['data']['outOfOpk'];
-        final lastBatchMaxOpkId = resBody['data']['lastBatchMaxOpkId'];
+        final outOfOpk = getSelfOpkStatusResBody['data']['outOfOpk'];
+        final lastBatchMaxOpkId =
+            getSelfOpkStatusResBody['data']['lastBatchMaxOpkId'];
 
         if (outOfOpk) {
           final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
@@ -97,7 +99,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
         }
 
         // 若伺服器中自己的 SPK 期限已到（7 天），則產生並上傳 SPK
-        final spkStatus = jsonDecode((await getSelfSpkStatus()).body)['data'];
+        final getSelfSpkStatusRes = await getSelfSpkStatus();
+        final getSelfSpkStatusResBody = jsonDecode(getSelfSpkStatusRes.body);
+        print('[main.dart] getSelfSpkStatusResBody: $getSelfSpkStatusResBody');
+        final spkStatus = getSelfSpkStatusResBody['data'];
         final spkExpired = spkStatus['spkExpired'];
         final lastBatchSpkId = spkStatus['lastBatchSpkId'];
 

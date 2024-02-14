@@ -1,12 +1,11 @@
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './../../utils/server_uri.dart';
+import './../../utils/load_jwt.dart';
 
 Future<http.Response> downloadPreKeyBundleAPI(
     String remoteUid, String remoteOpkId) async {
-  const storage = FlutterSecureStorage();
-  final token = await storage.read(key: 'token');
+  final token = await loadJwt();
 
   final res = await http.get(
       Uri.parse(

@@ -8,7 +8,7 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let uid = req.query.uid;
         let opkId = req.query.opkId;
-        let preKeyBundle = await preKeyBundleController.downloadPreKeyBundle(uid, opkId);
+        let preKeyBundle = await preKeyBundleController.downloadMultiDevicesPreKeyBundle(uid, opkId);
 
         res.status(200).json({
             message: '成功下載 Pre Key Bundle',

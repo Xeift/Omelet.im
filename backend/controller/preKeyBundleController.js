@@ -6,7 +6,7 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     let lastBatchSpkUpdateTime = Date.now();
     let lastBatchSpkId = ( Math.max(...Object.keys(spkPub).map(Number)) ).toString();
     let deviceId = (await getLastDeviceId(uid)) + 1;
-
+    
     await PreKeyBundleModel.findOneAndUpdate(
         { uid: uid, deviceId: deviceId },
         { deviceId: deviceId, ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastBatchSpkUpdateTime: lastBatchSpkUpdateTime, lastBatchSpkId: lastBatchSpkId },
@@ -14,7 +14,8 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     );
 }
 
-async function downloadPreKeyBundle(uid, opkId) {
+async function downloadMultiDevicesPreKeyBundle(uid, opkId) {
+    // TODO: make download multi devices
     let pkb = await PreKeyBundleModel.findOne(
         { uid: uid },
         'ipkPub spkPub spkSig opkPub'
@@ -34,7 +35,8 @@ async function downloadPreKeyBundle(uid, opkId) {
     return newPreKeyBundle;
 }
 
-async function getAvailableOpkIndex(uid) {
+async function getMultiDevicesAvailableOpkIndex(uid) {
+    // TODO: make query support muti device
     return Object.keys((await PreKeyBundleModel.findOne(
         { uid: uid },
         'opkPub'
@@ -126,8 +128,8 @@ async function findDeviceIdByIpkPub(uid, ipkPub) {
 
 module.exports = {
     uploadPreKeyBundle,
-    downloadPreKeyBundle,
-    getAvailableOpkIndex,
+    downloadMultiDevicesPreKeyBundle,
+    getMultiDevicesAvailableOpkIndex,
     deleteOpkPub,
     updateOpk,
     getSelfOpkStatus,

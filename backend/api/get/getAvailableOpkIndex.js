@@ -1,4 +1,3 @@
-const authController = require('../../controller/authController.js');
 const preKeyBundleController = require('../../controller/preKeyBundleController.js');
 const express = require('express');
 const router = express.Router();
@@ -7,7 +6,8 @@ const jwt = require('../../utils/jwt.js');
 router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let uid = req.query.uid;
-        let preKeyIndex = await preKeyBundleController.getAvailableOpkIndex(uid);
+        let preKeyIndex = await preKeyBundleController.getMultiDevicesAvailableOpkIndex(uid);
+        
         res.status(200).json({
             message: '成功取得 Pre Key Index',
             data: preKeyIndex,

@@ -36,11 +36,17 @@ async function downloadMultiDevicesPreKeyBundle(uid, opkId) {
 }
 
 async function getMultiDevicesAvailableOpkIndex(uid) {
-    // TODO: make query support muti device
-    return Object.keys((await PreKeyBundleModel.findOne(
+    let multiDevicesPreKeyBundles = await PreKeyBundleModel.find(
         { uid: uid },
-        'opkPub'
-    )).opkPub);
+        'deviceId opkPub'
+    ).lean();
+
+    let multiDevicesAvailableOpkIndex = {};
+    multiDevicesPreKeyBundles.forEach(bundle => {
+        multiDevicesAvailableOpkIndex[bundle.deviceId] = Object.keys(bundle.opkPub);
+    });
+
+    return multiDevicesAvailableOpkIndex;
 }
 
 async function deleteOpkPub(uid, opkId) {

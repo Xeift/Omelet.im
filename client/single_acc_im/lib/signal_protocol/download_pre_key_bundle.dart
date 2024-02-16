@@ -11,8 +11,13 @@ import './../api/get/get_available_opk_index_api.dart';
 
 Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
     downloadPreKeyBundle(String remoteUid) async {
-  final opkIndexRes = await getAvailableOpkIndexApi(remoteUid);
-  final opkId = randomChoice(jsonDecode(opkIndexRes.body)['data']);
+  final multiDevicesOpkIndexesRes = await getAvailableOpkIndexApi(remoteUid);
+  final multiDevicesOpkIndexesResBody =
+      jsonDecode(multiDevicesOpkIndexesRes.body);
+
+  print('多裝置 opkId 內容👉$multiDevicesOpkIndexesResBody');
+
+  final opkId = randomChoice(multiDevicesOpkIndexesResBody['data']);
 
   final res = await downloadPreKeyBundleAPI(remoteUid, opkId);
   final preKeyBundle = jsonDecode(res.body)['data'];

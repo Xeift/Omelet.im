@@ -21,6 +21,7 @@ module.exports = function(io) {
             else {
                 let uid = decodedToken['_uid'];
                 userIdToRoomId[uid] = socket.id;
+                socket.emit('jwtValid');
                 console.log(`[socket.js] room content👉 ${JSON.stringify(userIdToRoomId)}`);
                 console.log('--------------------------------\n');
             }

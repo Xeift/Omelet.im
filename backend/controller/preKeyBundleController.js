@@ -35,11 +35,17 @@ async function downloadMultiDevicesPreKeyBundle(uid, opkId) {
     return newPreKeyBundle;
 }
 
-async function getMultiDevicesAvailableOpkIndex(uid) {
+async function getMultiDevicesAvailableOpkIndex(uid, isSelf, deviceId) {
     let multiDevicesPreKeyBundles = await PreKeyBundleModel.find(
         { uid: uid },
         'deviceId opkPub'
     ).lean();
+
+    if (isSelf) {
+        // remove current device (deviceId) from multiDevicesPreKeyBundles
+        multiDevicesPreKeyBundles = multiDevicesPreKeyBundles.filter(bundle => bundle.deviceId !== deviceId);
+        console.log(multiDevicesPreKeyBundles);
+    }
 
     let multiDevicesAvailableOpkIndex = {};
     multiDevicesPreKeyBundles.forEach(bundle => {

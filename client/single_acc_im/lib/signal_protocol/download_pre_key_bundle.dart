@@ -20,24 +20,26 @@ Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
   final opkId = randomChoice(multiDevicesOpkIndexesResBody['data']);
 
   final res = await downloadPreKeyBundleAPI(remoteUid, opkId);
-  final preKeyBundle = jsonDecode(res.body)['data'];
+  final multiDevicesPreKeyBundle = jsonDecode(res.body)['data'];
   print('[download_pre_key_bundle.dart] pkb 內容👉 ${res.body}');
+  print('[download_pre_key_bundle.dart] pkb 形態👉 ${res.body.runtimeType}');
 
   final ipkPub = IdentityKey.fromBytes(
       Uint8List.fromList(
-          jsonDecode(preKeyBundle['ipkPub']).cast<int>().toList()),
+          jsonDecode(multiDevicesPreKeyBundle['ipkPub']).cast<int>().toList()),
       0);
   final spkPub = Curve.decodePoint(
       Uint8List.fromList(
-          jsonDecode(preKeyBundle['spkPub']).cast<int>().toList()),
+          jsonDecode(multiDevicesPreKeyBundle['spkPub']).cast<int>().toList()),
       0);
   final spkSig = Uint8List.fromList(
-      jsonDecode(preKeyBundle['spkSig']).cast<int>().toList());
+      jsonDecode(multiDevicesPreKeyBundle['spkSig']).cast<int>().toList());
   final opkPub = Curve.decodePoint(
-      Uint8List.fromList(
-          (jsonDecode(preKeyBundle['opkPub'])).cast<int>().toList()),
+      Uint8List.fromList((jsonDecode(multiDevicesPreKeyBundle['opkPub']))
+          .cast<int>()
+          .toList()),
       0);
-  final spkId = preKeyBundle['spkId'];
+  final spkId = multiDevicesPreKeyBundle['spkId'];
 
   return (ipkPub, spkPub, spkSig, opkPub, int.parse(spkId), int.parse(opkId));
 }

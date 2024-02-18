@@ -14,25 +14,32 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     );
 }
 
-async function downloadMultiDevicesPreKeyBundle(uid, opkId) {
-    // TODO: make download multi devices
-    let pkb = await PreKeyBundleModel.findOne(
-        { uid: uid },
-        'ipkPub spkPub spkSig opkPub'
-    ).lean();
-    let latestSpkIndex = ( Math.max(...Object.keys(pkb['spkPub']).map(Number)) ).toString();
-    let newPreKeyBundle = {};
+async function downloadMultiDevicesPreKeyBundle(uid, opkIds) {
+    let allPreKeyBundle = {};
 
-    newPreKeyBundle['ipkPub'] = pkb['ipkPub'];
+    for (let [deviceId, opkId] of Object.entries(opkIds)) {
+        console.log(`[preKeyController.js] ${deviceId}   ${opkId}`);
 
-    newPreKeyBundle['spkId'] = latestSpkIndex;
-    newPreKeyBundle['spkPub'] = pkb['spkPub'][latestSpkIndex];
-    newPreKeyBundle['spkSig'] = pkb['spkSig'][latestSpkIndex];
+        let pkb = await PreKeyBundleModel.findOne(
+            { uid: uid, deviceId: deviceId },
+            'ipkPub spkPub spkSig opkPub'
+        ).lean();
+        let latestSpkIndex = ( Math.max(...Object.keys(pkb['spkPub']).map(Number)) ).toString();
+        let newPreKeyBundle = {};
+    
+        newPreKeyBundle['ipkPub'] = pkb['ipkPub'];
+    
+        newPreKeyBundle['spkId'] = latestSpkIndex;
+        newPreKeyBundle['spkPub'] = pkb['spkPub'][latestSpkIndex];
+        newPreKeyBundle['spkSig'] = pkb['spkSig'][latestSpkIndex];
+    
+        newPreKeyBundle['opkId'] = opkId;
+        newPreKeyBundle['opkPub'] = pkb['opkPub'][opkId];
+    
+        allPreKeyBundle[deviceId] = newPreKeyBundle;
+    }
 
-    newPreKeyBundle['opkId'] = opkId;
-    newPreKeyBundle['opkPub'] = pkb['opkPub'][opkId];
-
-    return newPreKeyBundle;
+    return allPreKeyBundle;
 }
 
 async function getMultiDevicesAvailableOpkIndex(uid, isSelf, deviceId) {
@@ -44,7 +51,6 @@ async function getMultiDevicesAvailableOpkIndex(uid, isSelf, deviceId) {
     if (isSelf) {
         // remove current device (deviceId) from multiDevicesPreKeyBundles
         multiDevicesPreKeyBundles = multiDevicesPreKeyBundles.filter(bundle => bundle.deviceId !== deviceId);
-        console.log(multiDevicesPreKeyBundles);
     }
 
     let multiDevicesAvailableOpkIndex = {};

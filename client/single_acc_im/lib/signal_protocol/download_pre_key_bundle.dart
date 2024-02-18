@@ -9,7 +9,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 import './../api/get/download_pre_key_bundle_api.dart';
 import './../api/get/get_available_opk_index_api.dart';
 
-Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
+Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, String)>
     downloadPreKeyBundle(String remoteUid) async {
   final multiDevicesOpkIndexesRes = await getAvailableOpkIndexApi(remoteUid);
   final multiDevicesOpkIndexesResBody =
@@ -22,12 +22,40 @@ Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
   final theirPreKeyIndex =
       multiDevicesOpkIndexesResBody['data']['theirPreKeyIndex'];
 
+  print(
+      '[download_pre_key_bundle.dart] 多裝置 ourPreKeyIndex 內容👉$ourPreKeyIndex');
+  print(
+      '[download_pre_key_bundle.dart] 多裝置 theirPreKeyIndex 內容👉$theirPreKeyIndex');
+
   // TODO: make downloadPreKeyBundleAPI support multi devices
-  final opkId = randomChoice(multiDevicesOpkIndexesResBody['data']);
-  final res = await downloadPreKeyBundleAPI(remoteUid, opkId);
-  final multiDevicesPreKeyBundle = jsonDecode(res.body)['data'];
-  print('[download_pre_key_bundle.dart] pkb 內容👉 ${res.body}');
-  print('[download_pre_key_bundle.dart] pkb 形態👉 ${res.body.runtimeType}');
+
+  final ourPreKeyIndexRandom = {};
+  final theirPreKeyIndexRandom = {};
+
+  ourPreKeyIndex.forEach((key, value) {
+    ourPreKeyIndexRandom[key] = randomChoice(value);
+  });
+
+  theirPreKeyIndex.forEach((key, value) {
+    theirPreKeyIndexRandom[key] = randomChoice(value);
+  });
+
+  final multiDevicesOpkIndexesRandom = jsonEncode({
+    'ourPreKeyIndexRandom': ourPreKeyIndexRandom,
+    'theirPreKeyIndexRandom': theirPreKeyIndexRandom
+  });
+
+  print(
+      '[download_pre_key_bundle.dart] multiDevicesOpkIndexesRandom random ver:  $multiDevicesOpkIndexesRandom');
+
+  final res =
+      await downloadPreKeyBundleAPI(remoteUid, multiDevicesOpkIndexesRandom);
+
+  final multiDevicesPreKeyBundle = jsonDecode(res.body);
+  print(
+      '[download_pre_key_bundle.dart] pkb 內容👉 ${multiDevicesPreKeyBundle['data']}');
+
+  // TODO: deal with multi device pre key bundle type convert
 
   final ipkPub = IdentityKey.fromBytes(
       Uint8List.fromList(
@@ -46,7 +74,14 @@ Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
       0);
   final spkId = multiDevicesPreKeyBundle['spkId'];
 
-  return (ipkPub, spkPub, spkSig, opkPub, int.parse(spkId), int.parse(opkId));
+  return (
+    ipkPub,
+    spkPub,
+    spkSig,
+    opkPub,
+    int.parse(spkId),
+    multiDevicesOpkIndexesRandom
+  );
 }
 
 T randomChoice<T>(List<T> list) {

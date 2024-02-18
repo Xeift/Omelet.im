@@ -9,7 +9,6 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
         let theirUid = req.query.uid; // direct in api query
         let ipkPub = req.query.ipkPub;
         let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(ourUid, ipkPub);
-        console.log(`[getAvailableOpkIndex.js] deviceId: ${deviceId}`);
 
         let ourPreKeyIndex = await preKeyBundleController.getMultiDevicesAvailableOpkIndex(ourUid, true, deviceId);
         let theirPreKeyIndex = await preKeyBundleController.getMultiDevicesAvailableOpkIndex(theirUid, false, deviceId);

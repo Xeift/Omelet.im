@@ -17,8 +17,13 @@ Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
 
   print('多裝置 opkId 內容👉$multiDevicesOpkIndexesResBody');
 
-  final opkId = randomChoice(multiDevicesOpkIndexesResBody['data']);
+  final ourPreKeyIndex =
+      multiDevicesOpkIndexesResBody['data']['ourPreKeyIndex'];
+  final theirPreKeyIndex =
+      multiDevicesOpkIndexesResBody['data']['theirPreKeyIndex'];
 
+  // TODO: make downloadPreKeyBundleAPI support multi devices
+  final opkId = randomChoice(multiDevicesOpkIndexesResBody['data']);
   final res = await downloadPreKeyBundleAPI(remoteUid, opkId);
   final multiDevicesPreKeyBundle = jsonDecode(res.body)['data'];
   print('[download_pre_key_bundle.dart] pkb 內容👉 ${res.body}');

@@ -55,7 +55,18 @@ Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, String)>
   print(
       '[download_pre_key_bundle.dart] pkb 內容👉 ${multiDevicesPreKeyBundle['data']}');
 
+  final ourPreKeyBundle = multiDevicesPreKeyBundle['data']['ourPreKeyBundle'];
+  final theirPreKeyBundle =
+      multiDevicesPreKeyBundle['data']['theirPreKeyBundle'];
+
   // TODO: deal with multi device pre key bundle type convert
+  ourPreKeyBundle.forEach((key, value) {
+    print('[download_pre_key_bundle.dart]😎 $key $value');
+  });
+
+  theirPreKeyBundle.forEach((key, value) {
+    print('[download_pre_key_bundle.dart]😁 $key $value');
+  });
 
   final ipkPub = IdentityKey.fromBytes(
       Uint8List.fromList(

@@ -11,13 +11,21 @@ import './../signal_protocol/safe_session_store.dart';
 import './../signal_protocol/safe_identity_store.dart';
 import './../signal_protocol/download_pre_key_bundle.dart';
 
-Future<(String, bool, int?, Object?)> encryptMsg(
+Future<(String, bool, dynamic, dynamic)> encryptMsg(
     String remoteUid, String msgContent, Function updateHintMsg) async {
   final ipkStore = SafeIdentityKeyStore();
   final registrationId = await ipkStore.getLocalRegistrationId();
   final spkStore = SafeSpkStore();
   final opkStore = SafeOpkStore();
+
+  // 準備所有裝置的 Pre Key Bundle（包含自己及對方）
+  // final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
+  //     await downloadPreKeyBundle(remoteUid);
+  final Map<String, dynamic> multiDevicesPreKeyBundle =
+      await downloadPreKeyBundle(remoteUid);
+
   final remoteAddress = SignalProtocolAddress(remoteUid.toString(), 1);
+  // TODO: Address download pkb 後才能宣告
 
   // 建立 SessionStore
   final sessionStore = SafeSessionStore();
@@ -27,17 +35,29 @@ Future<(String, bool, int?, Object?)> encryptMsg(
   final sessionRecord = await sessionStore.loadSession(remoteAddress);
   final sessionState = sessionRecord.sessionState;
 
-  Future<(String, bool, int, String)> encryptPreKeySignalMessage() async {
-    // 準備對方的 Pre Key Bundle
-    final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
-        await downloadPreKeyBundle(remoteUid);
+  Future<(String, bool, dynamic, dynamic)> encryptPreKeySignalMessage() async {
     final sessionBuilder = SessionBuilder(
         sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
 
-    // TODO: fix opkId type
     // 用 SessionBuilder 處理 PreKeyBundle
-    final retrievedPreKeyBundle = PreKeyBundle(registrationId, 1, opkId as int?,
-        opkPub, spkId, spkPub, spkSig, ipkPub);
+    print(
+        '[encrypt_msg.dart] multiDevicesPreKeyBundle: $multiDevicesPreKeyBundle');
+    final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
+        await multiDevicesPreKeyBundle['theirPreKeyBundleConverted']['0'];
+
+    print('--------------------------------');
+    print(ipkPub);
+    print(spkPub);
+    print(spkSig);
+    print(opkPub);
+    print(spkId);
+    print(opkId);
+    print('--------------------------------');
+
+    // TODO: iterate pre key bundle
+
+    final retrievedPreKeyBundle = PreKeyBundle(
+        registrationId, 1, opkId, opkPub, spkId, spkPub, spkSig, ipkPub);
     await sessionBuilder.processPreKeyBundle(retrievedPreKeyBundle);
 
     // 建立 SessionCipher，用於加密訊息
@@ -58,7 +78,7 @@ Future<(String, bool, int?, Object?)> encryptMsg(
     );
   }
 
-  Future<(String, bool, int?, int?)> encryptSignalMessage() async {
+  Future<(String, bool, dynamic, dynamic)> encryptSignalMessage() async {
     // 建立 SessionCipher，用於加密訊息
     final sessionCipher = SessionCipher(
         sessionStore, opkStore, spkStore, ipkStore, remoteAddress);

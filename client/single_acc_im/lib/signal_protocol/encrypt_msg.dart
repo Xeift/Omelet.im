@@ -11,7 +11,7 @@ import './../signal_protocol/safe_session_store.dart';
 import './../signal_protocol/safe_identity_store.dart';
 import './../signal_protocol/download_pre_key_bundle.dart';
 
-Future<(String, bool, dynamic, dynamic)> encryptMsg(
+Future<Map<String, dynamic>> encryptMsg(
     String remoteUid, String msgContent, Function updateHintMsg) async {
   final ipkStore = SafeIdentityKeyStore();
   final registrationId = await ipkStore.getLocalRegistrationId();
@@ -19,31 +19,15 @@ Future<(String, bool, dynamic, dynamic)> encryptMsg(
   final opkStore = SafeOpkStore();
 
   // 準備所有裝置的 Pre Key Bundle（包含自己及對方）
-  // final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
-  //     await downloadPreKeyBundle(remoteUid);
   final Map<String, dynamic> multiDevicesPreKeyBundle =
       await downloadPreKeyBundle(remoteUid);
+  print(
+      '[encrypt_msg.dart] multiDevicesPreKeyBundle: $multiDevicesPreKeyBundle');
 
-  final remoteAddress = SignalProtocolAddress(remoteUid.toString(), 1);
-  // TODO: Address download pkb 後才能宣告
-
-  // 建立 SessionStore
-  final sessionStore = SafeSessionStore();
-  final sessionNotExsist = !(await sessionStore.containsSession(remoteAddress));
-
-  // 讀取 SessionRecord
-  final sessionRecord = await sessionStore.loadSession(remoteAddress);
-  final sessionState = sessionRecord.sessionState;
-
-  Future<(String, bool, dynamic, dynamic)> encryptPreKeySignalMessage() async {
-    final sessionBuilder = SessionBuilder(
-        sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
-
-    // 用 SessionBuilder 處理 PreKeyBundle
-    print(
-        '[encrypt_msg.dart] multiDevicesPreKeyBundle: $multiDevicesPreKeyBundle');
+  Future<(String, bool, dynamic, dynamic)> encryptSingleMsg(
+      String deviceId, dynamic singlePreKeyBundle) async {
     final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
-        await multiDevicesPreKeyBundle['theirPreKeyBundleConverted']['0'];
+        await singlePreKeyBundle;
 
     print('--------------------------------');
     print(ipkPub);
@@ -54,67 +38,103 @@ Future<(String, bool, dynamic, dynamic)> encryptMsg(
     print(opkId);
     print('--------------------------------');
 
-    // TODO: iterate pre key bundle
+    final remoteAddress =
+        SignalProtocolAddress(remoteUid.toString(), int.parse(deviceId));
 
-    final retrievedPreKeyBundle = PreKeyBundle(
-        registrationId, 1, opkId, opkPub, spkId, spkPub, spkSig, ipkPub);
-    await sessionBuilder.processPreKeyBundle(retrievedPreKeyBundle);
+    // 建立 SessionStore
+    final sessionStore = SafeSessionStore();
+    final sessionNotExsist =
+        !(await sessionStore.containsSession(remoteAddress));
 
-    // 建立 SessionCipher，用於加密訊息
-    final sessionCipher = SessionCipher(
-        sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
+    // 讀取 SessionRecord
+    final sessionRecord = await sessionStore.loadSession(remoteAddress);
+    final sessionState = sessionRecord.sessionState;
 
-    // ciphertext 形態為 PreKeySignalMessage(prekeyType)
-    final ciphertext = await sessionCipher
-        .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
-    final isPreKeySignalMessage =
-        ciphertext.getType() == CiphertextMessage.prekeyType;
+    Future<(String, bool, dynamic, dynamic)>
+        encryptPreKeySignalMessage() async {
+      final sessionBuilder = SessionBuilder(
+          sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
 
-    return (
-      jsonEncode(ciphertext.serialize()),
-      isPreKeySignalMessage,
-      spkId,
-      opkId
-    );
-  }
+      // 用 SessionBuilder 處理 PreKeyBundle
+      final retrievedPreKeyBundle = PreKeyBundle(registrationId,
+          int.parse(deviceId), opkId, opkPub, spkId, spkPub, spkSig, ipkPub);
+      await sessionBuilder.processPreKeyBundle(retrievedPreKeyBundle);
 
-  Future<(String, bool, dynamic, dynamic)> encryptSignalMessage() async {
-    // 建立 SessionCipher，用於加密訊息
-    final sessionCipher = SessionCipher(
-        sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
+      // 建立 SessionCipher，用於加密訊息
+      final sessionCipher = SessionCipher(
+          sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
 
-    // ciphertext 形態可能為 PreKeySignalMessage(prekeyType) 或 SignalMessage(whisperType)
-    final ciphertext = await sessionCipher
-        .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
-    final isPreKeySignalMessage =
-        ciphertext.getType() == CiphertextMessage.prekeyType;
+      // ciphertext 形態為 PreKeySignalMessage(prekeyType)
+      final ciphertext = await sessionCipher
+          .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
+      final isPreKeySignalMessage =
+          ciphertext.getType() == CiphertextMessage.prekeyType;
 
-    return (
-      jsonEncode(ciphertext.serialize()),
-      isPreKeySignalMessage,
-      null,
-      null
-    );
-  }
+      return (
+        jsonEncode(ciphertext.serialize()),
+        isPreKeySignalMessage,
+        spkId,
+        opkId
+      );
+    }
 
-  // 沒有 Session，Message 形態為 PreKeySignal，需要 SessionBuilder
-  if (sessionNotExsist) {
-    print('[encrypt_msg.dart] no session!');
-    return await encryptPreKeySignalMessage();
-  }
-  // 有 Session
-  else {
-    print('[encrypt_msg.dart] have session!');
+    Future<(String, bool, dynamic, dynamic)> encryptSignalMessage() async {
+      // 建立 SessionCipher，用於加密訊息
+      final sessionCipher = SessionCipher(
+          sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
 
-    // 對方未確認，Message 形態為 PreKeySignalMessage
-    if (sessionState.hasUnacknowledgedPreKeyMessage()) {
-      print('[encrypt_msg.dart] have unack!');
+      // ciphertext 形態可能為 PreKeySignalMessage(prekeyType) 或 SignalMessage(whisperType)
+      final ciphertext = await sessionCipher
+          .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
+      final isPreKeySignalMessage =
+          ciphertext.getType() == CiphertextMessage.prekeyType;
+
+      return (
+        jsonEncode(ciphertext.serialize()),
+        isPreKeySignalMessage,
+        null,
+        null
+      );
+    }
+
+    // 沒有 Session，Message 形態為 PreKeySignal，需要 SessionBuilder
+    if (sessionNotExsist) {
+      print('[encrypt_msg.dart] no session!');
       return await encryptPreKeySignalMessage();
     }
-    // 對方已確認，Message 形態為 SignalMessage
+    // 有 Session
     else {
-      print('[encrypt_msg.dart] no unack!');
-      return await encryptSignalMessage();
+      print('[encrypt_msg.dart] have session!');
+
+      // 對方未確認，Message 形態為 PreKeySignalMessage
+      if (sessionState.hasUnacknowledgedPreKeyMessage()) {
+        print('[encrypt_msg.dart] have unack!');
+        return await encryptPreKeySignalMessage();
+      }
+      // 對方已確認，Message 形態為 SignalMessage
+      else {
+        print('[encrypt_msg.dart] no unack!');
+        return await encryptSignalMessage();
+      }
     }
   }
+
+  // 自己其他裝置的 Pre Key Bundle
+  final ourPreKeyBundleConverted =
+      await multiDevicesPreKeyBundle['ourPreKeyBundleConverted'];
+  print(
+      '[encrypt_msg.dart] ourPreKeyBundleConverted: $ourPreKeyBundleConverted');
+  final ourMsgInfo = ourPreKeyBundleConverted
+      .map((key, value) => MapEntry(key, encryptSingleMsg(key, value)));
+
+  // 對方所有裝置的 Pre Key Bundle
+  final theirPreKeyBundleConverted =
+      await multiDevicesPreKeyBundle['theirPreKeyBundleConverted'];
+  final theirMsgInfo = theirPreKeyBundleConverted
+      .map((key, value) => MapEntry(key, encryptSingleMsg(key, value)));
+
+  return {
+    'ourPreKeyBundleConverted': ourMsgInfo,
+    'theirPreKeyBundleConverted': theirMsgInfo
+  };
 }

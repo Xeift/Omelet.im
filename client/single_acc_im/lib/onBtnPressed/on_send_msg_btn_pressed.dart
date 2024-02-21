@@ -14,41 +14,43 @@ Future<void> onSendMsgBtnPressed(
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // 加密訊息
-  final (cihertext, isPreKeySignalMessage, spkId, opkId) =
-      await encryptMsg(remoteUid, msgContent, updateHintMsg);
+  final msgInfo = await encryptMsg(remoteUid, msgContent, updateHintMsg);
+  print('[on_send_msg_btn_pressed.dart] msgInfo👉: $msgInfo');
+  // final (cihertext, isPreKeySignalMessage, spkId, opkId) =
+  //     await encryptMsg(remoteUid, msgContent, updateHintMsg);
 
-  // 訊息格式為 PreKeySignalMessage
-  if (isPreKeySignalMessage) {
-    socket.emit('clientSendMsgToServer', {
-      'isPreKeySignalMessage': isPreKeySignalMessage,
-      'type': 'text',
-      'sender': selfUid,
-      'receiver': remoteUid,
-      'content': cihertext,
-      'spkId': spkId,
-      'opkId': opkId
-    });
-  }
+  // // 訊息格式為 PreKeySignalMessage
+  // if (isPreKeySignalMessage) {
+  //   socket.emit('clientSendMsgToServer', {
+  //     'isPreKeySignalMessage': isPreKeySignalMessage,
+  //     'type': 'text',
+  //     'sender': selfUid,
+  //     'receiver': remoteUid,
+  //     'content': cihertext,
+  //     'spkId': spkId,
+  //     'opkId': opkId
+  //   });
+  // }
 
-  // 訊息格式為 SignalMessage
-  else {
-    socket.emit('clientSendMsgToServer', {
-      'isPreKeySignalMessage': isPreKeySignalMessage,
-      'type': 'text',
-      'sender': selfUid,
-      'receiver': remoteUid,
-      'content': cihertext
-    });
-  }
+  // // 訊息格式為 SignalMessage
+  // else {
+  //   socket.emit('clientSendMsgToServer', {
+  //     'isPreKeySignalMessage': isPreKeySignalMessage,
+  //     'type': 'text',
+  //     'sender': selfUid,
+  //     'receiver': remoteUid,
+  //     'content': cihertext
+  //   });
+  // }
 
-  // 將發送的訊息儲存到本地
-  final safeMsgStore = SafeMsgStore();
-  safeMsgStore.writeMsg(remoteUid, {
-    'timestamp': currentTimestamp,
-    'type': 'text',
-    'sender': selfUid,
-    'receiver': remoteUid,
-    'content': msgContent,
-  });
-  print('--------------------------------\n');
+  // // 將發送的訊息儲存到本地
+  // final safeMsgStore = SafeMsgStore();
+  // safeMsgStore.writeMsg(remoteUid, {
+  //   'timestamp': currentTimestamp,
+  //   'type': 'text',
+  //   'sender': selfUid,
+  //   'receiver': remoteUid,
+  //   'content': msgContent,
+  // });
+  // print('--------------------------------\n');
 }

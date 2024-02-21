@@ -21,8 +21,6 @@ Future<Map<String, dynamic>> encryptMsg(
   // 準備所有裝置的 Pre Key Bundle（包含自己及對方）
   final Map<String, dynamic> multiDevicesPreKeyBundle =
       await downloadPreKeyBundle(remoteUid);
-  print(
-      '[encrypt_msg.dart] multiDevicesPreKeyBundle: $multiDevicesPreKeyBundle');
 
   Future<(String, bool, dynamic, dynamic)> encryptSingleMsg(
       String deviceId, dynamic singlePreKeyBundle) async {
@@ -36,7 +34,7 @@ Future<Map<String, dynamic>> encryptMsg(
     print(opkPub);
     print(spkId);
     print(opkId);
-    print('--------------------------------');
+    print('--------------------------------\n');
 
     final remoteAddress =
         SignalProtocolAddress(remoteUid.toString(), int.parse(deviceId));
@@ -122,19 +120,20 @@ Future<Map<String, dynamic>> encryptMsg(
   // 自己其他裝置的 Pre Key Bundle
   final ourPreKeyBundleConverted =
       await multiDevicesPreKeyBundle['ourPreKeyBundleConverted'];
-  print(
-      '[encrypt_msg.dart] ourPreKeyBundleConverted: $ourPreKeyBundleConverted');
-  final ourMsgInfo = ourPreKeyBundleConverted
-      .map((key, value) => MapEntry(key, encryptSingleMsg(key, value)));
+  final Map<String, dynamic> ourMsgInfo = {};
+  for (var key in ourPreKeyBundleConverted.keys) {
+    var value = ourPreKeyBundleConverted[key];
+    ourMsgInfo[key] = await encryptSingleMsg(key, value);
+  }
 
   // 對方所有裝置的 Pre Key Bundle
   final theirPreKeyBundleConverted =
       await multiDevicesPreKeyBundle['theirPreKeyBundleConverted'];
-  final theirMsgInfo = theirPreKeyBundleConverted
-      .map((key, value) => MapEntry(key, encryptSingleMsg(key, value)));
+  final Map<String, dynamic> theirMsgInfo = {};
+  for (var key in theirPreKeyBundleConverted.keys) {
+    var value = theirPreKeyBundleConverted[key];
+    theirMsgInfo[key] = await encryptSingleMsg(key, value);
+  }
 
-  return {
-    'ourPreKeyBundleConverted': ourMsgInfo,
-    'theirPreKeyBundleConverted': theirMsgInfo
-  };
+  return {'ourMsgInfo': ourMsgInfo, 'theirMsgInfo': theirMsgInfo};
 }

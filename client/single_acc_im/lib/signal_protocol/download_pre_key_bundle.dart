@@ -14,19 +14,10 @@ Future<Map<String, dynamic>> downloadPreKeyBundle(String remoteUid) async {
   final multiDevicesOpkIndexesResBody =
       jsonDecode(multiDevicesOpkIndexesRes.body);
 
-  print('多裝置 opkId 內容👉$multiDevicesOpkIndexesResBody');
-
   final ourPreKeyIndex =
       multiDevicesOpkIndexesResBody['data']['ourPreKeyIndex'];
   final theirPreKeyIndex =
       multiDevicesOpkIndexesResBody['data']['theirPreKeyIndex'];
-
-  print(
-      '[download_pre_key_bundle.dart] 多裝置 ourPreKeyIndex 內容👉$ourPreKeyIndex');
-  print(
-      '[download_pre_key_bundle.dart] 多裝置 theirPreKeyIndex 內容👉$theirPreKeyIndex');
-
-  // TODO: make downloadPreKeyBundleAPI support multi devices
 
   final ourPreKeyIndexRandom = {};
   final theirPreKeyIndexRandom = {};
@@ -44,15 +35,10 @@ Future<Map<String, dynamic>> downloadPreKeyBundle(String remoteUid) async {
     'theirPreKeyIndexRandom': theirPreKeyIndexRandom
   });
 
-  print(
-      '[download_pre_key_bundle.dart] multiDevicesOpkIndexesRandom random ver:  $multiDevicesOpkIndexesRandom');
-
   final res =
       await downloadPreKeyBundleAPI(remoteUid, multiDevicesOpkIndexesRandom);
 
   final multiDevicesPreKeyBundle = jsonDecode(res.body);
-  print(
-      '[download_pre_key_bundle.dart] pkb 內容👉 ${multiDevicesPreKeyBundle['data']}');
 
   final ourPreKeyBundle = multiDevicesPreKeyBundle['data']['ourPreKeyBundle'];
   final theirPreKeyBundle =
@@ -87,7 +73,7 @@ Future<Map<String, dynamic>> downloadPreKeyBundle(String remoteUid) async {
   final theirPreKeyBundleConverted = theirPreKeyBundle.map((key, value) =>
       MapEntry(key,
           preKeyBundleTypeConverter(key, value, 'theirPreKeyIndexRandom')));
-  print(ourPreKeyBundleConverted);
+
   return {
     'ourPreKeyBundleConverted': ourPreKeyBundleConverted,
     'theirPreKeyBundleConverted': theirPreKeyBundleConverted

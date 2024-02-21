@@ -16,6 +16,7 @@ Future<void> onSendMsgBtnPressed(
   // 加密訊息
   final msgInfo = await encryptMsg(remoteUid, msgContent, updateHintMsg);
   print('[on_send_msg_btn_pressed.dart] msgInfo👉: $msgInfo');
+  print('🎈🎈🎈');
   // final (cihertext, isPreKeySignalMessage, spkId, opkId) =
   //     await encryptMsg(remoteUid, msgContent, updateHintMsg);
 

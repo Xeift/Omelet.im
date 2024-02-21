@@ -7,51 +7,73 @@ import './../message/safe_msg_store.dart';
 import './../signal_protocol/encrypt_msg.dart';
 
 Future<void> onSendMsgBtnPressed(
-    String remoteUid, String msgContent, Function updateHintMsg) async {
+    String theirUid, String msgContent, Function updateHintMsg) async {
   print('--------------------------------');
   const storage = FlutterSecureStorage();
-  final selfUid = await storage.read(key: 'uid');
+  final ourUid = await storage.read(key: 'uid');
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // 加密訊息
-  final msgInfo = await encryptMsg(remoteUid, msgContent, updateHintMsg);
+  final msgInfo = await encryptMsg(theirUid, msgContent, updateHintMsg);
+  final ourMsgInfo = msgInfo['ourMsgInfo'];
+  final theirMsgInfo = msgInfo['theirMsgInfo'];
+
+  print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
   print('[on_send_msg_btn_pressed.dart] msgInfo👉: $msgInfo');
-  print('🎈🎈🎈');
-  // final (cihertext, isPreKeySignalMessage, spkId, opkId) =
-  //     await encryptMsg(remoteUid, msgContent, updateHintMsg);
+  print('[on_send_msg_btn_pressed.dart] msgInfo👉: $ourMsgInfo');
+  print('[on_send_msg_btn_pressed.dart] msgInfo👉: $theirMsgInfo');
+  print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
 
-  // // 訊息格式為 PreKeySignalMessage
-  // if (isPreKeySignalMessage) {
-  //   socket.emit('clientSendMsgToServer', {
-  //     'isPreKeySignalMessage': isPreKeySignalMessage,
-  //     'type': 'text',
-  //     'sender': selfUid,
-  //     'receiver': remoteUid,
-  //     'content': cihertext,
-  //     'spkId': spkId,
-  //     'opkId': opkId
-  //   });
-  // }
+  Future<void> returnMsgToServer(singleMsgInfo, receiverUid) async {
+    final (cihertext, isPreKeySignalMessage, spkId, opkId) = singleMsgInfo;
 
-  // // 訊息格式為 SignalMessage
-  // else {
-  //   socket.emit('clientSendMsgToServer', {
-  //     'isPreKeySignalMessage': isPreKeySignalMessage,
-  //     'type': 'text',
-  //     'sender': selfUid,
-  //     'receiver': remoteUid,
-  //     'content': cihertext
-  //   });
-  // }
+    print('🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃');
+    print(cihertext);
+    print(isPreKeySignalMessage);
+    print(spkId);
+    print(opkId);
+    print('🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃\n');
 
-  // // 將發送的訊息儲存到本地
-  // final safeMsgStore = SafeMsgStore();
-  // safeMsgStore.writeMsg(remoteUid, {
-  //   'timestamp': currentTimestamp,
-  //   'type': 'text',
-  //   'sender': selfUid,
-  //   'receiver': remoteUid,
-  //   'content': msgContent,
-  // });
-  // print('--------------------------------\n');
+    // 訊息格式為 PreKeySignalMessage
+    if (isPreKeySignalMessage) {
+      socket.emit('clientSendMsgToServer', {
+        'isPreKeySignalMessage': isPreKeySignalMessage,
+        'type': 'text',
+        'sender': ourUid,
+        'receiver': receiverUid,
+        'content': cihertext,
+        'spkId': spkId,
+        'opkId': opkId
+      });
+    }
+
+    // 訊息格式為 SignalMessage
+    else {
+      socket.emit('clientSendMsgToServer', {
+        'isPreKeySignalMessage': isPreKeySignalMessage,
+        'type': 'text',
+        'sender': ourUid,
+        'receiver': receiverUid,
+        'content': cihertext
+      });
+    }
+
+    // 將發送的訊息儲存到本地
+    final safeMsgStore = SafeMsgStore();
+    safeMsgStore.writeMsg(theirUid, {
+      'timestamp': currentTimestamp,
+      'type': 'text',
+      'sender': ourUid,
+      'receiver': theirUid,
+      'content': msgContent,
+    });
+    print('--------------------------------\n');
+  }
+
+  for (var key in ourMsgInfo.keys) {
+    await returnMsgToServer(ourMsgInfo[key], ourUid);
+  }
+  for (var key in theirMsgInfo.keys) {
+    await returnMsgToServer(theirMsgInfo[key], theirUid);
+  }
 }

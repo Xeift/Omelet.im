@@ -24,7 +24,7 @@ Future<void> onSendMsgBtnPressed(
   print('[on_send_msg_btn_pressed.dart] msgInfo👉: $theirMsgInfo');
   print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
 
-  Future<void> returnMsgToServer(singleMsgInfo, receiverUid) async {
+  Future<void> returnMsgToServer(deviceId, singleMsgInfo, receiverUid) async {
     final (cihertext, isPreKeySignalMessage, spkId, opkId) = singleMsgInfo;
 
     print('🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃');
@@ -41,6 +41,7 @@ Future<void> onSendMsgBtnPressed(
         'type': 'text',
         'sender': ourUid,
         'receiver': receiverUid,
+        'deviceId': deviceId,
         'content': cihertext,
         'spkId': spkId,
         'opkId': opkId
@@ -54,6 +55,7 @@ Future<void> onSendMsgBtnPressed(
         'type': 'text',
         'sender': ourUid,
         'receiver': receiverUid,
+        'deviceId': deviceId,
         'content': cihertext
       });
     }
@@ -70,10 +72,10 @@ Future<void> onSendMsgBtnPressed(
     print('--------------------------------\n');
   }
 
-  for (var key in ourMsgInfo.keys) {
-    await returnMsgToServer(ourMsgInfo[key], ourUid);
+  for (var deviceId in ourMsgInfo.keys) {
+    await returnMsgToServer(deviceId, ourMsgInfo[deviceId], ourUid);
   }
-  for (var key in theirMsgInfo.keys) {
-    await returnMsgToServer(theirMsgInfo[key], theirUid);
+  for (var deviceId in theirMsgInfo.keys) {
+    await returnMsgToServer(deviceId, theirMsgInfo[deviceId], theirUid);
   }
 }

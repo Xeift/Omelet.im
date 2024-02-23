@@ -1,7 +1,5 @@
-const generateId = require('./snowflakeId');
 const jwt = require('./jwt');
 const msgController = require('./../controller/msgController');
-const authController = require('./../controller/authController');
 const preKeyBundleController = require('./../controller/preKeyBundleController.js');
 
 let userIdToRoomId = {};

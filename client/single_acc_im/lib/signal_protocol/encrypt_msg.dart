@@ -10,9 +10,11 @@ import './../signal_protocol/safe_opk_store.dart';
 import './../signal_protocol/safe_session_store.dart';
 import './../signal_protocol/safe_identity_store.dart';
 import './../signal_protocol/download_pre_key_bundle.dart';
+import './../utils/load_uid.dart';
 
 Future<Map<String, dynamic>> encryptMsg(
     String remoteUid, String msgContent, Function updateHintMsg) async {
+  final ourUid = await loadUid();
   final ipkStore = SafeIdentityKeyStore();
   final registrationId = await ipkStore.getLocalRegistrationId();
   final spkStore = SafeSpkStore();
@@ -23,7 +25,7 @@ Future<Map<String, dynamic>> encryptMsg(
       await downloadPreKeyBundle(remoteUid);
 
   Future<(String, bool, dynamic, dynamic)> encryptSingleMsg(
-      String deviceId, dynamic singlePreKeyBundle) async {
+      String deviceId, dynamic singlePreKeyBundle, String receiverUid) async {
     final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
         await singlePreKeyBundle;
 
@@ -37,7 +39,7 @@ Future<Map<String, dynamic>> encryptMsg(
     print('--------------------------------\n');
 
     final remoteAddress =
-        SignalProtocolAddress(remoteUid.toString(), int.parse(deviceId));
+        SignalProtocolAddress(receiverUid, int.parse(deviceId));
 
     // 建立 SessionStore
     final sessionStore = SafeSessionStore();
@@ -123,7 +125,7 @@ Future<Map<String, dynamic>> encryptMsg(
   final Map<String, dynamic> ourMsgInfo = {};
   for (var key in ourPreKeyBundleConverted.keys) {
     var value = ourPreKeyBundleConverted[key];
-    ourMsgInfo[key] = await encryptSingleMsg(key, value);
+    ourMsgInfo[key] = await encryptSingleMsg(key, value, ourUid);
   }
 
   // 對方所有裝置的 Pre Key Bundle
@@ -132,7 +134,7 @@ Future<Map<String, dynamic>> encryptMsg(
   final Map<String, dynamic> theirMsgInfo = {};
   for (var key in theirPreKeyBundleConverted.keys) {
     var value = theirPreKeyBundleConverted[key];
-    theirMsgInfo[key] = await encryptSingleMsg(key, value);
+    theirMsgInfo[key] = await encryptSingleMsg(key, value, remoteUid);
   }
 
   return {'ourMsgInfo': ourMsgInfo, 'theirMsgInfo': theirMsgInfo};

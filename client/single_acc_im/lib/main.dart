@@ -52,10 +52,10 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   }
 
   Future<void> initSocket() async {
-    final (token, ipkPub) = await loadJwtAndIpkPub();
-
     // JWT 存在，直接連線到 Socket.io Server
     if (await isJwtExsist()) {
+      final (token, ipkPub) = await loadJwtAndIpkPub();
+
       socket = io.io(
           serverUri, io.OptionBuilder().setTransports(['websocket']).build());
 

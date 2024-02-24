@@ -5,9 +5,11 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './../signal_protocol/decrypt_msg.dart';
+import './../utils/load_uid.dart';
 
 class SafeMsgStore {
   final storage = const FlutterSecureStorage();
+  final ourUid = loadUid();
 
   String uidToKey(String remoteUid, int index) {
     return 'msg_${remoteUid}_$index';
@@ -81,7 +83,15 @@ class SafeMsgStore {
       final decryptedMsg = await decryptMsg(unreadMsg['isPreKeySignalMessage'],
           int.parse(unreadMsg['sender']), unreadMsg['content']);
 
-      await writeMsg(unreadMsg['sender'], {
+      // handle msg sent from our other device
+      final String senderKey;
+      if (unreadMsg['sender'] == ourUid) {
+        senderKey = unreadMsg['receiver'];
+      } else {
+        senderKey = unreadMsg['sender'];
+      }
+
+      await writeMsg(senderKey, {
         'timestamp': unreadMsg['timestamp'],
         'type': unreadMsg['type'],
         'receiver': unreadMsg['receiver'],
@@ -95,7 +105,15 @@ class SafeMsgStore {
     final decryptedMsg = await decryptMsg(receivedMsg['isPreKeySignalMessage'],
         int.parse(receivedMsg['sender']), receivedMsg['content']);
 
-    await writeMsg(receivedMsg['sender'], {
+    // handle msg sent from our other device
+    final String senderKey;
+    if (receivedMsg['sender'] == ourUid) {
+      senderKey = receivedMsg['receiver'];
+    } else {
+      senderKey = receivedMsg['sender'];
+    }
+
+    await writeMsg(senderKey, {
       'timestamp': receivedMsg['timestamp'],
       'type': receivedMsg['type'],
       'receiver': receivedMsg['receiver'],

@@ -60,6 +60,7 @@ module.exports = function(io) {
                     'type': msg['type'],
                     'sender': senderUid,
                     'receiver': receiverUid,
+                    'receiverDeviceId': receiverDeviceId,
                     'content': msg['content'],
                 };
 

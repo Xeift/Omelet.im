@@ -39,7 +39,7 @@ Future<void> onSendMsgBtnPressed(
 
     // 將發送的訊息儲存到本地
     final safeMsgStore = SafeMsgStore();
-    safeMsgStore.writeMsg(theirUid, {
+    await safeMsgStore.writeMsg(theirUid, {
       'timestamp': currentTimestamp,
       'type': 'text',
       'sender': ourUid,

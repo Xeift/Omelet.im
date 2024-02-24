@@ -55,7 +55,7 @@ Future<void> onSendMsgBtnPressed(
         'type': 'text',
         'sender': ourUid,
         'receiver': receiverUid,
-        'senderDeviceId': deviceId,
+        'receiverDeviceId': deviceId,
         'content': cihertext,
         'spkId': spkId,
         'opkId': opkId
@@ -69,7 +69,7 @@ Future<void> onSendMsgBtnPressed(
         'type': 'text',
         'sender': ourUid,
         'receiver': receiverUid,
-        'senderDeviceId': deviceId,
+        'receiverDeviceId': deviceId,
         'content': cihertext
       };
     }

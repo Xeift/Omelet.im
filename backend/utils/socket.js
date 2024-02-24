@@ -18,21 +18,24 @@ module.exports = function(io) {
             }
             else {
                 let uid = decodedToken['_uid'];
-                userIdToRoomId[uid] = socket.id;
+                addUser(uid, '666', socket.id);
+                // TODO: deviceId 需要加入 JWT
+
                 socket.emit('jwtValid');
                 console.log(`[socket.js] room content👉 ${JSON.stringify(userIdToRoomId)}`);
                 console.log('--------------------------------\n');
             }
         });
 
-        socket.on('clientSendMsgToServer', async(msg) => {
+        async function dealWithClientMsgs(msg) {
             console.log('--------------------------------');
             console.log(`[socket.js] 訊息原始內容👉 ${JSON.stringify(msg)}`);
 
-            let senderUid = Object.entries(userIdToRoomId).find(([uid, socketId]) => socketId === socket.id);
-            if (senderUid) {
-                senderUid = senderUid[0];
+            let userDevice = findUserDeviceBySocketId(socket.id);
+            if (userDevice) {
+                let senderUid = userDevice['uid'];
                 let receiverUid = msg['receiver'];
+                let receiverDeviceId = msg['receiverDeviceId'];
                 let timestamp = Date.now().toString();
                 let newMsg;
 
@@ -43,7 +46,6 @@ module.exports = function(io) {
                         console.log(`[socket.js] 刪除opkid👉 ${msg['opkId']}`);
                         await preKeyBundleController.deleteOpkPub(receiverUid, msg['opkId']);
                     }
-
                 }
                 else { // 第二次以後發送訊息
                     console.log('[socket.js] 此訊息為 SignalMessage');
@@ -57,13 +59,13 @@ module.exports = function(io) {
                     'content': msg['content'],
                 };
 
-
                 console.log(`[socket.js] 轉發至客戶端的訊息👉 ${JSON.stringify(newMsg)}`);
-    
-                if (receiverUid in userIdToRoomId) { // 接收者在線上
-                    console.log('[socket.js] receiver online');
+
+                let socketId = isOnline(receiverUid, receiverDeviceId);
+                if (socketId) { // 接收者在線上
+                    console.log(`[socket.js] receiver ${socketId} online`);
                     socket
-                        .to(userIdToRoomId[receiverUid])
+                        .to(socketId)
                         .emit('serverForwardMsgToClient', newMsg);
                     console.log('[socket.js] done emit serverForwardMsgToClient');
                     console.log('--------------------------------\n');
@@ -71,25 +73,73 @@ module.exports = function(io) {
                 else { // 接收者離線
                     console.log('[socket.js] receiver offline');
                     console.log('--------------------------------\n');
-                    await msgController.storeUnreadMsg(newMsg);
+                    // await msgController.storeUnreadMsg(newMsg);
                 }
             }
             else {
                 console.log('[socket.js] 第一次連線 未進行 clientReturnJwtToServer');
             }
-        });
-
-
-        socket.on('disconnect', () => {
-            deleteUserIdFromRoom();
-        });
-
-
-        function deleteUserIdFromRoom() {
-            let disconnectorUid = Object.keys(userIdToRoomId).find(key => userIdToRoomId[key] === socket.id);
-            delete userIdToRoomId[disconnectorUid];
         }
 
-    });
-};
+        socket.on('clientSendMsgToServer', async(msgs) => {
+            let allMsgs = JSON.parse(msgs);
+            console.log(`完整訊息內容：${JSON.stringify(allMsgs)}`);
 
+            for (let msg in allMsgs) {
+                await dealWithClientMsgs(allMsgs[msg]);
+            }
+        });
+
+        socket.on('disconnect', () => {
+            removeUser(socket.id);
+            console.log('--------------------------------');
+            console.log(`[socket.js] client ${socket.id} has disconnected from backend server`);
+            console.log(`[socket.js] room content👉 ${JSON.stringify(userIdToRoomId)}`);
+            console.log('--------------------------------\n');
+        });
+
+    });
+
+    function addUser(userId, deviceId, socketId) {
+        if (!userIdToRoomId[userId]) {
+            userIdToRoomId[userId] = {};
+        }
+        userIdToRoomId[userId][deviceId] = socketId;
+    }
+    
+    function removeUser(socketId) {
+        for (let userId in userIdToRoomId) {
+            for (let deviceId in userIdToRoomId[userId]) {
+                if (userIdToRoomId[userId][deviceId] === socketId) {
+                    delete userIdToRoomId[userId][deviceId];
+                    break;
+                }
+            }
+        }
+    }
+    
+    function findUserDeviceBySocketId(socketId) {
+        for (let uid in userIdToRoomId) {
+            for (let deviceId in userIdToRoomId[uid]) {
+                if (userIdToRoomId[uid][deviceId] === socketId) {
+                    return { uid, deviceId };
+                }
+            }
+        }
+        return null;
+    }
+
+    function isOnline(uid, deviceId) {
+        console.log('----------------------------------------------------------------');
+        console.log(uid);
+        console.log(deviceId);
+        console.log(userIdToRoomId);
+        console.log('----------------------------------------------------------------\n');
+        if (userIdToRoomId[uid] && userIdToRoomId[uid][deviceId]) {
+            return userIdToRoomId[uid][deviceId];
+        }
+        return null;
+    }
+    
+    
+};

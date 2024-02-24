@@ -10,7 +10,10 @@ module.exports = function(io) {
         console.log(`[socket.js] client ${socket.id} has connected to backend server`);
 
 
-        socket.on('clientReturnJwtToServer', async(token) => {
+        socket.on('clientReturnJwtToServer', async(data) => {
+            let token = data.token;
+            let ipkPub = data.ipkPub;
+
             let decodedToken = await jwt.verifyJWTSocket(token);
             if (decodedToken === null) {
                 console.log('[socket.js] 👉 token expired');
@@ -18,8 +21,9 @@ module.exports = function(io) {
             }
             else {
                 let uid = decodedToken['_uid'];
-                addUser(uid, '666', socket.id);
-                // TODO: deviceId 需要加入 JWT
+                let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(uid, ipkPub);
+
+                addUser(uid, deviceId, socket.id);
 
                 socket.emit('jwtValid');
                 console.log(`[socket.js] room content👉 ${JSON.stringify(userIdToRoomId)}`);
@@ -73,7 +77,7 @@ module.exports = function(io) {
                 else { // 接收者離線
                     console.log('[socket.js] receiver offline');
                     console.log('--------------------------------\n');
-                    // await msgController.storeUnreadMsg(newMsg);
+                    await msgController.storeUnreadMsg(newMsg);
                 }
             }
             else {

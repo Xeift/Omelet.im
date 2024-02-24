@@ -4,12 +4,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import 'utils/jwt.dart';
 import 'utils/login.dart';
 import 'utils/server_uri.dart';
+import 'utils/load_jwt_and_ipk_pub.dart';
 
 import 'signal_protocol/safe_opk_store.dart';
 import 'signal_protocol/safe_spk_store.dart';
@@ -52,7 +52,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
   }
 
   Future<void> initSocket() async {
-    const storage = FlutterSecureStorage();
+    final (token, ipkPub) = await loadJwtAndIpkPub();
 
     // JWT 存在，直接連線到 Socket.io Server
     if (await isJwtExsist()) {
@@ -62,7 +62,7 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
       socket.onConnect((_) async {
         // 回傳 JWT，驗證身份
         socket.emit(
-            'clientReturnJwtToServer', await storage.read(key: 'token'));
+            'clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
 
         socket.on('jwtValid', (data) async {
           print('--------------------------------');

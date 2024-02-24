@@ -75,18 +75,18 @@ Future<void> onSendMsgBtnPressed(
     }
   }
 
-  List all_msg = [];
+  List allMsg = [];
 
   for (var deviceId in ourMsgInfo.keys) {
     var singleMsg =
         await returnMsgToServer(deviceId, ourMsgInfo[deviceId], ourUid);
-    all_msg.add(singleMsg);
+    allMsg.add(singleMsg);
   }
   for (var deviceId in theirMsgInfo.keys) {
     var singleMsg =
         await returnMsgToServer(deviceId, theirMsgInfo[deviceId], theirUid);
-    all_msg.add(singleMsg);
+    allMsg.add(singleMsg);
   }
 
-  socket.emit('clientSendMsgToServer', jsonEncode(all_msg));
+  socket.emit('clientSendMsgToServer', jsonEncode(allMsg));
 }

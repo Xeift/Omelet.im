@@ -1,4 +1,3 @@
-const authController = require('../../controller/authController.js');
 const preKeyBundleController = require('../../controller/preKeyBundleController.js');
 const express = require('express');
 const router = express.Router();

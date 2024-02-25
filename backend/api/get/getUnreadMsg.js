@@ -1,3 +1,4 @@
+const preKeyBundleController = require('../../controller/preKeyBundleController.js');
 const msgController = require('../../controller/msgController.js');
 const express = require('express');
 const router = express.Router();
@@ -7,8 +8,10 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
+        let ipkPub = req.query.ipkPub;
 
-        let msg = await msgController.readUnreadMsg(uid);
+        let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(uid, ipkPub);
+        let msg = await msgController.readUnreadMsg(uid, deviceId);
 
         res.status(200).json({
             message: '成功讀取未讀訊息',

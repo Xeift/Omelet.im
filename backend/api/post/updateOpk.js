@@ -1,5 +1,3 @@
-const authController = require('../../controller/authController.js');
-const msgController = require('../../controller/msgController.js');
 const preKeyBundleController = require('../../controller/preKeyBundleController.js');
 const express = require('express');
 const router = express.Router();
@@ -7,12 +5,13 @@ const jwt = require('../../utils/jwt.js');
 
 router.post('/', jwt.verifyJWT, async(req, res) => {
     let decodedToken = req.decodedToken;
-    let uid = decodedToken._uid;
+    let ourUid = decodedToken._uid;
 
-    let deviceId = req.body.deviceId;
+    let ipkPub = req.body.ipkPub;
+    let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(ourUid, ipkPub);
     let opkPub = JSON.parse(req.body.opkPub);
 
-    await preKeyBundleController.updateOpk(uid, opkPub);
+    await preKeyBundleController.updateOpk(ourUid, deviceId, opkPub);
 
 
     try {

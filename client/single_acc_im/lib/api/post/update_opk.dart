@@ -1,20 +1,19 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import './../../utils/load_jwt_and_ipk_pub.dart';
 
 import './../../utils/server_uri.dart';
 
-Future<http.Response> updateOpk(deviceId, opkPub) async {
-  const storage = FlutterSecureStorage();
-  final token = await storage.read(key: 'token');
+Future<http.Response> updateOpk(opkPub) async {
+  final (token, ipkPub) = await loadJwtAndIpkPub();
   final res = await http.post(Uri.parse('$serverUri/api/v1/update-opk'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token'
       },
       body: jsonEncode(<String, String>{
-        'deviceId': deviceId,
+        'ipkPub': ipkPub,
         'opkPub': opkPub,
       }));
 

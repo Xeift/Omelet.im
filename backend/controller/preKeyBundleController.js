@@ -69,9 +69,9 @@ async function deleteOpkPub(uid, opkId) {
     return result;
 }
 
-async function updateOpk(uid, opkPub) {
+async function updateOpk(uid, deviceId, opkPub) {
     await PreKeyBundleModel.findOneAndUpdate(
-        { uid: uid },
+        { uid: uid, deviceId: deviceId },
         { opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1] }
     );
 }
@@ -98,9 +98,9 @@ async function getSelfSpkStatus(uid, deviceId) {
     return [spkExpired, lastBatchSpkId];
 }
 
-async function updateSpk(uid, spkPub, spkSig) {
+async function updateSpk(uid, deviceId, spkPub, spkSig) {
     await PreKeyBundleModel.updateOne(
-        { uid: uid }, {
+        { uid: uid, deviceId: deviceId }, {
             $set: {
                 [`spkPub.${Object.keys(spkPub)}`]: spkPub, 
                 [`spkSig.${Object.keys(spkSig)}`]: spkSig,

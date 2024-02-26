@@ -82,13 +82,11 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
           if (outOfOpk) {
             final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
 
-            final res = await updateOpk(
-                '1',
-                jsonEncode({
-                  for (var newOpk in newOpks)
-                    newOpk.id.toString():
-                        jsonEncode(newOpk.getKeyPair().publicKey.serialize())
-                }));
+            final res = await updateOpk(jsonEncode({
+              for (var newOpk in newOpks)
+                newOpk.id.toString():
+                    jsonEncode(newOpk.getKeyPair().publicKey.serialize())
+            }));
             print('--------------------------------');
             print('[main.dart] new opk👉 ${res.body}');
             print('--------------------------------\n');
@@ -114,7 +112,6 @@ class _MyMsgWidgetState extends State<MyMsgWidget> {
             final newSpk = generateSignedPreKey(selfIpk, lastBatchSpkId + 1);
 
             final res = await updateSpk(
-              '1',
               jsonEncode({
                 newSpk.id.toString():
                     jsonEncode(newSpk.getKeyPair().publicKey.serialize())

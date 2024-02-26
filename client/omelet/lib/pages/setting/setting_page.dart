@@ -1,6 +1,13 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors
 
-import 'avatar_card.dart';
+import 'package:flutter/material.dart';
+import 'package:omelet/models/setting.dart';
+import 'package:provider/provider.dart';
+
+import '../../componets/setting/avatarcard.dart';
+import '../../componets/setting/setting_title.dart';
+import '../../theme/theme_provider.dart';
+
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -11,40 +18,44 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   @override
+
+
+  @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    //bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+          padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const AvatarCard(),
-              const SizedBox(
-                height: 20,
+              const SizedBox(height: 20,),
+              const Divider(),
+              const SizedBox(height: 10,),
+              Column(
+                children: List.generate(
+                  settings.length, 
+                  (index) => SettingTitle(setting: settings[index]),
+                ),
               ),
               const Divider(),
-              const SizedBox(
-                height: 10,
+              ListTile(
+                leading: Icon(Icons.dark_mode),
+                title: Text(
+                  'Dark theme',
+                  style: textTheme.titleSmall?.copyWith(
+                    color:Theme.of(context).colorScheme.primary,
+                  ), // 使用 subtitle1 而不是 titleSmall
+                ),
+                 onTap: (){
+                  Provider.of<ThemeProvier>(context,listen: false).toggleTheme();
+                 },
               ),
-              Row(
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: const Icon(Icons.person),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  const Text('personal')
-                ],
-              )
             ],
           ),
         ),

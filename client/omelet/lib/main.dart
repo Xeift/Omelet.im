@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:omelet/pages/home_page.dart';
+import './theme/theme_constants.dart';
+import 'theme/theme_provider.dart';
+import 'package:provider/provider.dart';
 
-import './pages/home_page.dart';
 
-import 'signal_protocol/generate_and_store_key.dart';
+//import 'signal_protocol/generate_and_store_key.dart';
 
-void main() async {
-  runApp(const MyApp());
-  await generateAndStoreKey();
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvier(),
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Omelet Login Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
+      theme: Provider.of<ThemeProvier>(context).themeData,
+      darkTheme: darkMode,
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(title: 'Login'),

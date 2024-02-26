@@ -3,6 +3,6 @@
 // const username = 'elpma';
 // const password = 'a';
 
-const serverUri = 'http://localhost:3000';
+const serverUri = 'https://c415-2401-e180-88b1-63e0-a9bf-5fa1-d400-3e0e.ngrok-free.app';
 const username = 'khusc';
 const password = 'a';

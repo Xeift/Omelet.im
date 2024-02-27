@@ -1,7 +1,7 @@
-const authController = require('../../controller/authController.js');
-const jwt = require('../../utils/jwt.js');
 const express = require('express');
 const router = express.Router();
+const jwt = require('../../utils/jwt.js');
+const authController = require('../../controller/authController.js');
 
 router.post('/', async(req, res) => {
     let username = req.body.username; // username 可為 username 或 email

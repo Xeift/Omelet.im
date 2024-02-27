@@ -1,8 +1,8 @@
-const authController = require('../../controller/authController.js');
-const jwt = require('../../utils/jwt.js');
-const email = require('../../utils/email.js');
 const express = require('express');
 const router = express.Router();
+const jwt = require('../../utils/jwt.js');
+const email = require('../../utils/email.js');
+const authController = require('../../controller/authController.js');
 
 router.post('/send-mail', async(req, res) => {
     let emailData = req.body.email;

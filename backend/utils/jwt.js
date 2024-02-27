@@ -59,8 +59,6 @@ async function verifyJWT(req, res, next) {
     }
 }
 
-
-
 async function verifyJWTSocket(token) {
     console.log(token);
     if (!token) {
@@ -76,8 +74,6 @@ async function verifyJWTSocket(token) {
         }
     }
 }
-
-
 
 module.exports = {
     generateLoginJWT,

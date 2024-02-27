@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config({ path: 'config/.env' });
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 const SERVER_URI = process.env.SERVER_URI;
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 
 async function sendResetPasswordMail(email, code) {
     const transporter = nodemailer.createTransport({

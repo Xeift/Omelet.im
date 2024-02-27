@@ -1,4 +1,3 @@
-const msgController = require('../../controller/msgController.js');
 const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');

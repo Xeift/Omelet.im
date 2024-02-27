@@ -1,8 +1,7 @@
-const authController = require('../../controller/authController.js');
-const preKeyBundleController = require('../../controller/preKeyBundleController.js');
 const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
+const preKeyBundleController = require('../../controller/preKeyBundleController.js');
 
 router.get('/', jwt.verifyJWT, async(req, res) => {
     try {

@@ -60,7 +60,6 @@ async function verifyJWT(req, res, next) {
 }
 
 async function verifyJWTSocket(token) {
-    console.log(token);
     if (!token) {
         return null;
     }

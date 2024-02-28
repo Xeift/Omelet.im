@@ -1,4 +1,5 @@
 const snowflakeId = require('../utils/snowflakeId');
+const passwordHelper = require('../utils/passwordHelper');
 const VerifiedUserModel = require('./../model/verifiedUserModel');
 const UnverifiedUserModel = require('../model/unverifiedUserModel');
 
@@ -9,7 +10,7 @@ async function isPasswordMatch(username, password) {
             { email: username }
         ]
     });
-    if (password === user.password) {
+    if (await passwordHelper.checkPassword(password, user.password)) {
         return user;
     }
     else {
@@ -28,12 +29,14 @@ async function isEmailVerified(input) {
 }
 
 async function createNewUnverifiedUser(uid, email, username, password) {
+    let hashedPassword = await passwordHelper.hashPassword(password);
+
     await UnverifiedUserModel.create({
         uid: uid,
         timestamp: snowflakeId.extractTimeStampFromId(uid),
         username: username,
         email: email,
-        password: password,
+        password: hashedPassword,
     });
 }
 

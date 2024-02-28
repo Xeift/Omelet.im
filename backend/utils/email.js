@@ -16,9 +16,21 @@ async function sendResetPasswordMail(email, code) {
         from: 'mail@omelet.im',
         to: email,
         subject: 'Omelet - 重置密碼申請',
-        html: `<h1>Omelet - 重置密碼申請</h1><p>我們收到您重置密碼的申請。<br>若您並未請求重置密碼，請忽略此郵件。<br>若您要重設密碼，請點擊下方藍字並按照網頁中的指示操作。</p><a href="${SERVER_URI}confirm-reset-email?code=${code}">按我重置密碼<a>`
+        html: `
+            <div style="font-family: Arial, sans-serif; color: #000; padding: 20px; border: 2px solid #000;">
+                <h1 style="color: #000; font-size: 24px; margin-bottom: 20px;">Omelet - 重置密碼申請</h1>
+                <p style="color: #000; font-size: 16px; margin-bottom: 20px;">
+                    我們收到您重置密碼的申請。<br>
+                    若您並未請求重置密碼，請忽略此郵件。<br>
+                    若您要重設密碼，請點擊下方按鈕並按照網頁中的指示操作。
+                </p>
+                <a href="${SERVER_URI}confirm-reset-email?code=${code}" style="text-decoration: none; display: inline-block; padding: 10px 20px; background-color: #fff; color: #000; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s, border-color 0.3s;">
+                    按我重置密碼
+                </a>
+            </div>`
     };
-
+    
+    
     transporter.sendMail(mailOptions);
 }
 
@@ -34,8 +46,19 @@ async function sendRegisterMail(email, code) {
     const mailOptions = {
         from: 'mail@omelet.im',
         to: email,
-        subject: 'Omelet - 帳號註冊',
-        html: `<h1>Omelet - 帳號註冊</h1><p>我們收到您帳號註冊的申請。<br>若您並未請求註冊帳號，請忽略此郵件。<br>若您要註冊帳號，請點擊下方藍字並按照網頁中的指示操作。</p><a href="${SERVER_URI}confirm-register-email?code=${code}">按我註冊帳號<a>`
+        subject: 'Omelet - 註冊帳號',
+        html: `
+            <div style="font-family: Arial, sans-serif; color: #000; padding: 20px; border: 2px solid #000;">
+                <h1 style="color: #000; font-size: 24px; margin-bottom: 20px;">Omelet - 註冊帳號申請</h1>
+                <p style="color: #000; font-size: 16px; margin-bottom: 20px;">
+                    我們收到您註冊帳號的申請。<br>
+                    若您並未請求註冊帳號，請忽略此郵件。<br>
+                    若您要註冊帳號，請點擊下方按鈕並按照網頁中的指示操作。
+                </p>
+                <a href="${SERVER_URI}confirm-register-email?code=${code}" style="text-decoration: none; display: inline-block; padding: 10px 20px; background-color: #fff; color: #000; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s, border-color 0.3s;">
+                    註冊帳號
+                </a>
+            </div>`
     };
 
     transporter.sendMail(mailOptions);

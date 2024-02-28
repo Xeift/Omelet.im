@@ -70,7 +70,8 @@ async function makeUnverifiedUserVerified(uid, email) {
 
 async function updatePasswordByEmail(email, newPassword) {
     const user = await VerifiedUserModel.findOne({ email });
-    user.password = newPassword;
+    let hashedNewPassword = await passwordHelper.hashPassword(newPassword);
+    user.password = hashedNewPassword;
 
     await user.save();
 }

@@ -1,18 +1,14 @@
-import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import './../../utils/load_jwt.dart';
-
 import './../../utils/server_uri.dart';
 
-Future<http.Response> updatePfp() async {
+Future<http.StreamedResponse> updatePfp(String path) async {
   final token = await loadJwt();
-  final res = await http.post(Uri.parse('$serverUri/api/v1/update-pfp'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token'
-      },
-      body: jsonEncode(<String, String>{'pfpData': 'haha'}));
+  var request =
+      http.MultipartRequest('POST', Uri.parse('$serverUri/api/v1/update-pfp'));
+  request.headers.addAll(<String, String>{'Authorization': 'Bearer $token'});
+  request.files.add(await http.MultipartFile.fromPath('pfpData', path));
+  var response = await request.send();
 
-  return res;
+  return response;
 }

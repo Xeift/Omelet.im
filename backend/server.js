@@ -30,6 +30,7 @@ app.use('/api/v1/update-opk', rateLimit.authLimiter, require('./api/post/updateO
 app.use('/api/v1/get-self-opk-status', rateLimit.authLimiter, require('./api/get/getSelfOpkStatus.js'));
 app.use('/api/v1/get-self-spk-status', rateLimit.authLimiter, require('./api/get/getSelfSpkStatus.js'));
 app.use('/api/v1/update-spk', rateLimit.authLimiter, require('./api/post/updateSpk.js'));
+app.use('/api/v1/update-pfp', rateLimit.authLimiter, require('./api/post/updatePfp.js'));
 
 app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confirm-register-email.js'));
 app.use('/confirm-reset-email', rateLimit.authLimiter, require('./page/confirm-reset-email.js'));

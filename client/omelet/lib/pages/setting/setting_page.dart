@@ -50,7 +50,7 @@ class _SettingPageState extends State<SettingPage> {
                   'Dark theme',
                   style: textTheme.titleSmall?.copyWith(
                     color:Theme.of(context).colorScheme.primary,
-                  ), // 使用 subtitle1 而不是 titleSmall
+                  ), 
                 ),
                  onTap: (){
                   Provider.of<ThemeProvier>(context,listen: false).toggleTheme();

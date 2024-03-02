@@ -25,7 +25,6 @@ class AvatarCard extends StatelessWidget {
               'Youtuber channel',
               style: TextStyle(
                 fontSize:10, 
-                color: Colors.grey,
               ),
             ),
           ],

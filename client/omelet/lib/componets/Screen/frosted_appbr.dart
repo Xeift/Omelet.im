@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:omelet/theme/theme_constants.dart';
 
 // ignore: must_be_immutable
 class FrostedAppbar extends StatefulWidget {
@@ -20,7 +21,7 @@ class FrostedAppbar extends StatefulWidget {
     required this.blurStrengthY, // 修正拼寫錯誤
     required this.color,
     required this.leading,
-    required this.title, // 修正冒號錯誤
+    required this.title, required IconThemeData iconTheme, // 修正冒號錯誤
   });
   @override
   FrostedAppbarState createState() => FrostedAppbarState();
@@ -48,7 +49,7 @@ class FrostedAppbarState extends State<FrostedAppbar> {
               Container(
                 margin: const EdgeInsets.only(right: 0),
                 width: 56,
-                color: Colors.transparent,
+                color: darkMode.iconTheme.color,
                 child: widget.leading,
               ),
               Expanded(

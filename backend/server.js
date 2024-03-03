@@ -35,6 +35,7 @@ app.use('/api/v1/update-pfp', rateLimit.authLimiter, require('./api/post/updateP
 app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confirm-register-email.js'));
 app.use('/confirm-reset-email', rateLimit.authLimiter, require('./page/confirm-reset-email.js'));
 
+app.use('/pfp', express.static('pfp'));
 
 app.use('*', require('./api/notFound.js'));
 

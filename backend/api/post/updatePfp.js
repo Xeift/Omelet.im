@@ -4,13 +4,13 @@ const jwt = require('../../utils/jwt.js');
 const authController = require('../../controller/authController.js');
 const multer  = require('multer');
 const fs = require('fs');
-if (!fs.existsSync('./uploads')){
-    fs.mkdirSync('./uploads');
+if (!fs.existsSync('pfp')){
+    fs.mkdirSync('pfp');
 }
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, 'pfp');
     },
     filename: function(req, file, cb) {
         let decodedToken = req.decodedToken;

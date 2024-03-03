@@ -8,6 +8,7 @@ import '../componets/alert/alert_msg.dart';
 import '../pages/chat_list_page.dart';
 import '../pages/login_signup/sign_up_page.dart';
 
+
 import './../api/post/login_api.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,6 +37,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -59,6 +61,7 @@ class HomePageState extends State<HomePage> {
                 buildSignupPageButton(), //註冊button控件呼叫
               ],
             ),
+
           ],
         ),
       ),

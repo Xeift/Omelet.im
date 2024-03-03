@@ -1,3 +1,4 @@
+const { boolean } = require('webidl-conversions');
 const mongoose = require('./mongoose');
 
 const VerifiedUserSchema = new mongoose.Schema({
@@ -7,7 +8,7 @@ const VerifiedUserSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: { type: String },
     room_joined: { type: [String], default: [] },
-    pfp: { type: mongoose.Schema.Types.Mixed },
+    hasPfp: { type: Boolean, default: false },
     lastDeviceId: { type: Number },
 });
 const VerifiedUserModel = mongoose.model('VerifiedUser', VerifiedUserSchema, 'verified_users');

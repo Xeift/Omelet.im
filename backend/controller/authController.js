@@ -76,9 +76,9 @@ async function updatePasswordByEmail(email, newPassword) {
     await user.save();
 }
 
-async function updatePfpByUid(uid, base64Data) {
+async function updatePfpStatus(uid, hasPfp) {
     const user = await VerifiedUserModel.findOne({ uid: uid });
-    user.pfp = base64Data;
+    user.hasPfp = hasPfp;
 
     await user.save();
 }
@@ -90,5 +90,5 @@ module.exports = {
     createNewUnverifiedUser,
     makeUnverifiedUserVerified,
     updatePasswordByEmail,
-    updatePfpByUid
+    updatePfpStatus
 };

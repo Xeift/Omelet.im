@@ -3,15 +3,27 @@ const router = express.Router();
 const jwt = require('../../utils/jwt.js');
 const authController = require('../../controller/authController.js');
 const multer  = require('multer');
-const upload = multer();
 const fs = require('fs');
+if (!fs.existsSync('./uploads')){
+    fs.mkdirSync('./uploads');
+}
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function(req, file, cb) {
+        let decodedToken = req.decodedToken;
+        let ourUid = decodedToken._uid;
+        cb(null, `${ourUid}.png`);
+    }
+});
+const upload = multer({ storage: storage });
 
 router.post('/', jwt.verifyJWT, upload.single('pfpData'), async(req, res) => {
     let decodedToken = req.decodedToken;
     let ourUid = decodedToken._uid;
-
-    const imageBase64 = Buffer.from(req.file.buffer).toString('base64');
-    await authController.updatePfpByUid(ourUid, imageBase64);
+    await authController.updatePfpStatus(ourUid, true);
 
     try {
         res.status(200).json({

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // btn
 import './../onBtnPressed/on_send_msg_btn_pressed.dart';
 import './../onBtnPressed/on_readall_msg_btn_pressed.dart';
-import './../onBtnPressed/on_test_btn2_pressed.dart';
+import '../onBtnPressed/on_update_pfp_btn_pressed.dart';
 
 class MsgWidget extends StatefulWidget {
   const MsgWidget(this.updateHintMsg, {super.key});
@@ -38,14 +38,16 @@ class MsgWidgetState extends State<MsgWidget> {
           child: const Text('發送訊息'),
         ),
         ElevatedButton(
-          onPressed: () async => await onTestBtn1Pressed(widget.updateHintMsg),
+          onPressed: () async =>
+              await onGetUserListBtnPressed(widget.updateHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
-          child: const Text('萬用測試鈕1'),
+          child: const Text('取得使用者列表'),
         ),
         ElevatedButton(
-          onPressed: () async => await onTestBtn2Pressed(widget.updateHintMsg),
+          onPressed: () async =>
+              await onUpdatePfpBtnPressed(widget.updateHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
-          child: const Text('萬用測試鈕2'),
+          child: const Text('更新頭像'),
         ),
       ],
     );

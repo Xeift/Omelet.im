@@ -2,7 +2,7 @@
 
 import './../message/safe_msg_store.dart';
 
-Future<void> onTestBtn1Pressed(Function updateHintMsg) async {
+Future<void> onGetUserListBtnPressed(Function updateHintMsg) async {
   final safeMsgStore = SafeMsgStore();
   final allMsgs = await safeMsgStore.readLast100Msg('492312533160431617');
   for (var allMsg in allMsgs) {

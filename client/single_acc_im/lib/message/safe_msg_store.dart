@@ -121,4 +121,27 @@ class SafeMsgStore {
       'content': decryptedMsg
     });
   }
+
+  Future<Map<String, dynamic>> getChatList() async {
+    Map<String, String> allData = await storage.readAll();
+    Map<String, dynamic> lastMsgWithEachUser = {};
+
+    for (var entry in allData.entries) {
+      List<String> keyParts = entry.key.split('_');
+      if (keyParts.length != 3 || keyParts[0] != 'msg') continue;
+
+      String remoteUid = keyParts[1];
+      int index = int.parse(keyParts[2]);
+
+      if (!lastMsgWithEachUser.containsKey(remoteUid) ||
+          lastMsgWithEachUser[remoteUid]['index'] < index) {
+        lastMsgWithEachUser[remoteUid] = {
+          'index': index,
+          'message': jsonDecode(entry.value),
+        };
+      }
+    }
+
+    return lastMsgWithEachUser;
+  }
 }

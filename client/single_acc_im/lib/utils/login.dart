@@ -8,7 +8,7 @@ Future<void> login(String username, String password, Function updateHintMsg,
     Function catHintMsg) async {
   const storage = FlutterSecureStorage();
 
-  final res = jsonDecode((await loginAPI(username, password)).body); // 1
+  final res = jsonDecode((await loginAPI(username, password)).body);
   await storage.write(key: 'token', value: res['token']);
   await storage.write(key: 'uid', value: res['data']['uid']);
   await storage.write(key: 'username', value: res['data']['username']);

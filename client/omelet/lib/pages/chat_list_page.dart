@@ -4,7 +4,7 @@ import 'package:omelet/pages/notification_page.dart';
 import '../pages/setting/setting_page.dart';
 import '../theme/theme_constants.dart';
 import '../pages/message_page.dart';
-import '../pages/notification_page.dart';
+// import '../pages/notification_page.dart';
 
 class ChatListPage extends StatefulWidget {
   const ChatListPage({Key? key}) : super(key: key);
@@ -17,8 +17,8 @@ class _ChatListPageState extends State<ChatListPage> {
   final ValueNotifier<int> pageIndex = ValueNotifier(1);
 
   final List<Widget> pages = const [
-    MessagePage(),
     NotificationPgae(),
+    MessagePage(),
     SettingPage(),
   ];
 
@@ -72,7 +72,7 @@ class BottonNavbar extends StatefulWidget {
 }
 
 class _BottonNavbarState extends State<BottonNavbar> {
-  var selectedIndex = 0;
+  var selectedIndex = 1;
   
   void handleItemSelected(int index){
     setState(() {
@@ -104,14 +104,14 @@ class _BottonNavbarState extends State<BottonNavbar> {
           children: [
             NavBarItem(
               index: 0, 
-              label: 'Message', 
-              icon: Icons.message, 
+              label: 'Notifications', 
+              icon: Icons.notifications, 
               isSelected: (selectedIndex == 0),
               onTap: handleItemSelected),
             NavBarItem(
               index: 1, 
-              label: 'Notification', 
-              icon: Icons.notifications, 
+              label: 'Message', 
+              icon: Icons.message, 
               isSelected: (selectedIndex == 1),
               onTap: handleItemSelected),
             NavBarItem(
@@ -127,6 +127,8 @@ class _BottonNavbarState extends State<BottonNavbar> {
   }
 }
 
+
+//navbar bottom
 class NavBarItem extends StatelessWidget {
   const NavBarItem({Key? key, required this.label, required this.icon, required this.index, required this.onTap,this.isSelected = false}) : super(key: key);
 
@@ -155,8 +157,7 @@ class NavBarItem extends StatelessWidget {
               label,
               style: isSelected 
               ? const TextStyle(fontSize: 11,color:AppColor.secondary)
-              : const TextStyle(fontSize: 11,color:Color.fromARGB(255, 255, 255, 255)),
-            ),
+              : const TextStyle(fontSize: 11,)),
           ],
         ),
       ),

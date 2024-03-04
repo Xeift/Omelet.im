@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/client/sample_im/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/client/sample_im/build" />
+      <excludeFolder url="file://$MODULE_DIR$/client/sample_im/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/client/xeift_e2ee_test/build" />
+      <excludeFolder url="file://$MODULE_DIR$/client/xeift_e2ee_test/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/client/xeift_e2ee_test/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/client/single_acc_im/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/client/single_acc_im/build" />
+      <excludeFolder url="file://$MODULE_DIR$/client/single_acc_im/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/client/omelet/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/client/omelet/build" />
+      <excludeFolder url="file://$MODULE_DIR$/client/omelet/.pub" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

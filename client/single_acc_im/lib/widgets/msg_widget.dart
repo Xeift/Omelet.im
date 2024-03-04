@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import './../onBtnPressed/on_send_msg_btn_pressed.dart';
 import '../onBtnPressed/on_read_chat_list_btn_pressed.dart';
 import '../onBtnPressed/on_update_pfp_btn_pressed.dart';
+import '../onBtnPressed/on_select_image_btn_pressed.dart';
 
 class MsgWidget extends StatefulWidget {
   const MsgWidget(this.updateHintMsg, {super.key});
@@ -48,6 +49,12 @@ class MsgWidgetState extends State<MsgWidget> {
               await onUpdatePfpBtnPressed(widget.updateHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
           child: const Text('更新頭像'),
+        ),
+        ElevatedButton(
+          onPressed: () async =>
+              await onSelectImageBtnPressed(widget.updateHintMsg),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+          child: const Text('選擇圖片 準備傳送圖片'),
         ),
       ],
     );

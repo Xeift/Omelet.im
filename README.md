@@ -42,14 +42,6 @@ Omelet-Social-Platform
 │       ├──single_acc_im        目前最新的測試用客戶端程式
 │       └──xeift_e2ee_test      用於測試通訊、API
 │
-├──frontend                     前端資料夾（Web 客戶端已棄用，轉為 Flutter）
-│       ├──node_modules         安裝的函式庫都存在這，沒事不會特別動
-│       ├──route                單純GET前端網頁的API
-│       ├──view                 前端Html、CSS檔案
-│       ├──package-lock.json    記錄用了哪些函式庫，還有 函式庫用了哪些其他的函式庫
-│       ├──package.json         記錄用了哪些函式庫
-│       └──server.js            前端主程式
-│
 ├──.gitignore                   gitignore設定文件
 ├──LICENSE                      版權宣告
 └──README.md                    此檔案

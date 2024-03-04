@@ -8,11 +8,17 @@ import './../main.dart' show socket;
 import './../message/safe_msg_store.dart';
 import './../signal_protocol/encrypt_msg.dart';
 
-import '../onBtnPressed/on_select_image_btn_pressed.dart' show imagePath;
+import '../onBtnPressed/on_select_image_btn_pressed.dart'
+    show imagePath, resetImagePath;
 
 Future<void> onSendMsgBtnPressed(
     String theirUid, String msgContent, Function updateHintMsg) async {
   print('--------------------------------');
+  if (imagePath != null) {
+    msgContent = imagePath.toString();
+    resetImagePath();
+  }
+
   const storage = FlutterSecureStorage();
   final ourUid = (await storage.read(key: 'uid')).toString();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
@@ -23,6 +29,7 @@ Future<void> onSendMsgBtnPressed(
   final theirMsgInfo = msgInfo['theirMsgInfo'];
 
   print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
+  print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
   print('[on_send_msg_btn_pressed.dart] imagePath: $imagePath');
   print('[on_send_msg_btn_pressed.dart] msgInfo👉: $msgInfo');
   print('[on_send_msg_btn_pressed.dart] msgInfo👉: $ourMsgInfo');

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:omelet/pages/chat_list_page.dart';
 import 'package:omelet/pages/home_page.dart';
 import './theme/theme_constants.dart';
 import 'theme/theme_provider.dart';
@@ -33,6 +34,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(title: 'Login'),
+        'Home':(BuildContext context) => const ChatListPage(),
       },
     );
   }

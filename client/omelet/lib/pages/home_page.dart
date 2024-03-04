@@ -132,8 +132,9 @@ class HomePageState extends State<HomePage> {
   }
 
   void nextPage() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => const ChatListPage()));
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder:(context)=> const ChatListPage())
+      , (route) => false);
   }
 
   Widget buildLoginButton() {

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -14,10 +15,18 @@ import '../onBtnPressed/on_select_image_btn_pressed.dart'
 Future<void> onSendMsgBtnPressed(
     String theirUid, String msgContent, Function updateHintMsg) async {
   print('--------------------------------');
+  String msgType;
+
   if (imagePath != null) {
-    msgContent = imagePath.toString();
+    var img = File(imagePath.toString());
+    msgContent = jsonEncode(await img.readAsBytes());
+    msgType = 'image';
     resetImagePath();
+  } else {
+    msgType = 'text';
   }
+
+  print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
 
   const storage = FlutterSecureStorage();
   final ourUid = (await storage.read(key: 'uid')).toString();
@@ -32,8 +41,8 @@ Future<void> onSendMsgBtnPressed(
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
   print('[on_send_msg_btn_pressed.dart] imagePath: $imagePath');
   print('[on_send_msg_btn_pressed.dart] msgInfo👉: $msgInfo');
-  print('[on_send_msg_btn_pressed.dart] msgInfo👉: $ourMsgInfo');
-  print('[on_send_msg_btn_pressed.dart] msgInfo👉: $theirMsgInfo');
+  print('[on_send_msg_btn_pressed.dart] ourMsgInfo👉: $ourMsgInfo');
+  print('[on_send_msg_btn_pressed.dart] theirMsgInfo👉: $theirMsgInfo');
   print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
 
   Future<Map<String, dynamic>> returnMsgToServer(
@@ -51,7 +60,7 @@ Future<void> onSendMsgBtnPressed(
     final safeMsgStore = SafeMsgStore();
     await safeMsgStore.writeMsg(theirUid, {
       'timestamp': currentTimestamp,
-      'type': 'text',
+      'type': msgType,
       'sender': ourUid,
       'receiver': theirUid,
       'content': msgContent,
@@ -62,7 +71,7 @@ Future<void> onSendMsgBtnPressed(
     if (isPreKeySignalMessage) {
       return {
         'isPreKeySignalMessage': isPreKeySignalMessage,
-        'type': 'text',
+        'type': msgType,
         'sender': ourUid,
         'receiver': receiverUid,
         'receiverDeviceId': deviceId,
@@ -76,7 +85,7 @@ Future<void> onSendMsgBtnPressed(
     else {
       return {
         'isPreKeySignalMessage': isPreKeySignalMessage,
-        'type': 'text',
+        'type': msgType,
         'sender': ourUid,
         'receiver': receiverUid,
         'receiverDeviceId': deviceId,

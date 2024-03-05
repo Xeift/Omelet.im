@@ -1,8 +1,11 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path_provider/path_provider.dart';
 
 import './../signal_protocol/decrypt_msg.dart';
 import './../utils/load_uid.dart';
@@ -111,6 +114,16 @@ class SafeMsgStore {
       senderKey = receivedMsg['receiver'];
     } else {
       senderKey = receivedMsg['sender'];
+    }
+
+    if (receivedMsg['type'] == 'image') {
+      // TODO:
+      print('😎img');
+      Directory? downloadsDirectory = await getDownloadsDirectory();
+      var file = File('${downloadsDirectory?.path}/your_file.png');
+      final imageBytes =
+          Uint8List.fromList(jsonDecode(decryptedMsg).cast<int>());
+      await file.writeAsBytes(imageBytes);
     }
 
     await writeMsg(senderKey, {

@@ -1,4 +1,4 @@
-package com.example.single_acc_im
+package com.omelet.single_acc_im
 
 import io.flutter.embedding.android.FlutterActivity
 

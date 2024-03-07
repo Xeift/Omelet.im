@@ -5,6 +5,6 @@ Future<void> onReadAllStorageBtnPressed(Function updateHintMsg) async {
   const storage = FlutterSecureStorage();
   final key = (await storage.readAll()).keys.toString();
   final allData = (await storage.readAll()).toString();
-  await updateHintMsg('$key\n$allData');
-  print('$key\n$allData');
+  await updateHintMsg('key👉$key\nallData👉$allData');
+  print('key👉$key\nallData👉$allData');
 }

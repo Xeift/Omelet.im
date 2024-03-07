@@ -15,7 +15,7 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  String hintMsg = '這是測試訊息UwU';
+  String hintMsg = '這是提示訊息UwU';
 
   @override
   void initState() {

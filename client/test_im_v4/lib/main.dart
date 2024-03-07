@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:test_im_v4/widget/read_all_storage_btn.dart';
 import 'package:test_im_v4/widget/remove_all_storage_btn.dart';
+import 'package:test_im_v4/widget/msg_widget.dart';
 
 final hintMsgKey = GlobalKey();
 
@@ -36,6 +37,8 @@ class _MainAppState extends State<MainApp> {
           const SizedBox(height: 50),
           ReadAllStorageBtn(updateHintMsg),
           RemoveAllStorageBtn(updateHintMsg),
+          MsgWidget(updateHintMsg),
+
           // 提示訊息（除錯用）
           Text(
             hintMsg,

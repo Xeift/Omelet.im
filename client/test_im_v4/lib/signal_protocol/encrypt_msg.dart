@@ -5,12 +5,12 @@ import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
-import './../signal_protocol/safe_spk_store.dart';
-import './../signal_protocol/safe_opk_store.dart';
-import './../signal_protocol/safe_session_store.dart';
-import './../signal_protocol/safe_identity_store.dart';
-import './../signal_protocol/download_pre_key_bundle.dart';
 import 'package:test_im_v4/utils/load_local_info.dart';
+import 'package:test_im_v4/signal_protocol/safe_spk_store.dart';
+import 'package:test_im_v4/signal_protocol/safe_opk_store.dart';
+import 'package:test_im_v4/signal_protocol/safe_session_store.dart';
+import 'package:test_im_v4/signal_protocol/safe_identity_store.dart';
+import 'package:test_im_v4/signal_protocol/download_pre_key_bundle.dart';
 
 Future<Map<String, dynamic>> encryptMsg(
     String remoteUid, String msgContent, Function updateHintMsg) async {

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
-import './../api/post/update_pfp.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:test_im_v4/api/post/update_pfp.dart';
 
 Future<void> onUpdatePfpBtnPressed(Function updateHintMsg) async {
   final picker = ImagePicker();

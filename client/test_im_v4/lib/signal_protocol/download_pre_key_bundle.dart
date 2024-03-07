@@ -6,8 +6,8 @@ import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
-import './../api/get/download_pre_key_bundle_api.dart';
-import './../api/get/get_available_opk_index_api.dart';
+import 'package:test_im_v4/api/get/download_pre_key_bundle_api.dart';
+import 'package:test_im_v4/api/get/get_available_opk_index_api.dart';
 
 Future<Map<String, dynamic>> downloadPreKeyBundle(String remoteUid) async {
   final multiDevicesOpkIndexesRes = await getAvailableOpkIndexApi(remoteUid);

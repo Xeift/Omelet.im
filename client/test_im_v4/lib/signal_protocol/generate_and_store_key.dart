@@ -4,10 +4,10 @@ import 'dart:convert';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
-import 'safe_spk_store.dart';
-import 'safe_opk_store.dart';
-import 'safe_identity_store.dart';
-import './../api/post/upload_pre_key_bundle_api.dart';
+import 'package:test_im_v4/signal_protocol/safe_spk_store.dart';
+import 'package:test_im_v4/signal_protocol/safe_opk_store.dart';
+import 'package:test_im_v4/signal_protocol/safe_identity_store.dart';
+import 'package:test_im_v4/api/post/upload_pre_key_bundle_api.dart';
 
 Future<void> generateAndStoreKey() async {
   final registrationId = generateRegistrationId(false);

@@ -10,10 +10,11 @@ import 'package:libsignal_protocol_dart/src/state/pre_key_record.dart';
 import 'package:libsignal_protocol_dart/src/state/session_record.dart';
 import 'package:libsignal_protocol_dart/src/state/signal_protocol_store.dart';
 import 'package:libsignal_protocol_dart/src/state/signed_pre_key_record.dart';
-import './../signal_protocol/safe_identity_store.dart';
-import './../signal_protocol/safe_spk_store.dart';
-import './../signal_protocol/safe_opk_store.dart';
-import './../signal_protocol/safe_session_store.dart';
+
+import 'package:test_im_v4/signal_protocol/safe_identity_store.dart';
+import 'package:test_im_v4/signal_protocol/safe_spk_store.dart';
+import 'package:test_im_v4/signal_protocol/safe_opk_store.dart';
+import 'package:test_im_v4/signal_protocol/safe_session_store.dart';
 
 class SafeSignalProtocolStore implements SignalProtocolStore {
   final safeIpkStore = SafeIdentityKeyStore();

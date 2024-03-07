@@ -4,10 +4,13 @@ import 'package:test_im_v4/widget/read_all_storage_btn.dart';
 import 'package:test_im_v4/widget/remove_all_storage_btn.dart';
 import 'package:test_im_v4/widget/msg_widget.dart';
 
+import 'package:test_im_v4/utils/init_socket.dart';
+
 final hintMsgKey = GlobalKey();
 
 void main() {
   runApp(const MainApp());
+  initSocket();
 }
 
 class MainApp extends StatefulWidget {
@@ -29,17 +32,12 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        // 用 SingleChildScrollView 確保垂直方向塞的下所有 widget
         body: SingleChildScrollView(
-            // 用 Column 垂直排列 widget
             child: Column(children: [
-          // 保留頂部空間
           const SizedBox(height: 50),
           ReadAllStorageBtn(updateHintMsg),
           RemoveAllStorageBtn(updateHintMsg),
           MsgWidget(updateHintMsg),
-
-          // 提示訊息（除錯用）
           Text(
             hintMsg,
             textDirection: TextDirection.ltr,

@@ -86,13 +86,13 @@ module.exports = function(io) {
             }
         }
 
-        socket.on('clientSendMsgToServer', async(msgs) => {
-            let allMsgs = JSON.parse(msgs);
-            console.log(`完整訊息內容：${JSON.stringify(allMsgs)}`);
+        socket.on('clientSendMsgToServer', async(msg) => {
+            let singleMsg = JSON.parse(msg);
+            console.log(`完整訊息內容：${JSON.stringify(singleMsg)}`);
 
-            for (let msg in allMsgs) {
-                await dealWithClientMsgs(allMsgs[msg]);
-            }
+            await dealWithClientMsgs(singleMsg);
+
+            // TODO: 刪掉 for 變成單則訊息
         });
 
         socket.on('disconnect', () => {

@@ -47,9 +47,9 @@ Future<void> initSocket() async {
       socket.on('serverForwardMsgToClient', (msg) async {
         print('--------------------------------');
         print('[main.dart] 已接收訊息👉 $msg');
+        print('--------------------------------\n');
         final safeMsgStore = SafeMsgStore();
         await safeMsgStore.storeReceivedMsg(msg);
-        print('--------------------------------\n');
       });
     });
 

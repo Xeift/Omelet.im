@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:test_im_v4/widget/read_all_storage_btn.dart';
 import 'package:test_im_v4/widget/remove_all_storage_btn.dart';
 import 'package:test_im_v4/widget/msg_widget.dart';
+import 'package:test_im_v4/widget/test_btn.dart';
 
 import 'package:test_im_v4/utils/init_socket.dart';
 
@@ -38,6 +39,7 @@ class _MainAppState extends State<MainApp> {
           ReadAllStorageBtn(updateHintMsg),
           RemoveAllStorageBtn(updateHintMsg),
           MsgWidget(updateHintMsg),
+          TestBtn(updateHintMsg),
           Text(
             hintMsg,
             textDirection: TextDirection.ltr,

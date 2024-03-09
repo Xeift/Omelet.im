@@ -46,16 +46,16 @@ class SafeMsgStore {
     return filteredKeys.length;
   }
 
-  Future<List<String>> readLast100Msg(String remoteUid) async {
+  Future<List<Map<String, dynamic>>> readLast100Msg(String remoteUid) async {
     Map<String, String> allData = await storage.readAll();
     List<String> filteredKeys = allData.keys
         .where((key) => key.startsWith('msg_${remoteUid}_'))
         .toList();
     filteredKeys.sort((a, b) =>
         int.parse(b.split('_').last).compareTo(int.parse(a.split('_').last)));
-    List<String> messages = [];
+    List<Map<String, dynamic>> messages = [];
     for (String key in filteredKeys.take(100)) {
-      messages.add(allData[key]!);
+      messages.add(jsonDecode(allData[key]!));
     }
 
     return messages;

@@ -117,7 +117,6 @@ class SafeMsgStore {
     }
 
     if (receivedMsg['type'] == 'image') {
-      // TODO:
       print('😎img');
       Directory? downloadsDirectory = await getDownloadsDirectory();
       var file = File('${downloadsDirectory?.path}/your_file.png');

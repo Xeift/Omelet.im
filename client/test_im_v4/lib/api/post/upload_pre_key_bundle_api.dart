@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:test_im_v4/utils/load_local_info.dart';
 
-Future<http.Response> uploadPreKeyBundleAPI(
+Future<http.Response> uploadPreKeyBundleApi(
     deviceId, ipkPub, spkPub, spkSig, opkPub) async {
   const storage = FlutterSecureStorage();
   final token = await storage.read(key: 'token');

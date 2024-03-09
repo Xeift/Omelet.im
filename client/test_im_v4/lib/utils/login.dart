@@ -9,7 +9,7 @@ import 'package:test_im_v4/api/post/login_api.dart';
 Future<void> login(String username, String password) async {
   const storage = FlutterSecureStorage();
 
-  final res = jsonDecode((await loginAPI(username, password)).body);
+  final res = jsonDecode((await loginApi(username, password)).body);
   await storage.write(key: 'token', value: res['token']);
   await storage.write(key: 'uid', value: res['data']['uid']);
   await storage.write(key: 'username', value: res['data']['username']);

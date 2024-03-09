@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:test_im_v4/utils/load_local_info.dart';
 
-Future<http.Response> loginAPI(String username, String password) async {
+Future<http.Response> loginApi(String username, String password) async {
   final res = await http.post(
     Uri.parse('$serverUri/api/v1/login'),
     headers: <String, String>{

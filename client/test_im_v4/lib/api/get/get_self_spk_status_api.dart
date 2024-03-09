@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:test_im_v4/utils/load_local_info.dart';
 
-Future<http.Response> getSelfSpkStatus() async {
+Future<http.Response> getSelfSpkStatusApi() async {
   final (token, ipkPub) = await loadJwtAndIpkPub();
 
   final res = await http.get(

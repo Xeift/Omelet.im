@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:test_im_v4/utils/load_local_info.dart';
 
-Future<http.Response> downloadPreKeyBundleAPI(
+Future<http.Response> downloadPreKeyBundleApi(
     String remoteUid, String multiDevicesOpkIndexesRandom) async {
   final token = await loadJwt();
 

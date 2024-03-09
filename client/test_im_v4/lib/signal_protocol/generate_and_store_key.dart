@@ -26,7 +26,7 @@ Future<void> generateAndStoreKey() async {
 
   const deviceId = '0';
 
-  await uploadPreKeyBundleAPI(
+  await uploadPreKeyBundleApi(
       deviceId,
       jsonEncode(selfIpk.getPublicKey().serialize()),
       jsonEncode({

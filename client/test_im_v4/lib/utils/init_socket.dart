@@ -9,8 +9,8 @@ import 'package:test_im_v4/utils/jwt.dart';
 import 'package:test_im_v4/utils/load_local_info.dart';
 import 'package:test_im_v4/utils/login.dart';
 
-import 'package:test_im_v4/api/post/update_opk.dart';
-import 'package:test_im_v4/api/post/update_spk.dart';
+import 'package:test_im_v4/api/post/update_opk_api.dart';
+import 'package:test_im_v4/api/post/update_spk_api.dart';
 import 'package:test_im_v4/api/get/get_unread_msg_api.dart';
 import 'package:test_im_v4/api/get/get_self_opk_status_api.dart';
 import 'package:test_im_v4/api/get/get_self_spk_status_api.dart';
@@ -43,7 +43,7 @@ Future<void> initSocket() async {
         print('--------------------------------\n');
 
         // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
-        final getSelfOpkStatusRes = await getSelfOpkStatus();
+        final getSelfOpkStatusRes = await getSelfOpkStatusApi();
         final getSelfOpkStatusResBody = jsonDecode(getSelfOpkStatusRes.body);
         print(
             '[main.dart] getSelfOpkStatusResBody 內容：$getSelfOpkStatusResBody');
@@ -55,7 +55,7 @@ Future<void> initSocket() async {
         if (outOfOpk) {
           final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
 
-          final res = await updateOpk(jsonEncode({
+          final res = await updateOpkApi(jsonEncode({
             for (var newOpk in newOpks)
               newOpk.id.toString():
                   jsonEncode(newOpk.getKeyPair().publicKey.serialize())
@@ -71,7 +71,7 @@ Future<void> initSocket() async {
         }
 
         // 若伺服器中自己的 SPK 期限已到（7 天），則產生並上傳 SPK
-        final getSelfSpkStatusRes = await getSelfSpkStatus();
+        final getSelfSpkStatusRes = await getSelfSpkStatusApi();
         final getSelfSpkStatusResBody = jsonDecode(getSelfSpkStatusRes.body);
         print('[main.dart] getSelfSpkStatusResBody: $getSelfSpkStatusResBody');
         final spkStatus = getSelfSpkStatusResBody['data'];
@@ -83,7 +83,7 @@ Future<void> initSocket() async {
           final selfIpk = await ipkStore.getIdentityKeyPair();
           final newSpk = generateSignedPreKey(selfIpk, lastBatchSpkId + 1);
 
-          final res = await updateSpk(
+          final res = await updateSpkApi(
             jsonEncode({
               newSpk.id.toString():
                   jsonEncode(newSpk.getKeyPair().publicKey.serialize())
@@ -126,7 +126,9 @@ Future<void> initSocket() async {
       // 後端檢查 JWT 是否過期
       // 跳轉至登入頁面
       await login(username, password);
-      socket.emit('clientReturnJwtToServer', await storage.read(key: 'token'));
+      final (token, ipkPub) = await loadJwtAndIpkPub();
+      socket
+          .emit('clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
     });
   } else {
     print('[main.dart] jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');

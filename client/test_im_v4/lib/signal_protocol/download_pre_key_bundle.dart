@@ -36,7 +36,7 @@ Future<Map<String, dynamic>> downloadPreKeyBundle(String remoteUid) async {
   });
 
   final res =
-      await downloadPreKeyBundleAPI(remoteUid, multiDevicesOpkIndexesRandom);
+      await downloadPreKeyBundleApi(remoteUid, multiDevicesOpkIndexesRandom);
 
   final multiDevicesPreKeyBundle = jsonDecode(res.body);
 

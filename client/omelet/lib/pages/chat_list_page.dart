@@ -150,13 +150,13 @@ class NavBarItem extends StatelessWidget {
             Icon(
               icon,
               size: 20,
-              color: isSelected ? AppColor.secondary : null,
+              color: isSelected ? AppColors.secondary : null,
               ),
             const SizedBox(height: 7,),
             Text(
               label,
               style: isSelected 
-              ? const TextStyle(fontSize: 11,color:AppColor.secondary)
+              ? const TextStyle(fontSize: 11,color:AppColors.secondary)
               : const TextStyle(fontSize: 11,)),
           ],
         ),

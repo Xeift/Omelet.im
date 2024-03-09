@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//警告視窗
+
 void loginErrorMsg(BuildContext context, String message) => showDialog(
     context: context,
     builder: (BuildContext context) {

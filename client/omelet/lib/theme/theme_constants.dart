@@ -1,36 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-abstract class AppColor{
-  static const textDark = Color.fromARGB(0, 255, 255, 255);
-  static const textLight = Color.fromARGB(0, 0, 0, 0);
-  static const secondary = Color.fromARGB(255, 115, 213, 251);
+abstract class AppColors {
+  static const accent = Color(0xFFD6755B);
+  static const secondary = Color(0xFF3B76F6);
+  static const cardLight = Color(0xFFF9FAFE);
+  static const cardDark = Color(0xFF303334);
+  static const textDark = Colors.black; // 修改为合适的颜色值
+  
+  static const textLigth = Color(0xFFF5F5F5);// 修改为合适的颜色值
 }
 
-
-ThemeData lightMode = ThemeData(
+ThemeData get lightMode => ThemeData(
   brightness: Brightness.light,
-  colorScheme: ColorScheme.light(
+  colorScheme: const ColorScheme.light(
     background: Colors.white,
-    primary: Colors.grey.shade300,
-    
-  )
-  ,
+    primary: Colors.grey,
+  ),
+  appBarTheme: const AppBarTheme(
+    iconTheme: IconThemeData(color: Colors.black),
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    centerTitle: true,
+    titleTextStyle: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 17,
+      color: AppColors.textDark,
+    ),
+    systemOverlayStyle: SystemUiOverlayStyle.dark,
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Color.fromARGB(255, 255, 255, 255),
-
+    backgroundColor: Colors.white,
   ),
 );
 
-ThemeData darkMode = ThemeData(
+ThemeData get darkMode => ThemeData(
   brightness: Brightness.dark,
-  colorScheme: ColorScheme.dark(
-    background: const Color.fromARGB(255, 20, 22, 30),
-    primary: Colors.grey.shade800,
+  colorScheme: const ColorScheme.dark(
+    background: Colors.black,
+    primary: Colors.grey,
   ),
-  iconTheme: const IconThemeData(
-    color: Color.fromARGB(255, 251, 251, 251), // 设置图标的颜色为白色
-  ),
+  appBarTheme:const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 17,
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
+  iconTheme: const IconThemeData(color: Colors.white),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Color.fromARGB(255, 20, 22, 30),
+    backgroundColor: Colors.black,
   ),
 );

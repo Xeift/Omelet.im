@@ -1,5 +1,5 @@
-const PreKeyBundleModel = require('./../model/preKeyBundleModel');
-const VerifiedUserModel = require('./../model/verifiedUserModel');
+const PreKeyBundleModel = require('../model/preKeyBundleModel');
+const VerifiedUserModel = require('../model/verifiedUserModel');
 
 
 async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {

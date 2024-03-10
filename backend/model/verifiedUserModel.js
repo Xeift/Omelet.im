@@ -1,4 +1,3 @@
-const { boolean } = require('webidl-conversions');
 const mongoose = require('./mongoose');
 
 const VerifiedUserSchema = new mongoose.Schema({

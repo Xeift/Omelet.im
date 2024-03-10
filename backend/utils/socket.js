@@ -1,6 +1,6 @@
 const jwt = require('./jwt');
-const msgController = require('./../controller/msgController');
-const preKeyBundleController = require('./../controller/preKeyBundleController.js');
+const msgController = require('../controller/msgController');
+const preKeyBundleController = require('../controller/preKeyBundleController.js');
 
 let userIdToRoomId = {};
 
@@ -91,8 +91,6 @@ module.exports = function(io) {
             console.log(`完整訊息內容：${JSON.stringify(singleMsg)}`);
 
             await dealWithClientMsgs(singleMsg);
-
-            // TODO: 刪掉 for 變成單則訊息
         });
 
         socket.on('disconnect', () => {
@@ -145,6 +143,4 @@ module.exports = function(io) {
         }
         return null;
     }
-    
-    
 };

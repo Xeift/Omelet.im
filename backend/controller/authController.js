@@ -1,6 +1,6 @@
 const snowflakeId = require('../utils/snowflakeId');
 const passwordHelper = require('../utils/passwordHelper');
-const VerifiedUserModel = require('./../model/verifiedUserModel');
+const VerifiedUserModel = require('../model/verifiedUserModel');
 const UnverifiedUserModel = require('../model/unverifiedUserModel');
 
 async function isPasswordMatch(username, password) {

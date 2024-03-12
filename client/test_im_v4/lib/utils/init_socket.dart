@@ -39,7 +39,7 @@ Future<void> initSocket() async {
         // 若伺服器中自己的 SPK 期限已到（7 天），則產生並上傳 SPK
         await checkSpkStatus();
 
-        // 否有未讀訊息，則儲存到本地
+        // 若有未讀訊息，則儲存到本地
         await checkUnreadMsg();
       });
 

@@ -104,8 +104,8 @@ class SafeMsgStore {
       await writeMsg(senderKey, {
         'timestamp': unreadMsg['timestamp'],
         'type': unreadMsg['type'],
-        'receiver': unreadMsg['receiver'],
         'sender': unreadMsg['sender'],
+        'receiver': unreadMsg['receiver'],
         'content': decryptedMsg
       });
     }
@@ -137,8 +137,8 @@ class SafeMsgStore {
     await writeMsg(senderKey, {
       'timestamp': receivedMsg['timestamp'],
       'type': receivedMsg['type'],
-      'receiver': receivedMsg['receiver'],
       'sender': receivedMsg['sender'],
+      'receiver': receivedMsg['receiver'],
       'content': decryptedMsg
     });
   }

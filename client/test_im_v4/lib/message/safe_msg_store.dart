@@ -74,7 +74,8 @@ class SafeMsgStore {
     return messages;
   }
 
-  Future<void> sortAndstoreUnreadMsg(List<dynamic> unreadMsgs) async {
+  Future<void> sortAndstoreUnreadMsgs(List<dynamic> unreadMsgs) async {
+    // 先對時間進行升序排序，訊息的 index 才會是正確的順序
     unreadMsgs.sort((a, b) {
       int timestampA = int.parse(a['timestamp']);
       int timestampB = int.parse(b['timestamp']);

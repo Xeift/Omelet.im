@@ -15,6 +15,6 @@ Future<void> checkUnreadMsg() async {
   // 儲存未讀訊息
   if (unreadMsgs.isNotEmpty) {
     final safeMsgStore = SafeMsgStore();
-    await safeMsgStore.sortAndstoreUnreadMsg(unreadMsgs);
+    await safeMsgStore.sortAndstoreUnreadMsgs(unreadMsgs);
   }
 }

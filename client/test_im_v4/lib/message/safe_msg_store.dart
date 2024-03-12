@@ -47,12 +47,15 @@ class SafeMsgStore {
   }
 
   Future<List<Map<String, dynamic>>> readLast100Msg(String remoteUid) async {
+    // 讀取所有訊息
     Map<String, String> allData = await storage.readAll();
+    // 篩選與特定使用者的訊息
     List<String> filteredKeys = allData.keys
         .where((key) => key.startsWith('msg_${remoteUid}_'))
         .toList();
     filteredKeys.sort((a, b) =>
         int.parse(b.split('_').last).compareTo(int.parse(a.split('_').last)));
+    // 取出最新的 100 則訊息
     List<Map<String, dynamic>> messages = [];
     for (String key in filteredKeys.take(100)) {
       messages.add(jsonDecode(allData[key]!));
@@ -75,7 +78,8 @@ class SafeMsgStore {
   }
 
   Future<void> sortAndstoreUnreadMsgs(List<dynamic> unreadMsgs) async {
-    // 先對時間進行升序排序，訊息的 index 才會是正確的順序
+    // 先對 timestamp 進行升序排序，舊訊息在前新訊息在後
+    // 這樣訊息的 index 才會是正確的順序
     unreadMsgs.sort((a, b) {
       int timestampA = int.parse(a['timestamp']);
       int timestampB = int.parse(b['timestamp']);
@@ -87,8 +91,10 @@ class SafeMsgStore {
       final decryptedMsg = await decryptMsg(unreadMsg['isPreKeySignalMessage'],
           int.parse(unreadMsg['sender']), unreadMsg['content']);
 
-      // handle msg sent from our other device
+      // 處理從自己其他裝置發送訊息的情況
       final String senderKey;
+      // 稍後寫入時的 key 應為接收者的 id
+      // 如果傳送訊息的是自己，寫入的 key 應為接收者
       if (unreadMsg['sender'] == ourUid) {
         senderKey = unreadMsg['receiver'];
       } else {
@@ -109,8 +115,10 @@ class SafeMsgStore {
     final decryptedMsg = await decryptMsg(receivedMsg['isPreKeySignalMessage'],
         int.parse(receivedMsg['sender']), receivedMsg['content']);
 
-    // handle msg sent from our other device
+    // 處理從自己其他裝置發送訊息的情況
     final String senderKey;
+    // 稍後寫入時的 key 應為接收者的 id
+    // 如果傳送訊息的是自己，寫入的 key 應為接收者
     if (receivedMsg['sender'] == ourUid) {
       senderKey = receivedMsg['receiver'];
     } else {

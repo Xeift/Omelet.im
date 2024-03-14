@@ -39,8 +39,9 @@ Omelet-Social-Platform
 ├──client                       Flutter 客戶端資料夾
 │       ├──omelet               主要客戶端程式
 │       ├──sample_im            測試用客戶端程式
-│       ├──single_acc_im        目前最新的測試用客戶端程式
-│       └──xeift_e2ee_test      用於測試通訊、API
+│       ├──single_acc_im        測試用客戶端程式
+│       ├──xeift_e2ee_test      用於測試通訊、API
+│       └──test_im_v4           目前最新的測試用客戶端
 │
 ├──.gitignore                   gitignore設定文件
 ├──LICENSE                      版權宣告

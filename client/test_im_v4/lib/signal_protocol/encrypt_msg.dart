@@ -13,7 +13,7 @@ import 'package:test_im_v4/signal_protocol/safe_identity_store.dart';
 import 'package:test_im_v4/signal_protocol/download_pre_key_bundle.dart';
 
 Future<Map<String, dynamic>> encryptMsg(
-    String remoteUid, String msgContent, Function updateHintMsg) async {
+    String remoteUid, String msgContent) async {
   final ourUid = await loadUid();
   final ipkStore = SafeIdentityKeyStore();
   final registrationId = await ipkStore.getLocalRegistrationId();

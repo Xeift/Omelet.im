@@ -20,6 +20,9 @@ Future<void> onSendMsgBtnPressed(
     var img = File(imagePath.toString());
     msgContent = jsonEncode(await img.readAsBytes());
     msgType = 'image';
+    // final msgInfo = await encryptMsg(theirUid, msgContent);
+    // TODO: enc img
+
     resetImagePath();
   } else {
     msgType = 'text';
@@ -32,7 +35,7 @@ Future<void> onSendMsgBtnPressed(
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // 加密訊息
-  final msgInfo = await encryptMsg(theirUid, msgContent, updateHintMsg);
+  final msgInfo = await encryptMsg(theirUid, msgContent);
   final ourMsgInfo = msgInfo['ourMsgInfo'];
   final theirMsgInfo = msgInfo['theirMsgInfo'];
 

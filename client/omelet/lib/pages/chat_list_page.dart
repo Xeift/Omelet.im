@@ -21,6 +21,11 @@ class _ChatListPageState extends State<ChatListPage> {
     MessagePage(),
     SettingPage(),
   ];
+  final List<String> title = const [
+    'Notification',
+    'Message',
+    'Setting'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,12 @@ class _ChatListPageState extends State<ChatListPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: const Text('Chat'),
+        title: ValueListenableBuilder<int>(
+          valueListenable: pageIndex,
+          builder: (context, value, child) {
+            return Text(title[value]);
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -93,7 +103,7 @@ class _BottonNavbarState extends State<BottonNavbar> {
           color: theme.bottomNavigationBarTheme.backgroundColor, // 应用底部导航栏的背景颜色
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3), // 阴影颜色
+              color: theme.shadowColor, // 阴影颜色
               blurRadius: 5, // 模糊半径
               offset: const Offset(0, -3), // 阴影偏移量，使其向上
             ),
@@ -110,13 +120,13 @@ class _BottonNavbarState extends State<BottonNavbar> {
               onTap: handleItemSelected),
             NavBarItem(
               index: 1, 
-              label: 'Message', 
+              label: '   Message   ', 
               icon: Icons.message, 
               isSelected: (selectedIndex == 1),
               onTap: handleItemSelected),
             NavBarItem(
               index: 2, 
-              label: 'Setting', 
+              label: '     Setting    ', 
               icon: Icons.settings, 
               isSelected: (selectedIndex == 2),
               onTap: handleItemSelected),

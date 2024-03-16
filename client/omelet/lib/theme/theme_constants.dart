@@ -32,12 +32,13 @@ ThemeData get lightMode => ThemeData(
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.white,
   ),
+  shadowColor: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.3)
 );
 
 ThemeData get darkMode => ThemeData(
   brightness: Brightness.dark,
   colorScheme: const ColorScheme.dark(
-    background: Colors.black,
+    background: Color.fromARGB(255, 16, 16, 16),
     primary: Colors.grey,
   ),
   appBarTheme:const AppBarTheme(
@@ -54,4 +55,5 @@ ThemeData get darkMode => ThemeData(
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.black,
   ),
+  shadowColor:Color.fromARGB(255, 97, 97, 97).withOpacity(0.3)
 );

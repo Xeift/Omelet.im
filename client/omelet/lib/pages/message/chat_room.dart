@@ -35,7 +35,7 @@ class ChatRoomPage extends StatelessWidget {
            Navigator.of(context).pop();
         }),
         elevation: 0.0,
-        backgroundColor: Color.fromARGB(255, 198, 198, 198).withAlpha(30),
+        backgroundColor:const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
         title: AppBarTitle(
           messageData: messageData,
         ),
@@ -271,10 +271,10 @@ class _ActionBar extends StatefulWidget {
   const _ActionBar({Key? key}) : super(key: key);
 
   @override
-  __ActionBarState createState() => __ActionBarState();
+  _ActionBarState createState() => _ActionBarState();
 }
 
-class __ActionBarState extends State<_ActionBar> {
+class _ActionBarState extends State<_ActionBar> {
   final StreamMessageInputController controller =
       StreamMessageInputController();
     late final TextEditingController textEditingController;
@@ -314,13 +314,13 @@ class __ActionBarState extends State<_ActionBar> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       bottom: true,
       top: false,
       child: Row(
         children: [
           Container(
+            height: 60,
             decoration: BoxDecoration(
               border: Border(
                 right: BorderSide(
@@ -332,7 +332,7 @@ class __ActionBarState extends State<_ActionBar> {
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Icon(
-                CupertinoIcons.camera_fill,
+                CupertinoIcons.bars,
               ),
             ),
           ),
@@ -353,12 +353,13 @@ class __ActionBarState extends State<_ActionBar> {
             ),
           ),
           Padding(
+            
             padding: const EdgeInsets.only(
-              left: 12,
-              right: 24.0,
+              left: 15,
+              right: 24,
             ),
             child: GlowingActionButton(
-              color: AppColors.accent,
+              color:const Color.fromARGB(255, 106, 137, 158),
               icon: Icons.send_rounded,
               onPressed: _sendMessage,
             ),

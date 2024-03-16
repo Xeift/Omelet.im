@@ -10,7 +10,7 @@ Future<void> onUpdatePfpBtnPressed(Function updateHintMsg) async {
   if (image != null) {
     final res = await updatePfpApi(image.path);
     if (res.statusCode == 200) {
-      print('[on_test_btn2Pressed.dart] update pfp successfully');
+      print('[on_update_pfp_btn_pressed.dart] update pfp successfully');
     }
   } else {
     print('No image selected.');

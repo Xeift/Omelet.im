@@ -12,7 +12,7 @@ const io = require('socket.io')(server, {
     cors: {}
 });
 
-const socket = require('./utils/socket.js')(io); // handle socket events
+const socket = require('./utils/socket.js')(io);
 
 app.use(cors({}));
 app.use(express.static(__dirname + '/client'));
@@ -31,6 +31,7 @@ app.use('/api/v1/get-self-opk-status', rateLimit.authLimiter, require('./api/get
 app.use('/api/v1/get-self-spk-status', rateLimit.authLimiter, require('./api/get/getSelfSpkStatus.js'));
 app.use('/api/v1/update-spk', rateLimit.authLimiter, require('./api/post/updateSpk.js'));
 app.use('/api/v1/update-pfp', rateLimit.authLimiter, require('./api/post/updatePfp.js'));
+app.use('/api/v1/upload-img', rateLimit.authLimiter, require('./api/post/uploadImg.js'));
 
 app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confirm-register-email.js'));
 app.use('/confirm-reset-email', rateLimit.authLimiter, require('./page/confirm-reset-email.js'));

@@ -2,10 +2,12 @@
 
 import 'dart:io';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:test_im_v4/message/safe_msg_store.dart';
+import 'package:test_im_v4/api/post/upload_img_api.dart';
 import 'package:test_im_v4/signal_protocol/encrypt_msg.dart';
 import 'package:test_im_v4/utils/init_socket.dart' show socket;
 import 'package:test_im_v4/on_btn_pressed/on_select_image_btn_pressed.dart'
@@ -18,10 +20,15 @@ Future<void> onSendMsgBtnPressed(
 
   if (imagePath != null) {
     var img = File(imagePath.toString());
-    msgContent = jsonEncode(await img.readAsBytes());
+    var imgBytes = jsonEncode(await img.readAsBytes());
+    print(imgBytes);
     msgType = 'image';
+
+    // var encryptedBytes = Uint8List.fromList(imgBytes);
+    // TODO: encrypt img
+    var res = await uploadImgApi(imgBytes, theirUid);
+    print('[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
     // final msgInfo = await encryptMsg(theirUid, msgContent);
-    // TODO: enc img
 
     resetImagePath();
   } else {

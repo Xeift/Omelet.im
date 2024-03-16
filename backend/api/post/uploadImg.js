@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     filename: function(req, file, cb) {
         let decodedToken = req.decodedToken;
         let ourUid = decodedToken._uid;
-        cb(null, `hiiii.png`);
+        cb(null, `${ourUid}.png`);
     }
 });
 const upload = multer({ storage: storage });

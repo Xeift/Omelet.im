@@ -9,7 +9,8 @@ Future<http.StreamedResponse> uploadImgApi(
       http.MultipartRequest('POST', Uri.parse('$serverUri/api/v1/upload-img'))
         ..fields['receiverUid'] = receiverUid;
   request.headers.addAll(<String, String>{'Authorization': 'Bearer $token'});
-  request.files.add(http.MultipartFile.fromString('imgData', encryptedBytes));
+  request.files.add(http.MultipartFile.fromString('imgData', encryptedBytes,
+      filename: 'img'));
   var response = await request.send();
 
   return response;

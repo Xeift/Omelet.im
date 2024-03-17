@@ -28,20 +28,31 @@ Future<void> onSendMsgBtnPressed(
     var imgBytes = jsonEncode(await img.readAsBytes());
     msgType = 'image';
 
-    // var encryptedBytes = Uint8List.fromList(imgBytes);
     final encryptedImg = await encryptMsg(theirUid, imgBytes);
     final ourEncryptedImg = encryptedImg['ourEncryptedMsg'];
     final theirEncryptedImg = encryptedImg['theirEncryptedMsg'];
 
-    for (var deviceId in ourEncryptedImg.keys) {
-      var res = await uploadImgApi(imgBytes, ourUid, deviceId);
-      print(
-          '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+    print('ourEncryptedImg.keys ${ourEncryptedImg.keys}');
+
+    if (!ourEncryptedImg.isEmpty) {
+      for (var deviceId in ourEncryptedImg.keys) {
+        var (cihertext, _, _, _) = ourEncryptedImg[deviceId];
+
+        var res = await uploadImgApi(cihertext, ourUid, deviceId);
+        print(
+            '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+      }
     }
-    for (var deviceId in theirEncryptedImg.keys) {
-      var res = await uploadImgApi(imgBytes, theirUid, deviceId);
-      print(
-          '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+
+    print('theirEncryptedImg.keys ${theirEncryptedImg.keys}');
+
+    if (!theirEncryptedImg.isEmpty) {
+      for (var deviceId in theirEncryptedImg.keys) {
+        var (cihertext, _, _, _) = theirEncryptedImg[deviceId];
+        var res = await uploadImgApi(cihertext, theirUid, deviceId);
+        print(
+            '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+      }
     }
 
     resetImagePath();

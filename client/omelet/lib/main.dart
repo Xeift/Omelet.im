@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 //import 'signal_protocol/generate_and_store_key.dart';
 
 void main() {
-  debugPaintSizeEnabled = true; // 顯示組件的邊界
-  debugPaintBaselinesEnabled = true; // 顯示組件的基線
+  debugPaintSizeEnabled = false; // 顯示組件的邊界
+  debugPaintBaselinesEnabled = false; // 顯示組件的基線
   runApp(
     
     ChangeNotifierProvider(

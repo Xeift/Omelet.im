@@ -2,10 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/utils/load_local_info.dart';
+
+import 'package:omelet/api/post/login_api.dart';
 
 
 import '../../models/message_data.dart';
@@ -22,6 +27,7 @@ class ChatRoomPage extends StatelessWidget {
 
 
   const ChatRoomPage({Key? key, required this.messageData}) : super(key: key);
+  
 
  final MessageData messageData;
 
@@ -53,9 +59,10 @@ class ChatRoomPage extends StatelessWidget {
 }
 
 
+
+
 class AppBarTitle extends StatelessWidget {
   const AppBarTitle({Key? key, required this.messageData}) : super(key: key);
-
   final MessageData messageData;
 
   @override
@@ -87,49 +94,112 @@ class AppBarTitle extends StatelessWidget {
   }
 }
 
+List<Map<String, dynamic>> msgs = [
+  {
+    'timestamp': 1709969515576,
+    'type': 'text',
+    'receiver': 551338674692820992,
+    'sender': 552415467919118336,
+    'content': '早安'
+  },
+  {
+    'timestamp': 1709969440757,
+    'type': 'text',
+    'sender': 551338674692820992,
+    'receiver': 552415467919118336,
+    'content': '你也早'
+  },
+  {
+    'timestamp': 1709969440758,
+    'type': 'text',
+    'receiver': 552415467919118336,
+    'sender': 551338674692820992,
+    'content': '今天天氣如何？'
+  },
+  {
+    'timestamp': 1709969440759,
+    'type': 'text',
+    'sender': 552415467919118336,
+    'receiver': 551338674692820992,
+    'content': '天氣很好'
+  },
+  {
+    'timestamp': 1709969440760,
+    'type': 'text',
+    'receiver': 552415467919118336,
+    'sender': 551338674692820992,
+    'content': '那我們去公園吧'
+  },
+  {
+    'timestamp': 1709969440761,
+    'type': 'text',
+    'sender': 552415467919118336,
+    'receiver': 551338674692820992,
+    'content': '好的，我們見面的地點在哪裡？'
+  },
+  {
+    'timestamp': 1709969440762,
+    'type': 'text',
+    'receiver': 552415467919118336,
+    'sender': 551338674692820992,
+    'content': '在公園的入口處見面'
+  },
+  {
+    'timestamp': 1709969440763,
+    'type': 'text',
+    'sender': 552415467919118336,
+    'receiver': 551338674692820992,
+    'content': '好的，我會準時到達'
+  },
+];
 
 class DemoMessageList extends StatelessWidget {
   const DemoMessageList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children:const [
-        DateLable(lable:'Yesterday'),
-        MessageTitle(
-          message:'Hi, Lucy',
-          messageDate:'12:01 PM',
-        ),
-        MessageOwnTitle(
-          message:'Hi, Lucy',
-          messageDate:'12:01 PM',
-        ),
-        MessageTitle(
-          message:'Hi, Lucy',
-          messageDate:'12:01 PM',
-        ),
-        MessageOwnTitle(
-          message:'Hi, Lucy',
-          messageDate:'12:01 PM',
-        ),
-        MessageTitle(
-          message:'Hi, Lucy',
-          messageDate:'12:01 PM',
-        ),
-        MessageOwnTitle(
-          message:'Hi, Lucy',
-          messageDate:'12:01 PM',
-        ),
-        MessageTitle(
-          message:'Hi, Lucy',
-          messageDate:'12:01 PM',
-        ),
-        MessageOwnTitle(
-          message:'Hi, Lucy',
-          messageDate:'12:01 PM',
-        ),
-      ],
-      );
+    return FutureBuilder<String?>(
+      future: loadUid(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // 如果仍在等待 UID，则显示加载指示器或其他加载状态
+          return const CircularProgressIndicator(); // 例如，显示一个圆形进度指示器
+        } else if (snapshot.hasError) {
+          // 处理加载 UID 时出现的错误
+          return Text('Error loading UID: ${snapshot.error}');
+        } else {
+          // 获取 UID
+          String? uid = snapshot.data;
+
+          // 构建消息列表
+          return ListView.builder(
+            itemCount: msgs.length,
+            itemBuilder: (context, index) {
+              final message = msgs[index];
+              print('使用這id{$uid}');
+              print(message['sender']);
+              // 判断消息是否属于当前用户
+              final isOwnMessage = message['sender'].toString() == uid;
+              print(isOwnMessage);
+
+              return isOwnMessage
+                  ? MessageTitle(
+                      message: message['content'],
+                      messageDate: DateFormat('h:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
+                      ),
+                    )
+                  : MessageOwnTitle(
+                      message: message['content'],
+                      messageDate: DateFormat('h:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
+                      ),
+                    );
+            },
+          );
+        }
+      },
+    );
   }
 }
 
@@ -277,14 +347,27 @@ class _ActionBar extends StatefulWidget {
 class _ActionBarState extends State<_ActionBar> {
   final StreamMessageInputController controller =
       StreamMessageInputController();
-    late final TextEditingController textEditingController;
+  late TextEditingController sendMsge;
+  @override
+   _ActionBarState() {
+    sendMsge = TextEditingController();
+  }
+  void initState() {
+    super.initState();
+    controller.addListener(_onTextChange);
+  }
 
   Timer? _debounce;
 
   Future<void> _sendMessage() async {
-    if (controller.text.isNotEmpty) {
-      StreamChannel.of(context).channel.sendMessage(controller.message);
-      controller.clear();
+    if (sendMsge.text.isNotEmpty) {
+      const String snederUserID = '551338674692820992';//模擬sender user.id
+      const String currentUserID = '551338674692820993';//reciver user.id
+      final currentTimeStamp = DateTime.now();
+
+
+
+      sendMsge.clear();
       FocusScope.of(context).unfocus();
     }
   }
@@ -293,16 +376,12 @@ class _ActionBarState extends State<_ActionBar> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(seconds: 1), () {
       if (mounted) {
-        StreamChannel.of(context).channel.keyStroke();
+        null;
       }
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    controller.addListener(_onTextChange);
-  }
+
 
   @override
   void dispose() {
@@ -341,7 +420,7 @@ class _ActionBarState extends State<_ActionBar> {
               padding: const EdgeInsets.only(left: 16.0),
               child: TextField(
                 onChanged: (val) {
-                  controller.text = val;
+                  sendMsge.text = val;
                 },
                 style: const TextStyle(fontSize: 14),
                 decoration: const InputDecoration(

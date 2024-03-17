@@ -83,6 +83,12 @@ async function updatePfpStatus(uid, hasPfp) {
     await user.save();
 }
 
+async function getUserPublicInfoByUid(uid) {
+    let userInfo = await VerifiedUserModel.findOne({ uid: uid });
+    let userPublicInfo = { username: userInfo['username'], pfp: `http://localhost:3000/${uid}.png` };
+    return userPublicInfo;
+}
+
 module.exports = {
     isPasswordMatch,
     isUserIdExsists,
@@ -90,5 +96,6 @@ module.exports = {
     createNewUnverifiedUser,
     makeUnverifiedUserVerified,
     updatePasswordByEmail,
-    updatePfpStatus
+    updatePfpStatus,
+    getUserPublicInfoByUid
 };

@@ -17,41 +17,49 @@ Future<void> onSendMsgBtnPressed(
     String theirUid, String msgContent, Function updateHintMsg) async {
   print('--------------------------------');
   String msgType;
-
-  if (imagePath != null) {
-    var img = File(imagePath.toString());
-    var imgBytes = jsonEncode(await img.readAsBytes());
-    print(imgBytes);
-    msgType = 'image';
-
-    // var encryptedBytes = Uint8List.fromList(imgBytes);
-    // TODO: encrypt img
-    var res = await uploadImgApi(imgBytes, theirUid);
-    print('[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
-    // final msgInfo = await encryptMsg(theirUid, msgContent);
-
-    resetImagePath();
-  } else {
-    msgType = 'text';
-  }
-
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
 
   const storage = FlutterSecureStorage();
   final ourUid = (await storage.read(key: 'uid')).toString();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
+  if (imagePath != null) {
+    var img = File(imagePath.toString());
+    var imgBytes = jsonEncode(await img.readAsBytes());
+    msgType = 'image';
+
+    // var encryptedBytes = Uint8List.fromList(imgBytes);
+    final encryptedImg = await encryptMsg(theirUid, imgBytes);
+    final ourEncryptedImg = encryptedImg['ourEncryptedMsg'];
+    final theirEncryptedImg = encryptedImg['theirEncryptedMsg'];
+
+    for (var deviceId in ourEncryptedImg.keys) {
+      var res = await uploadImgApi(imgBytes, ourUid, deviceId);
+      print(
+          '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+    }
+    for (var deviceId in theirEncryptedImg.keys) {
+      var res = await uploadImgApi(imgBytes, theirUid, deviceId);
+      print(
+          '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+    }
+
+    resetImagePath();
+  } else {
+    msgType = 'text';
+  }
+
   // 加密訊息
-  final msgInfo = await encryptMsg(theirUid, msgContent);
-  final ourMsgInfo = msgInfo['ourMsgInfo'];
-  final theirMsgInfo = msgInfo['theirMsgInfo'];
+  final encryptedMsg = await encryptMsg(theirUid, msgContent);
+  final ourEncryptedMsg = encryptedMsg['ourEncryptedMsg'];
+  final theirEncryptedMsg = encryptedMsg['theirEncryptedMsg'];
 
   print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
   print('[on_send_msg_btn_pressed.dart] imagePath: $imagePath');
-  print('[on_send_msg_btn_pressed.dart] msgInfo👉: $msgInfo');
-  print('[on_send_msg_btn_pressed.dart] ourMsgInfo👉: $ourMsgInfo');
-  print('[on_send_msg_btn_pressed.dart] theirMsgInfo👉: $theirMsgInfo');
+  print('[on_send_msg_btn_pressed.dart] msgInfo👉: $encryptedMsg');
+  print('[on_send_msg_btn_pressed.dart] ourMsgInfo👉: $ourEncryptedMsg');
+  print('[on_send_msg_btn_pressed.dart] theirMsgInfo👉: $theirEncryptedMsg');
   print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
 
   Future<Map<String, dynamic>> returnMsgToServer(
@@ -103,14 +111,14 @@ Future<void> onSendMsgBtnPressed(
     }
   }
 
-  for (var deviceId in ourMsgInfo.keys) {
+  for (var deviceId in ourEncryptedMsg.keys) {
     var singleMsg =
-        await returnMsgToServer(deviceId, ourMsgInfo[deviceId], ourUid);
+        await returnMsgToServer(deviceId, ourEncryptedMsg[deviceId], ourUid);
     socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
   }
-  for (var deviceId in theirMsgInfo.keys) {
-    var singleMsg =
-        await returnMsgToServer(deviceId, theirMsgInfo[deviceId], theirUid);
+  for (var deviceId in theirEncryptedMsg.keys) {
+    var singleMsg = await returnMsgToServer(
+        deviceId, theirEncryptedMsg[deviceId], theirUid);
     socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
   }
 }

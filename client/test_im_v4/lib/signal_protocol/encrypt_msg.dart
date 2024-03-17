@@ -122,20 +122,23 @@ Future<Map<String, dynamic>> encryptMsg(
   // 自己其他裝置的 Pre Key Bundle
   final ourPreKeyBundleConverted =
       await multiDevicesPreKeyBundle['ourPreKeyBundleConverted'];
-  final Map<String, dynamic> ourMsgInfo = {};
+  final Map<String, dynamic> ourEncryptedMsg = {};
   for (var key in ourPreKeyBundleConverted.keys) {
     var value = ourPreKeyBundleConverted[key];
-    ourMsgInfo[key] = await encryptSingleMsg(key, value, ourUid);
+    ourEncryptedMsg[key] = await encryptSingleMsg(key, value, ourUid);
   }
 
   // 對方所有裝置的 Pre Key Bundle
   final theirPreKeyBundleConverted =
       await multiDevicesPreKeyBundle['theirPreKeyBundleConverted'];
-  final Map<String, dynamic> theirMsgInfo = {};
+  final Map<String, dynamic> theirEncryptedMsg = {};
   for (var key in theirPreKeyBundleConverted.keys) {
     var value = theirPreKeyBundleConverted[key];
-    theirMsgInfo[key] = await encryptSingleMsg(key, value, remoteUid);
+    theirEncryptedMsg[key] = await encryptSingleMsg(key, value, remoteUid);
   }
 
-  return {'ourMsgInfo': ourMsgInfo, 'theirMsgInfo': theirMsgInfo};
+  return {
+    'ourEncryptedMsg': ourEncryptedMsg,
+    'theirEncryptedMsg': theirEncryptedMsg
+  };
 }

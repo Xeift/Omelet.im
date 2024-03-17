@@ -49,7 +49,8 @@ async function getMultiDevicesAvailableOpkIndex(uid, isSelf, deviceId) {
     ).lean();
 
     if (isSelf) {
-        // remove current device (deviceId) from multiDevicesPreKeyBundles
+        // 從 multiDevicesPreKeyBundles 移除目前裝置的 deviceId
+        // 避免發送訊息給自己
         multiDevicesPreKeyBundles = multiDevicesPreKeyBundles.filter(bundle => bundle.deviceId !== deviceId);
     }
 

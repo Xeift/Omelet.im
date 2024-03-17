@@ -24,7 +24,9 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     let decodedToken = req.decodedToken;
     let ourUid = decodedToken._uid;
     let receiverUid = req.body.receiverUid;
+    let deviceId = req.body.deviceId;
     console.log(`[uploadImg.js] 接收者 id：${receiverUid}`);
+    console.log(`[uploadImg.js] 裝置 id：${deviceId}`);
 
     try {
         res.status(200).json({

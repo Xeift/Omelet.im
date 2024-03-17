@@ -4,8 +4,8 @@ import 'package:test_im_v4/message/safe_msg_store.dart';
 
 Future<void> onTestBtnPressed(Function updateHintMsg) async {
   final safeMsgStore = SafeMsgStore();
-  final msgs = await safeMsgStore.readLast100Msg('552415467919118336');
+  final msgs = await safeMsgStore.getChatList();
 
-  updateHintMsg('Last 100 msg👉: $msgs');
-  print('Last 100 msg👉: $msgs');
+  updateHintMsg('[on_test_btn_pressed.dart] chat list👉: $msgs');
+  print('[on_test_btn_pressed.dart] chat list👉: $msgs');
 }

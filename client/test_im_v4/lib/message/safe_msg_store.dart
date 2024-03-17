@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:test_im_v4/api/get/get_user_public_info_api.dart';
 
 import 'package:test_im_v4/utils/load_local_info.dart';
 import 'package:test_im_v4/signal_protocol/decrypt_msg.dart';
@@ -156,7 +157,10 @@ class SafeMsgStore {
 
       if (!lastMsgWithEachUser.containsKey(remoteUid) ||
           lastMsgWithEachUser[remoteUid]['index'] < index) {
+        var remoteUserInfoRes = await getUserPublicInfoAPI(remoteUid);
+        var remoteUserInfo = jsonDecode(remoteUserInfoRes.body)['data'];
         lastMsgWithEachUser[remoteUid] = {
+          'remoteUserInfo': remoteUserInfo,
           'index': index,
           'message': jsonDecode(entry.value),
         };

@@ -4,10 +4,10 @@ import 'dart:convert';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
-import 'safe_spk_store.dart';
-import 'safe_opk_store.dart';
-import 'safe_identity_store.dart';
-import './../api/post/upload_pre_key_bundle_api.dart';
+import 'package:omelet/signal_protocol/safe_spk_store.dart';
+import 'package:omelet/signal_protocol/safe_opk_store.dart';
+import 'package:omelet/signal_protocol/safe_identity_store.dart';
+import 'package:omelet/api/post/upload_pre_key_bundle_api.dart';
 
 Future<void> generateAndStoreKey() async {
   final registrationId = generateRegistrationId(false);
@@ -24,9 +24,9 @@ Future<void> generateAndStoreKey() async {
     await opkStore.storePreKey(selfOpk.id, selfOpk);
   }
 
-  const deviceId = '1';
+  const deviceId = '0';
 
-  final res = await uploadPreKeyBundleAPI(
+  await uploadPreKeyBundleApi(
       deviceId,
       jsonEncode(selfIpk.getPublicKey().serialize()),
       jsonEncode({
@@ -39,6 +39,4 @@ Future<void> generateAndStoreKey() async {
           selfOpk.id.toString():
               jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
       }));
-
-  print(res.body);
 }

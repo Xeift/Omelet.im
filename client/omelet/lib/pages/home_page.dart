@@ -8,8 +8,7 @@ import '../componets/alert/alert_msg.dart';
 import '../pages/chat_list_page.dart';
 import '../pages/login_signup/sign_up_page.dart';
 
-
-import './../api/post/login_api.dart';
+import 'package:omelet/api/post/login_api.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -61,7 +60,6 @@ class HomePageState extends State<HomePage> {
                 buildSignupPageButton(), //註冊button控件呼叫
               ],
             ),
-
           ],
         ),
       ),
@@ -133,8 +131,8 @@ class HomePageState extends State<HomePage> {
 
   void nextPage() {
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder:(context)=> const ChatListPage())
-      , (route) => false);
+        MaterialPageRoute(builder: (context) => const ChatListPage()),
+        (route) => false);
   }
 
   Widget buildLoginButton() {
@@ -156,7 +154,7 @@ class HomePageState extends State<HomePage> {
             _userEmail = emailTextFieldController.text;
             _userPassword = passwordTextFieldController.text;
 
-            final res = await loginAPI(_userEmail, _userPassword);
+            final res = await loginApi(_userEmail, _userPassword);
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
 
@@ -235,4 +233,3 @@ class HomePageState extends State<HomePage> {
     );
   }
 }
-

@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import './../../utils/server_uri.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
-Future<http.Response> loginAPI(String username, String password) async {
+Future<http.Response> loginApi(String username, String password) async {
   final res = await http.post(
     Uri.parse('$serverUri/api/v1/login'),
     headers: <String, String>{

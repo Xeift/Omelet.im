@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import './../../utils/server_uri.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
-Future<http.Response> uploadPreKeyBundleAPI(
+Future<http.Response> uploadPreKeyBundleApi(
     deviceId, ipkPub, spkPub, spkSig, opkPub) async {
   const storage = FlutterSecureStorage();
   final token = await storage.read(key: 'token');

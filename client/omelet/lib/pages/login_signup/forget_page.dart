@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../componets/alert/alert_msg.dart';
-import '../../api/post/reset_password_api.dart';
+import 'package:omelet/api/post/reset_password_api.dart';
 
 class ForgetPage extends StatefulWidget {
   const ForgetPage({Key? key}) : super(key: key);

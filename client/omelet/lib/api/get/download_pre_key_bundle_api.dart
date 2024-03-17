@@ -1,16 +1,14 @@
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import './../../utils/server_uri.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
-Future<http.Response> downloadPreKeyBundleAPI(
-    String remoteUid, String remoteOpkId) async {
-  const storage = FlutterSecureStorage();
-  final token = await storage.read(key: 'token');
+Future<http.Response> downloadPreKeyBundleApi(
+    String remoteUid, String multiDevicesOpkIndexesRandom) async {
+  final token = await loadJwt();
 
   final res = await http.get(
       Uri.parse(
-          '$serverUri/api/v1/download-pre-key-bundle?uid=$remoteUid&opkId=$remoteOpkId'),
+          '$serverUri/api/v1/download-pre-key-bundle?uid=$remoteUid&multiDevicesOpkIndexesRandom=$multiDevicesOpkIndexesRandom'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token'

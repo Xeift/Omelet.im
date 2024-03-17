@@ -6,35 +6,78 @@ import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
-import './../api/get/download_pre_key_bundle_api.dart';
-import './../api/get/get_available_opk_index_api.dart';
+import 'package:omelet/api/get/download_pre_key_bundle_api.dart';
+import 'package:omelet/api/get/get_available_opk_index_api.dart';
 
-Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
-    downloadPreKeyBundle(String remoteUid) async {
-  final opkIndexRes = await getAvailableOpkIndexApi(remoteUid);
-  final opkId = randomChoice(jsonDecode(opkIndexRes.body)['data']);
+Future<Map<String, dynamic>> downloadPreKeyBundle(String remoteUid) async {
+  final multiDevicesOpkIndexesRes = await getAvailableOpkIndexApi(remoteUid);
+  final multiDevicesOpkIndexesResBody =
+      jsonDecode(multiDevicesOpkIndexesRes.body);
 
-  final res = await downloadPreKeyBundleAPI(remoteUid, opkId);
-  final preKeyBundle = jsonDecode(res.body)['data'];
-  print('[download_pre_key_bundle.dart] pkb 內容👉 ${res.body}');
+  final ourPreKeyIndex =
+      multiDevicesOpkIndexesResBody['data']['ourPreKeyIndex'];
+  final theirPreKeyIndex =
+      multiDevicesOpkIndexesResBody['data']['theirPreKeyIndex'];
 
-  final ipkPub = IdentityKey.fromBytes(
-      Uint8List.fromList(
-          jsonDecode(preKeyBundle['ipkPub']).cast<int>().toList()),
-      0);
-  final spkPub = Curve.decodePoint(
-      Uint8List.fromList(
-          jsonDecode(preKeyBundle['spkPub']).cast<int>().toList()),
-      0);
-  final spkSig = Uint8List.fromList(
-      jsonDecode(preKeyBundle['spkSig']).cast<int>().toList());
-  final opkPub = Curve.decodePoint(
-      Uint8List.fromList(
-          (jsonDecode(preKeyBundle['opkPub'])).cast<int>().toList()),
-      0);
-  final spkId = preKeyBundle['spkId'];
+  final ourPreKeyIndexRandom = {};
+  final theirPreKeyIndexRandom = {};
 
-  return (ipkPub, spkPub, spkSig, opkPub, int.parse(spkId), int.parse(opkId));
+  ourPreKeyIndex.forEach((key, value) {
+    ourPreKeyIndexRandom[key] = randomChoice(value);
+  });
+
+  theirPreKeyIndex.forEach((key, value) {
+    theirPreKeyIndexRandom[key] = randomChoice(value);
+  });
+
+  final multiDevicesOpkIndexesRandom = jsonEncode({
+    'ourPreKeyIndexRandom': ourPreKeyIndexRandom,
+    'theirPreKeyIndexRandom': theirPreKeyIndexRandom
+  });
+
+  final res =
+      await downloadPreKeyBundleApi(remoteUid, multiDevicesOpkIndexesRandom);
+
+  final multiDevicesPreKeyBundle = jsonDecode(res.body);
+
+  final ourPreKeyBundle = multiDevicesPreKeyBundle['data']['ourPreKeyBundle'];
+  final theirPreKeyBundle =
+      multiDevicesPreKeyBundle['data']['theirPreKeyBundle'];
+
+  Future<(IdentityKey, ECPublicKey, Uint8List, ECPublicKey, int, int)>
+      preKeyBundleTypeConverter(String deviceId,
+          Map<String, dynamic> singlePreKeyBundle, final character) async {
+    final ipkPub = IdentityKey.fromBytes(
+        Uint8List.fromList(
+            jsonDecode(singlePreKeyBundle['ipkPub']).cast<int>().toList()),
+        0);
+    final spkPub = Curve.decodePoint(
+        Uint8List.fromList(
+            jsonDecode(singlePreKeyBundle['spkPub']).cast<int>().toList()),
+        0);
+    final spkSig = Uint8List.fromList(
+        jsonDecode(singlePreKeyBundle['spkSig']).cast<int>().toList());
+    final opkPub = Curve.decodePoint(
+        Uint8List.fromList(
+            (jsonDecode(singlePreKeyBundle['opkPub'])).cast<int>().toList()),
+        0);
+    final spkId = int.parse(singlePreKeyBundle['spkId']);
+    final opkId = int.parse(
+        jsonDecode(multiDevicesOpkIndexesRandom)[character][deviceId]);
+
+    return (ipkPub, spkPub, spkSig, opkPub, spkId, opkId);
+  }
+
+  final ourPreKeyBundleConverted = ourPreKeyBundle.map((key, value) => MapEntry(
+      key, preKeyBundleTypeConverter(key, value, 'ourPreKeyIndexRandom')));
+  final theirPreKeyBundleConverted = theirPreKeyBundle.map((key, value) =>
+      MapEntry(key,
+          preKeyBundleTypeConverter(key, value, 'theirPreKeyIndexRandom')));
+
+  return {
+    'ourPreKeyBundleConverted': ourPreKeyBundleConverted,
+    'theirPreKeyBundleConverted': theirPreKeyBundleConverted
+  };
 }
 
 T randomChoice<T>(List<T> list) {

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import './../../utils/server_uri.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
 Future<http.Response> resetPasswordSendMailAPI(String email) async {
   final res = await http.post(

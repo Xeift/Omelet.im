@@ -56,11 +56,14 @@ class MessageTitle extends StatelessWidget {
         height: 100,
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(
+          
             border: Border(
                 bottom: BorderSide(
           color: Colors.grey,
           width: 0.2,
-        ))),
+          )
+        ),
+      ),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Row(

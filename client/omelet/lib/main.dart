@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:omelet/pages/chat_list_page.dart';
 import 'package:omelet/pages/home_page.dart';
 import './theme/theme_constants.dart';
@@ -9,7 +10,10 @@ import 'package:provider/provider.dart';
 //import 'signal_protocol/generate_and_store_key.dart';
 
 void main() {
+  debugPaintSizeEnabled = true; // 顯示組件的邊界
+  debugPaintBaselinesEnabled = true; // 顯示組件的基線
   runApp(
+    
     ChangeNotifierProvider(
       create: (context) => ThemeProvier(),
       child: const MyApp(),
@@ -27,6 +31,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
       title: 'Omelet Login Page',
       theme: Provider.of<ThemeProvier>(context).themeData,

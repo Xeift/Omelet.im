@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 
-const serverUri = 'https://649f-61-221-174-218.ngrok-free.app';
+const serverUri = 'https://e945-125-227-108-211.ngrok-free.app';
 const username = 'np';
 const password = 'a';
 

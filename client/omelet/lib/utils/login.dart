@@ -15,6 +15,6 @@ Future<void> login(String username, String password) async {
   await storage.write(key: 'username', value: res['data']['username']);
   await storage.write(key: 'email', value: res['data']['email']);
 
-  final data = res["data"];
+  final data = res['data'];
   print('[login.dart]${data["username"]}\n您的id為：${data["uid"]}');
 }

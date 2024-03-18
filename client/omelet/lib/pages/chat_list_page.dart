@@ -32,8 +32,7 @@ class _ChatListPageState extends State<ChatListPage> {
     pageIndex.addListener(() {
       print(pageIndex.value);
     });
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: ValueListenableBuilder<int>(
@@ -54,7 +53,7 @@ class _ChatListPageState extends State<ChatListPage> {
             ),
           ],
           leading: const Icon(Icons.account_circle),
-          backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
+          backgroundColor:const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
         ),
         body: ValueListenableBuilder(
           valueListenable: pageIndex,
@@ -69,7 +68,7 @@ class _ChatListPageState extends State<ChatListPage> {
             });
           },
         ),
-      ),
+      
     );
   }
 }

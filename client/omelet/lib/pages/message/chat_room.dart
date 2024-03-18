@@ -7,6 +7,7 @@ import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/message/safe_msg_store.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:omelet/api/post/login_api.dart';
 import '../../models/message_data.dart';
@@ -30,26 +31,27 @@ class ChatRoomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        leading:
-        IconButton(icon: const Icon(Icons.arrow_back_ios),onPressed:(){
-           Navigator.of(context).pop();
-        }),
-        elevation: 0.0,
-        backgroundColor:const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
-        title: AppBarTitle(
-          messageData: messageData,
-        ),
-      ),
-      body:const Column(
-        children:[
-          Expanded(child: DemoMessageList()
+        backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: AppBar(
+          leading:
+          IconButton(icon: const Icon(Icons.arrow_back_ios),onPressed:(){
+             Navigator.of(context).pop();
+          }),
+          elevation: 0.0,
+          backgroundColor:const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
+          title: AppBarTitle(
+            messageData: messageData,
           ),
-          _ActionBar(),
-          
-        ],
-      ),
+        ),
+        body: Column(
+          children:[
+            Expanded(
+            child: DemoMessageList(messageData: messageData,), // 传递messageData参数给DemoMessageList
+          ),
+            const _ActionBar(),
+            
+          ],
+        ),
     );
   }
 }
@@ -89,7 +91,7 @@ class AppBarTitle extends StatelessWidget {
     );
   }
 }
-
+//測試用list
 List<Map<String, dynamic>> msgs = [
   {
     'timestamp': 1709969515576,
@@ -149,55 +151,65 @@ List<Map<String, dynamic>> msgs = [
   },
 ];
 
+
+//測試：檢查是否有訊息
+SafeMsgStore safeMsgStore = SafeMsgStore();
+void fetchAndDisplayMessages() async {
+    String remoteUid = '552415467919118336'; 
+    List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
+    
+    // 处理获取到的消息，例如显示在界面上
+    // 例如：
+    if (messages.isEmpty) {
+    print('No messages available.');
+    return;
+  }else{
+      for (String message in messages) {
+        print('function Active sucessful');
+        print(message);
+      
+      }
+    } 
+  }
+
+
 class DemoMessageList extends StatelessWidget {
-  const DemoMessageList({Key? key}) : super(key: key);
+
+  const DemoMessageList({Key? key,required this.messageData}) : super(key: key);
+  final MessageData messageData;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String?>(
-      future: loadUid(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // 如果仍在等待 UID，则显示加载指示器或其他加载状态
-          return const CircularProgressIndicator(); // 例如，显示一个圆形进度指示器
-        } else if (snapshot.hasError) {
-          // 处理加载 UID 时出现的错误
-          return Text('Error loading UID: ${snapshot.error}');
-        } else {
-          // 获取 UID
-          String? uid = snapshot.data;
+    final uid = messageData.senderUid;
+    return ListView.builder(
+      itemCount: msgs.length,
+      itemBuilder: (context, index) {
+        final message = msgs[index];
+        print('使用這id{$uid}');
+        print(message['sender']);
+        //判斷是否為當前用戶
+        final isOwnMessage = message['sender'].toString() == uid;
+        print(isOwnMessage);
 
-          // 构建消息列表
-          return ListView.builder(
-            itemCount: msgs.length,
-            itemBuilder: (context, index) {
-              final message = msgs[index];
-              print('使用這id{$uid}');
-              print(message['sender']);
-              // 判断消息是否属于当前用户
-              final isOwnMessage = message['sender'].toString() == uid;
-              print(isOwnMessage);
-
-              return isOwnMessage
-                  ? MessageTitle(
-                      message: message['content'],
-                      messageDate: DateFormat('h:mm a').format(
-                        DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
-                      ),
-                    )
-                  : MessageOwnTitle(
-                      message: message['content'],
-                      messageDate: DateFormat('h:mm a').format(
-                        DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
-                      ),
-                    );
-            },
-          );
-        }
-      },
-    );
-  }
+        return isOwnMessage
+            ? MessageTitle(
+                message: message['content'],
+                messageDate: DateFormat('h:mm a').format(
+                  DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
+                ),
+              )
+            : MessageOwnTitle(
+                message: message['content'],
+                messageDate: DateFormat('h:mm a').format(
+                  DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
+        ),
+      );
+    },
+  );     
+ }
 }
+
+
 
 
 class MessageTitle extends StatelessWidget {
@@ -340,8 +352,6 @@ class _ActionBar extends StatefulWidget {
   _ActionBarState createState() => _ActionBarState();
 }
 
-
-
 class _ActionBarState extends State<_ActionBar> {
 
   late TextEditingController sendMsge;
@@ -358,16 +368,12 @@ class _ActionBarState extends State<_ActionBar> {
   Timer? _debounce;
 
    Future<void> _sendMessage() async {
+    print('以下是所有訊息');
+    fetchAndDisplayMessages();
     if (sendMsge.text.isNotEmpty) {
-    //   Future<void> onReadAllStorageBtnPressed(Function updateHintMsg) async {
-    //     const storage = FlutterSecureStorage();
-    //     final key = (await storage.readAll()).keys.toString();
-    //     final allData = (await storage.readAll()).toString();
-    //     await updateHintMsg('key👉$key\nallData👉$allData');
-    //     print('key👉$key\nallData👉$allData');
-    //     print(sendMsge.text);
-    // }
-    // onReadAllStorageBtnPressed(updateHintMsg);
+      
+      //TODO:寫入傳送訊息的邏輯
+
       sendMsge.clear();
       FocusScope.of(context).unfocus();
     }

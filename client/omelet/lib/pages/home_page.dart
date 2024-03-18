@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/theme/theme_constants.dart';
 
 import '../componets/alert/alert_msg.dart';
 import '../pages/chat_list_page.dart';
@@ -36,6 +37,8 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: lightMode, // 亮色模式主題
+      darkTheme: darkMode, //
       home: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Form(

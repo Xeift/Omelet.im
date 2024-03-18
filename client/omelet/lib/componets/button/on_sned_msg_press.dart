@@ -6,12 +6,12 @@ import 'dart:typed_data';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:test_im_v4/message/safe_msg_store.dart';
-import 'package:test_im_v4/api/post/upload_img_api.dart';
-import 'package:test_im_v4/signal_protocol/encrypt_msg.dart';
-import 'package:test_im_v4/utils/init_socket.dart' show socket;
-import 'package:test_im_v4/on_btn_pressed/on_select_image_btn_pressed.dart'
-show imagePath, resetImagePath;
+import 'package:omelet/message/safe_msg_store.dart';
+import 'package:omelet/api/post/upload_img_api.dart';
+import 'package:omelet/signal_protocol/encrypt_msg.dart';
+import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
+// import 'package:omelet/on_btn_pressed/on_select_image_btn_pressed.dart'
+// show imagePath, resetImagePath;
 
 Future<void> onSendMsgBtnPressed(
     String theirUid, String msgContent, Function updateHintMsg) async {
@@ -23,42 +23,42 @@ Future<void> onSendMsgBtnPressed(
   final ourUid = (await storage.read(key: 'uid')).toString();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
-  if (imagePath != null) {
-    var img = File(imagePath.toString());
-    var imgBytes = jsonEncode(await img.readAsBytes());
-    msgType = 'image';
+  // if (imagePath != null) {
+  //   var img = File(imagePath.toString());
+  //   var imgBytes = jsonEncode(await img.readAsBytes());
+  //   msgType = 'image';
 
-    final encryptedImg = await encryptMsg(theirUid, imgBytes);
-    final ourEncryptedImg = encryptedImg['ourEncryptedMsg'];
-    final theirEncryptedImg = encryptedImg['theirEncryptedMsg'];
+  //   final encryptedImg = await encryptMsg(theirUid, imgBytes);
+  //   final ourEncryptedImg = encryptedImg['ourEncryptedMsg'];
+  //   final theirEncryptedImg = encryptedImg['theirEncryptedMsg'];
 
-    print('ourEncryptedImg.keys ${ourEncryptedImg.keys}');
+  //   print('ourEncryptedImg.keys ${ourEncryptedImg.keys}');
 
-    if (!ourEncryptedImg.isEmpty) {
-      for (var deviceId in ourEncryptedImg.keys) {
-        var (cihertext, _, _, _) = ourEncryptedImg[deviceId];
+  //   if (!ourEncryptedImg.isEmpty) {
+  //     for (var deviceId in ourEncryptedImg.keys) {
+  //       var (cihertext, _, _, _) = ourEncryptedImg[deviceId];
 
-        var res = await uploadImgApi(cihertext, ourUid, deviceId);
-        print(
-            '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
-      }
-    }
+  //       var res = await uploadImgApi(cihertext, ourUid, deviceId);
+  //       print(
+  //           '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+  //     }
+  //   }
 
-    print('theirEncryptedImg.keys ${theirEncryptedImg.keys}');
+  //   print('theirEncryptedImg.keys ${theirEncryptedImg.keys}');
 
-    if (!theirEncryptedImg.isEmpty) {
-      for (var deviceId in theirEncryptedImg.keys) {
-        var (cihertext, _, _, _) = theirEncryptedImg[deviceId];
-        var res = await uploadImgApi(cihertext, theirUid, deviceId);
-        print(
-            '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
-      }
-    }
+  //   if (!theirEncryptedImg.isEmpty) {
+  //     for (var deviceId in theirEncryptedImg.keys) {
+  //       var (cihertext, _, _, _) = theirEncryptedImg[deviceId];
+  //       var res = await uploadImgApi(cihertext, theirUid, deviceId);
+  //       print(
+  //           '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+  //     }
+  //   }
 
-    resetImagePath();
-  } else {
+  //   resetImagePath();
+  // } else {
     msgType = 'text';
-  }
+  // }
 
   // 加密訊息
   final encryptedMsg = await encryptMsg(theirUid, msgContent);
@@ -67,7 +67,7 @@ Future<void> onSendMsgBtnPressed(
 
   print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
-  print('[on_send_msg_btn_pressed.dart] imagePath: $imagePath');
+  // print('[on_send_msg_btn_pressed.dart] imagePath: $imagePath');
   print('[on_send_msg_btn_pressed.dart] msgInfo👉: $encryptedMsg');
   print('[on_send_msg_btn_pressed.dart] ourMsgInfo👉: $ourEncryptedMsg');
   print('[on_send_msg_btn_pressed.dart] theirMsgInfo👉: $theirEncryptedMsg');

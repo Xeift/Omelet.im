@@ -10,7 +10,7 @@ import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
 import 'package:omelet/signal_protocol/generate_and_store_key.dart';
 import 'package:omelet/message/safe_msg_store.dart';
-
+late io.Socket socket;
 class LoadingPage extends StatefulWidget {
   const LoadingPage({Key? key}) : super(key: key);
 
@@ -106,7 +106,6 @@ class LoadingPageState extends State<LoadingPage> {
     } catch (e) {
       // 錯誤處理
       print('錯誤：$e');
-
     }
   }
 

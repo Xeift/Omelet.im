@@ -63,6 +63,7 @@ Future<void> initSocket() async {
       final (token, ipkPub) = await loadJwtAndIpkPub();
       socket
           .emit('clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
+    // TODO: 跳轉邏輯
     });
   } else {
     print('[main.dart] jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');

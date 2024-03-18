@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:omelet/pages/chat_list_page.dart';
 import 'package:omelet/pages/home_page.dart';
+import 'package:omelet/pages/login_signup/loading_page.dart';
 import './theme/theme_constants.dart';
 import 'theme/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: darkMode,
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomePage(title: 'Login'),
+        '/': (context) => LoadingPage(),
         'Home':(BuildContext context) => const ChatListPage(),
       },
     );

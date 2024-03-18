@@ -35,32 +35,34 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          children: [
-            const SizedBox(height: kToolbarHeight),
-            const SizedBox(height: 50),
-            buildTitle(),
-            const SizedBox(height: 30),
-            buildEmailTextField(), //Email輸入框控件呼叫
-            const SizedBox(height: 30),
-            buildPasswordTextField(), //Password輸入框控件呼叫
-            buildForgetPassword(),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buildLoginButton(), //登入button控件呼叫
-                const SizedBox(width: 30),
-                buildSignupPageButton(), //註冊button控件呼叫
-              ],
-            ),
-          ],
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            children: [
+              const SizedBox(height: kToolbarHeight),
+              const SizedBox(height: 50),
+              buildTitle(),
+              const SizedBox(height: 30),
+              buildEmailTextField(), //Email輸入框控件呼叫
+              const SizedBox(height: 30),
+              buildPasswordTextField(), //Password輸入框控件呼叫
+              buildForgetPassword(),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildLoginButton(), //登入button控件呼叫
+                  const SizedBox(width: 30),
+                  buildSignupPageButton(), //註冊button控件呼叫
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -173,6 +175,7 @@ class HomePageState extends State<HomePage> {
                     key: 'username', value: resBody['data']['username']);
                 await storage.write(
                     key: 'email', value: resBody['data']['email']);
+                print('準備跳轉至使用者介面');
                 nextPage();
                 break;
               case 401:

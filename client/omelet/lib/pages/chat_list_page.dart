@@ -32,41 +32,43 @@ class _ChatListPageState extends State<ChatListPage> {
     pageIndex.addListener(() {
       print(pageIndex.value);
     });
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        title: ValueListenableBuilder<int>(
-          valueListenable: pageIndex,
-          builder: (context, value, child) {
-            return Text(title[value]);
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingPage()),
-              );
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: AppBar(
+          title: ValueListenableBuilder<int>(
+            valueListenable: pageIndex,
+            builder: (context, value, child) {
+              return Text(title[value]);
             },
           ),
-        ],
-        leading: const Icon(Icons.account_circle),
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
-      ),
-      body: ValueListenableBuilder(
-        valueListenable: pageIndex,
-        builder: (BuildContext context, int value, _) {
-          return pages[value];
-        },
-      ),
-      bottomNavigationBar: BottonNavbar(
-        onItemSelected: (index) {
-          setState(() {
-            pageIndex.value = index;
-          });
-        },
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SettingPage()),
+                );
+              },
+            ),
+          ],
+          leading: const Icon(Icons.account_circle),
+          backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
+        ),
+        body: ValueListenableBuilder(
+          valueListenable: pageIndex,
+          builder: (BuildContext context, int value, _) {
+            return pages[value];
+          },
+        ),
+        bottomNavigationBar: BottonNavbar(
+          onItemSelected: (index) {
+            setState(() {
+              pageIndex.value = index;
+            });
+          },
+        ),
       ),
     );
   }

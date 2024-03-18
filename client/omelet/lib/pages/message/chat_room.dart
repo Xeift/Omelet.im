@@ -6,13 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/theme/theme_constants.dart';
-import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/utils/load_local_info.dart';
-
-import 'package:omelet/api/post/login_api.dart';
-
-
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+//import 'package:omelet/api/post/login_api.dart';
 import '../../models/message_data.dart';
 
 
@@ -442,7 +438,7 @@ class _ActionBarState extends State<_ActionBar> {
               right: 20,
             ),
             child: GlowingActionButton(
-              color:Color.fromARGB(255, 0, 0, 0),
+              color:const Color.fromARGB(255, 0, 0, 0),
               icon: Icons.send_rounded,
               onPressed: _sendMessage,
             ),

@@ -17,7 +17,8 @@ const storage = multer.diskStorage({
         let ourUid = decodedToken._uid;
         let receiverUid = req.body.receiverUid;
         let deviceId = req.body.deviceId;
-        cb(null, `${receiverUid}_${deviceId}.png`);
+        let filename = req.body.filename;
+        cb(null, `${receiverUid}_${deviceId}_${filename}.png`);
     }
 });
 const upload = multer({ storage: storage });

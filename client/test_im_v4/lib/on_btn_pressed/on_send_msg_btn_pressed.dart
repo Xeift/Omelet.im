@@ -2,13 +2,13 @@
 
 import 'dart:io';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:test_im_v4/message/safe_msg_store.dart';
 import 'package:test_im_v4/api/post/upload_img_api.dart';
 import 'package:test_im_v4/signal_protocol/encrypt_msg.dart';
+import 'package:test_im_v4/utils/generate_random_filename.dart';
 import 'package:test_im_v4/utils/init_socket.dart' show socket;
 import 'package:test_im_v4/on_btn_pressed/on_select_image_btn_pressed.dart'
     show imagePath, resetImagePath;
@@ -37,8 +37,8 @@ Future<void> onSendMsgBtnPressed(
     if (!ourEncryptedImg.isEmpty) {
       for (var deviceId in ourEncryptedImg.keys) {
         var (cihertext, _, _, _) = ourEncryptedImg[deviceId];
-
-        var res = await uploadImgApi(cihertext, ourUid, deviceId);
+        var filename = generateRandomFileName();
+        var res = await uploadImgApi(cihertext, theirUid, deviceId, filename);
         print(
             '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
       }
@@ -49,7 +49,8 @@ Future<void> onSendMsgBtnPressed(
     if (!theirEncryptedImg.isEmpty) {
       for (var deviceId in theirEncryptedImg.keys) {
         var (cihertext, _, _, _) = theirEncryptedImg[deviceId];
-        var res = await uploadImgApi(cihertext, theirUid, deviceId);
+        var filename = generateRandomFileName();
+        var res = await uploadImgApi(cihertext, theirUid, deviceId, filename);
         print(
             '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
       }

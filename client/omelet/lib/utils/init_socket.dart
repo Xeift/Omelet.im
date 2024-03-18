@@ -3,7 +3,7 @@
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import 'package:omelet/utils/jwt.dart';
-import 'package:omelet/utils/login.dart';
+// import 'package:omelet/utils/login.dart';
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
@@ -41,6 +41,8 @@ Future<void> initSocket() async {
 
         // 若有未讀訊息，則儲存到本地
         await checkUnreadMsg();
+
+        // TODO: 跳轉至聊天列表畫面
       });
 
       // 接收伺服器轉發的訊息
@@ -58,16 +60,16 @@ Future<void> initSocket() async {
       print('--------------------------------');
       print('[main.dart] JWT expired');
       print('--------------------------------\n');
-      // 跳轉至登入頁面
-      await login(username, password);
+      // TODO: 跳轉至登入頁面
+      // await login(username, password);
       final (token, ipkPub) = await loadJwtAndIpkPub();
       socket
           .emit('clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
-    // TODO: 跳轉邏輯
     });
   } else {
     print('[main.dart] jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
-    await login(username, password);
+    // TODO: 跳轉至登入頁面
+    // await login(username, password);
     await generateAndStoreKey();
     await initSocket();
   }

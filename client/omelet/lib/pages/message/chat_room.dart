@@ -78,14 +78,14 @@ class AppBarTitle extends StatelessWidget {
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 messageData.senderName,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 14),
               ),
-              const SizedBox(height: 40,),
+
             ],
           ),
         ),
@@ -344,29 +344,34 @@ class _ActionBar extends StatefulWidget {
   _ActionBarState createState() => _ActionBarState();
 }
 
+
+
 class _ActionBarState extends State<_ActionBar> {
-  final StreamMessageInputController controller =
-      StreamMessageInputController();
+
   late TextEditingController sendMsge;
   @override
    _ActionBarState() {
     sendMsge = TextEditingController();
   }
+  @override
   void initState() {
     super.initState();
-    controller.addListener(_onTextChange);
+    sendMsge.addListener(_onTextChange);
   }
 
   Timer? _debounce;
 
-  Future<void> _sendMessage() async {
+   Future<void> _sendMessage() async {
     if (sendMsge.text.isNotEmpty) {
-      const String snederUserID = '551338674692820992';//模擬sender user.id
-      const String currentUserID = '551338674692820993';//reciver user.id
-      final currentTimeStamp = DateTime.now();
-
-
-
+    //   Future<void> onReadAllStorageBtnPressed(Function updateHintMsg) async {
+    //     const storage = FlutterSecureStorage();
+    //     final key = (await storage.readAll()).keys.toString();
+    //     final allData = (await storage.readAll()).toString();
+    //     await updateHintMsg('key👉$key\nallData👉$allData');
+    //     print('key👉$key\nallData👉$allData');
+    //     print(sendMsge.text);
+    // }
+    // onReadAllStorageBtnPressed(updateHintMsg);
       sendMsge.clear();
       FocusScope.of(context).unfocus();
     }
@@ -376,20 +381,19 @@ class _ActionBarState extends State<_ActionBar> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(seconds: 1), () {
       if (mounted) {
-        null;
+       // StreamChannel.of(context).channel.keyStroke();
       }
     });
   }
 
-
-
   @override
   void dispose() {
-    controller.removeListener(_onTextChange);
-    controller.dispose();
+    sendMsge.removeListener(_onTextChange);
+    sendMsge.dispose();
 
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -435,10 +439,10 @@ class _ActionBarState extends State<_ActionBar> {
             
             padding: const EdgeInsets.only(
               left: 15,
-              right: 24,
+              right: 20,
             ),
             child: GlowingActionButton(
-              color:const Color.fromARGB(255, 106, 137, 158),
+              color:Color.fromARGB(255, 0, 0, 0),
               icon: Icons.send_rounded,
               onPressed: _sendMessage,
             ),

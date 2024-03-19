@@ -50,8 +50,8 @@ class MsgWidgetState extends State<MsgWidget> {
           child: const Text('更新頭像'),
         ),
         ElevatedButton(
-          onPressed: () async =>
-              await onSelectImageBtnPressed(widget.updateHintMsg),
+          onPressed: () async => await onSelectImageBtnPressed(
+              receiverController.text, widget.updateHintMsg),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
           child: const Text('選擇圖片 準備傳送圖片'),
         ),

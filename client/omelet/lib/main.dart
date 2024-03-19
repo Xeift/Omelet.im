@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:omelet/pages/chat_list_page.dart';
-import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart';
 import './theme/theme_constants.dart';
 import 'theme/theme_provider.dart';

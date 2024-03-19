@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/pages/chat_list_page.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:omelet/pages/login_signup/login_page.dart';

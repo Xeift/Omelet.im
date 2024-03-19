@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/theme/theme_constants.dart';
 
 import '../../componets/alert/alert_msg.dart';
-import '../chat_list_page.dart';
+import '../nav_bar_control_page.dart';
 import 'sign_up_page.dart';
 
 import 'package:omelet/api/post/login_api.dart';
@@ -139,7 +139,7 @@ class LoginPageState extends State<LoginPage> {
 
   void nextPage() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const ChatListPage()),
+        MaterialPageRoute(builder: (context) => const NavBarControlPage()),
         (route) => false);
   }
 

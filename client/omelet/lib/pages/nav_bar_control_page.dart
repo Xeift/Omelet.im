@@ -6,14 +6,14 @@ import '../theme/theme_constants.dart';
 import '../pages/message_page.dart';
 // import '../pages/notification_page.dart';
 
-class ChatListPage extends StatefulWidget {
-  const ChatListPage({Key? key}) : super(key: key);
+class NavBarControlPage extends StatefulWidget {
+  const NavBarControlPage({Key? key}) : super(key: key);
 
   @override
-  State<ChatListPage> createState() => _ChatListPageState();
+  State<NavBarControlPage> createState() => _NavBarControlPageState();
 }
 
-class _ChatListPageState extends State<ChatListPage> {
+class _NavBarControlPageState extends State<NavBarControlPage> {
   final ValueNotifier<int> pageIndex = ValueNotifier(1);
 
   final List<Widget> pages = const [

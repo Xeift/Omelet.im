@@ -158,8 +158,7 @@ void fetchAndDisplayMessages() async {
     String remoteUid = '552415467919118336'; 
     List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
     
-    // 处理获取到的消息，例如显示在界面上
-    // 例如：
+
     if (messages.isEmpty) {
     print('No messages available.');
     return;

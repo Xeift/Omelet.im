@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:omelet/pages/chat_list_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/utils/jwt.dart';
@@ -38,8 +39,8 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<void> initSocket() async {
     try {
-      // const storage = FlutterSecureStorage();
-      // await storage.deleteAll();
+      const storage = FlutterSecureStorage();
+      await storage.deleteAll();
 
       print(await isJwtExsist());
       if (await isJwtExsist()) {
@@ -65,7 +66,7 @@ class LoadingPageState extends State<LoadingPage> {
 
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const ChatListPage()));
+                  builder: (context) => const NavBarControlPage()));
               return;
             }
           });

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:omelet/componets/message/avatar.dart';
-import 'package:omelet/pages/message/chat_room.dart';
+import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/message/safe_msg_store.dart';
 import 'package:omelet/utils/load_local_info.dart';
 
@@ -39,7 +39,7 @@ Widget _delegate(BuildContext context, int index) {
         return Text('Error: ${snapshot.error}'); // 如果發生錯誤，顯示錯誤消息
       } else {
         // 如果 Future 完成，則使用其值來構建 MessageTitle 小部件
-        return MessageTitle(
+        return MessageItemTitle(
           messageData: MessageData(
             senderName: 'TestUser',
             message: 'HIHI',
@@ -56,8 +56,8 @@ Widget _delegate(BuildContext context, int index) {
 }
 
 }
-class MessageTitle extends StatelessWidget {
-  const MessageTitle({Key? key, required this.messageData}) : super(key: key);
+class MessageItemTitle extends StatelessWidget {
+  const MessageItemTitle({Key? key, required this.messageData}) : super(key: key);
 
   final MessageData messageData;
 

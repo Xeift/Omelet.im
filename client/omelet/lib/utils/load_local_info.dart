@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 
-const serverUri = 'https://46a5-125-227-227-205.ngrok-free.app';
+const serverUri = 'https://f199-111-242-243-194.ngrok-free.app';
 const username = 'np';
 const password = 'a';
 
@@ -32,6 +32,5 @@ Future<(String, String)> loadJwtAndIpkPub() async {
   final ipkStore = SafeIdentityKeyStore();
   final ipkPub = jsonEncode(
       (await ipkStore.getIdentityKeyPair()).getPublicKey().serialize());
-
   return (token, ipkPub);
 }

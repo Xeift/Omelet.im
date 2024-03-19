@@ -7,14 +7,12 @@ import './theme/theme_constants.dart';
 import 'theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-
 //import 'signal_protocol/generate_and_store_key.dart';
-
+final hintMsgKey = GlobalKey();
 void main() {
   debugPaintSizeEnabled = false; // 顯示組件的邊界
   debugPaintBaselinesEnabled = false; // 顯示組件的基線
   runApp(
-    
     ChangeNotifierProvider(
       create: (context) => ThemeProvier(),
       child: const MyApp(),
@@ -39,7 +37,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: darkMode,
       initialRoute: '/',
       routes: {
-        '/': (context) => LoadingPage(),
+        '/': (context) =>const LoadingPage(),
         'Home':(BuildContext context) => const ChatListPage(),
       },
     );

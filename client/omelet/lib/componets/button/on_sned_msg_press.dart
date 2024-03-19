@@ -1,0 +1,135 @@
+// ignore_for_file: avoid_print
+
+import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:omelet/message/safe_msg_store.dart';
+import 'package:omelet/api/post/upload_img_api.dart';
+import 'package:omelet/signal_protocol/encrypt_msg.dart';
+import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
+// import 'package:omelet/on_btn_pressed/on_select_image_btn_pressed.dart'
+// show imagePath, resetImagePath;
+
+Future<void> onSendMsgBtnPressed(
+    String theirUid, String msgContent, Function updateHintMsg) async {
+  print('--------------------------------');
+  String msgType;
+  print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
+
+  const storage = FlutterSecureStorage();
+  final ourUid = (await storage.read(key: 'uid')).toString();
+  final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
+
+  // if (imagePath != null) {
+  //   var img = File(imagePath.toString());
+  //   var imgBytes = jsonEncode(await img.readAsBytes());
+  //   msgType = 'image';
+
+  //   final encryptedImg = await encryptMsg(theirUid, imgBytes);
+  //   final ourEncryptedImg = encryptedImg['ourEncryptedMsg'];
+  //   final theirEncryptedImg = encryptedImg['theirEncryptedMsg'];
+
+  //   print('ourEncryptedImg.keys ${ourEncryptedImg.keys}');
+
+  //   if (!ourEncryptedImg.isEmpty) {
+  //     for (var deviceId in ourEncryptedImg.keys) {
+  //       var (cihertext, _, _, _) = ourEncryptedImg[deviceId];
+
+  //       var res = await uploadImgApi(cihertext, ourUid, deviceId);
+  //       print(
+  //           '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+  //     }
+  //   }
+
+  //   print('theirEncryptedImg.keys ${theirEncryptedImg.keys}');
+
+  //   if (!theirEncryptedImg.isEmpty) {
+  //     for (var deviceId in theirEncryptedImg.keys) {
+  //       var (cihertext, _, _, _) = theirEncryptedImg[deviceId];
+  //       var res = await uploadImgApi(cihertext, theirUid, deviceId);
+  //       print(
+  //           '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+  //     }
+  //   }
+
+  //   resetImagePath();
+  // } else {
+    msgType = 'text';
+  // }
+
+  // 加密訊息
+  final encryptedMsg = await encryptMsg(theirUid, msgContent);
+  final ourEncryptedMsg = encryptedMsg['ourEncryptedMsg'];
+  final theirEncryptedMsg = encryptedMsg['theirEncryptedMsg'];
+
+  print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
+  print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
+  // print('[on_send_msg_btn_pressed.dart] imagePath: $imagePath');
+  print('[on_send_msg_btn_pressed.dart] msgInfo👉: $encryptedMsg');
+  print('[on_send_msg_btn_pressed.dart] ourMsgInfo👉: $ourEncryptedMsg');
+  print('[on_send_msg_btn_pressed.dart] theirMsgInfo👉: $theirEncryptedMsg');
+  print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
+
+  Future<Map<String, dynamic>> returnMsgToServer(
+      deviceId, singleMsgInfo, receiverUid) async {
+    final (cihertext, isPreKeySignalMessage, spkId, opkId) = singleMsgInfo;
+
+    print('🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃');
+    print(cihertext);
+    print(isPreKeySignalMessage);
+    print(spkId);
+    print(opkId);
+    print('🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃\n');
+
+    // 將發送的訊息儲存到本地
+    final safeMsgStore = SafeMsgStore();
+    await safeMsgStore.writeMsg(theirUid, {
+      'timestamp': currentTimestamp,
+      'type': msgType,
+      'sender': ourUid,
+      'receiver': theirUid,
+      'content': msgContent,
+    });
+    print('--------------------------------\n');
+
+    // 訊息格式為 PreKeySignalMessage
+    if (isPreKeySignalMessage) {
+      return {
+        'isPreKeySignalMessage': isPreKeySignalMessage,
+        'type': msgType,
+        'sender': ourUid,
+        'receiver': receiverUid,
+        'receiverDeviceId': deviceId,
+        'content': cihertext,
+        'spkId': spkId,
+        'opkId': opkId
+      };
+    }
+
+    // 訊息格式為 SignalMessage
+    else {
+      return {
+        'isPreKeySignalMessage': isPreKeySignalMessage,
+        'type': msgType,
+        'sender': ourUid,
+        'receiver': receiverUid,
+        'receiverDeviceId': deviceId,
+        'content': cihertext
+      };
+    }
+  }
+
+  for (var deviceId in ourEncryptedMsg.keys) {
+    var singleMsg =
+        await returnMsgToServer(deviceId, ourEncryptedMsg[deviceId], ourUid);
+    socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
+  }
+  for (var deviceId in theirEncryptedMsg.keys) {
+    var singleMsg = await returnMsgToServer(
+        deviceId, theirEncryptedMsg[deviceId], theirUid);
+    socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
+  }
+}

@@ -41,7 +41,7 @@ ThemeData get darkMode => ThemeData(
       primary: Colors.grey,
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Color.fromARGB(0, 242, 242, 242),
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(

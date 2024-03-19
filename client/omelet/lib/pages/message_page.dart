@@ -1,8 +1,9 @@
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room.dart';
+import 'package:omelet/message/safe_msg_store.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
 import '../models/message_data.dart';
 import '../helpers.dart';
@@ -16,31 +17,45 @@ class MessagePage extends StatefulWidget {
 
 class _MessagePageState extends State<MessagePage> {
   @override
-  @override
   Widget build(BuildContext context) {
-    //bool isDark = Theme.of(context).brightness == Brightness.dark;
-    return CustomScrollView(
-      slivers: [
-        SliverList(delegate: SliverChildBuilderDelegate(_delegate)),
-      ],
+    return ListView.builder(
+      itemCount: 1, // 您希望顯示的消息數量
+      itemBuilder: (context, index) {
+        return _delegate(context, index);
+      },
     );
   }
 
-  Widget _delegate(BuildContext context, int index) {
-    final Faker faker = Faker();
-    final date = Helpers.randomDate();
+Widget _delegate(BuildContext context, int index) {
+  final date = Helpers.randomDate();
+  final Future<String> ourUid = loadUid(); // 將 Future 保存為變量，而不是使用 await
 
-    return MessageTitle(
-        messageData: MessageData(
-      senderName: faker.person.name(),
-      message: faker.lorem.sentence(),
-      messageDate: date,
-      dateMessage: Jiffy.parse('1997/09/23').fromNow(),
-      profilePicture: Helpers.randomPictureUrl(),
-    ));
-  }
+  return FutureBuilder<String>(
+    future: ourUid,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const CircularProgressIndicator(); // 在等待時顯示加載指示器
+      } else if (snapshot.hasError) {
+        return Text('Error: ${snapshot.error}'); // 如果發生錯誤，顯示錯誤消息
+      } else {
+        // 如果 Future 完成，則使用其值來構建 MessageTitle 小部件
+        return MessageTitle(
+          messageData: MessageData(
+            senderName: 'TestUser',
+            message: 'HIHI',
+            senderUid: snapshot.data!, // 使用 Future 的值
+            remoteUid: '552415467919118336', // 請確定您有合適的 remoteUid
+            messageDate: date,
+            dateMessage: Jiffy.parse('1997/09/23').fromNow(),
+            profilePicture: Helpers.randomPictureUrl(),
+          ),
+        );
+      }
+    },
+  );
 }
 
+}
 class MessageTitle extends StatelessWidget {
   const MessageTitle({Key? key, required this.messageData}) : super(key: key);
 
@@ -104,4 +119,5 @@ class MessageTitle extends StatelessWidget {
       ),
     );
   }
+  
 }

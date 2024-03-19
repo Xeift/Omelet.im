@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:omelet/pages/chat_list_page.dart';
-import 'package:omelet/pages/home_page.dart';
+import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart';
 import './theme/theme_constants.dart';
 import 'theme/theme_provider.dart';
@@ -30,15 +30,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       title: 'Omelet Login Page',
       theme: Provider.of<ThemeProvier>(context).themeData,
       darkTheme: darkMode,
       initialRoute: '/',
       routes: {
-        '/': (context) =>const LoadingPage(),
-        'Home':(BuildContext context) => const ChatListPage(),
+        '/': (context) => const LoadingPage(),
+        'Home': (BuildContext context) => const ChatListPage(),
       },
     );
   }

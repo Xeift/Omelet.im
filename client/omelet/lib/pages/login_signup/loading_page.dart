@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/pages/chat_list_page.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:omelet/pages/home_page.dart';
+import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/utils/jwt.dart';
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
-import 'package:omelet/signal_protocol/generate_and_store_key.dart';
 import 'package:omelet/message/safe_msg_store.dart';
+
 late io.Socket socket;
+
 class LoadingPage extends StatefulWidget {
   const LoadingPage({Key? key}) : super(key: key);
 
@@ -19,7 +20,6 @@ class LoadingPage extends StatefulWidget {
 }
 
 class LoadingPageState extends State<LoadingPage> {
-  late io.Socket socket;
   bool _isLoading = true;
 
   @override
@@ -39,9 +39,9 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<void> initSocket() async {
     try {
-      // Initialize socket
-      const storage = FlutterSecureStorage();
-      await storage.deleteAll();
+      // const storage = FlutterSecureStorage();
+      // await storage.deleteAll();
+
       print(await isJwtExsist());
       if (await isJwtExsist()) {
         final (token, ipkPub) = await loadJwtAndIpkPub();
@@ -52,7 +52,8 @@ class LoadingPageState extends State<LoadingPage> {
         );
 
         socket.onConnect((_) async {
-          socket.emit('clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
+          socket.emit(
+              'clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
 
           socket.on('jwtValid', (data) async {
             print('--------------------------------');
@@ -64,7 +65,8 @@ class LoadingPageState extends State<LoadingPage> {
             await checkUnreadMsg();
 
             if (mounted) {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ChatListPage()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ChatListPage()));
               return;
             }
           });
@@ -84,24 +86,28 @@ class LoadingPageState extends State<LoadingPage> {
           print('--------------------------------\n');
 
           if (mounted) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage(title: '',)));
-            return;            
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const LoginPage(
+                      title: '',
+                    )));
+            return;
           }
-          
+
           final (token, ipkPub) = await loadJwtAndIpkPub();
-          socket.emit('clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
+          socket.emit(
+              'clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
         });
       } else {
         print('[main.dart] jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
 
         if (mounted) {
           print('觸發跳轉');
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage(title: '',)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const LoginPage(
+                    title: '',
+                  )));
           return;
         }
-
-        await generateAndStoreKey();
-        await initSocket();
       }
     } catch (e) {
       // 錯誤處理

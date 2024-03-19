@@ -5,20 +5,23 @@ import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/theme/theme_constants.dart';
 
-import '../componets/alert/alert_msg.dart';
-import '../pages/chat_list_page.dart';
-import '../pages/login_signup/sign_up_page.dart';
+import '../../componets/alert/alert_msg.dart';
+import '../chat_list_page.dart';
+import 'sign_up_page.dart';
 
 import 'package:omelet/api/post/login_api.dart';
+import 'package:omelet/signal_protocol/generate_and_store_key.dart';
+import 'package:omelet/pages/login_signup/loading_page.dart'
+    show LoadingPageState;
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
-  HomePageState createState() => HomePageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class HomePageState extends State<HomePage> {
+class LoginPageState extends State<LoginPage> {
   late String _userEmail = '', _userPassword = '';
   final GlobalKey _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
@@ -172,12 +175,18 @@ class HomePageState extends State<HomePage> {
             const storage = FlutterSecureStorage();
             switch (statusCode) {
               case 200:
+                // 將使用者資訊寫入本地儲存空間
                 await storage.write(key: 'token', value: resBody['token']);
                 await storage.write(key: 'uid', value: resBody['data']['uid']);
                 await storage.write(
                     key: 'username', value: resBody['data']['username']);
                 await storage.write(
                     key: 'email', value: resBody['data']['email']);
+
+                // 產生並儲存 Signal Protocol 金鑰
+                await generateAndStoreKey();
+                await LoadingPageState().initSocket();
+
                 print('準備跳轉至使用者介面');
                 nextPage();
                 break;

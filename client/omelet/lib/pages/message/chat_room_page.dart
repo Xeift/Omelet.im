@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:omelet/componets/button/on_send_msg_press.dart';
+import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/theme/theme_constants.dart';

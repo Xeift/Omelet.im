@@ -42,7 +42,7 @@ class ChatRoomPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ReadMessageList(), 
+            child: ReadMessageList(),
           ),
           _ActionBar(
             messageData: messageData,
@@ -163,14 +163,11 @@ List<Map<String, dynamic>> msgs = [
 // }
 
 class ReadMessageList extends StatelessWidget {
-  const ReadMessageList({Key? key}): super(key: key);
+  const ReadMessageList({Key? key}) : super(key: key);
   // SafeMsgStore msgStore = SafeMsgStore();
   @override
   Widget build(BuildContext context) {
-
     return ListView.builder(
-      
-
       itemCount: msgs.length,
       itemBuilder: (context, index) {
         final message = msgs[index];

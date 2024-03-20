@@ -41,7 +41,7 @@ class ChatRoomPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(
+          const Expanded(
             child: ReadMessageList(),
           ),
           _ActionBar(

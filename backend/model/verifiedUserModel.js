@@ -9,6 +9,7 @@ const VerifiedUserSchema = new mongoose.Schema({
     room_joined: { type: [String], default: [] },
     hasPfp: { type: Boolean, default: false },
     lastDeviceId: { type: Number },
+    friends: { type: [String], default: [] },
 });
 const VerifiedUserModel = mongoose.model('VerifiedUser', VerifiedUserSchema, 'verified_users');
 

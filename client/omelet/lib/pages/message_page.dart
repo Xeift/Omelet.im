@@ -3,7 +3,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/utils/load_local_info.dart';
-import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
+// import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../models/message_data.dart';
 import '../utils/helpers.dart';
@@ -29,7 +29,7 @@ class _MessagePageState extends State<MessagePage> {
   Widget _delegate(BuildContext context, int index) {
     final date = Helpers.randomDate();
     final Future<String> ourUid = loadUid(); // 將 Future 保存為變量，而不是使用 await
-
+    // TODO: 為什麼不用 await？
     return FutureBuilder<String>(
       future: ourUid,
       builder: (context, snapshot) {

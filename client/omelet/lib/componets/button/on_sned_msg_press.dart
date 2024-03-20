@@ -10,17 +10,17 @@ import 'package:omelet/message/safe_msg_store.dart';
 // import 'package:omelet/api/post/upload_img_api.dart';
 import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
+import 'package:omelet/utils/load_local_info.dart';
 // import 'package:omelet/on_btn_pressed/on_select_image_btn_pressed.dart'
 // show imagePath, resetImagePath;
 
-Future<void> onSendMsgBtnPressed(
-    String theirUid, String msgContent) async {
+Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
   print('--------------------------------');
   String msgType;
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
 
   const storage = FlutterSecureStorage();
-  final ourUid = (await storage.read(key: 'uid')).toString();
+  final ourUid = await loadUid();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // if (imagePath != null) {

@@ -13,52 +13,47 @@ import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 //import 'package:omelet/api/post/login_api.dart';
 import '../../models/message_data.dart';
 
-
 class ChatRoomPage extends StatelessWidget {
-
   static Route route(MessageData data) => MaterialPageRoute(
-    builder:(context) => ChatRoomPage(
-      messageData: data,
-    )
-  );
-
-
+      builder: (context) => ChatRoomPage(
+            messageData: data,
+          ));
 
   const ChatRoomPage({Key? key, required this.messageData}) : super(key: key);
-  
 
- final MessageData messageData;
+  final MessageData messageData;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: AppBar(
-          leading:
-          IconButton(icon: const Icon(Icons.arrow_back_ios),onPressed:(){
-             Navigator.of(context).pop();
-          }),
-          elevation: 0.0,
-          backgroundColor:const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
-          title: AppBarTitle(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        elevation: 0.0,
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
+        title: AppBarTitle(
+          messageData: messageData,
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: DemoMessageList(
+              messageData: messageData,
+            ), // 传递messageData参数给DemoMessageList
+          ),
+          _ActionBar(
             messageData: messageData,
           ),
-        ),
-        body: Column(
-          children:[
-            Expanded(
-            child: DemoMessageList(messageData: messageData,), // 传递messageData参数给DemoMessageList
-          ),
-             _ActionBar(messageData: messageData,),
-            
-          ],
-        ),
+        ],
+      ),
     );
   }
 }
-
-
-
 
 class AppBarTitle extends StatelessWidget {
   const AppBarTitle({Key? key, required this.messageData}) : super(key: key);
@@ -84,7 +79,6 @@ class AppBarTitle extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 14),
               ),
-
             ],
           ),
         ),
@@ -92,6 +86,7 @@ class AppBarTitle extends StatelessWidget {
     );
   }
 }
+
 //測試用list
 List<Map<String, dynamic>> msgs = [
   {
@@ -152,30 +147,26 @@ List<Map<String, dynamic>> msgs = [
   },
 ];
 
-
 //測試：檢查是否有訊息
 SafeMsgStore safeMsgStore = SafeMsgStore();
 void fetchAndDisplayMessages() async {
-    String remoteUid = '552415467919118336'; 
-    List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
-    
+  String remoteUid = '552415467919118336';
+  List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
 
-    if (messages.isEmpty) {
-      print('No messages available.');
+  if (messages.isEmpty) {
+    print('No messages available.');
     return;
-  }else{
-      for (String message in messages) {
-        print('function Active sucessful');
-        print(message);
-      
-      }
-    } 
+  } else {
+    for (String message in messages) {
+      print('function Active sucessful');
+      print(message);
+    }
   }
-
+}
 
 class DemoMessageList extends StatelessWidget {
-
-  const DemoMessageList({Key? key,required this.messageData}) : super(key: key);
+  const DemoMessageList({Key? key, required this.messageData})
+      : super(key: key);
   final MessageData messageData;
 
   @override
@@ -185,7 +176,7 @@ class DemoMessageList extends StatelessWidget {
       itemCount: msgs.length,
       itemBuilder: (context, index) {
         final message = msgs[index];
-        print('使用者的uid{$uid}');
+        print('發送者的uid $uid');
         print(message['sender']);
         //判斷是否為當前用戶
         final isOwnMessage = message['sender'].toString() == uid;
@@ -202,18 +193,17 @@ class DemoMessageList extends StatelessWidget {
                 message: message['content'],
                 messageDate: DateFormat('h:mm a').format(
                   DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
-        ),
-      );
-    },
-  );     
- }
+                ),
+              );
+      },
+    );
+  }
 }
-
-
-
 
 class MessageTitle extends StatelessWidget {
-  const MessageTitle({Key? key, required this.message, required this.messageDate}) : super(key: key);
+  const MessageTitle(
+      {Key? key, required this.message, required this.messageDate})
+      : super(key: key);
 
   final String message;
   final String messageDate;
@@ -222,48 +212,45 @@ class MessageTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(_borderRadius),
-                  topRight: Radius.circular(_borderRadius),
-                  bottomRight: Radius.circular(_borderRadius),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(_borderRadius),
+                      topRight: Radius.circular(_borderRadius),
+                      bottomRight: Radius.circular(_borderRadius),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 20),
+                    child: Text(message),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
-                child: Text(message),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                messageDate,
-                style:const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                )
-              ),
-            ), 
-          ]
-        ),
-      )
-    );
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(messageDate,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+              ]),
+        ));
   }
 }
- 
 
 class MessageOwnTitle extends StatelessWidget {
-  const MessageOwnTitle({Key? key, required this.message, required this.messageDate}) : super(key: key);
+  const MessageOwnTitle(
+      {Key? key, required this.message, required this.messageDate})
+      : super(key: key);
 
   final String message;
   final String messageDate;
@@ -272,76 +259,69 @@ class MessageOwnTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: AppColors.secondary,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(_borderRadius),
-                  bottomRight: Radius.circular(_borderRadius),
-                  bottomLeft: Radius.circular(_borderRadius),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(_borderRadius),
+                      bottomRight: Radius.circular(_borderRadius),
+                      bottomLeft: Radius.circular(_borderRadius),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 20),
+                    child: Text(message,
+                        style: const TextStyle(
+                          color: AppColors.textLigth,
+                        )),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
-                child: Text(message,
-                    style: const TextStyle(
-                      color: AppColors.textLigth,
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                messageDate,
-                style:const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                )
-              ),
-            ), 
-          ]
-        ),
-      )
-    );
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(messageDate,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+              ]),
+        ));
   }
 }
 
-
 class DateLable extends StatelessWidget {
-  const DateLable({Key? key,required this.lable}) : super(key: key);
+  const DateLable({Key? key, required this.lable}) : super(key: key);
 
   final String lable;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child:Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32.0),
-        child: Container(
+        child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32.0),
+      child: Container(
           decoration: BoxDecoration(
-            color:Theme.of(context).cardColor,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12),
           ),
-          child:Padding(
-            padding: const EdgeInsets.symmetric(vertical:8.0 ,horizontal: 12),
-            child:Text(
-              lable,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color:Colors.black54,
-              )
-            ))
-        ),)
-    );
+          child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+              child: Text(lable,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  )))),
+    ));
   }
 }
 
@@ -357,7 +337,7 @@ class _ActionBarState extends State<_ActionBar> {
   late TextEditingController sendMsge;
   late String remoteUid;
   @override
-   _ActionBarState() {
+  _ActionBarState() {
     sendMsge = TextEditingController();
   }
   @override
@@ -370,20 +350,18 @@ class _ActionBarState extends State<_ActionBar> {
 
   Timer? _debounce;
 
-   Future<void> _sendMessage() async {
-
+  Future<void> _sendMessage() async {
     // fetchAndDisplayMessages();   檢查對方用戶是否有訊息
     if (sendMsge.text.isNotEmpty) {
-        print('以下是所有訊息');
-        print(sendMsge.text);
-        print('以下是對方uid');
-        print(remoteUid);
-        onSendMsgBtnPressed(remoteUid,sendMsge.text);
-        
-        //TODO:寫入傳送訊息的邏輯
+      print('以下是所有訊息');
+      print(sendMsge.text);
+      print('對方的uid $remoteUid');
+      onSendMsgBtnPressed(remoteUid, sendMsge.text);
 
-        sendMsge.clear();
-        FocusScope.of(context).unfocus();
+      //TODO:寫入傳送訊息的邏輯
+
+      sendMsge.clear();
+      FocusScope.of(context).unfocus();
     }
   }
 
@@ -391,7 +369,7 @@ class _ActionBarState extends State<_ActionBar> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(seconds: 1), () {
       if (mounted) {
-       // StreamChannel.of(context).channel.keyStroke();
+        // StreamChannel.of(context).channel.keyStroke();
       }
     });
   }
@@ -403,7 +381,6 @@ class _ActionBarState extends State<_ActionBar> {
 
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -446,13 +423,12 @@ class _ActionBarState extends State<_ActionBar> {
             ),
           ),
           Padding(
-            
             padding: const EdgeInsets.only(
               left: 15,
               right: 20,
             ),
             child: GlowingActionButton(
-              color:const Color.fromARGB(255, 0, 0, 0),
+              color: const Color.fromARGB(255, 0, 0, 0),
               icon: Icons.send_rounded,
               onPressed: _sendMessage,
             ),

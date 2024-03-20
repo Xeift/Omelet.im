@@ -6,7 +6,7 @@ import 'package:omelet/utils/load_local_info.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../models/message_data.dart';
-import '../utils/helpers.dart';
+import 'package:omelet/utils/helpers.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);

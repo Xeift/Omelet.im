@@ -6,7 +6,7 @@ import 'package:omelet/utils/load_local_info.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../models/message_data.dart';
-import '../helpers.dart';
+import '../utils/helpers.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
@@ -26,60 +26,59 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 
-Widget _delegate(BuildContext context, int index) {
-  final date = Helpers.randomDate();
-  final Future<String> ourUid = loadUid(); // 將 Future 保存為變量，而不是使用 await
+  Widget _delegate(BuildContext context, int index) {
+    final date = Helpers.randomDate();
+    final Future<String> ourUid = loadUid(); // 將 Future 保存為變量，而不是使用 await
 
-  return FutureBuilder<String>(
-    future: ourUid,
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const CircularProgressIndicator(); // 在等待時顯示加載指示器
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}'); // 如果發生錯誤，顯示錯誤消息
-      } else {
-        // 如果 Future 完成，則使用其值來構建 MessageTitle 小部件
-        print('OurUid is {$ourUid}');
-        return MessageItemTitle(
-          messageData: MessageData(
-            senderName: 'TestUser',
-            message: 'HIHI',
-            senderUid: snapshot.data!, // 使用 Future 的值
-            remoteUid: '552415467919118336', // 請確定您有合適的 remoteUid
-            messageDate: date,
-            dateMessage: Jiffy.parse('1997/09/23').fromNow(),
-            profilePicture: Helpers.randomPictureUrl(),
-          ),
-          
-        );      }
-    },
-  );
+    return FutureBuilder<String>(
+      future: ourUid,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(); // 在等待時顯示加載指示器
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}'); // 如果發生錯誤，顯示錯誤消息
+        } else {
+          // 如果 Future 完成，則使用其值來構建 MessageTitle 小部件
+          print('OurUid is {$ourUid}');
+          return MessageItemTitle(
+            messageData: MessageData(
+              senderName: 'TestUser',
+              message: 'HIHI',
+              senderUid: snapshot.data!, // 使用 Future 的值
+              remoteUid: '552415467919118336', // 請確定您有合適的 remoteUid
+              messageDate: date,
+              dateMessage: Jiffy.parse('1997/09/23').fromNow(),
+              profilePicture: Helpers.randomPictureUrl(),
+            ),
+          );
+        }
+      },
+    );
+  }
 }
 
-}
 class MessageItemTitle extends StatelessWidget {
-  const MessageItemTitle({Key? key, required this.messageData}) : super(key: key);
+  const MessageItemTitle({Key? key, required this.messageData})
+      : super(key: key);
 
   final MessageData messageData;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.of(context).push(ChatRoomPage.route(messageData));
       },
       child: Container(
         height: 100,
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(
-          
-            border: Border(
-                bottom: BorderSide(
-          color: Colors.grey,
-          width: 0.2,
-          )
+          border: Border(
+              bottom: BorderSide(
+            color: Colors.grey,
+            width: 0.2,
+          )),
         ),
-      ),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Row(
@@ -120,5 +119,4 @@ class MessageItemTitle extends StatelessWidget {
       ),
     );
   }
-  
 }

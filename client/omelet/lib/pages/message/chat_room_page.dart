@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:omelet/componets/button/on_sned_msg_press.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/theme/theme_constants.dart';
-import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/message/safe_msg_store.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:omelet/api/post/login_api.dart';
 import '../../models/message_data.dart';
@@ -48,7 +49,7 @@ class ChatRoomPage extends StatelessWidget {
             Expanded(
             child: DemoMessageList(messageData: messageData,), // 传递messageData参数给DemoMessageList
           ),
-            const _ActionBar(),
+             _ActionBar(messageData: messageData,),
             
           ],
         ),
@@ -160,7 +161,7 @@ void fetchAndDisplayMessages() async {
     
 
     if (messages.isEmpty) {
-    print('No messages available.');
+      print('No messages available.');
     return;
   }else{
       for (String message in messages) {
@@ -184,7 +185,7 @@ class DemoMessageList extends StatelessWidget {
       itemCount: msgs.length,
       itemBuilder: (context, index) {
         final message = msgs[index];
-        print('使用這id{$uid}');
+        print('使用者的uid{$uid}');
         print(message['sender']);
         //判斷是否為當前用戶
         final isOwnMessage = message['sender'].toString() == uid;
@@ -345,15 +346,16 @@ class DateLable extends StatelessWidget {
 }
 
 class _ActionBar extends StatefulWidget {
-  const _ActionBar({Key? key}) : super(key: key);
+  const _ActionBar({Key? key, required this.messageData}) : super(key: key);
+  final MessageData messageData;
 
   @override
   _ActionBarState createState() => _ActionBarState();
 }
 
 class _ActionBarState extends State<_ActionBar> {
-
   late TextEditingController sendMsge;
+  late String remoteUid;
   @override
    _ActionBarState() {
     sendMsge = TextEditingController();
@@ -361,20 +363,27 @@ class _ActionBarState extends State<_ActionBar> {
   @override
   void initState() {
     super.initState();
+    sendMsge = TextEditingController();
+    remoteUid = widget.messageData.remoteUid; // 在這裡初始化 remoteUid
     sendMsge.addListener(_onTextChange);
   }
 
   Timer? _debounce;
 
    Future<void> _sendMessage() async {
-    print('以下是所有訊息');
-    fetchAndDisplayMessages();
-    if (sendMsge.text.isNotEmpty) {
-      
-      //TODO:寫入傳送訊息的邏輯
 
-      sendMsge.clear();
-      FocusScope.of(context).unfocus();
+    // fetchAndDisplayMessages();   檢查對方用戶是否有訊息
+    if (sendMsge.text.isNotEmpty) {
+        print('以下是所有訊息');
+        print(sendMsge.text);
+        print('以下是對方uid');
+        print(remoteUid);
+        onSendMsgBtnPressed(remoteUid,sendMsge.text);
+        
+        //TODO:寫入傳送訊息的邏輯
+
+        sendMsge.clear();
+        FocusScope.of(context).unfocus();
     }
   }
 

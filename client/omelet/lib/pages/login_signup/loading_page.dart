@@ -39,8 +39,8 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<void> initSocket() async {
     try {
-      const storage = FlutterSecureStorage();
-      await storage.deleteAll();
+      // const storage = FlutterSecureStorage();
+      // await storage.deleteAll();
 
       print(await isJwtExsist());
       if (await isJwtExsist()) {

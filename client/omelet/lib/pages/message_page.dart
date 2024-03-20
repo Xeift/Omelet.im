@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
-import 'package:omelet/message/safe_msg_store.dart';
 import 'package:omelet/utils/load_local_info.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../models/message_data.dart';
 import '../helpers.dart';
@@ -39,6 +39,7 @@ Widget _delegate(BuildContext context, int index) {
         return Text('Error: ${snapshot.error}'); // 如果發生錯誤，顯示錯誤消息
       } else {
         // 如果 Future 完成，則使用其值來構建 MessageTitle 小部件
+        print('OurUid is {$ourUid}');
         return MessageItemTitle(
           messageData: MessageData(
             senderName: 'TestUser',
@@ -49,8 +50,8 @@ Widget _delegate(BuildContext context, int index) {
             dateMessage: Jiffy.parse('1997/09/23').fromNow(),
             profilePicture: Helpers.randomPictureUrl(),
           ),
-        );
-      }
+          
+        );      }
     },
   );
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:omelet/componets/message/avatar.dart';
-import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
-import 'package:omelet/utils/load_local_info.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../models/message_data.dart';

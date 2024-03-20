@@ -6,13 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:omelet/componets/button/on_send_msg_press.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
-import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/theme/theme_constants.dart';
-import 'package:omelet/message/safe_msg_store.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:omelet/api/post/login_api.dart';
 import 'package:omelet/models/message_data.dart';
+import 'package:omelet/utils/get_user_uid.dart';
 
 class ChatRoomPage extends StatelessWidget {
   static Route route(MessageData data) => MaterialPageRoute(
@@ -43,9 +42,7 @@ class ChatRoomPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ReadMessageList(
-              messageData: messageData,
-            ), // 传递messageData参数给DemoMessageList
+            child: ReadMessageList(), 
           ),
           _ActionBar(
             messageData: messageData,
@@ -148,7 +145,7 @@ List<Map<String, dynamic>> msgs = [
   },
 ];
 
-//測試：檢查是否有訊息
+// // 測試：檢查是否有訊息
 // SafeMsgStore safeMsgStore = SafeMsgStore();
 // void fetchAndDisplayMessages() async {
 //   String remoteUid = '552415467919118336';
@@ -166,14 +163,14 @@ List<Map<String, dynamic>> msgs = [
 // }
 
 class ReadMessageList extends StatelessWidget {
-  const ReadMessageList({Key? key, required this.messageData})
-      : super(key: key);
-  final MessageData messageData;
-
+  const ReadMessageList({Key? key}): super(key: key);
+  // SafeMsgStore msgStore = SafeMsgStore();
   @override
   Widget build(BuildContext context) {
 
     return ListView.builder(
+      
+
       itemCount: msgs.length,
       itemBuilder: (context, index) {
         final message = msgs[index];

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
+import 'package:omelet/utils/get_user_uid.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/utils/jwt.dart';
@@ -63,6 +63,7 @@ class LoadingPageState extends State<LoadingPage> {
             await checkOpkStatus();
             await checkSpkStatus();
             await checkUnreadMsg();
+            await getUserUid();
 
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(

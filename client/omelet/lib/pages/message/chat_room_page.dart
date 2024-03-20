@@ -8,10 +8,10 @@ import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/message/safe_msg_store.dart';
-import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
+// import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:omelet/api/post/login_api.dart';
-import '../../models/message_data.dart';
+import 'package:omelet/models/message_data.dart';
 
 class ChatRoomPage extends StatelessWidget {
   static Route route(MessageData data) => MaterialPageRoute(
@@ -334,33 +334,33 @@ class _ActionBar extends StatefulWidget {
 }
 
 class _ActionBarState extends State<_ActionBar> {
-  late TextEditingController sendMsge;
+  late TextEditingController sendMsg;
   late String remoteUid;
   @override
   _ActionBarState() {
-    sendMsge = TextEditingController();
+    sendMsg = TextEditingController();
   }
   @override
   void initState() {
     super.initState();
-    sendMsge = TextEditingController();
+    sendMsg = TextEditingController();
     remoteUid = widget.messageData.remoteUid; // 在這裡初始化 remoteUid
-    sendMsge.addListener(_onTextChange);
+    sendMsg.addListener(_onTextChange);
   }
 
   Timer? _debounce;
 
   Future<void> _sendMessage() async {
     // fetchAndDisplayMessages();   檢查對方用戶是否有訊息
-    if (sendMsge.text.isNotEmpty) {
+    if (sendMsg.text.isNotEmpty) {
       print('以下是所有訊息');
-      print(sendMsge.text);
+      print(sendMsg.text);
       print('對方的uid $remoteUid');
-      onSendMsgBtnPressed(remoteUid, sendMsge.text);
+      onSendMsgBtnPressed(remoteUid, sendMsg.text);
 
       // TODO: 寫入傳送訊息的邏輯
 
-      sendMsge.clear();
+      sendMsg.clear();
       FocusScope.of(context).unfocus();
     }
   }
@@ -376,8 +376,8 @@ class _ActionBarState extends State<_ActionBar> {
 
   @override
   void dispose() {
-    sendMsge.removeListener(_onTextChange);
-    sendMsge.dispose();
+    sendMsg.removeListener(_onTextChange);
+    sendMsg.dispose();
 
     super.dispose();
   }
@@ -411,7 +411,7 @@ class _ActionBarState extends State<_ActionBar> {
               padding: const EdgeInsets.only(left: 16.0),
               child: TextField(
                 onChanged: (val) {
-                  sendMsge.text = val;
+                  sendMsg.text = val;
                 },
                 style: const TextStyle(fontSize: 14),
                 decoration: const InputDecoration(

@@ -7,12 +7,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/utils/return_msg_to_server.dart';
 import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
+import 'package:omelet/utils/load_local_info.dart';
 
 Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
   print('--------------------------------');
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
-  const storage = FlutterSecureStorage();
-  final ourUid = (await storage.read(key: 'uid')).toString();
+  final ourUid = await loadUid();
 
   // 加密訊息
   final encryptedMsg = await encryptMsg(theirUid, msgContent);

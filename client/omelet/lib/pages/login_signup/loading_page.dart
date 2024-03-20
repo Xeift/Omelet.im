@@ -40,6 +40,7 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<void> initSocket() async {
     try {
+      // TODO: storage debug
       // const storage = FlutterSecureStorage();
       // await storage.deleteAll();
 

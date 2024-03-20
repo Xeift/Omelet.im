@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
+import 'package:omelet/message/safe_msg_store.dart';
 import 'package:omelet/theme/theme_constants.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -41,7 +43,7 @@ class ChatRoomPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const Expanded(
+           const Expanded(
             child: ReadMessageList(),
           ),
           _ActionBar(
@@ -86,110 +88,123 @@ class AppBarTitle extends StatelessWidget {
 }
 
 //測試用list
-List<Map<String, dynamic>> msgs = [
-  {
-    'timestamp': 1709969515576,
-    'type': 'text',
-    'receiver': 551338674692820992,
-    'sender': 552415467919118336,
-    'content': '早安'
-  },
-  {
-    'timestamp': 1709969440757,
-    'type': 'text',
-    'sender': 551338674692820992,
-    'receiver': 552415467919118336,
-    'content': '你也早'
-  },
-  {
-    'timestamp': 1709969440758,
-    'type': 'text',
-    'receiver': 552415467919118336,
-    'sender': 551338674692820992,
-    'content': '今天天氣如何？'
-  },
-  {
-    'timestamp': 1709969440759,
-    'type': 'text',
-    'sender': 552415467919118336,
-    'receiver': 551338674692820992,
-    'content': '天氣很好'
-  },
-  {
-    'timestamp': 1709969440760,
-    'type': 'text',
-    'receiver': 552415467919118336,
-    'sender': 551338674692820992,
-    'content': '那我們去公園吧'
-  },
-  {
-    'timestamp': 1709969440761,
-    'type': 'text',
-    'sender': 552415467919118336,
-    'receiver': 551338674692820992,
-    'content': '好的，我們見面的地點在哪裡？'
-  },
-  {
-    'timestamp': 1709969440762,
-    'type': 'text',
-    'receiver': 552415467919118336,
-    'sender': 551338674692820992,
-    'content': '在公園的入口處見面'
-  },
-  {
-    'timestamp': 1709969440763,
-    'type': 'text',
-    'sender': 552415467919118336,
-    'receiver': 551338674692820992,
-    'content': '好的，我會準時到達'
-  },
-];
+// List<Map<String, dynamic>> msgs = [
+//   {
+//     'timestamp': 1709969515576,
+//     'type': 'text',
+//     'receiver': 551338674692820992,
+//     'sender': 552415467919118336,
+//     'content': '早安'
+//   },
+//   {
+//     'timestamp': 1709969440757,
+//     'type': 'text',
+//     'sender': 551338674692820992,
+//     'receiver': 552415467919118336,
+//     'content': '你也早'
+//   },
+//   {
+//     'timestamp': 1709969440758,
+//     'type': 'text',
+//     'receiver': 552415467919118336,
+//     'sender': 551338674692820992,
+//     'content': '今天天氣如何？'
+//   },
+//   {
+//     'timestamp': 1709969440759,
+//     'type': 'text',
+//     'sender': 552415467919118336,
+//     'receiver': 551338674692820992,
+//     'content': '天氣很好'
+//   },
+//   {
+//     'timestamp': 1709969440760,
+//     'type': 'text',
+//     'receiver': 552415467919118336,
+//     'sender': 551338674692820992,
+//     'content': '那我們去公園吧'
+//   },
+//   {
+//     'timestamp': 1709969440761,
+//     'type': 'text',
+//     'sender': 552415467919118336,
+//     'receiver': 551338674692820992,
+//     'content': '好的，我們見面的地點在哪裡？'
+//   },
+//   {
+//     'timestamp': 1709969440762,
+//     'type': 'text',
+//     'receiver': 552415467919118336,
+//     'sender': 551338674692820992,
+//     'content': '在公園的入口處見面'
+//   },
+//   {
+//     'timestamp': 1709969440763,
+//     'type': 'text',
+//     'sender': 552415467919118336,
+//     'receiver': 551338674692820992,
+//     'content': '好的，我會準時到達'
+//   },
+// ];
 
-// // 測試：檢查是否有訊息
-// SafeMsgStore safeMsgStore = SafeMsgStore();
-// void fetchAndDisplayMessages() async {
-//   String remoteUid = '552415467919118336';
-//   List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
+// 測試：檢查是否有訊息
 
-//   if (messages.isEmpty) {
-//     print('No messages available.');
-//     return;
-//   } else {
-//     for (String message in messages) {
-//       print('function Active sucessful');
-//       print(message);
-//     }
-//   }
-// }
 
-class ReadMessageList extends StatelessWidget {
-  const ReadMessageList({Key? key}) : super(key: key);
-  // SafeMsgStore msgStore = SafeMsgStore();
+
+class ReadMessageList extends StatefulWidget {
+
+
+  const ReadMessageList({Key? key}) : super(key: key); 
   @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: msgs.length,
-      itemBuilder: (context, index) {
-        final message = msgs[index];
-        print('發送者的uid $ourUid');
-        print(message['sender']);
-        //判斷是否為當前用戶
-        final isOwnMessage = message['sender'].toString() == ourUid;
-        print(isOwnMessage);
+  State<ReadMessageList> createState() => _ReadMessageListState();
+}
 
-        return isOwnMessage
-            ? MessageTitle(
-                message: message['content'],
-                messageDate: DateFormat('h:mm a').format(
-                  DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
-                ),
-              )
-            : MessageOwnTitle(
-                message: message['content'],
-                messageDate: DateFormat('h:mm a').format(
-                  DateTime.fromMillisecondsSinceEpoch(message['timestamp']),
-                ),
-              );
+class _ReadMessageListState extends State<ReadMessageList> {
+  final SafeMsgStore safeMsgStore = SafeMsgStore();
+  List<Map<String, dynamic>> realMsg = []; // 將 realMsg 定義在狀態中保存訊息
+
+
+  Stream<List<Map<String, dynamic>>> fetchAndDisplayMessages() async* {
+  String remoteUid = '552415467919118336';
+  while (true) {
+    List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
+    if (messages.isNotEmpty) {
+      List<Map<String, dynamic>> parsedMessages = messages.map((message) => jsonDecode(message)).toList().cast<Map<String, dynamic>>();
+      yield parsedMessages;
+    }
+    await Future.delayed(const Duration(seconds: 1)); // 每秒鐘檢查一次新訊息
+  }
+}
+  
+  @override
+ @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Map<String, dynamic>>>(
+      stream: fetchAndDisplayMessages(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const Text('無訊息');
+        List<Map<String, dynamic>> realMsg = snapshot.data!;
+        return ListView.builder(
+          itemCount: realMsg.length,
+          itemBuilder: (context, index) {
+            final realmessage = realMsg[index];
+            int timestamp = int.parse(realmessage['timestamp']);
+            final isOwnMessage = realmessage['sender'].toString() == ourUid;
+            return isOwnMessage
+                ? MessageTitle(
+                    message: realmessage['content'],
+                    messageDate: DateFormat('h:mm a').format(
+                      DateTime.fromMillisecondsSinceEpoch(timestamp),
+                    ),
+                  )
+                : MessageOwnTitle(
+                    message: realmessage['content'],
+                    messageDate: DateFormat('h:mm a').format(
+                      DateTime.fromMillisecondsSinceEpoch(timestamp),
+                    ),
+                  );
+          },
+        );
       },
     );
   }
@@ -338,7 +353,7 @@ class _ActionBarState extends State<_ActionBar> {
   @override
   void initState() {
     super.initState();
-    sendMsg = TextEditingController();
+    sendMsg = TextEditingController();  
     remoteUid = widget.messageData.remoteUid; // 在這裡初始化 remoteUid
     sendMsg.addListener(_onTextChange);
   }
@@ -346,17 +361,16 @@ class _ActionBarState extends State<_ActionBar> {
   Timer? _debounce;
 
   Future<void> _sendMessage() async {
-    // fetchAndDisplayMessages();   檢查對方用戶是否有訊息
-    if (sendMsg.text.isNotEmpty) {
-      print('以下是所有訊息');
+    
+    if (sendMsg.text.trim().isNotEmpty) {
+      print('[chat_room_page]以下是所有訊息');
       print(sendMsg.text);
-      print('對方的uid $remoteUid');
+      print('[chat_room_page]對方的uid $remoteUid');
       onSendMsgBtnPressed(remoteUid, sendMsg.text);
-
-      // TODO: 寫入傳送訊息的邏輯
-
+      print('[chat_room_page]準備刪除輸入匡訊息');
       sendMsg.clear();
       FocusScope.of(context).unfocus();
+      print('[chat_room_page]刪除完畢');
     }
   }
 
@@ -364,7 +378,7 @@ class _ActionBarState extends State<_ActionBar> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(seconds: 1), () {
       if (mounted) {
-        // StreamChannel.of(context).channel.keyStroke();
+
       }
     });
   }
@@ -372,9 +386,9 @@ class _ActionBarState extends State<_ActionBar> {
   @override
   void dispose() {
     sendMsg.removeListener(_onTextChange);
+    super.dispose();
     sendMsg.dispose();
 
-    super.dispose();
   }
 
   @override

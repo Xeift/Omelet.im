@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:omelet/utils/return_msg_to_server.dart';
 import 'package:omelet/signal_protocol/encrypt_msg.dart';

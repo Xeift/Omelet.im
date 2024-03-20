@@ -80,6 +80,8 @@ class LoadingPageState extends State<LoadingPage> {
             print('--------------------------------\n');
             final safeMsgStore = SafeMsgStore();
             await safeMsgStore.storeReceivedMsg(msg);
+
+            // TODO: 顯示一則新訊息在聊天室
           });
         });
 

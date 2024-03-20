@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:omelet/componets/button/on_send_msg_press.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
+import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/message/safe_msg_store.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
@@ -42,7 +43,7 @@ class ChatRoomPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: DemoMessageList(
+            child: ReadMessageList(
               messageData: messageData,
             ), // 传递messageData参数给DemoMessageList
           ),
@@ -148,38 +149,38 @@ List<Map<String, dynamic>> msgs = [
 ];
 
 //測試：檢查是否有訊息
-SafeMsgStore safeMsgStore = SafeMsgStore();
-void fetchAndDisplayMessages() async {
-  String remoteUid = '552415467919118336';
-  List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
+// SafeMsgStore safeMsgStore = SafeMsgStore();
+// void fetchAndDisplayMessages() async {
+//   String remoteUid = '552415467919118336';
+//   List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
 
-  if (messages.isEmpty) {
-    print('No messages available.');
-    return;
-  } else {
-    for (String message in messages) {
-      print('function Active sucessful');
-      print(message);
-    }
-  }
-}
+//   if (messages.isEmpty) {
+//     print('No messages available.');
+//     return;
+//   } else {
+//     for (String message in messages) {
+//       print('function Active sucessful');
+//       print(message);
+//     }
+//   }
+// }
 
-class DemoMessageList extends StatelessWidget {
-  const DemoMessageList({Key? key, required this.messageData})
+class ReadMessageList extends StatelessWidget {
+  const ReadMessageList({Key? key, required this.messageData})
       : super(key: key);
   final MessageData messageData;
 
   @override
   Widget build(BuildContext context) {
-    final uid = messageData.senderUid;
+
     return ListView.builder(
       itemCount: msgs.length,
       itemBuilder: (context, index) {
         final message = msgs[index];
-        print('發送者的uid $uid');
+        print('發送者的uid $ourUid');
         print(message['sender']);
         //判斷是否為當前用戶
-        final isOwnMessage = message['sender'].toString() == uid;
+        final isOwnMessage = message['sender'].toString() == ourUid;
         print(isOwnMessage);
 
         return isOwnMessage

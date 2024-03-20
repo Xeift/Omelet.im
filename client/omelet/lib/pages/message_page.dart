@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:omelet/componets/message/avatar.dart';
+import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/utils/load_local_info.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
@@ -16,6 +17,7 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -28,23 +30,10 @@ class _MessagePageState extends State<MessagePage> {
 
   Widget _delegate(BuildContext context, int index) {
     final date = Helpers.randomDate();
-    final Future<String> ourUid = loadUid(); // 將 Future 保存為變量，而不是使用 await
-    // TODO: 為什麼不用 await？
-    return FutureBuilder<String>(
-      future: ourUid,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // 在等待時顯示加載指示器
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}'); // 如果發生錯誤，顯示錯誤消息
-        } else {
-          // 如果 Future 完成，則使用其值來構建 MessageTitle 小部件
-          print('OurUid is {$ourUid}');
           return MessageItemTitle(
             messageData: MessageData(
               senderName: 'TestUser',
               message: 'HIHI',
-              senderUid: snapshot.data!, // 使用 Future 的值
               remoteUid: '552415467919118336', // 請確定您有合適的 remoteUid
               messageDate: date,
               dateMessage: Jiffy.parse('1997/09/23').fromNow(),
@@ -52,9 +41,6 @@ class _MessagePageState extends State<MessagePage> {
             ),
           );
         }
-      },
-    );
-  }
 }
 
 class MessageItemTitle extends StatelessWidget {

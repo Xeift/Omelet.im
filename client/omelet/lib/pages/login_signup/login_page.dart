@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/theme/theme_constants.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
 import '../../componets/alert/alert_msg.dart';
 import '../nav_bar_control_page.dart';
@@ -12,7 +13,9 @@ import 'sign_up_page.dart';
 import 'package:omelet/api/post/login_api.dart';
 import 'package:omelet/signal_protocol/generate_and_store_key.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart'
-    show LoadingPageState;
+show LoadingPageState;
+
+String ourUid = '';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
@@ -186,7 +189,8 @@ class LoginPageState extends State<LoginPage> {
                 // 產生並儲存 Signal Protocol 金鑰
                 await generateAndStoreKey();
                 await LoadingPageState().initSocket();
-
+                ourUid = await loadUid();
+                print('登入後的uid:{$ourUid}');
                 print('準備跳轉至使用者介面');
                 nextPage();
                 break;

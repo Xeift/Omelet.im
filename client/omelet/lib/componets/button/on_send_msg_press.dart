@@ -62,8 +62,8 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
 
   // 加密訊息
   final encryptedMsg = await encryptMsg(theirUid, msgContent);
-  final ourEncryptedMsg = encryptedMsg['ourEncryptedMsg'];
-  final theirEncryptedMsg = encryptedMsg['theirEncryptedMsg'];
+  final ourEncryptedMsg = encryptedMsg['ourMsgInfo'];
+  final theirEncryptedMsg = encryptedMsg['theirMsgInfo'];
 
   print('🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈');
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');

@@ -9,6 +9,7 @@ import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
 import 'package:omelet/message/safe_msg_store.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 late io.Socket socket;
 

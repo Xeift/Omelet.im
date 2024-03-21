@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/utils/get_user_uid.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -80,8 +82,15 @@ class LoadingPageState extends State<LoadingPage> {
             print('--------------------------------\n');
             final safeMsgStore = SafeMsgStore();
             await safeMsgStore.storeReceivedMsg(msg);
-
+              print('[loading_page.dart]新增新接收到的訊息，模擬顯示在聊天室上');
+              print('[loading_page.dart]接收到資料：{$msg}');
             // TODO: 接收訊息時：顯示一則新訊息在聊天室
+            MessageTitle(
+                      message: msg['content'],
+                      messageDate: DateFormat('h:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(msg['timestamp']),
+                      ),
+             );
           });
         });
 

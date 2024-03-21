@@ -14,7 +14,7 @@ import 'package:omelet/theme/theme_constants.dart';
 //import 'package:omelet/api/post/login_api.dart';
 import 'package:omelet/models/message_data.dart';
 import 'package:omelet/utils/get_user_uid.dart';
-
+String remoteUid = '552415467919118336';
 class ChatRoomPage extends StatelessWidget {
   static Route route(MessageData data) => MaterialPageRoute(
       builder: (context) => ChatRoomPage(
@@ -158,36 +158,46 @@ class ReadMessageList extends StatefulWidget {
 class _ReadMessageListState extends State<ReadMessageList> {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
   List<Map<String, dynamic>> realMsg = []; // 將 realMsg 定義在狀態中保存訊息
-
-  Stream<List<Map<String, dynamic>>> fetchAndDisplayMessages() async* {
-    String remoteUid = '552415467919118336';
-    while (true) {
-      List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
-      if (messages.isNotEmpty) {
-        List<Map<String, dynamic>> parsedMessages = messages
-            .map((message) => jsonDecode(message))
-            .toList()
-            .cast<Map<String, dynamic>>();
-        yield parsedMessages;
-      }
-      await Future.delayed(const Duration(seconds: 1)); // 每秒鐘檢查一次新訊息
+  Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
+    List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
+    if (messages.isNotEmpty) {
+      List<Map<String, dynamic>> parsedMessages = messages
+          .map((message) => jsonDecode(message))
+          .toList()
+          .cast<Map<String, dynamic>>();
+      print('[chat_room_page.dart]抓取內存訊息{$parsedMessages}');
+      return parsedMessages;
+    } else {
+      print('[chat_room_page.dart]沒有訊息資料');
+      return []; // 添加一個默認返回值，例如空列表
     }
   }
-
-  @override
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Map<String, dynamic>>>(
-      stream: fetchAndDisplayMessages(),
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchAndDisplayMessages(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Text('無訊息');
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(); // 在等待時顯示進度指示器
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Text('無訊息');
+        }
         List<Map<String, dynamic>> realMsg = snapshot.data!;
+        
+        // 按時間先後順序對訊息進行排序
+        realMsg.sort((a, b) {
+          int timestampA = int.parse(a['timestamp']);
+          int timestampB = int.parse(b['timestamp']);
+          return timestampA.compareTo(timestampB);
+        });
+
         return ListView.builder(
           itemCount: realMsg.length,
           itemBuilder: (context, index) {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
-            final isOwnMessage = realmessage['sender'].toString() == ourUid;
+            final isOwnMessage = realmessage['sender'].toString() != ourUid;
             return isOwnMessage
                 ? MessageTitle(
                     message: realmessage['content'],
@@ -206,6 +216,7 @@ class _ReadMessageListState extends State<ReadMessageList> {
       },
     );
   }
+
 }
 
 class MessageTitle extends StatelessWidget {
@@ -343,7 +354,6 @@ class _ActionBar extends StatefulWidget {
 
 class _ActionBarState extends State<_ActionBar> {
   late TextEditingController sendMsg;
-  late String remoteUid;
   @override
   _ActionBarState() {
     sendMsg = TextEditingController();
@@ -352,7 +362,6 @@ class _ActionBarState extends State<_ActionBar> {
   void initState() {
     super.initState();
     sendMsg = TextEditingController();
-    remoteUid = widget.messageData.remoteUid; // 在這裡初始化 remoteUid
     sendMsg.addListener(_onTextChange);
   }
 

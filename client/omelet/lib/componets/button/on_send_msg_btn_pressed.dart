@@ -46,4 +46,6 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
         msgContent);
     socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
   }
+
+  // TODO: 發送訊息時：顯示一則新訊息在聊天室
 }

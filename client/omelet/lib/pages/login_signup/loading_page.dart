@@ -81,7 +81,7 @@ class LoadingPageState extends State<LoadingPage> {
             final safeMsgStore = SafeMsgStore();
             await safeMsgStore.storeReceivedMsg(msg);
 
-            // TODO: 顯示一則新訊息在聊天室
+            // TODO: 接收訊息時：顯示一則新訊息在聊天室
           });
         });
 

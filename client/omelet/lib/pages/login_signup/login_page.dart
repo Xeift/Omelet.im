@@ -13,7 +13,7 @@ import 'sign_up_page.dart';
 import 'package:omelet/api/post/login_api.dart';
 import 'package:omelet/signal_protocol/generate_and_store_key.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart'
-show LoadingPageState;
+    show LoadingPageState;
 
 String ourUid = '';
 
@@ -89,12 +89,12 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget buildPasswordTextField() {
-    //密碼輸入匡
+    // 密碼輸入框
     return TextFormField(
       obscureText: _isObscure,
       controller: passwordTextFieldController,
       decoration: InputDecoration(
-        //密碼遮蔽button
+        // 隱藏密碼按鈕
         labelText: 'Password',
         suffixIcon: IconButton(
           icon: Icon(
@@ -102,7 +102,7 @@ class LoginPageState extends State<LoginPage> {
             color: _eyeColor,
           ),
           onPressed: () {
-            //密碼遮蔽button，onpress event
+            // 隱藏密碼按鈕 onpress event
             setState(() {
               _isObscure = !_isObscure;
               _eyeColor = (_isObscure
@@ -116,7 +116,7 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget buildEmailTextField() {
-    //Email輸入框
+    // Email輸入框
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Email Address'),
       controller: emailTextFieldController,
@@ -124,7 +124,7 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget buildForgetPassword() {
-    //忘記密碼
+    // 忘記密碼
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Align(
@@ -147,7 +147,7 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget buildLoginButton() {
-    //登入按鈕，按下可以送出表單
+    // 登入按鈕，按下可以送出表單
     return Align(
       child: SizedBox(
         height: 50,

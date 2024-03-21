@@ -43,7 +43,7 @@ class ChatRoomPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-           const Expanded(
+          const Expanded(
             child: ReadMessageList(),
           ),
           _ActionBar(
@@ -149,12 +149,8 @@ class AppBarTitle extends StatelessWidget {
 
 // 測試：檢查是否有訊息
 
-
-
 class ReadMessageList extends StatefulWidget {
-
-
-  const ReadMessageList({Key? key}) : super(key: key); 
+  const ReadMessageList({Key? key}) : super(key: key);
   @override
   State<ReadMessageList> createState() => _ReadMessageListState();
 }
@@ -163,21 +159,23 @@ class _ReadMessageListState extends State<ReadMessageList> {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
   List<Map<String, dynamic>> realMsg = []; // 將 realMsg 定義在狀態中保存訊息
 
-
   Stream<List<Map<String, dynamic>>> fetchAndDisplayMessages() async* {
-  String remoteUid = '552415467919118336';
-  while (true) {
-    List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
-    if (messages.isNotEmpty) {
-      List<Map<String, dynamic>> parsedMessages = messages.map((message) => jsonDecode(message)).toList().cast<Map<String, dynamic>>();
-      yield parsedMessages;
+    String remoteUid = '552415467919118336';
+    while (true) {
+      List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
+      if (messages.isNotEmpty) {
+        List<Map<String, dynamic>> parsedMessages = messages
+            .map((message) => jsonDecode(message))
+            .toList()
+            .cast<Map<String, dynamic>>();
+        yield parsedMessages;
+      }
+      await Future.delayed(const Duration(seconds: 1)); // 每秒鐘檢查一次新訊息
     }
-    await Future.delayed(const Duration(seconds: 1)); // 每秒鐘檢查一次新訊息
   }
-}
-  
+
   @override
- @override
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Map<String, dynamic>>>(
       stream: fetchAndDisplayMessages(),
@@ -353,7 +351,7 @@ class _ActionBarState extends State<_ActionBar> {
   @override
   void initState() {
     super.initState();
-    sendMsg = TextEditingController();  
+    sendMsg = TextEditingController();
     remoteUid = widget.messageData.remoteUid; // 在這裡初始化 remoteUid
     sendMsg.addListener(_onTextChange);
   }
@@ -361,7 +359,6 @@ class _ActionBarState extends State<_ActionBar> {
   Timer? _debounce;
 
   Future<void> _sendMessage() async {
-    
     if (sendMsg.text.trim().isNotEmpty) {
       print('[chat_room_page]以下是所有訊息');
       print(sendMsg.text);
@@ -377,9 +374,7 @@ class _ActionBarState extends State<_ActionBar> {
   void _onTextChange() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(seconds: 1), () {
-      if (mounted) {
-
-      }
+      if (mounted) {}
     });
   }
 
@@ -388,7 +383,6 @@ class _ActionBarState extends State<_ActionBar> {
     sendMsg.removeListener(_onTextChange);
     super.dispose();
     sendMsg.dispose();
-
   }
 
   @override

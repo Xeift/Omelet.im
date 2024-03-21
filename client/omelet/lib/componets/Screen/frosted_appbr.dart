@@ -10,18 +10,19 @@ class FrostedAppbar extends StatefulWidget {
   Widget leading;
   List<Widget> actions;
   Color color;
-  double blurStrengthX; // 修正拼寫錯誤
+  double blurStrengthX;
   double blurStrengthY;
 
   FrostedAppbar({
     super.key,
     this.height = 70,
     required this.actions,
-    required this.blurStrengthX, // 修正拼寫錯誤
-    required this.blurStrengthY, // 修正拼寫錯誤
+    required this.blurStrengthX,
+    required this.blurStrengthY,
     required this.color,
     required this.leading,
-    required this.title, required IconThemeData iconTheme, // 修正冒號錯誤
+    required this.title,
+    required IconThemeData iconTheme,
   });
   @override
   FrostedAppbarState createState() => FrostedAppbarState();
@@ -55,7 +56,6 @@ class FrostedAppbarState extends State<FrostedAppbar> {
               Expanded(
                 child: widget.title,
               ),
-              // 移除這裡的逗號
               Row(
                 children: widget.actions,
               ),

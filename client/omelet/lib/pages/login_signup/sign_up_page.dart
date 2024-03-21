@@ -84,13 +84,13 @@ class SignUpPageState extends State<SignUpPage> {
   }
 
   Widget buildSignUpPasswordTextField() {
-    //密碼輸入匡
+    // 密碼輸入框
     return TextFormField(
       obscureText: _isObscure,
       controller: passwordSignUpTextFieldController,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        //密碼遮蔽button
+        // 隱藏密碼按鈕
         labelText: 'Password',
         suffixIcon: IconButton(
           icon: Icon(
@@ -98,7 +98,7 @@ class SignUpPageState extends State<SignUpPage> {
             color: _eyeColor,
           ),
           onPressed: () {
-            //密碼遮蔽button，onpress event
+            // 隱藏密碼按鈕 onpress event
             setState(() {
               _isObscure = !_isObscure;
               _eyeColor = (_isObscure
@@ -112,7 +112,7 @@ class SignUpPageState extends State<SignUpPage> {
   }
 
   Widget buildTitle() {
-    // Login字樣
+    // Login 字樣
     return const Padding(
       padding: EdgeInsets.all(8),
       child: Text(

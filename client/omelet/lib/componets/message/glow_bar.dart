@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:omelet/theme/theme_constants.dart';
 

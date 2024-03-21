@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-
 import 'package:omelet/utils/return_msg_to_server.dart';
 import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
@@ -18,6 +17,7 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
   final ourEncryptedMsg = encryptedMsg['ourMsgInfo'];
   final theirEncryptedMsg = encryptedMsg['theirMsgInfo'];
 
+  // 將加密過的訊息傳回 Server
   for (var deviceId in ourEncryptedMsg.keys) {
     var singleMsg = await returnMsgToServer(deviceId, ourEncryptedMsg[deviceId],
         ourUid, ourUid, theirUid, 'text', msgContent);

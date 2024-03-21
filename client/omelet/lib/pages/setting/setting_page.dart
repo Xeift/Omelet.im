@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:omelet/models/setting.dart';
 import 'package:provider/provider.dart';
 
-import '../../componets/setting/avatarcard.dart';
+import '../../componets/setting/avatar_card.dart';
 import '../../componets/setting/setting_title.dart';
 import '../../theme/theme_provider.dart';
-
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -18,8 +17,6 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   @override
-
-
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -34,12 +31,16 @@ class _SettingPageState extends State<SettingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const AvatarCard(),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               const Divider(),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Column(
                 children: List.generate(
-                  settings.length, 
+                  settings.length,
                   (index) => SettingTitle(setting: settings[index]),
                 ),
               ),
@@ -49,12 +50,13 @@ class _SettingPageState extends State<SettingPage> {
                 title: Text(
                   'Dark theme',
                   style: textTheme.titleSmall?.copyWith(
-                    color:Theme.of(context).colorScheme.primary,
-                  ), 
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
-                 onTap: (){
-                  Provider.of<ThemeProvier>(context,listen: false).toggleTheme();
-                 },
+                onTap: () {
+                  Provider.of<ThemeProvier>(context, listen: false)
+                      .toggleTheme();
+                },
               ),
             ],
           ),

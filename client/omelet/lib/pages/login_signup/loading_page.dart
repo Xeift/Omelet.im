@@ -72,7 +72,6 @@ class LoadingPageState extends State<LoadingPage> {
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const NavBarControlPage()));
-              return;
             }
           });
 

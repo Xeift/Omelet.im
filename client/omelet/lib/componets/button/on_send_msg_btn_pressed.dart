@@ -2,8 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:intl/intl.dart';
-import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/utils/return_msg_to_server.dart';
 import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
@@ -49,10 +47,10 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
     socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
   }
   print('[on_send_msg_btn_press.dart]新增新訊息，模擬顯示在聊天室上');
-  MessageOwnTitle(
-                    message: msgContent,
-                    messageDate: DateFormat('h:mm a').format(
-                      DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch),
-                    ),
-                  );
+  //TODO:發送訊息時，顯示一則新訊息在聊天室
+
 }
+
+
+
+

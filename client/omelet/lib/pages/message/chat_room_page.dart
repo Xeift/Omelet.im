@@ -96,58 +96,22 @@ class AppBarTitle extends StatelessWidget {
 //     'sender': 552415467919118336,
 //     'content': '早安'
 //   },
-//   {
-//     'timestamp': 1709969440757,
-//     'type': 'text',
-//     'sender': 551338674692820992,
-//     'receiver': 552415467919118336,
-//     'content': '你也早'
-//   },
-//   {
-//     'timestamp': 1709969440758,
-//     'type': 'text',
-//     'receiver': 552415467919118336,
-//     'sender': 551338674692820992,
-//     'content': '今天天氣如何？'
-//   },
-//   {
-//     'timestamp': 1709969440759,
-//     'type': 'text',
-//     'sender': 552415467919118336,
-//     'receiver': 551338674692820992,
-//     'content': '天氣很好'
-//   },
-//   {
-//     'timestamp': 1709969440760,
-//     'type': 'text',
-//     'receiver': 552415467919118336,
-//     'sender': 551338674692820992,
-//     'content': '那我們去公園吧'
-//   },
-//   {
-//     'timestamp': 1709969440761,
-//     'type': 'text',
-//     'sender': 552415467919118336,
-//     'receiver': 551338674692820992,
-//     'content': '好的，我們見面的地點在哪裡？'
-//   },
-//   {
-//     'timestamp': 1709969440762,
-//     'type': 'text',
-//     'receiver': 552415467919118336,
-//     'sender': 551338674692820992,
-//     'content': '在公園的入口處見面'
-//   },
-//   {
-//     'timestamp': 1709969440763,
-//     'type': 'text',
-//     'sender': 552415467919118336,
-//     'receiver': 551338674692820992,
-//     'content': '好的，我會準時到達'
-//   },
-// ];
 
 // 測試：檢查是否有訊息
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class ReadMessageList extends StatefulWidget {
   const ReadMessageList({Key? key}) : super(key: key);
@@ -157,6 +121,8 @@ class ReadMessageList extends StatefulWidget {
 
 class _ReadMessageListState extends State<ReadMessageList> {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
+
+
   List<Map<String, dynamic>> realMsg = []; // 將 realMsg 定義在狀態中保存訊息
   Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
     List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
@@ -216,7 +182,6 @@ class _ReadMessageListState extends State<ReadMessageList> {
       },
     );
   }
-
 }
 
 class MessageTitle extends StatelessWidget {

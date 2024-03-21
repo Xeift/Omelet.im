@@ -3,7 +3,7 @@ import 'package:omelet/pages/notification_page.dart';
 
 import '../pages/setting/setting_page.dart';
 import '../theme/theme_constants.dart';
-import '../pages/message_page.dart';
+import 'message_list_page.dart';
 // import '../pages/notification_page.dart';
 
 class NavBarControlPage extends StatefulWidget {
@@ -21,11 +21,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
     MessagePage(),
     SettingPage(),
   ];
-  final List<String> title = const [
-    'Notification',
-    'Message',
-    'Setting'
-  ];
+  final List<String> title = const ['Notification', 'Message', 'Setting'];
 
   @override
   Widget build(BuildContext context) {
@@ -33,48 +29,48 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
       print(pageIndex.value);
     });
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: AppBar(
-          title: ValueListenableBuilder<int>(
-            valueListenable: pageIndex,
-            builder: (context, value, child) {
-              return Text(title[value]);
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        title: ValueListenableBuilder<int>(
+          valueListenable: pageIndex,
+          builder: (context, value, child) {
+            return Text(title[value]);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingPage()),
+              );
             },
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SettingPage()),
-                );
-              },
-            ),
-          ],
-          leading: const Icon(Icons.account_circle),
-          backgroundColor:const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
-        ),
-        body: ValueListenableBuilder(
-          valueListenable: pageIndex,
-          builder: (BuildContext context, int value, _) {
-            return pages[value];
-          },
-        ),
-        bottomNavigationBar: BottonNavbar(
-          onItemSelected: (index) {
-            setState(() {
-              pageIndex.value = index;
-            });
-          },
-        ),
-      
+        ],
+        leading: const Icon(Icons.account_circle),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
+      ),
+      body: ValueListenableBuilder(
+        valueListenable: pageIndex,
+        builder: (BuildContext context, int value, _) {
+          return pages[value];
+        },
+      ),
+      bottomNavigationBar: BottonNavbar(
+        onItemSelected: (index) {
+          setState(() {
+            pageIndex.value = index;
+          });
+        },
+      ),
     );
   }
 }
 
 class BottonNavbar extends StatefulWidget {
-  const BottonNavbar({Key? key, required this.onItemSelected}) : super(key: key);
+  const BottonNavbar({Key? key, required this.onItemSelected})
+      : super(key: key);
 
   final ValueChanged<int> onItemSelected;
 
@@ -84,8 +80,8 @@ class BottonNavbar extends StatefulWidget {
 
 class _BottonNavbarState extends State<BottonNavbar> {
   var selectedIndex = 1;
-  
-  void handleItemSelected(int index){
+
+  void handleItemSelected(int index) {
     setState(() {
       selectedIndex = index;
     });
@@ -114,23 +110,23 @@ class _BottonNavbarState extends State<BottonNavbar> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             NavBarItem(
-              index: 0, 
-              label: 'Notifications', 
-              icon: Icons.notifications, 
-              isSelected: (selectedIndex == 0),
-              onTap: handleItemSelected),
+                index: 0,
+                label: 'Notifications',
+                icon: Icons.notifications,
+                isSelected: (selectedIndex == 0),
+                onTap: handleItemSelected),
             NavBarItem(
-              index: 1, 
-              label: '   Message   ', 
-              icon: Icons.message, 
-              isSelected: (selectedIndex == 1),
-              onTap: handleItemSelected),
+                index: 1,
+                label: '   Message   ',
+                icon: Icons.message,
+                isSelected: (selectedIndex == 1),
+                onTap: handleItemSelected),
             NavBarItem(
-              index: 2, 
-              label: '     Setting    ', 
-              icon: Icons.settings, 
-              isSelected: (selectedIndex == 2),
-              onTap: handleItemSelected),
+                index: 2,
+                label: '     Setting    ',
+                icon: Icons.settings,
+                isSelected: (selectedIndex == 2),
+                onTap: handleItemSelected),
           ],
         ),
       ),
@@ -138,10 +134,16 @@ class _BottonNavbarState extends State<BottonNavbar> {
   }
 }
 
-
 //navbar bottom
 class NavBarItem extends StatelessWidget {
-  const NavBarItem({Key? key, required this.label, required this.icon, required this.index, required this.onTap,this.isSelected = false}) : super(key: key);
+  const NavBarItem(
+      {Key? key,
+      required this.label,
+      required this.icon,
+      required this.index,
+      required this.onTap,
+      this.isSelected = false})
+      : super(key: key);
 
   final ValueChanged<int> onTap;
   final int index;
@@ -162,13 +164,16 @@ class NavBarItem extends StatelessWidget {
               icon,
               size: 20,
               color: isSelected ? AppColors.secondary : null,
-              ),
-            const SizedBox(height: 7,),
-            Text(
-              label,
-              style: isSelected 
-              ? const TextStyle(fontSize: 11,color:AppColors.secondary)
-              : const TextStyle(fontSize: 11,)),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            Text(label,
+                style: isSelected
+                    ? const TextStyle(fontSize: 11, color: AppColors.secondary)
+                    : const TextStyle(
+                        fontSize: 11,
+                      )),
           ],
         ),
       ),

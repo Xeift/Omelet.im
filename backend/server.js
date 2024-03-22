@@ -35,6 +35,7 @@ app.use('/api/v1/upload-img', rateLimit.authLimiter, require('./api/post/uploadI
 app.use('/api/v1/get-user-public-info', rateLimit.authLimiter, require('./api/get/getUserPublicInfo.js'));
 app.use('/api/v1/send-friend-request', rateLimit.authLimiter, require('./api/post/sendFriendRequest.js'));
 app.use('/api/v1/reply-friend-request', rateLimit.authLimiter, require('./api/post/replyFriendRequest.js'));
+app.use('/api/v1/get-friend-list', rateLimit.authLimiter, require('./api/get/getFriendList.js'));
 
 
 app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confirm-register-email.js'));

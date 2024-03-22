@@ -42,7 +42,7 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<void> initSocket() async {
     try {
-      // TODO: storage debug
+      // TODO: 刪除所有儲存空間，debug 用
       // const storage = FlutterSecureStorage();
       // await storage.deleteAll();
 
@@ -81,15 +81,15 @@ class LoadingPageState extends State<LoadingPage> {
             print('--------------------------------\n');
             final safeMsgStore = SafeMsgStore();
             await safeMsgStore.storeReceivedMsg(msg);
-              print('[loading_page.dart]新增新接收到的訊息，模擬顯示在聊天室上');
-              print('[loading_page.dart]接收到資料：{$msg}');
+            print('[loading_page.dart]新增新接收到的訊息，模擬顯示在聊天室上');
+            print('[loading_page.dart]接收到資料：{$msg}');
             // TODO: 接收訊息時：顯示一則新訊息在聊天室
             MessageTitle(
-                      message: msg['content'],
-                      messageDate: DateFormat('h:mm a').format(
-                        DateTime.fromMillisecondsSinceEpoch(msg['timestamp']),
-                      ),
-             );
+              message: msg['content'],
+              messageDate: DateFormat('h:mm a').format(
+                DateTime.fromMillisecondsSinceEpoch(msg['timestamp']),
+              ),
+            );
           });
         });
 

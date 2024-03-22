@@ -71,7 +71,7 @@ module.exports = function(io) {
                     socket
                         .to(socketId)
                         .emit('serverForwardMsgToClient', newMsg);
-                    console.log('[socket.js] done emit serverForwardMsgToClient');
+                    console.log('[socket.js] receiver online\ndone emit serverForwardMsgToClient');
                     console.log('--------------------------------\n');
                 }
                 else { // 接收者離線

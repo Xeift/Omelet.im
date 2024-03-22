@@ -14,7 +14,13 @@ import 'package:omelet/theme/theme_constants.dart';
 //import 'package:omelet/api/post/login_api.dart';
 import 'package:omelet/models/message_data.dart';
 import 'package:omelet/utils/get_user_uid.dart';
-String remoteUid = '552415467919118336';
+
+// TODO: 需要修改遠端 UID
+
+String remoteUid = '552415467919118336'; // xeift
+
+// String remoteUid = '551338674692820992'; // np
+
 class ChatRoomPage extends StatelessWidget {
   static Route route(MessageData data) => MaterialPageRoute(
       builder: (context) => ChatRoomPage(
@@ -99,20 +105,6 @@ class AppBarTitle extends StatelessWidget {
 
 // 測試：檢查是否有訊息
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class ReadMessageList extends StatefulWidget {
   const ReadMessageList({Key? key}) : super(key: key);
   @override
@@ -121,7 +113,6 @@ class ReadMessageList extends StatefulWidget {
 
 class _ReadMessageListState extends State<ReadMessageList> {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
-
 
   List<Map<String, dynamic>> realMsg = []; // 將 realMsg 定義在狀態中保存訊息
   Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
@@ -138,6 +129,7 @@ class _ReadMessageListState extends State<ReadMessageList> {
       return []; // 添加一個默認返回值，例如空列表
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>>(
@@ -150,7 +142,7 @@ class _ReadMessageListState extends State<ReadMessageList> {
           return const Text('無訊息');
         }
         List<Map<String, dynamic>> realMsg = snapshot.data!;
-        
+
         // 按時間先後順序對訊息進行排序
         realMsg.sort((a, b) {
           int timestampA = int.parse(a['timestamp']);

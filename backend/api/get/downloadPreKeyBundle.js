@@ -16,6 +16,7 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
         let theirPreKeyBundle = await preKeyBundleController.downloadMultiDevicesPreKeyBundle(theirUid, theirOpkIds);
 
 
+        console.log(`[downloadPreKeyBundle.js] ourPreKeyBundle: ${JSON.stringify(ourPreKeyBundle)}`);
         console.log(`[downloadPreKeyBundle.js] theirPreKeyBundle: ${JSON.stringify(theirPreKeyBundle)}`);
 
         res.status(200).json({

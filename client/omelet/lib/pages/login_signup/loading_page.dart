@@ -42,7 +42,7 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<void> initSocket() async {
     try {
-      // TODO: 刪除所有儲存空間，debug 用
+      // // TODO: 刪除所有儲存空間，debug 用
       // const storage = FlutterSecureStorage();
       // await storage.deleteAll();
 
@@ -87,7 +87,8 @@ class LoadingPageState extends State<LoadingPage> {
             MessageTitle(
               message: msg['content'],
               messageDate: DateFormat('h:mm a').format(
-                DateTime.fromMillisecondsSinceEpoch(msg['timestamp']),
+                DateTime.fromMillisecondsSinceEpoch(
+                    int.parse(msg['timestamp'])),
               ),
             );
           });

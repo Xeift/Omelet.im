@@ -145,6 +145,13 @@ async function findDeviceIdByIpkPub(uid, ipkPub) {
     return deviceId;
 }
 
+async function debugResetPreKeyBundle() {
+    await PreKeyBundleModel.deleteMany({});
+    console.log('所有PreKeyBundleModel的document已被刪除');
+    await VerifiedUserModel.updateMany({}, { $unset: { lastDeviceId: 1 } });
+    console.log('VerifiedUserModel中所有document的deviceId欄位已被刪除');
+}
+
 module.exports = {
     uploadPreKeyBundle,
     downloadMultiDevicesPreKeyBundle,
@@ -154,5 +161,6 @@ module.exports = {
     getSelfOpkStatus,
     getSelfSpkStatus,
     updateSpk,
-    findDeviceIdByIpkPub
+    findDeviceIdByIpkPub,
+    debugResetPreKeyBundle
 };

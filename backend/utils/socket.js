@@ -8,8 +8,7 @@ module.exports = function(io) {
     io.on('connection', (socket) => {
         console.log('--------------------------------');
         console.log(`[socket.js] client ${socket.id} has connected to backend server`);
-
-
+        
         socket.on('clientReturnJwtToServer', async(data) => {
             let token = data.token;
             let ipkPub = data.ipkPub;

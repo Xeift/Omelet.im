@@ -41,6 +41,10 @@ app.use('/pfp', express.static('pfp'));
 
 app.use('*', require('./api/notFound.js'));
 
+// TODO: debug 用，重置 PreKeyBundle
+// const preKeyBundleController = require('./controller/preKeyBundleController.js');
+// preKeyBundleController.debugResetPreKeyBundle();
+
 server.listen(BACKEND_PORT, () => {
     console.log(`後端伺服器已啟動\n${SERVER_URI}`);
 });

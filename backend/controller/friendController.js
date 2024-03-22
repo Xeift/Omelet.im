@@ -46,10 +46,14 @@ async function sendFriendRequest(initiatorUid, targetUid) {
     return true;
 }
 
-
 // 移除好友邀請
 async function removeFriendRequest(initiatorUid, targetUid) {
     await FriendRequestModel.deleteOne({ initiatorUid: initiatorUid, targetUid: targetUid });
+}
+
+async function getFriendRequest(targetUid) {
+    const friendRequests = await FriendRequestModel.find({ targetUid: targetUid }, { _id: 0, __v: 0 });
+    return friendRequests;
 }
 
 module.exports = {
@@ -57,5 +61,6 @@ module.exports = {
     removeFriend,
     getFriendsList,
     sendFriendRequest,
-    removeFriendRequest
+    removeFriendRequest,
+    getFriendRequest
 };

@@ -9,16 +9,19 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let theirUid = req.body.theirUid;
 
     let friendRequestStatus = await friendController.sendFriendRequest(ourUid, theirUid);
+    let isFriend = await friendController.isFriend(theirUid, ourUid);
 
     try {
-        if (friendRequestStatus === 'already_friend') {
+        if (isFriend) {
             res.status(409).json({
                 message: '已為好友，無需傳送好友邀請',
                 data: null,
                 token: null
             });  
+            return;
         }
-        else if (friendRequestStatus === 'duplicate_friend_req') {
+
+        if (friendRequestStatus === 'duplicate_friend_req') {
             res.status(409).json({
                 message: '已傳送過好友邀請，請等待對方回覆',
                 data: null,

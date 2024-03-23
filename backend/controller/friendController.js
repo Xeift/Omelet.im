@@ -35,16 +35,26 @@ async function getFriendsList(uid) {
     return user ? user.friends : [];
 }
 
+// 檢查彼此是否已為好友
+async function isFriend(initiatorUid, targetUid) {
+    const initiatorFriends = await getFriendsList(initiatorUid);
+    if (initiatorFriends.includes(targetUid)) {
+        return true;
+    }
+
+    return false;
+}
+
 /*----------------------------------------------------------------
                                 管理好友邀請
 ----------------------------------------------------------------*/
 
 // 傳送好友邀請
 async function sendFriendRequest(initiatorUid, targetUid) {
-    // 檢查是否已經存在相同的邀請
+    // 檢查是否重複發送好友邀請
     const existingRequest = await FriendRequestModel.findOne({ initiatorUid: initiatorUid, targetUid: targetUid });
     if (existingRequest) {
-        return false;
+        return 'duplicate_friend_req';
     }
 
     const friendRequest = new FriendRequestModel({
@@ -53,7 +63,8 @@ async function sendFriendRequest(initiatorUid, targetUid) {
         timestamp: Date.now(),
     });
     await friendRequest.save();
-    return true;
+
+    return 'success';
 }
 
 // 移除好友邀請
@@ -67,11 +78,19 @@ async function getFriendRequest(targetUid) {
     return friendRequests;
 }
 
+// 檢查好友邀請是否存在
+async function isFriendRequestExists(initiatorUid, targetUid) {
+    const existingRequest = await FriendRequestModel.findOne({ initiatorUid: initiatorUid, targetUid: targetUid });
+    return existingRequest != null;
+}
+
 module.exports = {
     addFriend,
     removeFriend,
     getFriendsList,
+    isFriend,
     sendFriendRequest,
     removeFriendRequest,
-    getFriendRequest
+    getFriendRequest,
+    isFriendRequestExists
 };

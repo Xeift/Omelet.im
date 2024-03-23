@@ -7,7 +7,7 @@ let userIdToRoomId = {};
 module.exports = function(io) {
     io.on('connection', (socket) => {
         console.log('--------------------------------');
-        console.log(`[socket.js] client ${socket.id} has connected to backend server`);
+        console.log(`[socket.js] 客戶端 ${socket.id} 已連接到後端伺服器`);
         
         socket.on('clientReturnJwtToServer', async(data) => {
             let token = data.token;
@@ -25,7 +25,7 @@ module.exports = function(io) {
                 addUser(uid, deviceId, socket.id);
 
                 socket.emit('jwtValid');
-                console.log(`[socket.js] room content👉 ${JSON.stringify(userIdToRoomId)}`);
+                console.log(`[socket.js] 線上客戶端👉 ${JSON.stringify(userIdToRoomId)}`);
                 console.log('--------------------------------\n');
             }
         });
@@ -95,8 +95,8 @@ module.exports = function(io) {
         socket.on('disconnect', () => {
             removeUser(socket.id);
             console.log('--------------------------------');
-            console.log(`[socket.js] client ${socket.id} has disconnected from backend server`);
-            console.log(`[socket.js] room content👉 ${JSON.stringify(userIdToRoomId)}`);
+            console.log(`[socket.js] 客戶端 ${socket.id} 已與後端斷開連接`);
+            console.log(`[socket.js] 目前線上客戶端👉 ${JSON.stringify(userIdToRoomId)}`);
             console.log('--------------------------------\n');
         });
 

@@ -41,10 +41,17 @@ async function getFriendsList(uid) {
 
 // 傳送好友邀請
 async function sendFriendRequest(initiatorUid, targetUid) {
-    // 檢查是否已經存在相同的邀請
+    
+    // 檢查彼此是否已為好友
+    const initiatorFriends = await getFriendsList(initiatorUid);
+    if (initiatorFriends.includes(targetUid)) {
+        return 'already_friend';
+    }
+
+    // 檢查是否重複發送好友邀請
     const existingRequest = await FriendRequestModel.findOne({ initiatorUid: initiatorUid, targetUid: targetUid });
     if (existingRequest) {
-        return false;
+        return 'duplicate_friend_req';
     }
 
     const friendRequest = new FriendRequestModel({
@@ -53,7 +60,8 @@ async function sendFriendRequest(initiatorUid, targetUid) {
         timestamp: Date.now(),
     });
     await friendRequest.save();
-    return true;
+
+    return 'success';
 }
 
 // 移除好友邀請

@@ -126,6 +126,8 @@ class AppBarTitle extends StatelessWidget {
 class ReadMessageList extends StatelessWidget {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
 
+  ReadMessageList({super.key});
+
   Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
     List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
     if (messages.isNotEmpty) {
@@ -148,10 +150,10 @@ class ReadMessageList extends StatelessWidget {
       future: fetchAndDisplayMessages(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // 在等待時顯示進度指示器
+          return const CircularProgressIndicator(); // 在等待時顯示進度指示器
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text('無訊息');
+          return const Text('無訊息');
         }
         List<Map<String, dynamic>> realMsg = snapshot.data!;
 

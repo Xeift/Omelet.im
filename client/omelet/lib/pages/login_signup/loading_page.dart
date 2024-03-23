@@ -90,13 +90,6 @@ class LoadingPageState extends State<LoadingPage> {
             print('[loading_page.dart]接收到資料：{$msg}');
             // TODO: 接收訊息時：顯示一則新訊息在聊天室
             ChatRoomPageState.currenInstance()?.reloadData();
-            MessageTitle(
-              message: msg['content'],
-              messageDate: DateFormat('h:mm a').format(
-                DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(msg['timestamp'])),
-              ),
-            );
           });
         });
 

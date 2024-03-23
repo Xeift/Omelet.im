@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,20 +47,44 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-        elevation: 0.0,
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
-        title: AppBarTitle(
-          messageData: widget.messageData,
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(65), // 設定所需的高度
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 10, sigmaY: 10
+              ),
+              child: AppBar(
+                title: AppBarTitle(messageData: widget.messageData),
+                leading: IconButton(
+                  icon:const Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
+                ),
+                backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+                elevation: 0, 
+              ),
+            ),
+          ),
         ),
-      ),
+
+
+
+
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //       icon: const Icon(Icons.arrow_back_ios),
+      //       onPressed: () {
+      //         Navigator.of(context).pop();
+      //       }),
+      //   elevation: 0.0,
+      //   backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
+      //   title: AppBarTitle(
+      //     messageData: widget.messageData,
+      //   ),
+      // ),
       key:updateChatKey,
       body: Column(
         children: [
@@ -75,7 +100,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   }
     reloadData(){
       setState(() {});
-      print('setState完成');
+      print('[chat_room_page]以刷新頁面');
     }
 }
 
@@ -96,7 +121,7 @@ class AppBarTitle extends StatelessWidget {
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 messageData.senderName,
@@ -325,45 +350,35 @@ class _ActionBar extends StatefulWidget {
 }
 
 class _ActionBarState extends State<_ActionBar> {
-  late TextEditingController sendMsg;
-  @override
-  _ActionBarState() {
-    sendMsg = TextEditingController();
-  }
+  late TextEditingController _sendMsgController;
+
   @override
   void initState() {
     super.initState();
-    sendMsg.addListener(_onTextChange);
+    _sendMsgController = TextEditingController();
   }
 
-  Timer? _debounce;
-
   Future<void> _sendMessage() async {
-    if (sendMsg.text.trim().isNotEmpty) {
+    if (_sendMsgController.text.trim().isNotEmpty) {
       print('[chat_room_page]以下是所有訊息');
-      print(sendMsg.text);
+      print(_sendMsgController.text);
       print('[chat_room_page]對方的uid $remoteUid');
-      onSendMsgBtnPressed(remoteUid, sendMsg.text);
-      print('[chat_room_page]準備刪除輸入匡訊息');
-      sendMsg.clear();
+      onSendMsgBtnPressed(remoteUid, _sendMsgController.text);
+      setState(() {
+        _sendMsgController.clear();
+      });
       FocusScope.of(context).unfocus();
+      print('[chat_room_page]準備刪除輸入匡訊息');
       print('[chat_room_page]刪除完畢');
     }
   }
 
-  void _onTextChange() {
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(seconds: 1), () {
-      if (mounted) {}
-    });
-  }
-
   @override
   void dispose() {
-    sendMsg.removeListener(_onTextChange);
+    _sendMsgController.dispose();
     super.dispose();
-    sendMsg.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -394,9 +409,7 @@ class _ActionBarState extends State<_ActionBar> {
             child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: TextField(
-                onChanged: (val) {
-                  sendMsg.text = val;
-                },
+                controller: _sendMsgController,
                 style: const TextStyle(fontSize: 14),
                 decoration: const InputDecoration(
                   hintText: 'Type something...',

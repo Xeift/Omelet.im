@@ -1,7 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:omelet/pages/notification_page.dart';
+import 'dart:ui';
 
-import '../pages/setting/setting_page.dart';
+import 'package:flutter/material.dart';
+import 'package:omelet/pages/friends_page/friends_list_page.dart';
+import 'package:omelet/pages/notification_page/notification_page.dart';
+import 'package:omelet/pages/setting/setting_page.dart';
+
 import '../theme/theme_constants.dart';
 import 'message_list_page.dart';
 // import '../pages/notification_page.dart';
@@ -19,37 +22,46 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
   final List<Widget> pages = const [
     NotificationPgae(),
     MessagePage(),
-    SettingPage(),
+    FriendsListPage(),
   ];
-  final List<String> title = const ['Notification', 'Message', 'Setting'];
+  final List<String> title = const ['Notification', 'Message', 'Friends'];
 
   @override
   Widget build(BuildContext context) {
-    pageIndex.addListener(() {
-      print(pageIndex.value);
-    });
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        title: ValueListenableBuilder<int>(
-          valueListenable: pageIndex,
-          builder: (context, value, child) {
-            return Text(title[value]);
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingPage()),
-              );
-            },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(65), // 設定所需的高度
+        child: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 10, sigmaY: 10
+            ),
+            child: AppBar(
+              title: ValueListenableBuilder<int>(
+                valueListenable: pageIndex,
+                builder: (context, value, child) {
+                  return Text(title[value]);
+                },
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SettingPage()),
+                    );
+                  },
+                ),
+              ],
+              leading: const Icon(Icons.account_circle),
+              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+              elevation: 0, 
+            ),
+          
           ),
-        ],
-        leading: const Icon(Icons.account_circle),
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
+        ),
       ),
       body: ValueListenableBuilder(
         valueListenable: pageIndex,
@@ -123,8 +135,8 @@ class _BottonNavbarState extends State<BottonNavbar> {
                 onTap: handleItemSelected),
             NavBarItem(
                 index: 2,
-                label: '     Setting    ',
-                icon: Icons.settings,
+                label: '     Friends    ',
+                icon: Icons.pets,
                 isSelected: (selectedIndex == 2),
                 onTap: handleItemSelected),
           ],

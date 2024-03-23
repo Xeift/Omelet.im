@@ -21,7 +21,7 @@ String remoteUid = '552415467919118336'; // xeift
 
 // String remoteUid = '551338674692820992'; // np
 
-class ChatRoomPage extends StatelessWidget {
+class ChatRoomPage extends StatefulWidget {
   static Route route(MessageData data) => MaterialPageRoute(
       builder: (context) => ChatRoomPage(
             messageData: data,
@@ -32,8 +32,21 @@ class ChatRoomPage extends StatelessWidget {
   final MessageData messageData;
 
   @override
+  State<ChatRoomPage> createState() => ChatRoomPageState();
+}
+
+class ChatRoomPageState extends State<ChatRoomPage> {
+  static GlobalKey updateChatKey = GlobalKey();
+  static currenInstance(){
+    var state = ChatRoomPageState.updateChatKey.currentContext?.findAncestorStateOfType();
+    return state;
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         leading: IconButton(
@@ -44,21 +57,26 @@ class ChatRoomPage extends StatelessWidget {
         elevation: 0.0,
         backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
         title: AppBarTitle(
-          messageData: messageData,
+          messageData: widget.messageData,
         ),
       ),
+      key:updateChatKey,
       body: Column(
         children: [
-          const Expanded(
+           Expanded(
             child: ReadMessageList(),
           ),
           _ActionBar(
-            messageData: messageData,
+            messageData: widget.messageData,
           ),
         ],
       ),
     );
   }
+    reloadData(){
+      setState(() {});
+      print('setState完成');
+    }
 }
 
 class AppBarTitle extends StatelessWidget {
@@ -105,16 +123,9 @@ class AppBarTitle extends StatelessWidget {
 
 // 測試：檢查是否有訊息
 
-class ReadMessageList extends StatefulWidget {
-  const ReadMessageList({Key? key}) : super(key: key);
-  @override
-  State<ReadMessageList> createState() => _ReadMessageListState();
-}
-
-class _ReadMessageListState extends State<ReadMessageList> {
+class ReadMessageList extends StatelessWidget {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
 
-  List<Map<String, dynamic>> realMsg = []; // 將 realMsg 定義在狀態中保存訊息
   Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
     List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
     if (messages.isNotEmpty) {
@@ -132,14 +143,15 @@ class _ReadMessageListState extends State<ReadMessageList> {
 
   @override
   Widget build(BuildContext context) {
+    print('[chat_room_page.dart]加載一次');
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: fetchAndDisplayMessages(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // 在等待時顯示進度指示器
+          return CircularProgressIndicator(); // 在等待時顯示進度指示器
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Text('無訊息');
+          return Text('無訊息');
         }
         List<Map<String, dynamic>> realMsg = snapshot.data!;
 
@@ -147,10 +159,11 @@ class _ReadMessageListState extends State<ReadMessageList> {
         realMsg.sort((a, b) {
           int timestampA = int.parse(a['timestamp']);
           int timestampB = int.parse(b['timestamp']);
-          return timestampA.compareTo(timestampB);
+          return timestampB.compareTo(timestampA);
         });
 
         return ListView.builder(
+          reverse: true,
           itemCount: realMsg.length,
           itemBuilder: (context, index) {
             final realmessage = realMsg[index];
@@ -318,7 +331,6 @@ class _ActionBarState extends State<_ActionBar> {
   @override
   void initState() {
     super.initState();
-    sendMsg = TextEditingController();
     sendMsg.addListener(_onTextChange);
   }
 
@@ -353,6 +365,7 @@ class _ActionBarState extends State<_ActionBar> {
 
   @override
   Widget build(BuildContext context) {
+    print('[chat_room_page.dart]ActionBar被加載');
     return SafeArea(
       bottom: true,
       top: false,

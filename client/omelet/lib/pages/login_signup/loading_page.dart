@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
@@ -12,6 +14,7 @@ import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
 import 'package:omelet/message/safe_msg_store.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 
 late io.Socket socket;
 
@@ -42,9 +45,11 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<void> initSocket() async {
     try {
-      // // TODO: 刪除所有儲存空間，debug 用
+      // // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
       // const storage = FlutterSecureStorage();
       // await storage.deleteAll();
+      // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
+      // print('[loading_page.dart] ${jsonDecode(res.body)}');
 
       print(await isJwtExsist());
       if (await isJwtExsist()) {

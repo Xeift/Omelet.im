@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 
 const serverUri =
-    'https://8520-2001-b011-c009-1742-5056-4ee7-2749-8082.ngrok-free.app';
+    'https://215e-2001-b011-c009-1742-ed7c-5cae-c5f8-650e.ngrok-free.app';
 // const serverUri = 'http://localhost:3000';
 
 Future<String> loadUid() async {

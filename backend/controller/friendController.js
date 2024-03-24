@@ -51,11 +51,7 @@ async function isFriend(initiatorUid, targetUid) {
 
 // 傳送好友邀請
 async function sendFriendRequest(initiatorUid, targetUid) {
-    // 檢查是否重複發送好友邀請
-    const existingRequest = await FriendRequestModel.findOne({ initiatorUid: initiatorUid, targetUid: targetUid });
-    if (existingRequest) {
-        return 'duplicate_friend_req';
-    }
+    await FriendRequestModel.findOne({ initiatorUid: initiatorUid, targetUid: targetUid });
 
     const friendRequest = new FriendRequestModel({
         initiatorUid: initiatorUid,

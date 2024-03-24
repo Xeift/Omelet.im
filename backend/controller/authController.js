@@ -89,6 +89,16 @@ async function getUserPublicInfoByUid(uid) {
     return userPublicInfo;
 }
 
+async function getUidByEmail(email) {
+    let user = await VerifiedUserModel.findOne({ email: email });
+    return user ? user.uid : null;
+}
+
+async function getUidByUsername(username) {
+    let user = await VerifiedUserModel.findOne({ username: username });
+    return user ? user.uid : null;
+}
+
 module.exports = {
     isPasswordMatch,
     isUserIdExsists,
@@ -97,5 +107,7 @@ module.exports = {
     makeUnverifiedUserVerified,
     updatePasswordByEmail,
     updatePfpStatus,
-    getUserPublicInfoByUid
+    getUserPublicInfoByUid,
+    getUidByEmail,
+    getUidByUsername
 };

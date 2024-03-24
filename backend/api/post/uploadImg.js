@@ -25,19 +25,20 @@ const upload = multer({ storage: storage });
 router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     let decodedToken = req.decodedToken;
     let ourUid = decodedToken._uid;
-
-    let isPreKeySignalMessage = req.body.isPreKeySignalMessage;
+    let timestamp = Date.now().toString();
+    let isPreKeySignalMessage = JSON.parse(req.body.isPreKeySignalMessage);
     let type = req.body.type;
     let sender = req.body.sender;
     let receiver = req.body.receiver;
     let receiverDeviceId = req.body.receiverDeviceId;
     let filename = req.body.content;
-    let spkId = req.body.spkId;
-    let opkId = req.body.opkId;
+    let spkId = JSON.parse(req.body.spkId);
+    let opkId = JSON.parse(req.body.opkId);
 
     console.log(`ourUid：${ourUid}`);
     
-    console.log(`isPreKeySignalMessage${isPreKeySignalMessage}`);
+    console.log(`isPreKeySignalMessage：${isPreKeySignalMessage}`);
+    console.log(`isPreKeySignalMessage：${typeof(isPreKeySignalMessage)}`);
     console.log(`type：${type}`);
     console.log(`sender：${sender}`);
     console.log(`receiver：${receiver}`);
@@ -47,6 +48,7 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     console.log(`opkId：${opkId}`);
 
     // TODO: emit to client
+    // send link to the msg
 
     try {
         res.status(200).json({

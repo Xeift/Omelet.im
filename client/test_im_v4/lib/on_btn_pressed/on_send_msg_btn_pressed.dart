@@ -2,18 +2,16 @@
 
 import 'dart:convert';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:test_im_v4/utils/return_msg_to_server.dart';
 import 'package:test_im_v4/signal_protocol/encrypt_msg.dart';
 import 'package:test_im_v4/utils/init_socket.dart' show socket;
+import 'package:test_im_v4/utils/load_local_info.dart';
 
 Future<void> onSendMsgBtnPressed(
     String theirUid, String msgContent, Function updateHintMsg) async {
   print('--------------------------------');
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
-  const storage = FlutterSecureStorage();
-  final ourUid = (await storage.read(key: 'uid')).toString();
+  final ourUid = await loadUid();
 
   // 加密訊息
   final encryptedMsg = await encryptMsg(theirUid, msgContent);

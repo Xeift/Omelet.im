@@ -11,13 +11,13 @@ import 'package:test_im_v4/signal_protocol/encrypt_msg.dart';
 import 'package:test_im_v4/utils/generate_random_filename.dart';
 import 'package:test_im_v4/utils/return_msg_to_server.dart';
 import 'package:test_im_v4/utils/init_socket.dart' show socket;
+import 'package:test_im_v4/utils/load_local_info.dart';
 
 Future<void> onSelectImageBtnPressed(
     String theirUid, Function updateHintMsg) async {
   final picker = ImagePicker();
   var image = await picker.pickImage(source: ImageSource.gallery);
-  const storage = FlutterSecureStorage();
-  final ourUid = (await storage.read(key: 'uid')).toString();
+  final ourUid = await loadUid();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   if (image != null) {

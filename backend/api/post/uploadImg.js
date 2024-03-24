@@ -26,10 +26,28 @@ const upload = multer({ storage: storage });
 router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     let decodedToken = req.decodedToken;
     let ourUid = decodedToken._uid;
-    let receiverUid = req.body.receiverUid;
-    let deviceId = req.body.deviceId;
+
+    let isPreKeySignalMessage = req.body.isPreKeySignalMessage;
+    let type = req.body.type;
+    let sender = req.body.sender;
+    let receiver = req.body.receiver;
+    let receiverDeviceId = req.body.receiverDeviceId;
+    let filename = req.body.content;
+    let spkId = req.body.spkId;
+    let opkId = req.body.opkId;
 
     console.log(`ourUid：${ourUid}`);
+    
+    console.log(`isPreKeySignalMessage${isPreKeySignalMessage}`);
+    console.log(`type：${type}`);
+    console.log(`sender：${sender}`);
+    console.log(`receiver：${receiver}`);
+    console.log(`receiverDeviceId：${receiverDeviceId}`);
+    console.log(`filename：${filename}`);
+    console.log(`spkId：${spkId}`);
+    console.log(`opkId：${opkId}`);
+
+    // TODO: emit to client
 
     try {
         res.status(200).json({

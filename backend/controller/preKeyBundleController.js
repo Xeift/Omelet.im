@@ -138,12 +138,17 @@ async function getLastDeviceId(uid) {
 }
 
 async function findDeviceIdByIpkPub(uid, ipkPub) {
-    let deviceId = (await PreKeyBundleModel.findOne(
-        { uid: uid, ipkPub: ipkPub },
-        'deviceId',
-    )).deviceId;
-
-    return deviceId;
+    try {
+        let deviceId = (await PreKeyBundleModel.findOne(
+            { uid: uid, ipkPub: ipkPub },
+            'deviceId',
+        )).deviceId;
+    
+        return deviceId;
+    }
+    catch (error) {
+        console.log(error);
+    }
 }
 
 async function debugResetPreKeyBundle() {

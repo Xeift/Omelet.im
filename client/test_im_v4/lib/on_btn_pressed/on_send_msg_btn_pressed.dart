@@ -10,7 +10,7 @@ import 'package:test_im_v4/utils/load_local_info.dart';
 Future<void> onSendMsgBtnPressed(
     String theirUid, String msgContent, Function updateHintMsg) async {
   print('--------------------------------');
-  print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
+  print('[on_send_msg_btn_pressed.dart] 訊息明文: $msgContent');
   final ourUid = await loadUid();
 
   // 加密訊息

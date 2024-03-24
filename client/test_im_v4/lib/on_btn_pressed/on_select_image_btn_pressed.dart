@@ -7,10 +7,12 @@ import 'package:test_im_v4/api/post/upload_img_api.dart';
 import 'package:test_im_v4/signal_protocol/encrypt_msg.dart';
 import 'package:test_im_v4/utils/generate_random_filename.dart';
 import 'package:test_im_v4/utils/load_local_info.dart';
+import 'package:test_im_v4/message/safe_msg_store.dart';
 
 Future<void> onSelectImageBtnPressed(
     String theirUid, Function updateHintMsg) async {
   final ourUid = await loadUid();
+  final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // 選擇圖片
   final picker = ImagePicker();
@@ -19,6 +21,16 @@ Future<void> onSelectImageBtnPressed(
   if (image != null) {
     var img = File(image.path.toString());
     var imgBytes = jsonEncode(await img.readAsBytes());
+
+    // 將發送的訊息儲存到本地
+    final safeMsgStore = SafeMsgStore();
+    await safeMsgStore.writeMsg(theirUid, {
+      'timestamp': currentTimestamp,
+      'type': 'image',
+      'sender': ourUid,
+      'receiver': theirUid,
+      'content': imgBytes,
+    });
 
     // 加密圖片
     final encryptedImg = await encryptMsg(theirUid, imgBytes);
@@ -30,7 +42,7 @@ Future<void> onSelectImageBtnPressed(
         // 將加密過的圖片上傳至伺服器
         var filename = generateRandomFileName(); // 產生隨機檔名
         var res = await uploadImgApi(deviceId, ourEncryptedImg[deviceId],
-            ourUid, ourUid, theirUid, 'image', imgBytes, filename);
+            ourUid, ourUid, theirUid, imgBytes, filename);
 
         print(
             '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
@@ -42,7 +54,7 @@ Future<void> onSelectImageBtnPressed(
         // 將加密過的圖片上傳至伺服器
         var filename = generateRandomFileName(); // 產生隨機檔名
         var res = await uploadImgApi(deviceId, theirEncryptedImg[deviceId],
-            theirUid, ourUid, theirUid, 'image', imgBytes, filename);
+            theirUid, ourUid, theirUid, imgBytes, filename);
 
         print(
             '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');

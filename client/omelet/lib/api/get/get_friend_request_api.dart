@@ -13,3 +13,5 @@ Future<http.Response> getFriendRequestApi() async {
 
   return res;
 }
+
+//type = <String> 'uid' 'username' 'email'

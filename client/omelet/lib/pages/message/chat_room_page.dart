@@ -71,20 +71,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
         ),
 
 
-
-
-      // appBar: AppBar(
-      //   leading: IconButton(
-      //       icon: const Icon(Icons.arrow_back_ios),
-      //       onPressed: () {
-      //         Navigator.of(context).pop();
-      //       }),
-      //   elevation: 0.0,
-      //   backgroundColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(30),
-      //   title: AppBarTitle(
-      //     messageData: widget.messageData,
-      //   ),
-      // ),
       key:updateChatKey,
       body: Column(
         children: [
@@ -135,18 +121,6 @@ class AppBarTitle extends StatelessWidget {
     );
   }
 }
-
-//測試用list
-// List<Map<String, dynamic>> msgs = [
-//   {
-//     'timestamp': 1709969515576,
-//     'type': 'text',
-//     'receiver': 551338674692820992,
-//     'sender': 552415467919118336,
-//     'content': '早安'
-//   },
-
-// 測試：檢查是否有訊息
 
 class ReadMessageList extends StatelessWidget {
   final SafeMsgStore safeMsgStore = SafeMsgStore();

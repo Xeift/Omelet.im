@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/utils/get_user_uid.dart';
 import 'package:omelet/theme/theme_constants.dart';
 
@@ -10,8 +13,28 @@ class FriendsAddPage extends StatefulWidget {
 }
 
 class _FriendsAddPageState extends State<FriendsAddPage> {
-  TextEditingController _requestFriends = TextEditingController();
+  TextEditingController _requestFriendsController = TextEditingController();
   bool _buttonSelectPressed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _requestFriendsController = TextEditingController();
+  }
+  late final String resT = _requestFriendsController.text;
+
+  Future<void> _sendRequest() async{
+    if(_requestFriendsController.text.trim().isNotEmpty){
+      print('[friends_add_page]送出好友邀請{$resT}');
+      final res = await sendFriendRequestApi(_requestFriendsController.text,'uid');
+      final statusCode  = res.statusCode;
+      print('[friends_add_page]好友邀請狀態碼{$statusCode}');
+      setState(() {
+        _requestFriendsController.clear();
+      });
+      FocusScope.of(context).unfocus();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,16 +164,17 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
-                      controller: _requestFriends,
+                      controller: _requestFriendsController,
                       decoration: InputDecoration(
                         hintText:
                             _buttonSelectPressed ? '以Uid添加好友' : '以Email添加好友',
                       ),
+                      onSubmitted: (_) => _sendRequest(),
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      // 点击第二个按钮时执行的操作
+                    onPressed: () async{
+                      _sendRequest();
                     },
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(200, 50),

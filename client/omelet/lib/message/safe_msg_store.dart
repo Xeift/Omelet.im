@@ -169,4 +169,5 @@ class SafeMsgStore {
 
     return lastMsgWithEachUser;
   }
+
 }

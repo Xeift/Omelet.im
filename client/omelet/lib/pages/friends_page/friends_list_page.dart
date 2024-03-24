@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
-import 'package:omelet/utils/get_user_uid.dart';
+import 'package:omelet/utils/get_friends_list.dart';
 
 class FriendsListPage extends StatefulWidget {
   const FriendsListPage({super.key});
@@ -130,6 +130,7 @@ class FriendsList extends StatelessWidget {
           title: Text(friends[index]),//顯示好友頭像、名稱
           onTap: () {
             //TODO:跳轉好友聊天室，須有好友UID
+    
           },
         );
       },

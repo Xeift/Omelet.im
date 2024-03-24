@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
 const authController = require('../../controller/authController.js');
+const eventEmitter = require('../../utils/eventEmitter.js');
 const multer  = require('multer');
 const fs = require('fs');
 if (!fs.existsSync('img')){
@@ -49,6 +50,7 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
 
     // TODO: emit to client
     // send link to the msg
+    eventEmitter.emit('newImgUploaded', 'hi bro');
 
     try {
         res.status(200).json({

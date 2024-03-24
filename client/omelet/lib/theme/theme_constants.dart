@@ -7,8 +7,9 @@ abstract class AppColors {
   static const cardLight = Color(0xFFF9FAFE);
   static const cardDark = Color(0xFF303334);
   static const textDark = Colors.black; // 修改为合适的颜色值
-
   static const textLigth = Color(0xFFF5F5F5); // 修改为合适的颜色值
+  static const borderColorLight = Color.fromARGB(255, 0, 0, 0); // 修改为合适的边框颜色
+  static const borderColorDark = Colors.red; // 修改为合适的边框颜色
 }
 
 ThemeData get lightMode => ThemeData(
@@ -32,7 +33,8 @@ ThemeData get lightMode => ThemeData(
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
     ),
-    shadowColor: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.3));
+    shadowColor:const Color.fromARGB(255, 238, 236, 236).withOpacity(0.3),
+    highlightColor: AppColors.borderColorLight);
 
 ThemeData get darkMode => ThemeData(
     brightness: Brightness.dark,
@@ -54,4 +56,7 @@ ThemeData get darkMode => ThemeData(
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.black,
     ),
-    shadowColor: const Color.fromARGB(255, 97, 97, 97).withOpacity(0.3));
+    shadowColor:const Color.fromARGB(255, 146, 146, 146).withOpacity(0.3),
+    highlightColor:const Color.fromARGB(255, 255, 255, 255),
+ 
+    );

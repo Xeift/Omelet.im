@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
+import 'package:omelet/utils/get_user_uid.dart';
 
 class FriendsListPage extends StatefulWidget {
   const FriendsListPage({super.key});

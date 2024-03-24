@@ -48,7 +48,7 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
     socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
   }
   print('[on_send_msg_btn_press.dart]新增新訊息，模擬顯示在聊天室上');
-  //TODO:發送訊息時，顯示一則新訊息在聊天室
+  //發送訊息時，顯示一則新訊息在聊天室
   ChatRoomPageState.currenInstance()?.reloadData();
 }
 

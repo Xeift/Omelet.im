@@ -19,7 +19,7 @@ class _MessagePageState extends State<MessagePage> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 1, // 您希望顯示的消息數量
+      itemCount: 100, // 您希望顯示的消息數量
       itemBuilder: (context, index) {
         return _delegate(context, index);
       },
@@ -54,8 +54,8 @@ class MessageItemTitle extends StatelessWidget {
         Navigator.of(context).push(ChatRoomPage.route(messageData));
       },
       child: Container(
-        height: 100,
-        margin: const EdgeInsets.symmetric(horizontal: 8),
+        height: 80,
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         decoration: const BoxDecoration(
           border: Border(
               bottom: BorderSide(
@@ -71,32 +71,34 @@ class MessageItemTitle extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Avatar.medium(url: messageData.profilePicture),
               ),
-              Expanded(
+                Expanded(
                   child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    messageData.senderName,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      letterSpacing: 0.2,
-                      wordSpacing: 1.5,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                    child: Text(
-                      messageData.message,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 162, 162, 162),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        messageData.senderName,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          letterSpacing: 0.2,
+                          wordSpacing: 1.5,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ))
+                      SizedBox(
+                        height: 20,
+                        child: Text(
+                          messageData.message,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color.fromARGB(255, 162, 162, 162),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              )
             ],
           ),
         ),

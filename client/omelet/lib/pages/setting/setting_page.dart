@@ -4,10 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
-import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
+import 'package:omelet/componets/button/on_update_pfp_btn_pressed.dart';
 import 'package:omelet/message/safe_msg_store.dart';
 import 'package:omelet/models/setting.dart';
 import 'package:omelet/utils/get_user_uid.dart';
+import 'package:omelet/utils/load_local_info.dart';
 import 'package:provider/provider.dart';
 import 'package:omelet/theme/theme_constants.dart';
 
@@ -26,7 +27,7 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
 
-
+  
   @override
   Widget build(BuildContext context) {
 
@@ -68,7 +69,7 @@ class _SettingPageState extends State<SettingPage> {
                                     height: 55,
                                     child: ElevatedButton(
                                       onPressed: () async =>
-                                          print('[setting_page]上傳圖片'),
+                                         onUpdatePfpBtnPressed(),
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               Color.fromARGB(0, 255, 255, 255)),
@@ -111,7 +112,7 @@ class _SettingPageState extends State<SettingPage> {
                         );
                       });
                 },
-                child:AvatarCard(userName: 'hhhh'),
+                child:AvatarCard(),
               ),
               const SizedBox(
                 height: 20,

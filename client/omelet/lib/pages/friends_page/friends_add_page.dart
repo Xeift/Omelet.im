@@ -23,16 +23,20 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
   }
   late final String resT = _requestFriendsController.text;
 
+
   Future<void> _sendRequest() async{
     if(_requestFriendsController.text.trim().isNotEmpty){
       print('[friends_add_page]送出好友邀請{$resT}');
       final res = await sendFriendRequestApi(_requestFriendsController.text,'uid');
       final statusCode  = res.statusCode;
       print('[friends_add_page]好友邀請狀態碼{$statusCode}');
+      final String resB = res.body;
+      print('[friends_add_page]好友邀請狀態碼{$resB}');
+      
       setState(() {
         _requestFriendsController.clear();
       });
-      FocusScope.of(context).unfocus();
+      // FocusScope.of(context).unfocus();
     }
   }
 

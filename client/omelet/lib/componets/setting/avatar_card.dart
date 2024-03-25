@@ -2,36 +2,37 @@ import 'package:flutter/material.dart';
 
 class AvatarCard extends StatelessWidget {
   const AvatarCard({
-    super.key,
-  });
+    Key? key,
+    required this.userName,
+  }) : super(key: key);
+
+  final String userName;
 
   @override
   Widget build(BuildContext context) {
-    
-    return const Row(
+    return Row(
       children: [
-        Icon(Icons.account_circle_outlined,size: 40,),
-        SizedBox(width: 10),
+        const Icon(Icons.account_circle_outlined, size: 40),
+        const SizedBox(width: 10),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Text(
-              'unset Name',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+            Text(
+              userName,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
+            const Text(
               'Youtuber channel',
               style: TextStyle(
-                fontSize:10, 
+                fontSize: 10,
               ),
             ),
           ],
         )
       ],
-      
-
     );
   }
 }

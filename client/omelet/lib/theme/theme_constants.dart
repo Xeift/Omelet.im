@@ -16,7 +16,7 @@ ThemeData get lightMode => ThemeData(
     brightness: Brightness.light,
     colorScheme: const ColorScheme.light(
       background: Colors.white,
-      primary: Colors.grey,
+      primary: Color.fromARGB(255, 94, 94, 94),
     ),
     appBarTheme: const AppBarTheme(
       iconTheme: IconThemeData(color: Colors.black),
@@ -34,13 +34,19 @@ ThemeData get lightMode => ThemeData(
       backgroundColor: Colors.white,
     ),
     shadowColor:const Color.fromARGB(255, 238, 236, 236).withOpacity(0.3),
-    highlightColor: AppColors.borderColorLight);
+    highlightColor: AppColors.borderColorLight,
+    textTheme: const TextTheme(
+      bodyLarge:TextStyle(),
+    ).apply(
+      bodyColor: Color.fromARGB(255, 0, 0, 0),
+    )
+    );
 
 ThemeData get darkMode => ThemeData(
     brightness: Brightness.dark,
     colorScheme: const ColorScheme.dark(
       background: Color.fromARGB(255, 16, 16, 16),
-      primary: Colors.grey,
+      primary: Color.fromARGB(255, 203, 203, 203),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Color.fromARGB(0, 0, 0, 0),
@@ -58,5 +64,9 @@ ThemeData get darkMode => ThemeData(
     ),
     shadowColor:const Color.fromARGB(255, 146, 146, 146).withOpacity(0.3),
     highlightColor:const Color.fromARGB(255, 255, 255, 255),
- 
+    textTheme: const TextTheme(
+      bodyLarge:TextStyle(),
+    ).apply(
+      bodyColor: Color.fromARGB(255, 255, 255, 255),
+    )
     );

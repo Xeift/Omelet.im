@@ -15,6 +15,13 @@ Future<String> loadUid() async {
   return uid;
 }
 
+Future<String> loadUserName() async {
+  const storage = FlutterSecureStorage();
+  final username = (await storage.read(key: 'username')).toString();
+
+  return username;
+}
+
 Future<String> loadJwt() async {
   const storage = FlutterSecureStorage();
   final token = (await storage.read(key: 'token')).toString();

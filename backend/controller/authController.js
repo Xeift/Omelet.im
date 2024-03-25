@@ -87,7 +87,7 @@ async function getUserPublicInfoByUid(uid) {
     let userInfo = await VerifiedUserModel.findOne({ uid: uid });
     let userPublicInfo = { username: userInfo['username'], pfp: `http://localhost:3000/${uid}.png` };
     return userPublicInfo;
-}
+}//remoteuser name、remote img
 
 async function getUidByEmail(email) {
     let user = await VerifiedUserModel.findOne({ email: email });

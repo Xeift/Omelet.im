@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/utils/get_user_uid.dart';
 import 'package:omelet/theme/theme_constants.dart';
@@ -14,29 +14,32 @@ class FriendsAddPage extends StatefulWidget {
 
 class _FriendsAddPageState extends State<FriendsAddPage> {
   TextEditingController _requestFriendsController = TextEditingController();
-  bool _buttonSelectPressed = false;
+  String _requestFriendsType = ''; // Store the type of friend request
 
   @override
   void initState() {
     super.initState();
     _requestFriendsController = TextEditingController();
   }
-  late final String resT = _requestFriendsController.text;
 
+  Future<void> _sendRequest() async {
+    try {
+      if (_requestFriendsController.text.trim().isNotEmpty && _requestFriendsType.isNotEmpty) {
 
-  Future<void> _sendRequest() async{
-    if(_requestFriendsController.text.trim().isNotEmpty){
-      print('[friends_add_page]送出好友邀請{$resT}');
-      final res = await sendFriendRequestApi(_requestFriendsController.text,'uid');
-      final statusCode  = res.statusCode;
-      print('[friends_add_page]好友邀請狀態碼{$statusCode}');
-      final String resB = res.body;
-      print('[friends_add_page]好友邀請狀態碼{$resB}');
-      
-      setState(() {
-        _requestFriendsController.clear();
-      });
-      // FocusScope.of(context).unfocus();
+        final res = await sendFriendRequestApi(_requestFriendsController.text, _requestFriendsType);
+        final statusCode = res.statusCode;
+        final String resBody = res.body;
+        print('[friends_add_page] 好友邀請送出型態: $_requestFriendsType');
+        print('[friends_add_page] 好友邀請狀態碼: $statusCode');
+        print('[friends_add_page] 好友邀請回應: $resBody');
+
+        setState(() {
+          _requestFriendsController.clear();
+        });
+      }
+    } catch (e) {
+      print('Error sending friend request: $e');
+      // Handle error
     }
   }
 
@@ -54,29 +57,29 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
+            // Display user's UID
             Container(
               width: 325,
               height: 85,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: const Offset(4.0, 4.0),
-                      blurRadius: 10,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Theme.of(context).shadowColor,
-                      offset: const Offset(-4.0, -4.0),
-                      blurRadius: 10,
-                      spreadRadius: 1.0,
-                    ),
-                  ]),
+                color: Theme.of(context).colorScheme.background,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade500,
+                    offset: const Offset(4.0, 4.0),
+                    blurRadius: 10,
+                    spreadRadius: 1.0,
+                  ),
+                  BoxShadow(
+                    color: Theme.of(context).shadowColor,
+                    offset: const Offset(-4.0, -4.0),
+                    blurRadius: 10,
+                    spreadRadius: 1.0,
+                  ),
+                ],
+              ),
               child: Center(
                 child: Text(
                   '您的Uid: $ourUid',
@@ -84,111 +87,102 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                   ),
-                ), // 使用ourUid变量
+                ),
               ),
             ),
             const SizedBox(height: 30),
+            // Friend request input section
             Container(
               width: 325,
               height: 300,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: const Offset(4.0, 4.0),
-                      blurRadius: 10,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Theme.of(context).shadowColor,
-                      offset: const Offset(-4.0, -4.0),
-                      blurRadius: 10.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ]),
+                color: Theme.of(context).colorScheme.background,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade500,
+                    offset: const Offset(4.0, 4.0),
+                    blurRadius: 10,
+                    spreadRadius: 1.0,
+                  ),
+                  BoxShadow(
+                    color: Theme.of(context).shadowColor,
+                    offset: const Offset(-4.0, -4.0),
+                    blurRadius: 10.0,
+                    spreadRadius: 1.0,
+                  ),
+                ],
+              ),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  const SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      // Button to select Uid
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            _buttonSelectPressed = true;
+                            _requestFriendsType = 'uid';
                           });
-                          // 在这里执行按钮1按下时的操作
-                          // 比如获取文本框中的内容 _textController.text
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _buttonSelectPressed
+                          backgroundColor: _requestFriendsType == 'uid'
                               ? Colors.black
                               : Colors.white,
                         ),
                         child: Text(
                           'Uid',
                           style: TextStyle(
-                            color: _buttonSelectPressed
-                                ? const Color.fromARGB(255, 255, 255, 255)
-                                : const Color.fromARGB(255, 0, 0, 0),
+                            color: _requestFriendsType == 'uid'
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
+                      // Button to select Email
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            _buttonSelectPressed = false;
+                            _requestFriendsType = 'email';
                           });
-                          // 在这里执行按钮1按下时的操作
-                          // 比如获取文本框中的内容 _textController.text
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _buttonSelectPressed
-                              ? const Color.fromARGB(255, 255, 255, 255)
-                              : const Color.fromARGB(255, 0, 0, 0),
+                          backgroundColor: _requestFriendsType == 'email'
+                              ? Colors.black
+                              : Colors.white,
                         ),
                         child: Text(
                           'Email',
                           style: TextStyle(
-                            color: _buttonSelectPressed
-                                ? const Color.fromARGB(255, 0, 0, 0)
-                                : const Color.fromARGB(255, 255, 255, 255),
+                            color: _requestFriendsType == 'email'
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  const SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: _requestFriendsController,
                       decoration: InputDecoration(
-                        hintText:
-                            _buttonSelectPressed ? '以Uid添加好友' : '以Email添加好友',
+                        hintText: _requestFriendsType == 'uid'
+                            ? '以Uid添加好友'
+                            : '以Email添加好友',
                       ),
                       onSubmitted: (_) => _sendRequest(),
                     ),
                   ),
+                  // Submit button
                   ElevatedButton(
-                    onPressed: () async{
-                      _sendRequest();
-                    },
+                    onPressed: _sendRequest,
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(200, 50),
                     ),
-                    child: Text(
-                      'Submit',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.background,
-                      ),
-                    ),
+                    child:const Text('Submit'),
                   ),
                 ],
               ),

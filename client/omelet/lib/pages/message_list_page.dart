@@ -15,7 +15,6 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -28,17 +27,17 @@ class _MessagePageState extends State<MessagePage> {
 
   Widget _delegate(BuildContext context, int index) {
     final date = Helpers.randomDate();
-          return MessageItemTitle(
-            messageData: MessageData(
-              senderName: 'TestUser',
-              message: 'HIHI',
-              remoteUid: '552415467919118336', // 請確定您有合適的 remoteUid
-              messageDate: date,
-              dateMessage: Jiffy.parse('1997/09/23').fromNow(),
-              profilePicture: Helpers.randomPictureUrl(),
-            ),
-          );
-        }
+    return MessageItemTitle(
+      messageData: MessageData(
+        senderName: 'TestUser',
+        message: 'HIHI',
+        remoteUid: '552415467919118336', // 請確定您有合適的 remoteUid
+        messageDate: date,
+        dateMessage: Jiffy.parse('1997/09/23').fromNow(),
+        profilePicture: Helpers.randomPictureUrl(),
+      ),
+    );
+  }
 }
 
 class MessageItemTitle extends StatelessWidget {
@@ -71,34 +70,33 @@ class MessageItemTitle extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Avatar.medium(url: messageData.profilePicture),
               ),
-                Expanded(
+              Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        messageData.senderName,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          letterSpacing: 0.2,
-                          wordSpacing: 1.5,
-                          fontWeight: FontWeight.w900,
-                        ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    messageData.senderName,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      letterSpacing: 0.2,
+                      wordSpacing: 1.5,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: Text(
+                      messageData.message,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color.fromARGB(255, 162, 162, 162),
                       ),
-                      SizedBox(
-                        height: 20,
-                        child: Text(
-                          messageData.message,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Color.fromARGB(255, 162, 162, 162),
-                        ),
-                      ),
-                    )
-                  ],
-                )
-              )
+                    ),
+                  )
+                ],
+              ))
             ],
           ),
         ),

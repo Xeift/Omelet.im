@@ -139,7 +139,7 @@ class SignUpPageState extends State<SignUpPage> {
             _singUpPassword = passwordSignUpTextFieldController.text;
             _signUpName = nameSignUpTextFieldController.text;
 
-            final res = await signUpSendMailAPI(
+            final res = await signUpSendMailApi(
                 _signUpEamil, _signUpName, _singUpPassword);
             final statusCode = res.statusCode;
 

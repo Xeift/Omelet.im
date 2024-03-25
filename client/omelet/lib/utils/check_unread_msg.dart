@@ -8,7 +8,7 @@ import 'package:omelet/message/safe_msg_store.dart';
 
 Future<void> checkUnreadMsg() async {
   // 取得未讀訊息
-  final getUnreadMsgAPIRes = await getUnreadMsgAPI();
+  final getUnreadMsgAPIRes = await getUnreadMsgApi();
   final List<dynamic> unreadMsgs = jsonDecode(getUnreadMsgAPIRes.body)['data'];
   print('[main.dart] 未讀訊息👉 $unreadMsgs');
 

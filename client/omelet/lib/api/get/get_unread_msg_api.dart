@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/load_local_info.dart';
 
-Future<http.Response> getUnreadMsgAPI() async {
+Future<http.Response> getUnreadMsgApi() async {
   final (token, ipkPub) = await loadJwtAndIpkPub();
 
   final res = await http.get(

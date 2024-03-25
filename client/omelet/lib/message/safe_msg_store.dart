@@ -157,7 +157,7 @@ class SafeMsgStore {
 
       if (!lastMsgWithEachUser.containsKey(remoteUid) ||
           lastMsgWithEachUser[remoteUid]['index'] < index) {
-        var remoteUserInfoRes = await getUserPublicInfoAPI(remoteUid);
+        var remoteUserInfoRes = await getUserPublicInfoApi(remoteUid);
         var remoteUserInfo = jsonDecode(remoteUserInfoRes.body)['data'];
         lastMsgWithEachUser[remoteUid] = {
           'remoteUserInfo': remoteUserInfo,
@@ -169,5 +169,4 @@ class SafeMsgStore {
 
     return lastMsgWithEachUser;
   }
-
 }

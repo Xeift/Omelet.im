@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/load_local_info.dart';
 
-Future<http.Response> getUserPublicInfoAPI(uid) async {
+Future<http.Response> getUserPublicInfoApi(uid) async {
   final token = await loadJwt();
 
   final res = await http.get(

@@ -90,7 +90,7 @@ class ForgetPageState extends State<ForgetPage> {
             // 忘記密碼邏輯
             _userForgetEmail = forgetEmailController.text;
 
-            final res = await resetPasswordSendMailAPI(_userForgetEmail);
+            final res = await resetPasswordSendMailApi(_userForgetEmail);
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
 

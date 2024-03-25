@@ -1,9 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/friends_page/friends_list_page.dart';
 import 'package:omelet/pages/notification_page/notification_page.dart';
 import 'package:omelet/pages/setting/setting_page.dart';
+import 'package:omelet/utils/get_user_uid.dart';
+import 'package:omelet/utils/load_local_info.dart';
+import 'package:http/http.dart' as http;
 
 import '../theme/theme_constants.dart';
 import 'message_list_page.dart';
@@ -26,40 +30,85 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
   ];
   final List<String> title = const ['Notification', 'Message', 'Friends'];
 
+  final String imgUrl = '$serverUri/pfp/$ourUid.png';
+
+  late Future<bool> _urlValidFuture;
+
+  Future<bool> isValidUrl(String url) async {
+    if (url.isEmpty) return false; // 確保網址不是空的
+
+    try {
+      final response = await http.head(Uri.parse(url));
+      return response.statusCode == 200; // 如果狀態碼是 200，則視為有效的 URL
+    } catch (e) {
+      return false; // 發生任何異常時都視為無效的 URL
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _urlValidFuture = isValidUrl(imgUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(65), // 設定所需的高度
+        preferredSize: const Size.fromHeight(100),
+        // 設定所需的高度
         child: ClipRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 10, sigmaY: 10
-            ),
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: AppBar(
               title: ValueListenableBuilder<int>(
                 valueListenable: pageIndex,
                 builder: (context, value, child) {
-                  return Text(title[value]);
+                  return Center(
+                    child: Text(title[value]),
+                  );
                 },
               ),
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const SettingPage()),
-                    );
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.settings),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const SettingPage()),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
-              leading: const Icon(Icons.account_circle),
+              leading: FutureBuilder<bool>(
+                future: _urlValidFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator(); // 加載指示器，當url驗證中
+                  } else if (snapshot.hasError || !snapshot.data!) {
+                    return const Padding(
+                      padding: EdgeInsets.only(left: 16.0), // 在leading左侧添加空白
+                      child: Icon(
+                        Icons.account_circle_outlined,
+                        size: 55,
+                      ),
+                    ); // 換成使用者頭像
+                  } else {
+                    return Avatar.small(url: imgUrl); // 如果是有效的 URL，顯示圖片
+                  }
+                },
+              ),
               backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-              elevation: 0, 
+              elevation: 0,
+              centerTitle: true, // 讓標題居中
             ),
-          
           ),
         ),
       ),

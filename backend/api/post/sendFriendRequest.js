@@ -57,7 +57,11 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
         }
 
         await friendController.sendFriendRequest(ourUid, theirUid);
-        eventEmitter.emit('receivedFriendRequest', { 'initiatorUid': ourUid, 'targetUid': theirUid });
+        eventEmitter.emit('receivedFriendRequest', {
+            'initiatorUid': ourUid,
+            'targetUid': theirUid,
+            'timestamp': Date.now()
+        });
         
         res.status(200).json({
             message: '好友邀請傳送成功',

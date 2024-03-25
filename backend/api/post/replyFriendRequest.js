@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
 const friendController = require('../../controller/friendController.js');
+const eventEmitter = require('../../utils/eventEmitter.js');
 
 router.post('/', jwt.verifyJWT, async(req, res) => {
     let decodedToken = req.decodedToken;
@@ -33,6 +34,12 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
         if (isAgree) {
             await friendController.addFriend(ourUid, theirUid);
             await friendController.removeFriendRequest(theirUid, ourUid);
+
+            eventEmitter.emit('acceptedFriendRequest', {
+                'initiatorUid': theirUid,
+                'targetUid': ourUid,
+                'timestamp': Date.now()
+            });
 
             res.status(200).json({
                 message: '已同意對方的好友邀請',

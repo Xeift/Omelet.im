@@ -10,6 +10,9 @@ import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
 import 'package:omelet/message/safe_msg_store.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
+import 'dart:convert';
 
 late io.Socket socket;
 
@@ -91,7 +94,14 @@ class LoadingPageState extends State<LoadingPage> {
             print('--------------------------------');
             print('[main.dart] 已接收到好友邀請👉 $msg');
             print('--------------------------------\n');
-            // TODO: 顯示好友邀請
+            // TODO: 顯示並儲存好友邀請
+          });
+
+          socket.on('acceptedFriendRequest', (msg) async {
+            print('--------------------------------');
+            print('[main.dart] 對方已同意到好友邀請👉 $msg');
+            print('--------------------------------\n');
+            // TODO: 顯示「對方已同意好友邀請」
           });
         });
 

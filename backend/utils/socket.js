@@ -45,6 +45,19 @@ function isOnline(uid, deviceId) {
     return null;
 }
 
+function getOnlineSocketIdsByUid(uid) {
+    const onlineSocketIds = [];
+  
+    if (userIdToRoomId[uid]) {
+        for (const deviceId in userIdToRoomId[uid]) {
+            const socketId = userIdToRoomId[uid][deviceId];
+            onlineSocketIds.push(socketId);
+        }
+    }
+  
+    return onlineSocketIds;
+}
+
 async function dealWithClientMsgs(msg, socket) {
     console.log('--------------------------------');
     console.log(`[socket.js] 訊息原始內容👉 ${JSON.stringify(msg)}`);
@@ -107,14 +120,19 @@ module.exports = function(io) {
         
         // TODO: 加一個監聽 imgUploaded event
         eventEmitter.on('newImgUploaded', async(msg) => {
-            console.log('收到新消息😎😎😎:', msg);
+            console.log('收到新圖片😎😎😎:', msg);
             await dealWithClientMsgs(msg, socket);
         });
 
         // TODO: 監聽 receivedFriendRequest event
         eventEmitter.on('receivedFriendRequest', async(msg) => {
             console.log('收到新好友邀請😎😎😎:', msg);
-            // await dealWithClientMsgs(msg, socket);
+            let initiatorUid = msg['initiatorUid'];
+            let targetUid = msg['targetUid'];
+            let targetSocketId = getOnlineSocketIdsByUid(targetUid);
+            console.log(targetSocketId);
+            console.log(JSON.stringify(targetSocketId));
+            // TODO: emit 到有上線的 device
         });
 
         socket.on('clientReturnJwtToServer', async(data) => {

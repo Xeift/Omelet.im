@@ -124,15 +124,19 @@ module.exports = function(io) {
             await dealWithClientMsgs(msg, socket);
         });
 
-        // TODO: 監聽 receivedFriendRequest event
+        // 監聽 sendFriendRequest.js 的 receivedFriendRequest event
         eventEmitter.on('receivedFriendRequest', async(msg) => {
             console.log('收到新好友邀請😎😎😎:', msg);
-            let initiatorUid = msg['initiatorUid'];
             let targetUid = msg['targetUid'];
-            let targetSocketId = getOnlineSocketIdsByUid(targetUid);
-            console.log(targetSocketId);
-            console.log(JSON.stringify(targetSocketId));
-            // TODO: emit 到有上線的 device
+            let targetSocketIds = getOnlineSocketIdsByUid(targetUid);
+
+            // emit event 到有上線的 device
+            for (let targetSocketId of targetSocketIds) {
+                console.log(`emit 好友邀請到 ${targetUid} ${targetSocketId}\n內容：${msg}`);
+                socket
+                    .to(targetSocketId)
+                    .emit('receivedFriendRequest', JSON.stringify(msg));
+            }
         });
 
         socket.on('clientReturnJwtToServer', async(data) => {

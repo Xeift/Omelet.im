@@ -111,6 +111,12 @@ module.exports = function(io) {
             await dealWithClientMsgs(msg, socket);
         });
 
+        // TODO: 監聽 receivedFriendRequest event
+        eventEmitter.on('receivedFriendRequest', async(msg) => {
+            console.log('收到新好友邀請😎😎😎:', msg);
+            // await dealWithClientMsgs(msg, socket);
+        });
+
         socket.on('clientReturnJwtToServer', async(data) => {
             let token = data.token;
             let ipkPub = data.ipkPub;

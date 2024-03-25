@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('../../utils/jwt.js');
 const friendController = require('../../controller/friendController.js');
 const authController = require('../../controller/authController.js');
+const eventEmitter = require('../../utils/eventEmitter.js');
 
 
 router.post('/', jwt.verifyJWT, async(req, res) => {
@@ -56,6 +57,8 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
         }
 
         await friendController.sendFriendRequest(ourUid, theirUid);
+        eventEmitter.emit('receivedFriendRequest', { 'initiatorUid': ourUid, 'targetUid': theirUid });
+        
         res.status(200).json({
             message: '好友邀請傳送成功',
             data: null,

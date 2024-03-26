@@ -105,6 +105,9 @@ class LoadingPageState extends State<LoadingPage> {
           });
         });
 
+        socket.on(
+            'disconnect', (_) => print('[loading_page.dart] 已與後端伺服器斷開連接🈹'));
+
         socket.on('jwtExpired', (data) async {
           print('--------------------------------');
           print('[main.dart] JWT expired');

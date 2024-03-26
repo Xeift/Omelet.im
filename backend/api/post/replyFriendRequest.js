@@ -36,6 +36,7 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
             await friendController.removeFriendRequest(theirUid, ourUid);
 
             eventEmitter.emit('acceptedFriendRequest', {
+                'type': 'system_notify',
                 'initiatorUid': theirUid,
                 'targetUid': ourUid,
                 'timestamp': Date.now()

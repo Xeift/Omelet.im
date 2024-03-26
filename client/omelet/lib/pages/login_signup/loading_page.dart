@@ -13,6 +13,7 @@ import 'package:omelet/message/safe_msg_store.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 import 'dart:convert';
+import 'package:omelet/message/safe_notify_store.dart';
 
 late io.Socket socket;
 
@@ -59,6 +60,9 @@ class LoadingPageState extends State<LoadingPage> {
         );
 
         socket.onConnect((_) async {
+          final safeNotifyStore = SafeNotifyStore();
+          print('所有通知內容：${await safeNotifyStore.readAllNotifications()}');
+
           socket.emit(
               'clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
 
@@ -94,13 +98,20 @@ class LoadingPageState extends State<LoadingPage> {
             print('--------------------------------');
             print('[main.dart] 已接收到好友邀請👉 $msg');
             print('--------------------------------\n');
-            // TODO: 顯示並儲存好友邀請
+
+            print('[loading_page] ${jsonDecode(msg).runtimeType}');
+
+            // 儲存好友邀請
+            await safeNotifyStore.writeNotification(jsonDecode(msg));
+            print('[loading_page] 完成');
+            // TODO: 顯示好友邀請
           });
 
           socket.on('acceptedFriendRequest', (msg) async {
             print('--------------------------------');
-            print('[main.dart] 對方已同意到好友邀請👉 $msg');
+            print('[main.dart] 對方已同意好友邀請👉 $msg');
             print('--------------------------------\n');
+            await safeNotifyStore.writeNotification(jsonDecode(msg));
             // TODO: 顯示「對方已同意好友邀請」
           });
         });

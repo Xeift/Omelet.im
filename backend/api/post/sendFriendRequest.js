@@ -59,10 +59,10 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
         await friendController.sendFriendRequest(ourUid, theirUid);
         console.log('[sendFriendRequest] 🎈🎈🎈');
         eventEmitter.emit('receivedFriendRequest', {
+            'timestamp': Date.now(),
             'type': 'friend_request',
             'initiatorUid': ourUid,
-            'targetUid': theirUid,
-            'timestamp': Date.now()
+            'targetUid': theirUid
         });
         
         res.status(200).json({

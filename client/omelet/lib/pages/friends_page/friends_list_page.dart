@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/src/response.dart';
 import 'package:omelet/api/get/get_friend_list_api.dart';
+import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
 import 'package:omelet/utils/get_friends_list.dart';
 
@@ -46,7 +47,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                     child: FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
                   );
                 }
-                return const Text('No data available'); // 如果沒有數據，顯示沒有數據消息
+                return const Text('哈哈 沒朋友，請點擊右上角加好友吧～'); // 如果沒有數據，顯示沒有數據消息
               },
             ),
           ],
@@ -56,27 +57,60 @@ class _FriendsListPageState extends State<FriendsListPage> {
   }
 }
 
-
 class FriendsList extends StatelessWidget {
-  final List<Map<String, dynamic>> friends; // 添加 friends 参数
+  final List<Map<String, dynamic>> friends;
 
-  const FriendsList({Key? key, required this.friends}) : super(key: key); // 初始化 friends 参数
+  const FriendsList({Key? key, required this.friends}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      // child: Column(
-      //   children: [
-      //     for (var friend in friends) // 遍历好友列表并显示
-      //       ListTile(
-      //         title: Text(friend['name']), // 假设好友对象中有名为 'name' 的字段
-      //         // onTap: () {}, // 如果需要，可以添加跳转到聊天室的操作
-      //       ),
-      //   ],
-      // ),
+    return ListView.builder(
+      itemCount: friends.length,
+      itemBuilder: (context, index) {
+        // 获取当前好友信息
+        Map<String, dynamic> friend = friends[index];
+
+        // 提取好友的用户名、头像 URL 和 UID
+        String username = friend['data']['username'];
+        String pfpUrl = friend['data']['pfp'];
+        String userUid = friend['data']['uid'];
+
+        // 根据头像 URL 判断应该显示 Icon 还是 Avatar
+        Widget avatarWidget = pfpUrl == 'http://localhost:3000/$userUid.png'
+            ?const Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Icon(Icons.ac_unit_outlined),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Avatar.medium(url: pfpUrl,),
+              );
+
+        return ListTile(
+          title: Row(
+            children: [
+              avatarWidget, // 使用条件表达式选择要显示的头像组件
+              const SizedBox(width: 30),
+              Text(
+                    username,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      letterSpacing: 0.2,
+                      wordSpacing: 1.5,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+            ],
+          ),
+          onTap: () {
+            // 添加您的逻辑以响应好友点击事件
+          },
+        );
+      },
     );
   }
 }
+
 
 
 class SearchBar extends StatefulWidget {//搜尋框、搜尋好友、添加好友列表
@@ -148,4 +182,3 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 }
-

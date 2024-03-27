@@ -56,7 +56,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(100),
         // 設定所需的高度
         child: ClipRect(
           child: BackdropFilter(

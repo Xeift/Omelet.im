@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/src/response.dart';
+import 'package:omelet/api/get/get_friend_list_api.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
 import 'package:omelet/utils/get_friends_list.dart';
 
@@ -10,20 +12,15 @@ class FriendsListPage extends StatefulWidget {
 }
 
 class _FriendsListPageState extends State<FriendsListPage> {
-  final List<String> _friends = []; // 創建好友的空list
+  late Future<List<Map<String, dynamic>>> _friendsListFuture;
+  
+  
+
 
   @override
-  void initState() {//初始化
+  void initState() {
     super.initState();
-    _loadFriends();
-  }
-
-  Future<void> _loadFriends() async {
-    //實現加載好友的功能
-    setState(() {
-      //假得好以列表，測試使用
-      _friends.addAll(['Friend 1', 'Friend 2', 'Friend 3','Friend 1', 'Friend 2', 'Friend 3','Friend 1', 'Friend 2', 'Friend 3','Friend 1', 'Friend 2', 'Friend 3,Friend 1', 'Friend 2', 'Friend 3','Friend 1', 'Friend 2', 'Friend 3','Friend 1', 'Friend 2', 'Friend 3','Friend 1', 'Friend 2', 'Friend 3']);
-    });
+    _friendsListFuture = getFriendsList(); // 獲取好友列表的Future
   }
 
   @override
@@ -34,9 +31,23 @@ class _FriendsListPageState extends State<FriendsListPage> {
         child: Column(
           children: [
             const SearchBar(),
-            SizedBox(
-              height: MediaQuery.of(context).size.height - 150,
-              child: FriendsList(friends: _friends),
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: _friendsListFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(); // 正在加載顯示進度指示器
+                }
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}'); // 如果出現錯誤，顯示錯誤消息
+                }
+                if (snapshot.hasData) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height - 150,
+                    child: FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
+                  );
+                }
+                return const Text('No data available'); // 如果沒有數據，顯示沒有數據消息
+              },
             ),
           ],
         ),
@@ -44,6 +55,29 @@ class _FriendsListPageState extends State<FriendsListPage> {
     );
   }
 }
+
+
+class FriendsList extends StatelessWidget {
+  final List<Map<String, dynamic>> friends; // 添加 friends 参数
+
+  const FriendsList({Key? key, required this.friends}) : super(key: key); // 初始化 friends 参数
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      // child: Column(
+      //   children: [
+      //     for (var friend in friends) // 遍历好友列表并显示
+      //       ListTile(
+      //         title: Text(friend['name']), // 假设好友对象中有名为 'name' 的字段
+      //         // onTap: () {}, // 如果需要，可以添加跳转到聊天室的操作
+      //       ),
+      //   ],
+      // ),
+    );
+  }
+}
+
 
 class SearchBar extends StatefulWidget {//搜尋框、搜尋好友、添加好友列表
   const SearchBar({super.key});
@@ -115,25 +149,3 @@ class _SearchBarState extends State<SearchBar> {
   }
 }
 
-
-class FriendsList extends StatelessWidget {
-  final List<String> friends;
-
-  const FriendsList({super.key, required this.friends});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: friends.length,//好友數量
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(friends[index]),//顯示好友頭像、名稱
-          onTap: () {
-            //TODO:跳轉好友聊天室，須有好友UID
-    
-          },
-        );
-      },
-    );
-  }
-}

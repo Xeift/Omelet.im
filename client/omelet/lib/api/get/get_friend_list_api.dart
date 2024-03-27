@@ -6,7 +6,7 @@ Future<http.Response> getFriendListApi() async {
   final token = await loadJwt();
 
   final res = await http.get(
-      Uri.parse('$serverUri/api/v1/get-user-public-info'),
+      Uri.parse('$serverUri/api/v1/get-friend-list'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token'

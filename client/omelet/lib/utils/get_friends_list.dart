@@ -1,22 +1,37 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-
+import 'package:flutter/semantics.dart';
+import 'package:omelet/api/get/get_user_public_info_api.dart';
+import 'package:omelet/utils/get_user_uid.dart';
 import 'package:omelet/api/get/get_friend_list_api.dart';
+import 'package:omelet/utils/get_user_uid.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
-import 'package:omelet/message/safe_msg_store.dart';
+Future<List<Map<String, dynamic>>> getFriendsList() async {
+  List<Map<String, dynamic>> friends_info_list = [];
+  try {
+    final getFriendsListApi = await getFriendListApi();
+  
+   var jsonResponse = jsonDecode(getFriendsListApi.body);
+    print('[main.dart] 使用者好友👉 ${jsonResponse['data']}');
+    List jsonFriendsData = jsonResponse['data'];
+    List<String> stringList = jsonFriendsData.map((item) => item.toString()).toList();
+    print('${stringList.runtimeType}');
+    print('[get_friends_list.dart]jsonFriendsData:${stringList}');
 
-Future<void> getfriendslist() async {
-  // 取得未讀訊息
-  final getFriendsListApi = await getFriendListApi();
-  final List<dynamic> friendsList = jsonDecode(getFriendsListApi.body)['data'];
-  print('[main.dart] 使用者好友👉 $friendsList');
+    if (jsonFriendsData.isNotEmpty) {
 
-  // 儲存未讀訊息
-  if (friendsList.isNotEmpty) {
-    final safeMsgStore = SafeMsgStore();
-    print(friendsList);
-  }else{
-    print(friendsList);
+
+      return [];
+    } else {
+      print('[get_friedns_list.dart]list is empty');
+      return [];
+    }
+  } catch (e) {
+    // 捕獲可能的異常
+    print('Error fetching friends list: $e');
+    // 返回空列表或適當的錯誤處理
+    return [];
   }
 }

@@ -33,7 +33,6 @@ class _MessagePageState extends State<MessagePage> {
         message: 'HIHI',
         remoteUid: '552415467919118336', // 請確定您有合適的 remoteUid
         messageDate: date,
-        dateMessage: Jiffy.parse('1997/09/23').fromNow(),
         profilePicture: Helpers.randomPictureUrl(),
       ),
     );
@@ -50,7 +49,7 @@ class MessageItemTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(ChatRoomPage.route(messageData));
+        // Navigator.of(context).push(ChatRoomPage.route(messageData,'552415467919118336'));
       },
       child: Container(
         height: 80,

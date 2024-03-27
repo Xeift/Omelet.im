@@ -10,5 +10,6 @@
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "editor.formatOnSave": false,
-    "dart.showDartDeveloperLogs": true
+    "dart.showDartDeveloperLogs": true,
+    "cmake.sourceDirectory": "/Users/maple/Documents/Omelet/Omelet.im/client/omelet/windows"
 }

@@ -1,0 +1,6 @@
+MONGO_URI="mongodb+srv://xeift:Xl2OVvLkUvoU0GI9@omelet-cluster-1.svzxu5e.mongodb.net/mtestdb?retryWrites=true&w=majority"
+GMAIL_APP_PASSWORD="kvgtomczagljjbiz"
+JWT_SECRET="OMELET_JWT_SECRET_2062b51d3893a5ca174a1dba017ad2bdde339b6cad930cdd86b8f47748b81f22"
+BACKEND_PORT=3000
+BACKEND_URL="http://localhost:3000/"
+FRONTEND_URL="http://localhost:3001/"

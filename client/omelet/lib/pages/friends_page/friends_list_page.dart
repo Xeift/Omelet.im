@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/src/response.dart';
 import 'package:omelet/api/get/get_friend_list_api.dart';
 import 'package:omelet/componets/message/avatar.dart';
+import 'package:omelet/models/message_data.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
+import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/utils/get_friends_list.dart';
 
 class FriendsListPage extends StatefulWidget {
@@ -57,11 +59,12 @@ class _FriendsListPageState extends State<FriendsListPage> {
   }
 }
 
+
+
 class FriendsList extends StatelessWidget {
   final List<Map<String, dynamic>> friends;
 
   const FriendsList({Key? key, required this.friends}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -78,7 +81,7 @@ class FriendsList extends StatelessWidget {
         // 根据头像 URL 判断应该显示 Icon 还是 Avatar
         Widget avatarWidget = pfpUrl == 'http://localhost:3000/$userUid.png'
             ?const Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
                 child: Icon(Icons.ac_unit_outlined),
               )
             : Padding(
@@ -103,7 +106,9 @@ class FriendsList extends StatelessWidget {
             ],
           ),
           onTap: () {
-            // 添加您的逻辑以响应好友点击事件
+           //TODO:跳轉至該用戶的聊天頁面
+            Navigator.of(context).push(ChatRoomPage.route(friend));
+      
           },
         );
       },

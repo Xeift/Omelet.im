@@ -20,18 +20,16 @@ import 'package:omelet/utils/get_user_uid.dart';
 
 // String remoteUid = '552415467919118336'; // xeift
 
-String remoteUid = '551338674692820992'; // np
+// String remoteUid = '551338674692820992'; // np
 
 class ChatRoomPage extends StatefulWidget {
-  static Route route(MessageData data) => MaterialPageRoute(
+  static Route route(Map<String, dynamic> friendsInfo) => MaterialPageRoute(
       builder: (context) => ChatRoomPage(
-            messageData: data,
+            friendsInfo: friendsInfo,
           ));
 
-  const ChatRoomPage({Key? key, required this.messageData}) : super(key: key);
-
-  final MessageData messageData;
-
+  const ChatRoomPage({Key? key, required this.friendsInfo}) : super(key: key);
+  final Map<String, dynamic> friendsInfo;
   @override
   State<ChatRoomPage> createState() => ChatRoomPageState();
 }
@@ -54,7 +52,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: AppBar(
-              title: AppBarTitle(messageData: widget.messageData),
+              title: AppBarTitle(friendsInfo: widget.friendsInfo,),
               leading: IconButton(
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
@@ -70,10 +68,10 @@ class ChatRoomPageState extends State<ChatRoomPage> {
       body: Column(
         children: [
           Expanded(
-            child: ReadMessageList(),
+            child: ReadMessageList(friendsInfo: widget.friendsInfo,),
           ),
           _ActionBar(
-            messageData: widget.messageData,
+            friendsInfo: widget.friendsInfo
           ),
         ],
       ),
@@ -87,16 +85,16 @@ class ChatRoomPageState extends State<ChatRoomPage> {
 }
 
 class AppBarTitle extends StatelessWidget {
-  const AppBarTitle({Key? key, required this.messageData}) : super(key: key);
-  final MessageData messageData;
-
+  const AppBarTitle({Key? key, required this.friendsInfo}) : super(key: key);
+  final Map<String, dynamic> friendsInfo;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Avatar.small(
-          url: messageData.profilePicture,
-        ),
+        // Avatar.small(
+        //   url: messageData.profilePicture,
+        // ),
+        const Icon(Icons.ac_unit_outlined),
         const SizedBox(
           width: 16,
         ),
@@ -106,7 +104,7 @@ class AppBarTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                messageData.senderName,
+                friendsInfo['data']['username'],
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 14),
               ),
@@ -120,11 +118,13 @@ class AppBarTitle extends StatelessWidget {
 
 class ReadMessageList extends StatelessWidget {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
+  
 
-  ReadMessageList({super.key});
+  ReadMessageList({super.key, required this.friendsInfo});
+  final Map<String, dynamic> friendsInfo;
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
-    List<String> messages = await safeMsgStore.readAllMsg(remoteUid);
+    List<String> messages = await safeMsgStore.readAllMsg(friendsInfo['data']['uid']);
     if (messages.isNotEmpty) {
       List<Map<String, dynamic>> parsedMessages = messages
           .map((message) => jsonDecode(message))
@@ -312,8 +312,8 @@ class DateLable extends StatelessWidget {
 }
 
 class _ActionBar extends StatefulWidget {
-  const _ActionBar({Key? key, required this.messageData}) : super(key: key);
-  final MessageData messageData;
+  const _ActionBar({Key? key, required this.friendsInfo}) : super(key: key);
+  final Map<String, dynamic> friendsInfo;
 
   @override
   _ActionBarState createState() => _ActionBarState();
@@ -332,8 +332,9 @@ class _ActionBarState extends State<_ActionBar> {
     if (_sendMsgController.text.trim().isNotEmpty) {
       print('[chat_room_page]以下是所有訊息');
       print(_sendMsgController.text);
-      print('[chat_room_page]對方的uid $remoteUid');
-      onSendMsgBtnPressed(remoteUid, _sendMsgController.text);
+      print('[chat_room_page]對方的uid ${widget.friendsInfo['data']['uid']}');
+      // 使用好友信息发送消息
+      onSendMsgBtnPressed(widget.friendsInfo['data']['uid'], _sendMsgController.text);
       setState(() {
         _sendMsgController.clear();
       });

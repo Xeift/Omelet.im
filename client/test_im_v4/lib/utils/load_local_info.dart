@@ -8,7 +8,7 @@ import 'package:test_im_v4/signal_protocol/safe_identity_store.dart';
 // const username = 'np';
 // const password = 'a';
 
-const serverUri = 'https://e9a5-60-249-247-100.ngrok-free.app';
+const serverUri = 'https://7eb3-60-249-247-100.ngrok-free.app';
 const username = 'xeift';
 const password = 'a';
 

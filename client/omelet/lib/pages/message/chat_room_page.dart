@@ -18,9 +18,9 @@ import 'package:omelet/utils/get_user_uid.dart';
 
 // TODO: 需要修改遠端 UID
 
-String remoteUid = '552415467919118336'; // xeift
+// String remoteUid = '552415467919118336'; // xeift
 
-// String remoteUid = '551338674692820992'; // np
+String remoteUid = '551338674692820992'; // np
 
 class ChatRoomPage extends StatefulWidget {
   static Route route(MessageData data) => MaterialPageRoute(
@@ -38,43 +38,38 @@ class ChatRoomPage extends StatefulWidget {
 
 class ChatRoomPageState extends State<ChatRoomPage> {
   static GlobalKey updateChatKey = GlobalKey();
-  static currenInstance(){
-    var state = ChatRoomPageState.updateChatKey.currentContext?.findAncestorStateOfType();
+  static currenInstance() {
+    var state = ChatRoomPageState.updateChatKey.currentContext
+        ?.findAncestorStateOfType();
     return state;
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(65), // 設定所需的高度
-          child: ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: 10, sigmaY: 10
-              ),
-              child: AppBar(
-                title: AppBarTitle(messageData: widget.messageData),
-                leading: IconButton(
-                  icon:const Icon(Icons.arrow_back_ios),
+        preferredSize: const Size.fromHeight(65), // 設定所需的高度
+        child: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: AppBar(
+              title: AppBarTitle(messageData: widget.messageData),
+              leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
                     Navigator.of(context).pop();
-                  }
-                ),
-                backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-                elevation: 0, 
-              ),
+                  }),
+              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+              elevation: 0,
             ),
           ),
         ),
-
-
-      key:updateChatKey,
+      ),
+      key: updateChatKey,
       body: Column(
         children: [
-           Expanded(
+          Expanded(
             child: ReadMessageList(),
           ),
           _ActionBar(
@@ -84,10 +79,11 @@ class ChatRoomPageState extends State<ChatRoomPage> {
       ),
     );
   }
-    reloadData(){
-      setState(() {});
-      print('[chat_room_page]以刷新頁面');
-    }
+
+  reloadData() {
+    setState(() {});
+    print('[chat_room_page]以刷新頁面');
+  }
 }
 
 class AppBarTitle extends StatelessWidget {
@@ -352,7 +348,6 @@ class _ActionBarState extends State<_ActionBar> {
     _sendMsgController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {

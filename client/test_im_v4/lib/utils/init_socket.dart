@@ -63,8 +63,15 @@ Future<void> initSocket() async {
       final (token, ipkPub) = await loadJwtAndIpkPub();
       socket
           .emit('clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
-      
-    
+    });
+
+    socket.on('receivedFriendRequest', (msg) async {
+      print('--------------------------------');
+      print('[main.dart] 已接收到好友邀請👉 $msg');
+      print('--------------------------------\n');
+
+      print('[loading_page] 完成');
+      // TODO: 顯示好友邀請
     });
   } else {
     print('[main.dart] jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');

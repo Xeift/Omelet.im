@@ -23,12 +23,20 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
         theirUid = await authController.getUidByEmail(theirIdentifier);
     }
 
-
     let isTheirUidExsists = await authController.isUserIdExsists(theirUid);
     let isFriend = await friendController.isFriend(theirUid, ourUid);
     let friendRequestExists = await friendController.isFriendRequestExists(ourUid, theirUid);
 
     try {
+        if (ourUid === theirUid) {
+            res.status(409).json({
+                message: '您不能傳送好友邀請給自己',
+                data: null,
+                token: null
+            });  
+            return;
+        }
+
         if (!isTheirUidExsists) {
             res.status(403).json({
                 message: '傳送好友邀請者不存在',

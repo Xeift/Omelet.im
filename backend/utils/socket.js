@@ -144,7 +144,7 @@ module.exports = function(io) {
             console.log('對方已同意好友邀請😎😎😎:', JSON.stringify(msg));
             let initiatorUid = msg['initiatorUid'];
             let initiatorSocketIds = getOnlineSocketIdsByUid(initiatorUid);
-
+            console.log(`[socket] 目前上線的 initiator uid: ${initiatorSocketIds}`);
             // emit event 到對方有上線的 device
             for (let initiatorSocketId of initiatorSocketIds) {
                 console.log(`emit 成功訊息到 ${initiatorUid} ${initiatorSocketId}\n內容：${JSON.stringify(msg)}`);

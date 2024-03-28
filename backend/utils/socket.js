@@ -118,7 +118,7 @@ module.exports = function(io) {
         console.log('--------------------------------');
         console.log(`[socket.js] 客戶端 ${socket.id} 已連接到後端伺服器`);
         
-        // TODO: 加一個監聽 imgUploaded event
+        // 監聽 imgUploaded event
         eventEmitter.on('newImgUploaded', async(msg) => {
             console.log('收到新圖片😎😎😎:', msg);
             await dealWithClientMsgs(msg, socket);
@@ -135,7 +135,6 @@ module.exports = function(io) {
             for (let targetSocketId of targetSocketIds) {
                 console.log(`emit 好友邀請到 ${targetUid} ${targetSocketId}\n內容：${JSON.stringify(msg)}`);
                 socket
-                    .to(targetSocketId)
                     .emit('receivedFriendRequest', JSON.stringify(msg));
             }
             console.log('好友邀請 event emit 完畢');
@@ -151,7 +150,6 @@ module.exports = function(io) {
             for (let initiatorSocketId of initiatorSocketIds) {
                 console.log(`emit 成功訊息到 ${initiatorUid} ${initiatorSocketId}\n內容：${JSON.stringify(msg)}`);
                 socket
-                    .to(initiatorSocketId)
                     .emit('acceptedFriendRequest', JSON.stringify(msg));
             }
         });
@@ -192,6 +190,8 @@ module.exports = function(io) {
             console.log(`[socket.js] 目前線上客戶端👉 ${JSON.stringify(userIdToRoomId)}`);
             console.log('--------------------------------\n');
         });
+
+
 
     });
 };

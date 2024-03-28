@@ -38,6 +38,7 @@ Future<void> initSocket() async {
       socket.on('jwtValid', (data) async {
         print('--------------------------------');
         print('[main.dart] backend connected');
+        print('[init_socket.dart] socketid = ${socket.id}');
         print('--------------------------------\n');
 
         // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
@@ -61,11 +62,11 @@ Future<void> initSocket() async {
 
       print('one!');
 
-      socket.on('receivedFriendRequest', (msg) async {
+      socket.on('receivedFriendRequest', (msg) {
         print('--------------------------------');
-        print('[main.dart] 已接收到好友邀請👉 $msg');
+        print('[loading_page] 已接收到好友邀請👉 $msg');
         print('--------------------------------\n');
-
+        print('[loading_page] socketid = ${socket.id}');
         print('[loading_page] 完成');
         // TODO: 顯示好友邀請
       });

@@ -76,7 +76,7 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
             message: '好友邀請傳送成功',
             data: null,
             token: null
-        });            
+        });
     }
     catch (err) {
         res.status(500).json({

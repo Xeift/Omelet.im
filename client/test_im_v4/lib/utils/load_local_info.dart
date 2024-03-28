@@ -8,8 +8,12 @@ import 'package:test_im_v4/signal_protocol/safe_identity_store.dart';
 // const username = 'np';
 // const password = 'a';
 
-const serverUri = 'https://7eb3-60-249-247-100.ngrok-free.app';
-const username = 'xeift';
+// const serverUri = 'https://7eb3-60-249-247-100.ngrok-free.app';
+// const username = 'xeift';
+// const password = 'a';
+
+const serverUri = 'https://3193-60-249-247-100.ngrok-free.app';
+const username = 'elpma';
 const password = 'a';
 
 Future<String> loadUid() async {

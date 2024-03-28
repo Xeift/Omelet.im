@@ -129,6 +129,7 @@ module.exports = function(io) {
             console.log('收到新好友邀請😎😎😎:', JSON.stringify(msg));
             let targetUid = msg['targetUid'];
             let targetSocketIds = getOnlineSocketIdsByUid(targetUid);
+            console.log(`[socket] 目前上線的 target uid: ${targetSocketIds}`);
 
             // emit event 到對方有上線的 device
             for (let targetSocketId of targetSocketIds) {
@@ -137,6 +138,7 @@ module.exports = function(io) {
                     .to(targetSocketId)
                     .emit('receivedFriendRequest', JSON.stringify(msg));
             }
+            console.log('好友邀請 event emit 完畢');
         });
 
         // 監聽 replyFriendRequest.js 的 acceptedFriendRequest event

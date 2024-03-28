@@ -10,12 +10,19 @@ import 'package:test_im_v4/utils/check_spk_status.dart';
 import 'package:test_im_v4/utils/check_unread_msg.dart';
 
 import 'package:test_im_v4/signal_protocol/generate_and_store_key.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:test_im_v4/message/safe_msg_store.dart';
 
 late io.Socket socket;
 
 Future<void> initSocket() async {
+  // TODO: debug 用：刪除所有儲存空間
+  // const storage = FlutterSecureStorage();
+  // await storage.deleteAll();
+  // print('[init_socket.dart] 已刪除本地資訊');
+  // await Future.delayed(const Duration(seconds: 9999));
+
   // JWT 存在，直接連線到 Socket.io Server
   if (await isJwtExsist()) {
     final (token, ipkPub) = await loadJwtAndIpkPub();
@@ -51,6 +58,19 @@ Future<void> initSocket() async {
         final safeMsgStore = SafeMsgStore();
         await safeMsgStore.storeReceivedMsg(msg);
       });
+
+      print('one!');
+
+      socket.on('receivedFriendRequest', (msg) async {
+        print('--------------------------------');
+        print('[main.dart] 已接收到好友邀請👉 $msg');
+        print('--------------------------------\n');
+
+        print('[loading_page] 完成');
+        // TODO: 顯示好友邀請
+      });
+
+      print('two!');
     });
 
     // 後端檢查 JWT 是否過期
@@ -63,15 +83,6 @@ Future<void> initSocket() async {
       final (token, ipkPub) = await loadJwtAndIpkPub();
       socket
           .emit('clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
-    });
-
-    socket.on('receivedFriendRequest', (msg) async {
-      print('--------------------------------');
-      print('[main.dart] 已接收到好友邀請👉 $msg');
-      print('--------------------------------\n');
-
-      print('[loading_page] 完成');
-      // TODO: 顯示好友邀請
     });
   } else {
     print('[main.dart] jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');

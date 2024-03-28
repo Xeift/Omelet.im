@@ -6,7 +6,7 @@ import 'package:omelet/api/post/reply_friend_request_api.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/models/message_data.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
-import 'package:omelet/message/safe_notify_store.dart';
+import 'package:omelet/storage/safe_notify_store.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);

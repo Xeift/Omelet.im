@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
+import 'package:omelet/storage/safe_util_store.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../models/message_data.dart';
@@ -15,6 +18,34 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
+
+  SafeUtilStore safeUtilStore = SafeUtilStore();
+  List<Map<String, dynamic>> isSended = [];
+  @override
+  void initState() {
+    super.initState();
+    _loadIsSendedList();
+  }
+
+  Future<void> _loadIsSendedList() async {
+    List<Map<String, dynamic>> loadIsSendList = await safeUtilStore.readIsSendeList();
+    List<Map<String, dynamic>> userInfo=[];
+    
+    if(loadIsSendList.isNotEmpty){
+      print('[message_list_page.dart]$loadIsSendList');
+      for (var element in loadIsSendList) {
+      if (element['isSended'] == true) {
+        print(element['uid']);
+      }
+    }
+    }else{
+      print('[message_list_page.dart]布林列表為空');
+    }
+    setState(() {
+      isSended = loadIsSendList;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(

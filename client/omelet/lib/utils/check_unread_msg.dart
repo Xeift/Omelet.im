@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:omelet/api/get/get_unread_msg_api.dart';
 
-import 'package:omelet/message/safe_msg_store.dart';
+import 'package:omelet/storage/safe_msg_store.dart';
 
 Future<void> checkUnreadMsg() async {
   // 取得未讀訊息

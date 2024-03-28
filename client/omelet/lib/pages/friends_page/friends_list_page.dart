@@ -6,6 +6,7 @@ import 'package:omelet/models/message_data.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/utils/get_friends_list.dart';
+import 'package:omelet/storage/safe_util_store.dart';
 
 class FriendsListPage extends StatefulWidget {
   const FriendsListPage({super.key});
@@ -48,8 +49,9 @@ class _FriendsListPageState extends State<FriendsListPage> {
                     height: MediaQuery.of(context).size.height - 150,
                     child: FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
                   );
+                }else {
+                  return const Text('哭沒朋友，請點擊右上角加好友吧～'); // 如果沒有數據，顯示沒有數據消息
                 }
-                return const Text('哈哈 沒朋友，請點擊右上角加好友吧～'); // 如果沒有數據，顯示沒有數據消息
               },
             ),
           ],
@@ -64,7 +66,8 @@ class _FriendsListPageState extends State<FriendsListPage> {
 class FriendsList extends StatelessWidget {
   final List<Map<String, dynamic>> friends;
 
-  const FriendsList({Key? key, required this.friends}) : super(key: key);
+  FriendsList({Key? key, required this.friends}) : super(key: key);
+  SafeUtilStore safeUtilStore = SafeUtilStore();
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -105,8 +108,9 @@ class FriendsList extends StatelessWidget {
                   ),
             ],
           ),
-          onTap: () {
+          onTap: () async {
            //TODO:跳轉至該用戶的聊天頁面
+            await safeUtilStore.writeIsSend(friend['data']['uid'],true);
             Navigator.of(context).push(ChatRoomPage.route(friend));
       
           },

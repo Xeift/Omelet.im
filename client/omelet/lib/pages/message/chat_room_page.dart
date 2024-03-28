@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
-import 'package:omelet/message/safe_msg_store.dart';
+import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/theme/theme_constants.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';

@@ -7,7 +7,7 @@ import 'package:omelet/utils/return_msg_to_server.dart';
 import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
 import 'package:omelet/utils/load_local_info.dart';
-import 'package:omelet/message/safe_msg_store.dart';
+import 'package:omelet/storage/safe_msg_store.dart';
 
 Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
   print('--------------------------------');

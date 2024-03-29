@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
+import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_util_store.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
@@ -20,6 +22,7 @@ class MessagePage extends StatefulWidget {
 class _MessagePageState extends State<MessagePage> {
 
   SafeUtilStore safeUtilStore = SafeUtilStore();
+  SafeMsgStore safeMsgStore = SafeMsgStore();
   List<Map<String, dynamic>> isSended = [];
   @override
   void initState() {
@@ -30,12 +33,19 @@ class _MessagePageState extends State<MessagePage> {
   Future<void> _loadIsSendedList() async {
     List<Map<String, dynamic>> loadIsSendList = await safeUtilStore.readIsSendeList();
     List<Map<String, dynamic>> userInfo=[];
-    
+    List<Map<String,dynamic>> leastMsg = [];
+    //TODO:須將isSended判斷後抓取資料
     if(loadIsSendList.isNotEmpty){
       print('[message_list_page.dart]$loadIsSendList');
       for (var element in loadIsSendList) {
       if (element['isSended'] == true) {
-        print(element['uid']);
+        var res = await getUserPublicInfoApi(element['uid']);
+        Map<String, dynamic> jsonResBody = jsonDecode(res.body); 
+        var resM = await safeMsgStore.getChatList();
+        
+        print('[message_list_page.dart]resM$resM');
+        print('[message_list_page.dart]$jsonResBody');
+        
       }
     }
     }else{

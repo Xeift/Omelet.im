@@ -11,12 +11,13 @@ Future<http.Response> signUpSendMailApi(
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
+    
     body: jsonEncode(<String, String>{
       'email': email,
       'username': username,
       'password': password
     }),
   );
-
+  print('[signup_api.dart]email:$email,username:$username,password:$password');
   return res;
 }

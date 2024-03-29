@@ -140,6 +140,7 @@ module.exports = function(io) {
             for (let targetSocketId of targetSocketIds) {
                 console.log(`emit 好友邀請到 ${targetUid} ${targetSocketId}\n內容：${JSON.stringify(msg)}`);
                 socket
+                    .to(targetSocketId)
                     .emit('receivedFriendRequest', JSON.stringify(msg));
             }
             console.log('好友邀請 event emit 完畢');
@@ -156,6 +157,7 @@ module.exports = function(io) {
             for (let initiatorSocketId of initiatorSocketIds) {
                 console.log(`emit 成功訊息到 ${initiatorUid} ${initiatorSocketId}\n內容：${JSON.stringify(msg)}`);
                 socket
+                    .to(initiatorSocketId)
                     .emit('acceptedFriendRequest', JSON.stringify(msg));
             }
         });

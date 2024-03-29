@@ -44,6 +44,7 @@ app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confir
 app.use('/confirm-reset-email', rateLimit.authLimiter, require('./page/confirm-reset-email.js'));
 
 app.use('/pfp', express.static('pfp'));
+app.use('/img', express.static('img'));
 
 // TODO: debug 用，重置 PreKeyBundle
 app.use('/api/v1/debug-reset-prekeybundle-and-unread-msg', rateLimit.authLimiter, require('./api/debug.js'));

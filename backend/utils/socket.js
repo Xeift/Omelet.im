@@ -119,9 +119,9 @@ module.exports = function(io) {
         console.log(`[socket.js] 客戶端 ${socket.id} 已連接到後端伺服器`);
         
         // 監聽 imgUploaded event
-        eventEmitter.on('newImgUploaded', async(msg) => {
-            console.log('收到新圖片😎😎😎:', msg);
-            await dealWithClientMsgs(msg, socket);
+        eventEmitter.on('newImgUploadedJs', async(msg) => {
+            console.log(`[socket] 收到新圖片😎😎😎:${JSON.stringify(msg)}`);
+            // await dealWithClientMsgs(msg, socket);
         });
 
         // 監聽 sendFriendRequest.js 的 receivedFriendRequest event

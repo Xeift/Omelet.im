@@ -18,6 +18,8 @@ const storage = multer.diskStorage({
         let receiver = req.body.receiver;
         let receiverDeviceId = req.body.receiverDeviceId;
         let filename = req.body.content;
+
+
         cb(null, `${receiver}_${receiverDeviceId}_${filename}.png`);
     }
 });
@@ -48,9 +50,16 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     console.log(`spkId：${spkId}`);
     console.log(`opkId：${opkId}`);
 
-    // TODO: emit to client
-    // send link to the msg
-    eventEmitter.emit('newImgUploaded', 'hi bro');
+    eventEmitter.emit('newImgUploadedJs', {
+        isPreKeySignalMessage: isPreKeySignalMessage,
+        type: type,
+        sender: sender,
+        receiver: receiver,
+        receiverDeviceId: receiverDeviceId,
+        content: `http://localhost:3000/img/${receiver}_${receiverDeviceId}_${filename}.png`,
+        spkId: spkId,
+        opkId: opkId
+    });
 
     try {
         res.status(200).json({

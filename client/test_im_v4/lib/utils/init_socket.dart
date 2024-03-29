@@ -60,8 +60,6 @@ Future<void> initSocket() async {
         await safeMsgStore.storeReceivedMsg(msg);
       });
 
-      print('one!');
-
       socket.on('receivedFriendRequest', (msg) {
         print('--------------------------------');
         print('[loading_page] 已接收到好友邀請👉 $msg');
@@ -70,8 +68,6 @@ Future<void> initSocket() async {
         print('[loading_page] 完成');
         // TODO: 顯示好友邀請
       });
-
-      print('two!');
     });
 
     // 後端檢查 JWT 是否過期

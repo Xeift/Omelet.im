@@ -125,11 +125,16 @@ module.exports = function(io) {
         });
 
         // 監聽 sendFriendRequest.js 的 receivedFriendRequest event
-        eventEmitter.on('receivedFriendRequest', async(msg) => {
-            console.log('收到新好友邀請😎😎😎:', JSON.stringify(msg));
+        eventEmitter.on('receivedFriendRequestJs', async(msg) => {
+            console.log('[socket]------------------------------------------------');
+            console.log(`收到新好友邀請😎: ${JSON.stringify(msg)}`);
+
             let targetUid = msg['targetUid'];
+            console.log(`接收者 uid: ${targetUid}`);
+
             let targetSocketIds = getOnlineSocketIdsByUid(targetUid);
-            console.log(`[socket] 目前上線的 target uid: ${targetSocketIds}`);
+            console.log(`接收者 uid 對應的上線中 socketid: ${targetSocketIds}`);
+            console.log(`目前上線的所有客戶端👉 ${JSON.stringify(userIdToRoomId)}`);
 
             // emit event 到對方有上線的 device
             for (let targetSocketId of targetSocketIds) {
@@ -138,10 +143,11 @@ module.exports = function(io) {
                     .emit('receivedFriendRequest', JSON.stringify(msg));
             }
             console.log('好友邀請 event emit 完畢');
+            console.log('[socket]------------------------------------------------');
         });
 
         // 監聽 replyFriendRequest.js 的 acceptedFriendRequest event
-        eventEmitter.on('acceptedFriendRequest', async(msg) => {
+        eventEmitter.on('acceptedFriendRequestJs', async(msg) => {
             console.log('對方已同意好友邀請😎😎😎:', JSON.stringify(msg));
             let initiatorUid = msg['initiatorUid'];
             let initiatorSocketIds = getOnlineSocketIdsByUid(initiatorUid);

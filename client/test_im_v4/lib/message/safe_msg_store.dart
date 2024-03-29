@@ -113,6 +113,18 @@ class SafeMsgStore {
   }
 
   Future<void> storeReceivedMsg(Map<String, dynamic> receivedMsg) async {
+    if (receivedMsg['type'] == 'image') {
+      print('😎img');
+      print(receivedMsg);
+      final imgUrl = "$serverUri/img/${receivedMsg['content']}";
+      print('$imgUrl');
+      // Directory? downloadsDirectory = await getDownloadsDirectory();
+      // var file = File('${downloadsDirectory?.path}/your_file.png');
+      // final imageBytes =
+      //     Uint8List.fromList(jsonDecode(decryptedMsg).cast<int>());
+      // await file.writeAsBytes(imageBytes);
+    }
+
     final decryptedMsg = await decryptMsg(receivedMsg['isPreKeySignalMessage'],
         int.parse(receivedMsg['sender']), receivedMsg['content']);
 
@@ -124,15 +136,6 @@ class SafeMsgStore {
       senderKey = receivedMsg['receiver'];
     } else {
       senderKey = receivedMsg['sender'];
-    }
-
-    if (receivedMsg['type'] == 'image') {
-      print('😎img');
-      Directory? downloadsDirectory = await getDownloadsDirectory();
-      var file = File('${downloadsDirectory?.path}/your_file.png');
-      final imageBytes =
-          Uint8List.fromList(jsonDecode(decryptedMsg).cast<int>());
-      await file.writeAsBytes(imageBytes);
     }
 
     await writeMsg(senderKey, {

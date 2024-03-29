@@ -56,7 +56,7 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
         sender: sender,
         receiver: receiver,
         receiverDeviceId: receiverDeviceId,
-        content: `http://localhost:3000/img/${receiver}_${receiverDeviceId}_${filename}.png`,
+        content: `${receiver}_${receiverDeviceId}_${filename}.png`,
         spkId: spkId,
         opkId: opkId
     });

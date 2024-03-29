@@ -121,7 +121,7 @@ module.exports = function(io) {
         // 監聽 imgUploaded event
         eventEmitter.on('newImgUploadedJs', async(msg) => {
             console.log(`[socket] 收到新圖片😎😎😎:${JSON.stringify(msg)}`);
-            // await dealWithClientMsgs(msg, socket);
+            await dealWithClientMsgs(msg, socket);
         });
 
         // 監聽 sendFriendRequest.js 的 receivedFriendRequest event

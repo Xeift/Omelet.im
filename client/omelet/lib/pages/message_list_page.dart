@@ -5,6 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
+import 'package:omelet/pages/notification_page/notification_page.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_util_store.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
@@ -24,42 +25,38 @@ class _MessagePageState extends State<MessagePage> {
   SafeUtilStore safeUtilStore = SafeUtilStore();
   SafeMsgStore safeMsgStore = SafeMsgStore();
   List<Map<String, dynamic>> isSended = [];
+
+  Map<String, dynamic> leastMsg = {}; 
+
   @override
   void initState() {
     super.initState();
-    _loadIsSendedList();
+    _initialize();
   }
+  
 
-  Future<void> _loadIsSendedList() async {
-    List<Map<String, dynamic>> loadIsSendList = await safeUtilStore.readIsSendeList();
-    List<Map<String, dynamic>> userInfo=[];
-    List<Map<String,dynamic>> leastMsg = [];
-    //TODO:須將isSended判斷後抓取資料
-    if(loadIsSendList.isNotEmpty){
-      print('[message_list_page.dart]$loadIsSendList');
-      for (var element in loadIsSendList) {
-      if (element['isSended'] == true) {
-        var res = await getUserPublicInfoApi(element['uid']);
-        Map<String, dynamic> jsonResBody = jsonDecode(res.body); 
-        var resM = await safeMsgStore.getChatList();
-        
-        print('[message_list_page.dart]resM$resM');
-        print('[message_list_page.dart]$jsonResBody');
-        
+  Future<void> _initialize() async {
+    Map<String, dynamic>? loadedMsg = await _loadIsSendedList();
+    if (loadedMsg != null && loadedMsg.isNotEmpty) {
+      if (mounted) {
+        setState(() {
+           leastMsg = loadedMsg;
+        });
       }
     }
-    }else{
-      print('[message_list_page.dart]布林列表為空');
-    }
-    setState(() {
-      isSended = loadIsSendList;
-    });
+
+  }
+
+  Future<Map<String, dynamic>?> _loadIsSendedList() async {
+    var resM = await safeMsgStore.getChatList();
+    return resM;
   }
 
   @override
   Widget build(BuildContext context) {
+    print('[message_list_page.dart]leastMsg:$leastMsg');
     return ListView.builder(
-      itemCount: 100, // 您希望顯示的消息數量
+      itemCount: leastMsg.length, 
       itemBuilder: (context, index) {
         return _delegate(context, index);
       },
@@ -67,19 +64,40 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   Widget _delegate(BuildContext context, int index) {
+  if (leastMsg.isNotEmpty) {
     final date = Helpers.randomDate();
-    return MessageItemTitle(
-      messageData: MessageData(
-        senderName: 'TestUser',
-        message: 'HIHI',
-        remoteUid: '552415467919118336', // 請確定您有合適的 remoteUid
-        messageDate: date,
-        profilePicture: Helpers.randomPictureUrl(),
-      ),
-    );
+    final List<String> keys = leastMsg.keys.toList();
+    final List values = leastMsg.values.toList();
+
+    if (index >= 0 && index < leastMsg.length) {
+      final String senderUid = keys[index];
+      final Map<String, dynamic> message = values[index];
+      
+      // 檢查 message 是否為空
+      if (message != null && message.containsKey('remoteUserInfo')) {
+        final String senderName = message['remoteUserInfo']['username'];
+        final String messageContent = message['message']['content'];
+        final String remoteUid = senderUid;
+        final String messageDate = message['message']['timestamp'];
+
+        return MessageItemTitle(
+          messageData: MessageData(
+            senderName: senderName,
+            message: messageContent,
+            remoteUid: remoteUid,
+            messageDate:  DateTime.fromMillisecondsSinceEpoch(int.parse(messageDate)),
+            profilePicture: Helpers.randomPictureUrl(),
+          ),
+        );
+      }
+    }
   }
+
+  // 如果 leastMsg 為空或 index 不在範圍內，返回一個空的小部件或其他適當的處理方式
+  return SizedBox(); // 添加了明確的返回語句
 }
 
+}
 class MessageItemTitle extends StatelessWidget {
   const MessageItemTitle({Key? key, required this.messageData})
       : super(key: key);

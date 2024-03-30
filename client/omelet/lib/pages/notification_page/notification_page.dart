@@ -29,12 +29,12 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Future<void> _sendFriendsAccept() async {
-    replyFriendRequestApi('552415467919118336', true);
+    replyFriendRequestApi('551338674692820992', true);
     print('已成為好友');
   }
 
   Future<void> _removeFriends() async {
-    removeFriendApi('552415467919118336');
+    removeFriendApi('551338674692820992');
     print('已刪除好友');
   }
 

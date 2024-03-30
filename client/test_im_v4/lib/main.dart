@@ -1,10 +1,13 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 
 import 'package:test_im_v4/widget/read_all_storage_btn.dart';
 import 'package:test_im_v4/widget/remove_all_storage_btn.dart';
 import 'package:test_im_v4/widget/msg_widget.dart';
 import 'package:test_im_v4/widget/test_btn.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import 'package:test_im_v4/utils/init_socket.dart';
 
 final hintMsgKey = GlobalKey();
@@ -23,6 +26,21 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   String hintMsg = '這是提示訊息UwU';
+
+  File? imageFile;
+
+  Future<void> loadImage() async {
+    final directory = await getApplicationDocumentsDirectory();
+    List<FileSystemEntity> files = directory.listSync();
+    for (var file in files) {
+      print(file.path);
+    }
+
+    final imagePath = '${directory.path}/output.png';
+    setState(() {
+      imageFile = File(imagePath);
+    });
+  }
 
   @override
   void initState() {
@@ -45,7 +63,12 @@ class _MainAppState extends State<MainApp> {
             textDirection: TextDirection.ltr,
             key: hintMsgKey,
           ),
+          imageFile == null ? Container() : Image.file(imageFile!),
         ])),
+        floatingActionButton: FloatingActionButton(
+          onPressed: loadImage,
+          child: const Icon(Icons.image),
+        ),
       ),
     );
   }

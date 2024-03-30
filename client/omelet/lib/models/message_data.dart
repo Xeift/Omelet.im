@@ -15,7 +15,7 @@ class MessageData {
   final DateTime messageDate;
   final String profilePicture;
 }
-
+@immutable
 class NotificationData {
   const NotificationData({
     required this.title,
@@ -28,6 +28,7 @@ class NotificationData {
   final String type;
   final DateTime notifyDate;
 }
+@immutable
 class FriendsListData{
   const FriendsListData({
     required this.friendsUid,

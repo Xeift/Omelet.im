@@ -38,7 +38,7 @@ ThemeData get lightMode => ThemeData(
     textTheme: const TextTheme(
       bodyLarge:TextStyle(),
     ).apply(
-      bodyColor: Color.fromARGB(255, 0, 0, 0),
+      bodyColor:const Color.fromARGB(255, 0, 0, 0),
     )
     );
 
@@ -67,6 +67,6 @@ ThemeData get darkMode => ThemeData(
     textTheme: const TextTheme(
       bodyLarge:TextStyle(),
     ).apply(
-      bodyColor: Color.fromARGB(255, 255, 255, 255),
+      bodyColor: const Color.fromARGB(255, 255, 255, 255),
     )
     );

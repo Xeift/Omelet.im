@@ -1,11 +1,7 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:jiffy/jiffy.dart';
-import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
-import 'package:omelet/pages/notification_page/notification_page.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_util_store.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
@@ -65,7 +61,6 @@ class _MessagePageState extends State<MessagePage> {
 
   Widget _delegate(BuildContext context, int index) {
   if (leastMsg.isNotEmpty) {
-    final date = Helpers.randomDate();
     final List<String> keys = leastMsg.keys.toList();
     final List values = leastMsg.values.toList();
 
@@ -94,21 +89,25 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   // 如果 leastMsg 為空或 index 不在範圍內，返回一個空的小部件或其他適當的處理方式
-  return SizedBox(); // 添加了明確的返回語句
+  return const SizedBox(); // 添加了明確的返回語句
 }
 
 }
+
 class MessageItemTitle extends StatelessWidget {
-  const MessageItemTitle({Key? key, required this.messageData})
+  MessageItemTitle({Key? key, required this.messageData})
       : super(key: key);
 
   final MessageData messageData;
+  SafeMsgStore safeMsgStore = SafeMsgStore();
+    SafeUtilStore safeUtilStore = SafeUtilStore();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        // Navigator.of(context).push(ChatRoomPage.route(messageData,'552415467919118336'));
+      onTap: () async {
+        // await safeUtilStore.writeIsSend(messageData.remoteUid,true);
+        Navigator.of(context).push(ChatRoomPage.route(messageData.remoteUid));
       },
       child: Container(
         height: 80,

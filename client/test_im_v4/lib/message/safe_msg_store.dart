@@ -87,6 +87,15 @@ class SafeMsgStore {
     });
 
     for (var unreadMsg in unreadMsgs) {
+      // 若為圖片，則根據檔名下載加密過的圖片
+      if (unreadMsg['type'] == 'image') {
+        print('😎img $unreadMsg');
+        final imgUrl = "$serverUri/img/${unreadMsg['content']}";
+        var response = await http.get(Uri.parse(imgUrl));
+        unreadMsg['content'] = response.body;
+      }
+
+      // 解密訊息
       final decryptedMsg = await decryptMsg(
         unreadMsg['isPreKeySignalMessage'],
         int.parse(unreadMsg['sender']),

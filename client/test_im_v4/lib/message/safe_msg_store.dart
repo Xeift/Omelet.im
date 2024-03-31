@@ -8,6 +8,8 @@ import 'package:test_im_v4/api/get/get_user_public_info_api.dart';
 import 'package:test_im_v4/utils/load_local_info.dart';
 import 'package:test_im_v4/signal_protocol/decrypt_msg.dart';
 import 'package:http/http.dart' as http;
+// import 'package:path_provider/path_provider.dart';
+// import 'dart:io';
 
 class SafeMsgStore {
   final storage = const FlutterSecureStorage();

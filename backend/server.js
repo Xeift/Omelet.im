@@ -5,8 +5,6 @@ const rateLimit = require('./utils/rateLimit.js');
 require('dotenv').config({ path: 'config/.env' });
 const BACKEND_PORT = process.env.BACKEND_PORT;
 const SERVER_URI = process.env.SERVER_URI;
-const fs = require('fs');
-const path = require('path');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -46,22 +44,8 @@ app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confir
 app.use('/confirm-reset-email', rateLimit.authLimiter, require('./page/confirm-reset-email.js'));
 
 app.use('/pfp', express.static('pfp'));
-// app.use('/img', express.static('img'));
-app.get('/img/:id', (req, res) => {
-    const filePath = path.join(__dirname, 'img', req.params.id);
+app.use('/img', rateLimit.authLimiter, require('./api/get/downloadImage.js'));
 
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send(err);
-        }
-        else {
-            fs.unlink(filePath, (err) => {
-                if (err) console.error(`Error removing file: ${err}`);
-            });
-        }
-    });
-});
 
 // TODO: debug 用，重置 PreKeyBundle
 app.use('/api/v1/debug-reset-prekeybundle-and-unread-msg', rateLimit.authLimiter, require('./api/debug.js'));

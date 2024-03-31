@@ -8,8 +8,8 @@ import 'package:test_im_v4/api/get/get_user_public_info_api.dart';
 import 'package:test_im_v4/utils/load_local_info.dart';
 import 'package:test_im_v4/signal_protocol/decrypt_msg.dart';
 import 'package:http/http.dart' as http;
-// import 'package:path_provider/path_provider.dart';
-// import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class SafeMsgStore {
   final storage = const FlutterSecureStorage();
@@ -94,6 +94,7 @@ class SafeMsgStore {
         print('😎img $unreadMsg');
         final imgUrl = "$serverUri/img/${unreadMsg['content']}";
         var response = await http.get(Uri.parse(imgUrl));
+        print('resp content ${response.body}');
         unreadMsg['content'] = response.body;
       }
 
@@ -140,14 +141,14 @@ class SafeMsgStore {
       receivedMsg['content'],
     );
 
-    // // 若為圖片，則將解密後的圖片儲存至 App Directory
-    // if (receivedMsg['type'] == 'image') {
-    //   List<int> bytes = jsonDecode(decryptedMsg).cast<int>();
-    //   final directory = await getApplicationDocumentsDirectory();
-    //   File file = File('${directory.path}/output.png');
-    //   print('已儲存到 ${directory.path}/output.png');
-    //   file.writeAsBytesSync(bytes);
-    // }
+    // 若為圖片，則將解密後的圖片儲存至 App Directory
+    if (receivedMsg['type'] == 'image') {
+      List<int> bytes = jsonDecode(decryptedMsg).cast<int>();
+      final directory = await getApplicationDocumentsDirectory();
+      File file = File('${directory.path}/output.png');
+      print('已儲存到 ${directory.path}/output.png');
+      file.writeAsBytesSync(bytes);
+    }
 
     // 處理從自己其他裝置發送訊息的情況
     final String senderKey;

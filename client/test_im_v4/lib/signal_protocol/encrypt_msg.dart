@@ -12,10 +12,6 @@ import 'package:test_im_v4/signal_protocol/safe_session_store.dart';
 import 'package:test_im_v4/signal_protocol/safe_identity_store.dart';
 import 'package:test_im_v4/signal_protocol/download_pre_key_bundle.dart';
 
-// TODO: 新增一個 singleDevicePreKeyBundle 參數
-// 下載單一 PreKeyBundle
-// 直接 encrypt
-
 Future<Map<String, dynamic>> encryptMsg(
     String remoteUid, String msgContent) async {
   final ourUid = await loadUid();

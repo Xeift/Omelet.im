@@ -16,7 +16,6 @@ Future<Map<String, dynamic>> downloadPreKeyBundle(String remoteUid) async {
       jsonDecode(multiDevicesOpkIndexesRes.body);
 
   // opk 分為我方其他裝置的 opk 及 Bob 所有裝置的 opk
-  // TODO: 不要用 our 和 their 區分我方和對方的 opk，一律使用 SignalProtocolAddress 標示
   final ourPreKeyIndex =
       multiDevicesOpkIndexesResBody['data']['ourPreKeyIndex'];
   final theirPreKeyIndex =

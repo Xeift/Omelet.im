@@ -10,8 +10,6 @@ import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 import 'dart:convert';
 import 'package:omelet/storage/safe_notify_store.dart';
 

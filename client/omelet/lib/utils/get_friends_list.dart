@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'package:flutter/semantics.dart';
 import 'package:http/http.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
-import 'package:omelet/utils/get_user_uid.dart';
 import 'package:omelet/api/get/get_friend_list_api.dart';
-import 'package:omelet/utils/get_user_uid.dart';
-import 'package:omelet/utils/load_local_info.dart';
+
 
 Future<List<Map<String, dynamic>>> getFriendsList() async {
   try {

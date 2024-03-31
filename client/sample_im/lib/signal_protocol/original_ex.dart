@@ -63,7 +63,6 @@ Future<void> install() async {
   print(ciphertext); // 打印密文
   print(ciphertext.serialize()); // 打印序列化的密文
 
-  // 創建一個遠程 SessionCipher 來解密訊息
   final signalProtocolStore =
       InMemorySignalProtocolStore(remoteIdentityKeyPair, 1);
   const aliceAddress = SignalProtocolAddress('alice', 1);

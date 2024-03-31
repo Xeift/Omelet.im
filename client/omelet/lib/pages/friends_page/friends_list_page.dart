@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/src/response.dart';
-import 'package:omelet/api/get/get_friend_list_api.dart';
 import 'package:omelet/componets/message/avatar.dart';
-import 'package:omelet/models/message_data.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/utils/get_friends_list.dart';
@@ -63,6 +60,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
 
 
 
+// ignore: must_be_immutable
 class FriendsList extends StatelessWidget {
   final List<Map<String, dynamic>> friends;
 
@@ -109,9 +107,10 @@ class FriendsList extends StatelessWidget {
             ],
           ),
           onTap: () async {
-           //TODO:跳轉至該用戶的聊天頁面
+           //跳轉至該用戶的聊天頁面
             await safeUtilStore.writeIsSend(friend['data']['uid'],true);
-            Navigator.of(context).push(ChatRoomPage.route(friend));
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).push(ChatRoomPage.route(userUid));
       
           },
         );

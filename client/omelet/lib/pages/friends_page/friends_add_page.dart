@@ -1,9 +1,7 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/utils/get_user_uid.dart';
-import 'package:omelet/theme/theme_constants.dart';
 
 class FriendsAddPage extends StatefulWidget {
   const FriendsAddPage({Key? key}) : super(key: key);

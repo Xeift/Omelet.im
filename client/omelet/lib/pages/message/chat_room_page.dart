@@ -4,7 +4,9 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
@@ -23,19 +25,48 @@ import 'package:omelet/utils/get_user_uid.dart';
 // String remoteUid = '551338674692820992'; // np
 
 class ChatRoomPage extends StatefulWidget {
-  static Route route(Map<String, dynamic> friendsInfo) => MaterialPageRoute(
+  static Route route(String friendsUid) => MaterialPageRoute(
       builder: (context) => ChatRoomPage(
-            friendsInfo: friendsInfo,
+            friendsUid: friendsUid,
           ));
 
-  const ChatRoomPage({Key? key, required this.friendsInfo}) : super(key: key);
-  final Map<String, dynamic> friendsInfo;
+  const ChatRoomPage({Key? key, required this.friendsUid}) : super(key: key);
+
+  final String friendsUid;
+
   @override
   State<ChatRoomPage> createState() => ChatRoomPageState();
 }
-
 class ChatRoomPageState extends State<ChatRoomPage> {
   static GlobalKey updateChatKey = GlobalKey();
+  late String friendsUid;
+  late Map<String, dynamic> friendsInfo = {}; // 初始为空Map，表示数据尚未加载完成
+
+  @override
+  void initState() {
+    super.initState();
+    friendsUid = widget.friendsUid;
+    _fetchUserInfo().then((userInfo) {
+      setState(() {
+        friendsInfo = userInfo;
+      });
+    });
+  }
+
+  Future<Map<String, dynamic>> _fetchUserInfo() async {
+    try {
+      final response = await getUserPublicInfoApi(friendsUid);
+      Map<String, dynamic> responseData = jsonDecode(response.body);
+      responseData['data']['uid'] = widget.friendsUid;
+      return responseData;
+    } catch (e) {
+      // 处理错误
+      print('获取用户信息时出错: $e');
+      // 返回一个空的 Map 以避免空指针异常
+      return {};
+    }
+  }
+
   static currenInstance() {
     var state = ChatRoomPageState.updateChatKey.currentContext
         ?.findAncestorStateOfType();
@@ -44,51 +75,66 @@ class ChatRoomPageState extends State<ChatRoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(65), // 設定所需的高度
-        child: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AppBar(
-              title: AppBarTitle(friendsInfo: widget.friendsInfo,),
-              leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-              elevation: 0,
+    if (friendsInfo.isEmpty) {
+      // 数据尚未加载完成，显示加载指示器
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      // 数据加载完成，显示页面
+      return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(65), // 設定所需的高度
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: AppBar(
+                title: AppBarTitle(
+                  friendsInfo: friendsInfo,
+                ),
+                leading: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                backgroundColor:
+                    Theme.of(context).appBarTheme.backgroundColor,
+                elevation: 0,
+              ),
             ),
           ),
         ),
-      ),
-      key: updateChatKey,
-      body: Column(
-        children: [
-          Expanded(
-            child: ReadMessageList(friendsInfo: widget.friendsInfo,),
-          ),
-          _ActionBar(
-            friendsInfo: widget.friendsInfo
-          ),
-        ],
-      ),
-    );
+        key: updateChatKey,
+        body: Column(
+          children: [
+            Expanded(
+              child: ReadMessageList(
+                friendsInfo: friendsInfo,
+              ),
+            ),
+            _ActionBar(friendsInfo: friendsInfo),
+          ],
+        ),
+      );
+    }
   }
-
   reloadData() {
     setState(() {});
     print('[chat_room_page]以刷新頁面');
   }
 }
 
+  
+
 class AppBarTitle extends StatelessWidget {
   const AppBarTitle({Key? key, required this.friendsInfo}) : super(key: key);
   final Map<String, dynamic> friendsInfo;
   @override
   Widget build(BuildContext context) {
+    print('[chat_room_page.dart]friendsInfo$friendsInfo');
     return Row(
       children: [
         // Avatar.small(
@@ -118,13 +164,13 @@ class AppBarTitle extends StatelessWidget {
 
 class ReadMessageList extends StatelessWidget {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
-  
 
   ReadMessageList({super.key, required this.friendsInfo});
   final Map<String, dynamic> friendsInfo;
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
-    List<String> messages = await safeMsgStore.readAllMsg(friendsInfo['data']['uid']);
+    List<String> messages =
+        await safeMsgStore.readAllMsg(friendsInfo['data']['uid']);
     if (messages.isNotEmpty) {
       List<Map<String, dynamic>> parsedMessages = messages
           .map((message) => jsonDecode(message))
@@ -334,7 +380,8 @@ class _ActionBarState extends State<_ActionBar> {
       print(_sendMsgController.text);
       print('[chat_room_page]對方的uid ${widget.friendsInfo['data']['uid']}');
       // 使用好友信息发送消息
-      onSendMsgBtnPressed(widget.friendsInfo['data']['uid'], _sendMsgController.text);
+      onSendMsgBtnPressed(
+          widget.friendsInfo['data']['uid'], _sendMsgController.text);
       setState(() {
         _sendMsgController.clear();
       });

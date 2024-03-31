@@ -1,15 +1,13 @@
 // ignore_for_file: avoid_print
 
-import 'dart:io';
 import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/signal_protocol/decrypt_msg.dart';
+import 'package:http/http.dart' as http;
 
 class SafeMsgStore {
   final storage = const FlutterSecureStorage();
@@ -89,8 +87,20 @@ class SafeMsgStore {
     });
 
     for (var unreadMsg in unreadMsgs) {
-      final decryptedMsg = await decryptMsg(unreadMsg['isPreKeySignalMessage'],
-          int.parse(unreadMsg['sender']), unreadMsg['content']);
+      // 若為圖片，則根據檔名下載加密過的圖片
+      if (unreadMsg['type'] == 'image') {
+        print('😎img $unreadMsg');
+        final imgUrl = "$serverUri/img/${unreadMsg['content']}";
+        var response = await http.get(Uri.parse(imgUrl));
+        unreadMsg['content'] = response.body;
+      }
+
+      // 解密訊息
+      final decryptedMsg = await decryptMsg(
+        unreadMsg['isPreKeySignalMessage'],
+        int.parse(unreadMsg['sender']),
+        unreadMsg['content'],
+      );
 
       // 處理從自己其他裝置發送訊息的情況
       final String senderKey;
@@ -113,8 +123,29 @@ class SafeMsgStore {
   }
 
   Future<void> storeReceivedMsg(Map<String, dynamic> receivedMsg) async {
-    final decryptedMsg = await decryptMsg(receivedMsg['isPreKeySignalMessage'],
-        int.parse(receivedMsg['sender']), receivedMsg['content']);
+    // 若為圖片，則根據檔名下載加密過的圖片
+    if (receivedMsg['type'] == 'image') {
+      print('😎img $receivedMsg');
+      final imgUrl = "$serverUri/img/${receivedMsg['content']}";
+      var response = await http.get(Uri.parse(imgUrl));
+      receivedMsg['content'] = response.body;
+    }
+
+    // 解密訊息
+    final decryptedMsg = await decryptMsg(
+      receivedMsg['isPreKeySignalMessage'],
+      int.parse(receivedMsg['sender']),
+      receivedMsg['content'],
+    );
+
+    // // 若為圖片，則將解密後的圖片儲存至 App Directory
+    // if (receivedMsg['type'] == 'image') {
+    //   List<int> bytes = jsonDecode(decryptedMsg).cast<int>();
+    //   final directory = await getApplicationDocumentsDirectory();
+    //   File file = File('${directory.path}/output.png');
+    //   print('已儲存到 ${directory.path}/output.png');
+    //   file.writeAsBytesSync(bytes);
+    // }
 
     // 處理從自己其他裝置發送訊息的情況
     final String senderKey;
@@ -124,15 +155,6 @@ class SafeMsgStore {
       senderKey = receivedMsg['receiver'];
     } else {
       senderKey = receivedMsg['sender'];
-    }
-
-    if (receivedMsg['type'] == 'image') {
-      print('😎img');
-      Directory? downloadsDirectory = await getDownloadsDirectory();
-      var file = File('${downloadsDirectory?.path}/your_file.png');
-      final imageBytes =
-          Uint8List.fromList(jsonDecode(decryptedMsg).cast<int>());
-      await file.writeAsBytes(imageBytes);
     }
 
     await writeMsg(senderKey, {

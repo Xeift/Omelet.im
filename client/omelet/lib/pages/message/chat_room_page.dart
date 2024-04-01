@@ -15,10 +15,7 @@ import 'package:omelet/theme/theme_constants.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:omelet/api/post/login_api.dart';
-import 'package:omelet/models/message_data.dart';
 import 'package:omelet/utils/get_user_uid.dart';
-
-// TODO: 需要修改遠端 UID
 
 // String remoteUid = '552415467919118336'; // xeift
 
@@ -379,7 +376,6 @@ class _ActionBarState extends State<_ActionBar> {
       print('[chat_room_page]以下是所有訊息');
       print(_sendMsgController.text);
       print('[chat_room_page]對方的uid ${widget.friendsInfo['data']['uid']}');
-      // 使用好友信息发送消息
       onSendMsgBtnPressed(
           widget.friendsInfo['data']['uid'], _sendMsgController.text);
       setState(() {

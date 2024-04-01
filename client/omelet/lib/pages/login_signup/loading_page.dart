@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/utils/get_user_uid.dart';
@@ -43,8 +44,7 @@ class LoadingPageState extends State<LoadingPage> {
   Future<void> initSocket() async {
     try {
       // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
-      // const storage = FlutterSecureStorage();
-      // await storage.deleteAll();
+
       // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
       // print('[loading_page.dart] ${jsonDecode(res.body)}');
 

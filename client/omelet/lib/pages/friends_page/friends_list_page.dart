@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:omelet/api/post/remove_friend_api.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
@@ -89,30 +91,49 @@ class FriendsList extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Avatar.medium(url: pfpUrl,),
               );
+        Future<void> _onDeletedFriends(String userUid) async {
+          await removeFriendApi(userUid);
+          print('[friends_list_page.dart]以刪除好友$userUid');
+        }
 
-        return ListTile(
-          title: Row(
+        return Slidable(
+          
+          endActionPane: ActionPane(
+            
+            motion: const StretchMotion(),
             children: [
-              avatarWidget, // 使用条件表达式选择要显示的头像组件
-              const SizedBox(width: 30),
-              Text(
-                    username,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      letterSpacing: 0.2,
-                      wordSpacing: 1.5,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
+              SlidableAction(
+                onPressed: (context) => _onDeletedFriends(userUid),
+                backgroundColor: Colors.blueGrey,
+                icon:Icons.delete,
+                label: 'Delet Friend',
+                )
             ],
           ),
-          onTap: () async {
-           //跳轉至該用戶的聊天頁面
-            await safeUtilStore.writeIsSend(friend['data']['uid'],true);
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).push(ChatRoomPage.route(userUid));
-      
-          },
+          child: ListTile(
+            title: Row(
+              children: [
+                avatarWidget, 
+                const SizedBox(width: 30),
+                Text(
+                      username,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        letterSpacing: 0.2,
+                        wordSpacing: 1.5,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+              ],
+            ),
+            onTap: () async {
+             //跳轉至該用戶的聊天頁面
+              await safeUtilStore.writeIsSend(friend['data']['uid'],true);
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).push(ChatRoomPage.route(userUid));
+              
+            },
+          ),
         );
       },
     );
@@ -183,6 +204,7 @@ class _SearchBarState extends State<SearchBar> {
                 MaterialPageRoute(builder: (context) => const FriendsAddPage()),
               );
             },
+            
             icon: const Icon(Icons.add),
           ),
         ],

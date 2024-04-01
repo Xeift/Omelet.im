@@ -1,10 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_util_store.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../models/message_data.dart';
 import 'package:omelet/utils/helpers.dart';
@@ -54,9 +57,25 @@ class _MessagePageState extends State<MessagePage> {
     return ListView.builder(
       itemCount: leastMsg.length, 
       itemBuilder: (context, index) {
-        return _delegate(context, index);
+        return Slidable(
+          startActionPane: ActionPane(
+            motion: const StretchMotion(),
+            children: [
+              SlidableAction(
+                flex: 1,
+                backgroundColor: Colors.blueGrey,
+                icon:Icons.delete,
+                label:'delet friend',
+                onPressed:(context) => _onDeleted()),
+            ],
+            
+            ),
+          child:_delegate(context, index)); 
       },
     );
+  }
+  void _onDeleted(){
+    //TODO:寫入刪除訊息列的邏輯
   }
 
   Widget _delegate(BuildContext context, int index) {

@@ -16,10 +16,8 @@ Future<List<Map<String, dynamic>>> getFriendsList() async {
     print('[get_friends_list.dart]jsonFriendsData:$stringList');
 
     if (jsonFriendsData.isNotEmpty) {
-      // 使用 map() 函数将每个 UID 传递给 getUserPublicInfoApi，并生成一个包含 Future<Response> 的列表
       List<Future<Response>> responseFutures = stringList.map((i) => getUserPublicInfoApi(i)).toList();
 
-      // 调用 convertIterableToList 函数，将 Future<Response> 转换为 List<Map<String, dynamic>>
       List<Map<String, dynamic>> resultList = await convertIterableToList(responseFutures,stringList);
       print(resultList);
       return resultList;

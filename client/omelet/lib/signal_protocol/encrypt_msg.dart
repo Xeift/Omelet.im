@@ -14,7 +14,7 @@ import 'package:omelet/signal_protocol/download_pre_key_bundle.dart';
 
 Future<Map<String, dynamic>> encryptMsg(
     String remoteUid, String msgContent) async {
-  final ourUid = await loadUid();
+  final ourUid = await loadCurrentActiveAccount();
   final ipkStore = SafeIdentityKeyStore();
   final registrationId = await ipkStore.getLocalRegistrationId();
   final spkStore = SafeSpkStore();

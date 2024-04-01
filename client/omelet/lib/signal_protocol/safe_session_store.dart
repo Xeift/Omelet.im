@@ -7,20 +7,24 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:libsignal_protocol_dart/src/signal_protocol_address.dart';
 import 'package:libsignal_protocol_dart/src/state/session_record.dart';
 import 'package:libsignal_protocol_dart/src/state/session_store.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
 class SafeSessionStore implements SessionStore {
   final storage = const FlutterSecureStorage();
 
   @override
   Future<bool> containsSession(SignalProtocolAddress address) async {
-    return await storage.read(key: address.toString()) != null;
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    return await storage.read(key: '${ourCurrentUid}_${address.toString()}') !=
+        null;
   }
 
   @override
   Future<void> deleteAllSessions(String name) async {
+    final ourCurrentUid = await loadCurrentActiveAccount();
     final allKeys = await storage.readAll();
     allKeys.keys
-        .where((k) => k.startsWith(name))
+        .where((k) => k.startsWith('${ourCurrentUid}_$name'))
         .forEach((k) async => await storage.delete(key: k));
   }
 
@@ -31,10 +35,12 @@ class SafeSessionStore implements SessionStore {
 
   @override
   Future<List<int>> getSubDeviceSessions(String name) async {
+    final ourCurrentUid = await loadCurrentActiveAccount();
     final deviceIds = <int>[];
     final allKeys = await storage.readAll();
     allKeys.keys
-        .where((k) => k.startsWith(name) && !k.endsWith(':1'))
+        .where(
+            (k) => k.startsWith('${ourCurrentUid}_$name') && !k.endsWith(':1'))
         .forEach((k) => deviceIds.add(int.parse(k.split(':')[1])));
     return deviceIds;
   }
@@ -42,7 +48,9 @@ class SafeSessionStore implements SessionStore {
   @override
   Future<SessionRecord> loadSession(SignalProtocolAddress address) async {
     try {
-      final sessionData = await storage.read(key: address.toString());
+      final ourCurrentUid = await loadCurrentActiveAccount();
+      final sessionData =
+          await storage.read(key: '${ourCurrentUid}_${address.toString()}');
 
       if (sessionData != null) {
         return SessionRecord.fromSerialized(
@@ -58,7 +66,9 @@ class SafeSessionStore implements SessionStore {
   @override
   Future<void> storeSession(
       SignalProtocolAddress address, SessionRecord record) async {
+    final ourUid = await loadCurrentActiveAccount();
     await storage.write(
-        key: address.toString(), value: jsonEncode(record.serialize()));
+        key: '${ourUid}_${address.toString()}',
+        value: jsonEncode(record.serialize()));
   }
 }

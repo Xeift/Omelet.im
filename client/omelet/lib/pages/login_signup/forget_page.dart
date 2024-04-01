@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../componets/alert/alert_msg.dart';
 import 'package:omelet/api/post/reset_password_api.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
 class ForgetPage extends StatefulWidget {
   const ForgetPage({Key? key}) : super(key: key);
@@ -104,7 +105,9 @@ class ForgetPageState extends State<ForgetPage> {
 
             switch (statusCode) {
               case 200:
-                await storage.write(key: 'message', value: 'email 已成功寄出');
+                final ourUid = await loadCurrentActiveAccount();
+                await storage.write(
+                    key: '${ourUid}_message', value: 'email 已成功寄出');
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   loginErrorMsg(context, 'Email 已成功寄出');
                 });

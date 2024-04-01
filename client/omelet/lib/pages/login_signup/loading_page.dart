@@ -43,8 +43,10 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<void> initSocket() async {
     try {
-      // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
-
+      // // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
+      // const storage = FlutterSecureStorage();
+      // await storage.deleteAll();
+      // print('[loading_page] 已刪除所有儲存空間');
       // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
       // print('[loading_page.dart] ${jsonDecode(res.body)}');
 

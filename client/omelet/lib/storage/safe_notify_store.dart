@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
 class SafeNotifyStore {
   final storage = const FlutterSecureStorage();
@@ -11,11 +12,13 @@ class SafeNotifyStore {
     print('[safe_notify_store] 已儲存');
     final key = 'notify_${value['timestamp']}';
     final data = jsonEncode(value);
-    await storage.write(key: key, value: data);
+    final ourUid = await loadCurrentActiveAccount();
+    await storage.write(key: '${ourUid}_$key', value: data);
   }
 
   Future<Map<String, dynamic>> readNotification(int timestamp) async {
-    final key = 'notify_$timestamp';
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    final key = '${ourCurrentUid}_notify_$timestamp';
     final result = await storage.read(key: key);
     return result != null ? jsonDecode(result) : null;
   }
@@ -27,14 +30,11 @@ class SafeNotifyStore {
 
   Future<List> readAllNotifications() async {
     final allValues = await storage.readAll();
+    final ourCurrentUid = await loadCurrentActiveAccount();
     return allValues.entries
-        .where((element) => element.key.startsWith('notify_'))
+        .where((element) => element.key.startsWith('${ourCurrentUid}_notify_'))
         .map((e) => jsonDecode(e.value))
         .toList();
-        //TODO:檢視在notification_page
+    //TODO:檢視在notification_page
   }
 }
-
-
-
-

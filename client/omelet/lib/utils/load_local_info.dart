@@ -7,30 +7,47 @@ import 'package:omelet/signal_protocol/safe_identity_store.dart';
 const serverUri = 'https://0ccc-60-249-247-100.ngrok-free.app';
 // const serverUri = 'http://localhost:3000';
 
+Future<void> changeCurrentActiveAccount(String newUid) async {
+  const storage = FlutterSecureStorage();
+  await storage.write(key: 'currentActiveAccount', value: newUid);
+}
+
+Future<String> loadCurrentActiveAccount() async {
+  const storage = FlutterSecureStorage();
+  final uid = (await storage.read(key: 'currentActiveAccount')).toString();
+
+  return uid;
+}
+
 Future<String> loadUid() async {
   const storage = FlutterSecureStorage();
-  final uid = (await storage.read(key: 'uid')).toString();
+  final ourCurrentUid = await loadCurrentActiveAccount();
+  final uid = (await storage.read(key: '${ourCurrentUid}_uid')).toString();
 
   return uid;
 }
 
 Future<String> loadUserName() async {
   const storage = FlutterSecureStorage();
-  final username = (await storage.read(key: 'username')).toString();
+  final ourCurrentUid = await loadCurrentActiveAccount();
+  final username =
+      (await storage.read(key: '${ourCurrentUid}_username')).toString();
 
   return username;
 }
 
 Future<String> loadJwt() async {
   const storage = FlutterSecureStorage();
-  final token = (await storage.read(key: 'token')).toString();
+  final ourCurrentUid = await loadCurrentActiveAccount();
+  final token = (await storage.read(key: '${ourCurrentUid}_token')).toString();
 
   return token;
 }
 
 Future<(String, String)> loadJwtAndIpkPub() async {
   const storage = FlutterSecureStorage();
-  final token = (await storage.read(key: 'token')).toString();
+  final ourCurrentUid = await loadCurrentActiveAccount();
+  final token = (await storage.read(key: '${ourCurrentUid}_token')).toString();
   final ipkStore = SafeIdentityKeyStore();
   final ipkPub = jsonEncode(
       (await ipkStore.getIdentityKeyPair()).getPublicKey().serialize());

@@ -5,13 +5,17 @@ import 'dart:typed_data';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
 class SafeOpkStore implements PreKeyStore {
   final storage = const FlutterSecureStorage();
 
   @override
   Future<PreKeyRecord> loadPreKey(int preKeyId) async {
-    final opks = jsonDecode((await storage.read(key: 'selfOpk')).toString());
+    final ourCurrentUid = await loadCurrentActiveAccount();
+
+    final opks = jsonDecode(
+        (await storage.read(key: '${ourCurrentUid}_selfOpk')).toString());
     if (opks == null) {
       throw InvalidKeyIdException('no prekey found');
     }
@@ -27,17 +31,22 @@ class SafeOpkStore implements PreKeyStore {
 
   @override
   Future<void> storePreKey(int preKeyId, PreKeyRecord record) async {
-    Map<String, dynamic> preKeys =
-        jsonDecode((await storage.read(key: 'selfOpk')).toString()) ?? {};
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    Map<String, dynamic> preKeys = jsonDecode(
+            (await storage.read(key: '${ourCurrentUid}_selfOpk')).toString()) ??
+        {};
 
     preKeys[preKeyId.toString()] = jsonEncode(record.serialize());
+    final ourUid = await loadCurrentActiveAccount();
 
-    await storage.write(key: 'selfOpk', value: jsonEncode(preKeys));
+    await storage.write(key: '${ourUid}_selfOpk', value: jsonEncode(preKeys));
   }
 
   @override
   Future<bool> containsPreKey(int preKeyId) async {
-    final preKeys = jsonDecode((await storage.read(key: 'selfOpk')).toString());
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    final preKeys = jsonDecode(
+        (await storage.read(key: '${ourCurrentUid}_selfOpk')).toString());
     if (preKeys == null) {
       throw InvalidKeyIdException('no prekey found');
     }
@@ -49,13 +58,15 @@ class SafeOpkStore implements PreKeyStore {
 
   @override
   Future<void> removePreKey(int preKeyId) async {
-    var preKeys = jsonDecode((await storage.read(key: 'selfOpk')).toString());
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    var preKeys = jsonDecode(
+        (await storage.read(key: '${ourCurrentUid}_selfOpk')).toString());
     if (preKeys == null) {
       throw InvalidKeyIdException('no prekey found');
     }
 
     preKeys.remove(preKeyId.toString());
-
-    await storage.write(key: 'selfOpk', value: jsonEncode(preKeys));
+    final ourUid = await loadCurrentActiveAccount();
+    await storage.write(key: '${ourUid}_selfOpk', value: jsonEncode(preKeys));
   }
 }

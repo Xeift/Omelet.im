@@ -11,7 +11,7 @@ import 'package:omelet/storage/safe_msg_store.dart';
 
 Future<void> onSelectImageBtnPressed(
     String theirUid, Function updateHintMsg) async {
-  final ourUid = await loadUid();
+  final ourUid = await loadCurrentActiveAccount();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // 選擇圖片

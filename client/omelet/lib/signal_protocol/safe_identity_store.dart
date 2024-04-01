@@ -9,13 +9,16 @@ import 'package:libsignal_protocol_dart/src/identity_key.dart';
 import 'package:libsignal_protocol_dart/src/identity_key_pair.dart';
 import 'package:libsignal_protocol_dart/src/signal_protocol_address.dart';
 import 'package:libsignal_protocol_dart/src/state/identity_key_store.dart';
+import 'package:omelet/utils/load_local_info.dart';
 
 class SafeIdentityKeyStore implements IdentityKeyStore {
   static const storage = FlutterSecureStorage();
 
   @override
   Future<IdentityKey?> getIdentity(SignalProtocolAddress address) async {
-    final iks = jsonDecode((await storage.read(key: 'othersIpk')).toString());
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    final iks = jsonDecode(
+        (await storage.read(key: '${ourCurrentUid}_othersIpk')).toString());
     if (iks == null) {
       return null;
     }
@@ -31,16 +34,19 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
 
   @override
   Future<IdentityKeyPair> getIdentityKeyPair() async {
-    return IdentityKeyPair.fromSerialized(Uint8List.fromList(
-        jsonDecode((await storage.read(key: 'selfIpk')).toString())
-            .cast<int>()
-            .toList()));
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    return IdentityKeyPair.fromSerialized(Uint8List.fromList(jsonDecode(
+            (await storage.read(key: '${ourCurrentUid}_selfIpk')).toString())
+        .cast<int>()
+        .toList()));
   }
 
   @override
   Future<int> getLocalRegistrationId() async {
+    final ourCurrentUid = await loadCurrentActiveAccount();
     return int.parse(
-        (await storage.read(key: 'localRegistrationId')).toString());
+        (await storage.read(key: '${ourCurrentUid}_localRegistrationId'))
+            .toString());
   }
 
   @override
@@ -56,8 +62,11 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
   @override
   Future<bool> saveIdentity(
       SignalProtocolAddress address, IdentityKey? identityKey) async {
-    Map<String, dynamic> identityKeys =
-        jsonDecode((await storage.read(key: 'othersIpk')).toString()) ?? {};
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    Map<String, dynamic> identityKeys = jsonDecode(
+            (await storage.read(key: '${ourCurrentUid}_othersIpk'))
+                .toString()) ??
+        {};
 
     final existing = identityKeys[address.toString()];
     if (identityKey == null) {
@@ -65,7 +74,9 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
     }
     if (identityKey.serialize() != existing) {
       identityKeys[address.toString()] = jsonEncode(identityKey.serialize());
-      await storage.write(key: 'othersIpk', value: jsonEncode(identityKeys));
+      final ourUid = await loadCurrentActiveAccount();
+      await storage.write(
+          key: '${ourUid}_othersIpk', value: jsonEncode(identityKeys));
       return true;
     } else {
       return false;
@@ -74,10 +85,13 @@ class SafeIdentityKeyStore implements IdentityKeyStore {
 
   Future<bool> saveIdentityKeyPair(
       IdentityKeyPair identityKeyPair, int localRegistrationId) async {
+    final ourUid = await loadCurrentActiveAccount();
     await storage.write(
-        key: 'selfIpk', value: jsonEncode(identityKeyPair.serialize()));
+        key: '${ourUid}_selfIpk',
+        value: jsonEncode(identityKeyPair.serialize()));
     await storage.write(
-        key: 'localRegistrationId', value: localRegistrationId.toString());
+        key: '${ourUid}_localRegistrationId',
+        value: localRegistrationId.toString());
     return true;
   }
 }

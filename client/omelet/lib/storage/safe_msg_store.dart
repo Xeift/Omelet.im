@@ -13,33 +13,35 @@ class SafeMsgStore {
   final storage = const FlutterSecureStorage();
   final ourUid = loadUid();
 
-  String uidToKey(String remoteUid, int index) {
-    return 'msg_${remoteUid}_$index';
+  Future<String> uidToKey(String remoteUid, int index) async {
+    final ourUid = await loadCurrentActiveAccount();
+    return '${ourUid}_msg_${remoteUid}_$index';
   }
 
   Future<void> writeMsg(String remoteUid, Map<String, dynamic> msg) async {
     final msgJson = jsonEncode(msg);
-    String key = uidToKey(remoteUid, await getMsgCount(remoteUid) + 1);
-
+    String key = await uidToKey(remoteUid, await getMsgCount(remoteUid) + 1);
     await storage.write(key: key, value: msgJson);
   }
 
   Future<Map<String, dynamic>> readMsg(String remoteUid, int index) async {
-    String key = uidToKey(remoteUid, index);
-
-    return jsonDecode((await storage.read(key: key)).toString());
+    String key = await uidToKey(remoteUid, index);
+    final ourCurrentUid = await loadCurrentActiveAccount();
+    return jsonDecode(
+        (await storage.read(key: '${ourCurrentUid}_$key')).toString());
   }
 
   Future<void> deleteMsg(String remoteUid, int index) async {
-    String key = uidToKey(remoteUid, index);
+    String key = await uidToKey(remoteUid, index);
 
     await storage.delete(key: key);
   }
 
   Future<int> getMsgCount(String remoteUid) async {
     Map<String, String> allData = await storage.readAll();
+    final ourCurrentUid = await loadCurrentActiveAccount();
     List<String> filteredKeys = allData.keys
-        .where((key) => key.startsWith('msg_${remoteUid}_'))
+        .where((key) => key.startsWith('${ourCurrentUid}_msg_${remoteUid}_'))
         .toList();
 
     return filteredKeys.length;
@@ -49,8 +51,9 @@ class SafeMsgStore {
     // 讀取所有訊息
     Map<String, String> allData = await storage.readAll();
     // 篩選與特定使用者的訊息
+    final ourCurrentUid = await loadCurrentActiveAccount();
     List<String> filteredKeys = allData.keys
-        .where((key) => key.startsWith('msg_${remoteUid}_'))
+        .where((key) => key.startsWith('${ourCurrentUid}_msg_${remoteUid}_'))
         .toList();
     filteredKeys.sort((a, b) =>
         int.parse(b.split('_').last).compareTo(int.parse(a.split('_').last)));
@@ -65,8 +68,9 @@ class SafeMsgStore {
 
   Future<List<String>> readAllMsg(String remoteUid) async {
     Map<String, String> allData = await storage.readAll();
+    final ourCurrentUid = await loadCurrentActiveAccount();
     List<String> filteredKeys = allData.keys
-        .where((key) => key.startsWith('msg_${remoteUid}_'))
+        .where((key) => key.startsWith('${ourCurrentUid}_msg_${remoteUid}_'))
         .toList();
     List<String> messages = [];
     for (String key in filteredKeys) {
@@ -169,13 +173,15 @@ class SafeMsgStore {
   Future<Map<String, dynamic>> getChatList() async {
     Map<String, String> allData = await storage.readAll();
     Map<String, dynamic> lastMsgWithEachUser = {};
+    final ourCurrentUid = await loadCurrentActiveAccount();
 
     for (var entry in allData.entries) {
       List<String> keyParts = entry.key.split('_');
-      if (keyParts.length != 3 || keyParts[0] != 'msg') continue;
+      if (keyParts.length != 4 || keyParts[1] != 'msg') continue;
+      if (keyParts[0] != ourCurrentUid) continue;
 
-      String remoteUid = keyParts[1];
-      int index = int.parse(keyParts[2]);
+      String remoteUid = keyParts[2];
+      int index = int.parse(keyParts[3]);
 
       if (!lastMsgWithEachUser.containsKey(remoteUid) ||
           lastMsgWithEachUser[remoteUid]['index'] < index) {

@@ -178,19 +178,32 @@ class LoginPageState extends State<LoginPage> {
             const storage = FlutterSecureStorage();
             switch (statusCode) {
               case 200:
+                await changeCurrentActiveAccount(resBody['data']['uid']);
+
+                ourUid = await loadCurrentActiveAccount();
+
                 // 將使用者資訊寫入本地儲存空間
-                await storage.write(key: 'token', value: resBody['token']);
-                await storage.write(key: 'uid', value: resBody['data']['uid']);
                 await storage.write(
-                    key: 'username', value: resBody['data']['username']);
+                    key: '${ourUid}_token', value: resBody['token']);
                 await storage.write(
-                    key: 'email', value: resBody['data']['email']);
+                    key: '${ourUid}_uid', value: resBody['data']['uid']);
+                await storage.write(
+                    key: '${ourUid}_username',
+                    value: resBody['data']['username']);
+                await storage.write(
+                    key: '${ourUid}_email', value: resBody['data']['email']);
 
                 // 產生並儲存 Signal Protocol 金鑰
                 await generateAndStoreKey();
                 await LoadingPageState().initSocket();
-                ourUid = await loadUid();
                 print('登入後的uid:{$ourUid}');
+
+                print(
+                    '[login_page] 目前啟用帳號為：${await loadCurrentActiveAccount()}');
+
+                print('[login_page] 目前所有內容：${await storage.readAll()}');
+                print(
+                    '[login_page] 目前所有 key：${(await storage.readAll()).keys}');
                 print('準備跳轉至使用者介面');
                 nextPage();
                 break;

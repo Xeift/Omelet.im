@@ -12,7 +12,7 @@ import 'package:omelet/storage/safe_msg_store.dart';
 Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
   print('--------------------------------');
   print('[on_send_msg_btn_pressed.dart] msgContent: $msgContent');
-  final ourUid = await loadUid();
+  final ourUid = await loadCurrentActiveAccount();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   // 將發送的訊息儲存到本地
@@ -51,7 +51,3 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
   //發送訊息時，顯示一則新訊息在聊天室
   ChatRoomPageState.currenInstance()?.reloadData();
 }
-
-
-
-

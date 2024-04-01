@@ -60,13 +60,12 @@ Future<void> initSocket() async {
         await safeMsgStore.storeReceivedMsg(msg);
       });
 
-      socket.on('receivedFriendRequest', (msg) {
+      socket.on('receivedFriendRequest', (msg) async {
         print('--------------------------------');
         print('[loading_page] 已接收到好友邀請👉 $msg');
         print('--------------------------------\n');
         print('[loading_page] socketid = ${socket.id}');
         print('[loading_page] 完成');
-        // TODO: 顯示好友邀請
       });
     });
 

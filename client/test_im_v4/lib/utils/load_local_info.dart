@@ -16,8 +16,7 @@ import 'package:test_im_v4/signal_protocol/safe_identity_store.dart';
 // const username = 'khusc';
 // const password = 'a';
 
-const serverUri =
-    'https://2776-218-164-16-101.ngrok-free.app';
+const serverUri = 'https://a607-125-227-108-214.ngrok-free.app';
 const username = 'elpma';
 const password = 'a';
 

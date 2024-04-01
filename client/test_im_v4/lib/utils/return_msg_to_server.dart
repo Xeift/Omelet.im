@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
-Future<Map<String, dynamic>> returnMsgToServer(
-    deviceId, singleMsgInfo, receiverUid, ourUid, theirUid, msgContent) async {
+Future<Map<String, dynamic>> returnMsgToServer(deviceId, singleMsgInfo,
+    receiverUid, ourUid, theirUid, msgType, msgContent) async {
   final (cihertext, isPreKeySignalMessage, spkId, opkId) = singleMsgInfo;
 
   print('🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃');
@@ -17,7 +17,7 @@ Future<Map<String, dynamic>> returnMsgToServer(
   if (isPreKeySignalMessage) {
     return {
       'isPreKeySignalMessage': isPreKeySignalMessage,
-      'type': 'text',
+      'type': msgType,
       'sender': ourUid,
       'receiver': receiverUid,
       'receiverDeviceId': deviceId,
@@ -31,7 +31,7 @@ Future<Map<String, dynamic>> returnMsgToServer(
   else {
     return {
       'isPreKeySignalMessage': isPreKeySignalMessage,
-      'type': 'text',
+      'type': msgType,
       'sender': ourUid,
       'receiver': receiverUid,
       'receiverDeviceId': deviceId,

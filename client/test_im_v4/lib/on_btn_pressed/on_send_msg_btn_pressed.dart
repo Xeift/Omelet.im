@@ -30,14 +30,21 @@ Future<void> onSendMsgBtnPressed(
   final ourEncryptedMsg = encryptedMsg['ourEncryptedMsg'];
   final theirEncryptedMsg = encryptedMsg['theirEncryptedMsg'];
 
+  // 將加密過的訊息傳回 Server
   for (var deviceId in ourEncryptedMsg.keys) {
     var singleMsg = await returnMsgToServer(deviceId, ourEncryptedMsg[deviceId],
-        ourUid, ourUid, theirUid, msgContent);
+        ourUid, ourUid, theirUid, 'text', msgContent);
     socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
   }
   for (var deviceId in theirEncryptedMsg.keys) {
-    var singleMsg = await returnMsgToServer(deviceId,
-        theirEncryptedMsg[deviceId], theirUid, ourUid, theirUid, msgContent);
+    var singleMsg = await returnMsgToServer(
+        deviceId,
+        theirEncryptedMsg[deviceId],
+        theirUid,
+        ourUid,
+        theirUid,
+        'text',
+        msgContent);
     socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
   }
 }

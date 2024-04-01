@@ -20,10 +20,6 @@ Future<Map<String, dynamic>> encryptMsg(
   final spkStore = SafeSpkStore();
   final opkStore = SafeOpkStore();
 
-  // 準備所有裝置的 Pre Key Bundle（包含自己及對方）
-  final Map<String, dynamic> multiDevicesPreKeyBundle =
-      await downloadPreKeyBundle(remoteUid);
-
   Future<(String, bool, dynamic, dynamic)> encryptSingleMsg(
       String deviceId, dynamic singlePreKeyBundle, String receiverUid) async {
     final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
@@ -118,6 +114,10 @@ Future<Map<String, dynamic>> encryptMsg(
       }
     }
   }
+
+  // 準備所有裝置的 Pre Key Bundle（包含自己及對方）
+  final Map<String, dynamic> multiDevicesPreKeyBundle =
+      await downloadPreKeyBundle(remoteUid);
 
   // 自己其他裝置的 Pre Key Bundle
   final ourPreKeyBundleConverted =

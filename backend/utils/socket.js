@@ -169,7 +169,7 @@ module.exports = function(io) {
             let decodedToken = await jwt.verifyJWTSocket(token);
             if (decodedToken === null) {
                 console.log('[socket.js] 👉 token expired');
-                socket.emit('jwtExpired');
+                socket.to(socket.id).emit('jwtExpired');
             }
             else {
                 let uid = decodedToken['_uid'];
@@ -177,7 +177,7 @@ module.exports = function(io) {
 
                 addUser(uid, deviceId, socket.id);
 
-                socket.emit('jwtValid');
+                socket.to(socket.id).emit('jwtValid');
                 console.log(`[socket.js] 線上客戶端👉 ${JSON.stringify(userIdToRoomId)}`);
                 console.log('--------------------------------\n');
             }

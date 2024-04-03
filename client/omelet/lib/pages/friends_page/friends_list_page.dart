@@ -16,9 +16,6 @@ class FriendsListPage extends StatefulWidget {
 
 class _FriendsListPageState extends State<FriendsListPage> {
   late Future<List<Map<String, dynamic>>> _friendsListFuture;
-  
-  
-
 
   @override
   void initState() {
@@ -48,7 +45,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                     height: MediaQuery.of(context).size.height - 150,
                     child: FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
                   );
-                }else {
+                } else {
                   return const Text('哭沒朋友，請點擊右上角加好友吧～'); // 如果沒有數據，顯示沒有數據消息
                 }
               },
@@ -59,8 +56,6 @@ class _FriendsListPageState extends State<FriendsListPage> {
     );
   }
 }
-
-
 
 // ignore: must_be_immutable
 class FriendsList extends StatelessWidget {
@@ -83,13 +78,15 @@ class FriendsList extends StatelessWidget {
 
         // 根据头像 URL 判断应该显示 Icon 还是 Avatar
         Widget avatarWidget = pfpUrl == 'http://localhost:3000/$userUid.png'
-            ?const Padding(
+            ? const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Icon(Icons.ac_unit_outlined),
               )
             : Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Avatar.medium(url: pfpUrl,),
+                child: Avatar.medium(
+                  url: pfpUrl,
+                ),
               );
         Future<void> _onDeletedFriends(String userUid) async {
           await removeFriendApi(userUid);
@@ -97,41 +94,38 @@ class FriendsList extends StatelessWidget {
         }
 
         return Slidable(
-          
           endActionPane: ActionPane(
-            
             motion: const StretchMotion(),
             children: [
               SlidableAction(
                 onPressed: (context) => _onDeletedFriends(userUid),
                 backgroundColor: Colors.blueGrey,
-                icon:Icons.delete,
+                icon: Icons.delete,
                 label: 'Delet Friend',
-                )
+              )
             ],
           ),
           child: ListTile(
             title: Row(
               children: [
-                avatarWidget, 
+                avatarWidget,
                 const SizedBox(width: 30),
                 Text(
-                      username,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        letterSpacing: 0.2,
-                        wordSpacing: 1.5,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                  username,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    letterSpacing: 0.2,
+                    wordSpacing: 1.5,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
               ],
             ),
             onTap: () async {
-             //跳轉至該用戶的聊天頁面
-              await safeUtilStore.writeIsSend(friend['data']['uid'],true);
+              //跳轉至該用戶的聊天頁面
+              await safeUtilStore.writeIsSend(friend['data']['uid'], true);
               // ignore: use_build_context_synchronously
               Navigator.of(context).push(ChatRoomPage.route(userUid));
-              
             },
           ),
         );
@@ -140,14 +134,14 @@ class FriendsList extends StatelessWidget {
   }
 }
 
-
-
-class SearchBar extends StatefulWidget {//搜尋框、搜尋好友、添加好友列表
+class SearchBar extends StatefulWidget {
+  //搜尋框、搜尋好友、添加好友列表
   const SearchBar({super.key});
 
   @override
   State<SearchBar> createState() => _SearchBarState();
 }
+
 class _SearchBarState extends State<SearchBar> {
   final TextEditingController _searchController = TextEditingController();
 
@@ -191,7 +185,8 @@ class _SearchBarState extends State<SearchBar> {
             ),
           ),
           IconButton(
-            onPressed: () {//搜尋好友Button
+            onPressed: () {
+              //搜尋好友Button
               final query = _searchController.text;
             },
             icon: const Icon(Icons.search),
@@ -199,12 +194,12 @@ class _SearchBarState extends State<SearchBar> {
           const SizedBox(width: 10),
           IconButton(
             onPressed: () {
-              Navigator.push(//挑轉至添加好有頁面(FriendsAddPage)
+              Navigator.push(
+                // 跳轉至添加好有頁面(FriendsAddPage)
                 context,
                 MaterialPageRoute(builder: (context) => const FriendsAddPage()),
               );
             },
-            
             icon: const Icon(Icons.add),
           ),
         ],

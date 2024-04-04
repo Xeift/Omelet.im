@@ -61,13 +61,13 @@ class _NotificationPageState extends State<NotificationPage> {
                   );
                 } else if (realMsg[index]['type'] == 'system') {
                 } else {
-                  print('[notification_page.dart]Error type for notification');
+                  print('[notification_page.dart] Error type for notification');
                 }
               },
             );
           } else {
             return const Center(
-              child: Text('[notification_page.dart]you have no message now'),
+              child: Text('[notification_page.dart] you have no message now'),
             );
           }
         });

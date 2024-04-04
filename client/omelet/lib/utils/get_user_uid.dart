@@ -6,5 +6,5 @@ String ourUid = '';
 
 Future<void> getUserUid() async {
   ourUid = await loadCurrentActiveAccount();
-  print('抓取使用者uid{$ourUid}');
+  print('抓取使用者uid$ourUid');
 }

@@ -24,7 +24,10 @@ class SafeNotifyStore {
   }
 
   Future<void> deleteNotification(int timestamp) async {
-    final key = 'notify_$timestamp';
+    final ourUid = await loadCurrentActiveAccount();
+    final key = '${ourUid}_notify_$timestamp';
+    print('deleteNotification key 為：$key');
+    print('目前所有儲存空間內容：${await storage.readAll()}');
     await storage.delete(key: key);
     print('[safe_notify_store]key:$key');
   }

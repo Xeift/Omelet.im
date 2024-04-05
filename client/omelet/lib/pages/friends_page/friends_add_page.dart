@@ -43,6 +43,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('[friends_add_page]ourUid$ourUid');
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(

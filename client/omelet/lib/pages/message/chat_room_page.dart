@@ -207,17 +207,17 @@ class ReadMessageList extends StatelessWidget {
           itemBuilder: (context, index) {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
-            final isOwnMessage = realmessage['sender'].toString() != ourUid;
+            final isOwnMessage = realmessage['sender'].toString() == ourUid;
             return isOwnMessage
                 ? MessageTitle(
                     message: realmessage['content'],
-                    messageDate: DateFormat('h:mm a').format(
+                    messageDate: DateFormat('MMMM/d h:mm a').format(
                       DateTime.fromMillisecondsSinceEpoch(timestamp),
                     ),
                   )
                 : MessageOwnTitle(
                     message: realmessage['content'],
-                    messageDate: DateFormat('h:mm a').format(
+                    messageDate: DateFormat('MMMM/d h:mm a').format(
                       DateTime.fromMillisecondsSinceEpoch(timestamp),
                     ),
                   );

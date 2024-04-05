@@ -34,6 +34,7 @@ class ChatRoomPage extends StatefulWidget {
   @override
   State<ChatRoomPage> createState() => ChatRoomPageState();
 }
+
 class ChatRoomPageState extends State<ChatRoomPage> {
   static GlobalKey updateChatKey = GlobalKey();
   late String friendsUid;
@@ -97,8 +98,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
-                backgroundColor:
-                    Theme.of(context).appBarTheme.backgroundColor,
+                backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
                 elevation: 0,
               ),
             ),
@@ -118,13 +118,12 @@ class ChatRoomPageState extends State<ChatRoomPage> {
       );
     }
   }
+
   reloadData() {
     setState(() {});
     print('[chat_room_page]以刷新頁面');
   }
 }
-
-  
 
 class AppBarTitle extends StatelessWidget {
   const AppBarTitle({Key? key, required this.friendsInfo}) : super(key: key);

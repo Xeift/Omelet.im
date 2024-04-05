@@ -4,7 +4,6 @@ import 'package:omelet/utils/get_user_uid.dart';
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:http/http.dart' as http;
 
-
 class AvatarCard extends StatelessWidget {
   AvatarCard({
     Key? key,
@@ -22,7 +21,6 @@ class AvatarCard extends StatelessWidget {
       return false; // 發生任何異常時都視為無效的 URL
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +38,13 @@ class AvatarCard extends StatelessWidget {
                   final bool isUrlValid = urlSnapshot.data ?? false;
                   return Row(
                     children: [
-                      if (isUrlValid)  // 判斷是否為有效的 URL
-                            Avatar.large(url:imgUrl)  // 如果是有效的 URL，顯示圖片
-                          else
-                            const Icon(Icons.account_circle_outlined,size: 55,),
+                      if (isUrlValid) // 判斷是否為有效的 URL
+                        Avatar.large(url: imgUrl) // 如果是有效的 URL，顯示圖片
+                      else
+                        const Icon(
+                          Icons.account_circle_outlined,
+                          size: 55,
+                        ),
                       const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

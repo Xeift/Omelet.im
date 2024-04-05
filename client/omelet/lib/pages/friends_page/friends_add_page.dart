@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/utils/get_user_uid.dart';
@@ -22,9 +21,10 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
 
   Future<void> _sendRequest() async {
     try {
-      if (_requestFriendsController.text.trim().isNotEmpty && _requestFriendsType.isNotEmpty) {
-
-        final res = await sendFriendRequestApi(_requestFriendsController.text, _requestFriendsType);
+      if (_requestFriendsController.text.trim().isNotEmpty &&
+          _requestFriendsType.isNotEmpty) {
+        final res = await sendFriendRequestApi(
+            _requestFriendsController.text, _requestFriendsType);
         final statusCode = res.statusCode;
         final String resBody = res.body;
         print('[friends_add_page] 好友邀請送出型態: $_requestFriendsType');
@@ -180,7 +180,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(200, 50),
                     ),
-                    child:const Text('Submit'),
+                    child: const Text('Submit'),
                   ),
                 ],
               ),

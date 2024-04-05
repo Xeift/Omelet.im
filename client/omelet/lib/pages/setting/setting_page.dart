@@ -17,14 +17,9 @@ class SettingPage extends StatefulWidget {
   State<SettingPage> createState() => _SettingPageState();
 }
 
-
-
 class _SettingPageState extends State<SettingPage> {
-
-  
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width; //抓取螢幕寬度
     TextTheme textTheme = Theme.of(context).textTheme;
     //bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -62,10 +57,10 @@ class _SettingPageState extends State<SettingPage> {
                                     width: 300,
                                     height: 55,
                                     child: ElevatedButton(
-                                      onPressed: () async{
+                                      onPressed: () async {
                                         onUpdatePfpBtnPressed();
                                         setState(() {});
-                                      }, 
+                                      },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               Color.fromARGB(0, 255, 255, 255)),
@@ -87,10 +82,9 @@ class _SettingPageState extends State<SettingPage> {
                                     width: 300,
                                     height: 55,
                                     child: ElevatedButton(
-                                      onPressed: () async{
+                                      onPressed: () async {
                                         print('[setting_page]刪除圖片');
                                       },
-                                        
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               Color.fromARGB(0, 255, 255, 255)),
@@ -110,12 +104,11 @@ class _SettingPageState extends State<SettingPage> {
                         );
                       });
                 },
-                child:AvatarCard(),
+                child: AvatarCard(),
               ),
               const SizedBox(
                 height: 20,
               ),
- 
               const Divider(),
               const SizedBox(
                 height: 10,

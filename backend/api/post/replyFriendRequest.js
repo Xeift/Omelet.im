@@ -8,8 +8,12 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let decodedToken = req.decodedToken;
     let ourUid = decodedToken._uid;
     let theirUid = req.body.theirUid;
-    let isAgree = req.body.isAgree;
+    let isAgree = JSON.parse(req.body.isAgree);
     let isFriend = await friendController.isFriend(theirUid, ourUid);
+
+    console.log(`isAgree ${isAgree}`);
+    console.log(`isAgree tp ${typeof(isAgree)}`);
+
     let friendRequestExists = await friendController.isFriendRequestExists(theirUid, ourUid);
 
     try {
@@ -49,7 +53,7 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
             });
         }
         else {
-            await friendController.removeFriendRequest(ourUid, theirUid);
+            await friendController.removeFriendRequest(theirUid, ourUid);
 
             res.status(200).json({
                 message: '已拒絕對方的好友邀請',

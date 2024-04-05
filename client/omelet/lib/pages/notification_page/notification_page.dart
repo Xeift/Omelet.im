@@ -30,7 +30,6 @@ class _NotificationPageState extends State<NotificationPage> {
     }
   }
 
-
   Future<void> _handleRefresh9() async {
     setState(() {});
   }
@@ -55,7 +54,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     final int requestTime = realMsg[index]['timestamp'];
                     print('[notification_page.dart]realMsg:$realMsg');
                     return FriednsRequestItemTitle(
-                      requestTime:requestTime,
+                      requestTime: requestTime,
                       requestData: realMsg,
                       requestUid: requestUid,
                     );
@@ -77,7 +76,7 @@ class _NotificationPageState extends State<NotificationPage> {
 }
 
 class FriednsRequestItemTitle extends StatelessWidget {
-   FriednsRequestItemTitle({
+  FriednsRequestItemTitle({
     Key? key,
     required this.requestTime,
     required this.requestData,
@@ -99,21 +98,21 @@ class FriednsRequestItemTitle extends StatelessWidget {
     return resBody;
   }
 
-    Future<void> _sendFriendsAccept() async {
-    await replyFriendRequestApi(requestUid, true);
+  Future<void> _sendFriendsAccept() async {
+    final res = await replyFriendRequestApi(requestUid, true);
+    print('[notification_page.dart] ${res.body}');
     print('[notification_page.dart]已成為好友');
     await safeNotifyStore.deleteNotification(requestTime);
     print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
-    
   }
 
-    Future<void> _sendFriendsDismiss() async {
-    await replyFriendRequestApi(requestUid, false);
+  Future<void> _sendFriendsDismiss() async {
+    final res = await replyFriendRequestApi(requestUid, false);
+    print('[notification_page.dart] ${res.body}');
     print('拒絕邀請🥲');
     await safeNotifyStore.deleteNotification(requestTime);
     print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -143,48 +142,52 @@ class FriednsRequestItemTitle extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                      child:Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(10.0),
-                            // child: Avatar.medium(url: messageData.profilePicture),
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  username,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    letterSpacing: 0.2,
-                                    wordSpacing: 1.5,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                  child: Text(
-                                    '好友邀請',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromARGB(255, 162, 162, 162),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          ElevatedButton(onPressed: _sendFriendsAccept, child:const Text('accept')),
-                          const SizedBox(width: 5,),
-                          ElevatedButton(onPressed: _sendFriendsDismiss, child:const Text('Dismiss'))
-                        ],
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        // child: Avatar.medium(url: messageData.profilePicture),
                       ),
-                    
-                  
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              username,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                letterSpacing: 0.2,
+                                wordSpacing: 1.5,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                '好友邀請',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromARGB(255, 162, 162, 162),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                          onPressed: _sendFriendsAccept,
+                          child: const Text('accept')),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      ElevatedButton(
+                          onPressed: _sendFriendsDismiss,
+                          child: const Text('Dismiss'))
+                    ],
+                  ),
                 ),
               ),
             );

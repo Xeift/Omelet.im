@@ -24,7 +24,8 @@ class SafeNotifyStore {
   }
 
   Future<void> deleteNotification(int timestamp) async {
-    final key = 'notify_$timestamp';
+    final ourUid = await loadCurrentActiveAccount();
+    final key = '${ourUid}_notify_$timestamp';
     await storage.delete(key: key);
   }
 
@@ -35,6 +36,5 @@ class SafeNotifyStore {
         .where((element) => element.key.startsWith('${ourCurrentUid}_notify_'))
         .map((e) => jsonDecode(e.value))
         .toList();
-
   }
 }

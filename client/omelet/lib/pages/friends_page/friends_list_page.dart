@@ -35,7 +35,9 @@ class _FriendsListPageState extends State<FriendsListPage> {
               future: _friendsListFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(); // 正在加載顯示進度指示器
+                  return const LinearProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
+                  ); // 正在加載顯示進度指示器
                 }
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}'); // 如果出現錯誤，顯示錯誤消息
@@ -88,7 +90,7 @@ class FriendsList extends StatelessWidget {
                   url: pfpUrl,
                 ),
               );
-        Future<void> _onDeletedFriends(String userUid) async {
+        Future<void> onDeletedFriends(String userUid) async {
           await removeFriendApi(userUid);
           print('[friends_list_page.dart]以刪除好友$userUid');
         }
@@ -98,7 +100,7 @@ class FriendsList extends StatelessWidget {
             motion: const StretchMotion(),
             children: [
               SlidableAction(
-                onPressed: (context) => _onDeletedFriends(userUid),
+                onPressed: (context) => onDeletedFriends(userUid),
                 backgroundColor: Colors.blueGrey,
                 icon: Icons.delete,
                 label: 'Delet Friend',
@@ -187,7 +189,7 @@ class _SearchBarState extends State<SearchBar> {
           IconButton(
             onPressed: () {
               //搜尋好友Button
-              final query = _searchController.text;
+              // final query = _searchController.text;
             },
             icon: const Icon(Icons.search),
           ),

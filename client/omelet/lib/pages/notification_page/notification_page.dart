@@ -2,10 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
-import 'package:omelet/api/post/remove_friend_api.dart';
 import 'package:omelet/api/post/reply_friend_request_api.dart';
-import 'package:omelet/componets/message/avatar.dart';
-import 'package:omelet/models/message_data.dart';
 import 'package:omelet/storage/safe_notify_store.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -23,6 +20,7 @@ class _NotificationPageState extends State<NotificationPage> {
     List<Map<String, dynamic>> jsonMessages =
         messages.map((message) => message as Map<String, dynamic>).toList();
     if (messages.isNotEmpty) {
+      print('[notification_page.dart]通知內容物：$jsonMessages');
       return jsonMessages;
     } else {
       print('[notification_page.dart]沒有通知資料');
@@ -40,7 +38,9 @@ class _NotificationPageState extends State<NotificationPage> {
         future: fetchAndDisplayNotifications(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
+            );
           }
           List<Map<String, dynamic>> realMsg = snapshot.data!;
           if (snapshot.hasData) {
@@ -120,7 +120,9 @@ class FriednsRequestItemTitle extends StatelessWidget {
       future: fetchAndDisplayPublicInfo(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
+            );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {

@@ -1,3 +1,5 @@
+// 註冊用
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -11,7 +13,6 @@ Future<http.Response> signUpSendMailApi(
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    
     body: jsonEncode(<String, String>{
       'email': email,
       'username': username,

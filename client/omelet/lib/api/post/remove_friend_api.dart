@@ -1,3 +1,5 @@
+// 透過 uid 移除特定好友
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;

@@ -1,3 +1,5 @@
+// 透過 uid 或使用者名稱發好友邀請
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;

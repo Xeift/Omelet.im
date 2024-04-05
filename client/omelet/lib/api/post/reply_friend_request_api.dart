@@ -1,3 +1,5 @@
+// 同意或拒絕發給自身的好友邀請
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;

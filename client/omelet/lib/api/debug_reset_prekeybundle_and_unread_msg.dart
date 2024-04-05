@@ -1,3 +1,5 @@
+// debug 用，可刪除MongoDB 中所有 pre key bundle 和 unread msg
+
 import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/load_local_info.dart';

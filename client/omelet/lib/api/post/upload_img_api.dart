@@ -1,3 +1,5 @@
+// 使用者上傳圖片用
+
 import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/load_local_info.dart';

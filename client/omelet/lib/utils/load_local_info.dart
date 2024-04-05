@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 
 const serverUri =
-    'https://c465-2001-b011-c009-d36b-b059-441a-399a-e252.ngrok-free.app';
+    'https://9077-2001-b011-c009-3687-315e-1153-fdfd-204c.ngrok-free.app';
 // const serverUri = 'http://localhost:3000';
 
 Future<void> changeCurrentActiveAccount(String newUid) async {

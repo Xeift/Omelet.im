@@ -1,3 +1,5 @@
+// 取得使用者公開資訊，包括 uid、使用者名稱、頭像
+
 import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/load_local_info.dart';

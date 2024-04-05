@@ -1,3 +1,5 @@
+// 初次使用時上傳 pre key bundle
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;

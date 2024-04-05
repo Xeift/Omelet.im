@@ -35,6 +35,6 @@ class SafeNotifyStore {
         .where((element) => element.key.startsWith('${ourCurrentUid}_notify_'))
         .map((e) => jsonDecode(e.value))
         .toList();
-    //TODO:檢視在notification_page
+
   }
 }

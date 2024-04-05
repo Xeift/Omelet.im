@@ -30,14 +30,9 @@ class _NotificationPageState extends State<NotificationPage> {
     }
   }
 
-  Future<void> _sendFriendsAccept() async {
-    replyFriendRequestApi('551338674692820992', true);
-    print('已成為好友');
-  }
 
-  Future<void> _removeFriends() async {
-    removeFriendApi('551338674692820992');
-    print('已刪除好友');
+  Future<void> _handleRefresh9() async {
+    setState(() {});
   }
 
   @override
@@ -50,20 +45,27 @@ class _NotificationPageState extends State<NotificationPage> {
           }
           List<Map<String, dynamic>> realMsg = snapshot.data!;
           if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: realMsg.length,
-              itemBuilder: (context, index) {
-                if (realMsg[index]['type'] == 'friend_request') {
-                  final String requestUid = realMsg[index]['initiatorUid'];
-                  return FriednsRequestItemTitle(
-                    requestData: realMsg,
-                    requestUid: requestUid,
-                  );
-                } else if (realMsg[index]['type'] == 'system') {
-                } else {
-                  print('[notification_page.dart] Error type for notification');
-                }
-              },
+            return RefreshIndicator(
+              onRefresh: _handleRefresh9,
+              child: ListView.builder(
+                itemCount: realMsg.length,
+                itemBuilder: (context, index) {
+                  if (realMsg[index]['type'] == 'friend_request') {
+                    final String requestUid = realMsg[index]['initiatorUid'];
+                    final int requestTime = realMsg[index]['timestamp'];
+                    print('[notification_page.dart]realMsg:$realMsg');
+                    return FriednsRequestItemTitle(
+                      requestTime:requestTime,
+                      requestData: realMsg,
+                      requestUid: requestUid,
+                    );
+                  } else if (realMsg[index]['type'] == 'system') {
+                  } else {
+                    print(
+                        '[notification_page.dart] Error type for notification');
+                  }
+                },
+              ),
             );
           } else {
             return const Center(
@@ -75,32 +77,58 @@ class _NotificationPageState extends State<NotificationPage> {
 }
 
 class FriednsRequestItemTitle extends StatelessWidget {
-  const FriednsRequestItemTitle(
-      {Key? key, required this.requestData, required this.requestUid})
-      : super(key: key);
+   FriednsRequestItemTitle({
+    Key? key,
+    required this.requestTime,
+    required this.requestData,
+    required this.requestUid,
+  }) : super(key: key);
+
   final List<Map<String, dynamic>> requestData;
   final String requestUid;
+  final int requestTime;
 
-  Future<Map<String, dynamic>> fetchAndDisplaPublicInfo() async {
+  final SafeNotifyStore safeNotifyStore = SafeNotifyStore();
+
+  Future<Map<String, dynamic>> fetchAndDisplayPublicInfo() async {
     var res = await getUserPublicInfoApi(requestUid);
-
-    Map<String, dynamic> resBody = jsonDecode(res.body);
+    String responseBody =
+        res.body.toString(); // Convert response body to string
+    Map<String, dynamic> resBody = jsonDecode(responseBody);
     print('[notification_page.dart]抓取用戶資料{$resBody}');
     return resBody;
   }
 
+    Future<void> _sendFriendsAccept() async {
+    await replyFriendRequestApi(requestUid, true);
+    print('[notification_page.dart]已成為好友');
+    await safeNotifyStore.deleteNotification(requestTime);
+    print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
+    
+  }
+
+    Future<void> _sendFriendsDismiss() async {
+    await replyFriendRequestApi(requestUid, false);
+    print('拒絕邀請🥲');
+    await safeNotifyStore.deleteNotification(requestTime);
+    print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: fetchAndDisplaPublicInfo(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // var requrestUserInfo = snapshot;
-            print('[notification_page.dart]snapshot$snapshot');
+    return FutureBuilder<Map<String, dynamic>>(
+      future: fetchAndDisplayPublicInfo(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          final Map<String, dynamic>? data = snapshot.data;
+          if (data != null) {
+            String username = data['data']['username'].toString();
+            print('[notification.dart] username:$username');
             return InkWell(
               child: Container(
                 height: 80,
@@ -113,48 +141,58 @@ class FriednsRequestItemTitle extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                        // child: Avatar.medium(url: messageData.profilePicture),
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '好友申請，請問要接受他的要請嗎？',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                letterSpacing: 0.2,
-                                wordSpacing: 1.5,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                              child: Text(
-                                'ho',
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color.fromARGB(255, 162, 162, 162),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                      child:Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(10.0),
+                            // child: Avatar.medium(url: messageData.profilePicture),
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  username,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    letterSpacing: 0.2,
+                                    wordSpacing: 1.5,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                                const SizedBox(
+                                  height: 20,
+                                  child: Text(
+                                    '好友邀請',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color.fromARGB(255, 162, 162, 162),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          ElevatedButton(onPressed: _sendFriendsAccept, child:const Text('accept')),
+                          const SizedBox(width: 5,),
+                          ElevatedButton(onPressed: _sendFriendsDismiss, child:const Text('Dismiss'))
+                        ],
+                      ),
+                    
+                  
                 ),
               ),
             );
+          } else {
+            return const Center(child: Text('錯誤資料，請回報Omelet.im團隊'));
           }
-        });
+        }
+      },
+    );
   }
 }

@@ -149,3 +149,6 @@ dist
 
 /backend/img/*
 
+/backend/config/cf.crt
+
+/backend/config/cf.key

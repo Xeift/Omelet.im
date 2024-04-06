@@ -148,3 +148,6 @@ dist
 /backend/pfp/*
 
 /backend/img/*
+
+.crt
+.key

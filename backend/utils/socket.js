@@ -169,15 +169,15 @@ module.exports = function(io) {
             let decodedToken = await jwt.verifyJWTSocket(token);
             if (decodedToken === null) {
                 console.log('[socket.js] 👉 token expired');
-                socket.to(socket.id).emit('jwtExpired');
+                socket.emit('jwtExpired');
             }
             else {
                 let uid = decodedToken['_uid'];
                 let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(uid, ipkPub);
 
                 addUser(uid, deviceId, socket.id);
-
-                socket.to(socket.id).emit('jwtValid');
+                console.log(`[socket.js] uid: ${uid}, deviceId: ${deviceId}, socket.id: ${socket.id}`);
+                socket.emit('jwtValid');
                 console.log(`[socket.js] 線上客戶端👉 ${JSON.stringify(userIdToRoomId)}`);
                 console.log('--------------------------------\n');
             }

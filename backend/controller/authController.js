@@ -87,7 +87,15 @@ async function updatePfpStatus(uid, hasPfp) {
 
 async function getUserPublicInfoByUid(uid) {
     let userInfo = await VerifiedUserModel.findOne({ uid: uid });
-    let userPublicInfo = { username: userInfo['username'], pfp: `${AWS_SERVER_URI}${uid}.png` };
+    let pfp;
+    if (userInfo.hasPfp) {
+        pfp = `${AWS_SERVER_URI}pfp/${uid}.png`;
+    }
+    else {
+        pfp = null;
+    }
+    let userPublicInfo = { username: userInfo['username'], pfp: pfp };
+    console.log(userPublicInfo);
     return userPublicInfo;
 }//remoteuser name、remote img
 

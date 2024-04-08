@@ -46,26 +46,37 @@ class _MessagePageState extends State<MessagePage> {
     return resM;
   }
 
+  Future<void> _handleRefreshMdgList() async{
+    setState(() {
+      
+    });
+  }
+
+  
+
   @override
   Widget build(BuildContext context) {
     print('[message_list_page.dart]leastMsg:$leastMsg');
-    return ListView.builder(
-      itemCount: leastMsg.length,
-      itemBuilder: (context, index) {
-        return Slidable(
-            startActionPane: ActionPane(
-              motion: const StretchMotion(),
-              children: [
-                SlidableAction(
-                    flex: 1,
-                    backgroundColor: Colors.blueGrey,
-                    icon: Icons.delete,
-                    label: 'delet friend',
-                    onPressed: (context) => _onDeleted()),
-              ],
-            ),
-            child: _delegate(context, index));
-      },
+    return RefreshIndicator(
+      onRefresh: _handleRefreshMdgList,
+      child: ListView.builder(
+        itemCount: leastMsg.length,
+        itemBuilder: (context, index) {
+          return Slidable(
+              startActionPane: ActionPane(
+                motion: const StretchMotion(),
+                children: [
+                  SlidableAction(
+                      flex: 1,
+                      backgroundColor: Colors.blueGrey,
+                      icon: Icons.delete,
+                      label: 'delet friend',
+                      onPressed: (context) => _onDeleted()),
+                ],
+              ),
+              child: _delegate(context, index));
+        },
+      ),
     );
   }
 
@@ -83,7 +94,7 @@ class _MessagePageState extends State<MessagePage> {
         final Map<String, dynamic> message = values[index];
 
         // 檢查 message 是否為空
-        if (message != null && message.containsKey('remoteUserInfo')) {
+        if (message.containsKey('remoteUserInfo')) {
           final String senderName = message['remoteUserInfo']['username'];
           final String messageContent = message['message']['content'];
           final String remoteUid = senderUid;
@@ -108,6 +119,7 @@ class _MessagePageState extends State<MessagePage> {
   }
 }
 
+// ignore: must_be_immutable
 class MessageItemTitle extends StatelessWidget {
   MessageItemTitle({Key? key, required this.messageData}) : super(key: key);
 

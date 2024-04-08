@@ -23,6 +23,13 @@ class _FriendsListPageState extends State<FriendsListPage> {
     _friendsListFuture = getFriendsList(); // 獲取好友列表的Future
   }
 
+  Future<void> _handleRefreshFriend() async {
+  setState(() {
+    _friendsListFuture = getFriendsList(); // Reload friend list
+  });
+  await _friendsListFuture; // Wait for the friend list to be reloaded
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,9 +50,12 @@ class _FriendsListPageState extends State<FriendsListPage> {
                   return Text('Error: ${snapshot.error}'); // 如果出現錯誤，顯示錯誤消息
                 }
                 if (snapshot.hasData) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height - 150,
-                    child: FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
+                  return RefreshIndicator(
+                    onRefresh:_handleRefreshFriend ,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height - 150,
+                      child: FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
+                    ),
                   );
                 } else {
                   return const Text('哭沒朋友，請點擊右上角加好友吧～'); // 如果沒有數據，顯示沒有數據消息
@@ -78,7 +88,6 @@ class FriendsList extends StatelessWidget {
         String pfpUrl = friend['data']['pfp'];
         String userUid = friend['data']['uid'];
 
-        // 根据头像 URL 判断应该显示 Icon 还是 Avatar
         Widget avatarWidget = pfpUrl == 'http://localhost:3000/$userUid.png'
             ? const Padding(
                 padding: EdgeInsets.all(10.0),

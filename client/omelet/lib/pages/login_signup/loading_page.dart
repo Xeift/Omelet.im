@@ -34,7 +34,7 @@ class LoadingPageState extends State<LoadingPage> {
   }
 
   Future<void> waitForIsShowUserPage() async {
-    await Future.delayed(const Duration(seconds: 3));
+
     // 停止加载
     setState(() {
       _isLoading = false;
@@ -171,6 +171,6 @@ class LoadingPageState extends State<LoadingPage> {
               child: CircularProgressIndicator(), // 顯示載入指示器
             ),
           )
-        : const Scaffold(body:Center(child:Text('加載失敗'))); // 或其他 UI
+        : const Scaffold(body:Center(child:Text('加載中'))); // 或其他 UI
   }
 }

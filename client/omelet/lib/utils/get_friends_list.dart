@@ -17,9 +17,9 @@ Future<List<Map<String, dynamic>>> getFriendsList() async {
 
     if (jsonFriendsData.isNotEmpty) {
       List<Future<Response>> responseFutures = stringList.map((i) => getUserPublicInfoApi(i)).toList();
-
+      print('[get_friends_list_dart]responseFutures:$responseFutures');
       List<Map<String, dynamic>> resultList = await convertIterableToList(responseFutures,stringList);
-      print(resultList);
+      print('[get_friends_list_dart]resultList:$resultList');
       return resultList;
     } else {
       print('[get_friends_list.dart]list is empty');

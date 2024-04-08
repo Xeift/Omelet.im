@@ -2,6 +2,8 @@ const snowflakeId = require('../utils/snowflakeId');
 const passwordHelper = require('../utils/passwordHelper');
 const VerifiedUserModel = require('../model/verifiedUserModel');
 const UnverifiedUserModel = require('../model/unverifiedUserModel');
+require('dotenv').config({ path: 'config/.env' });
+const SERVER_URI = process.env.SERVER_URI;
 
 async function isPasswordMatch(username, password) {
     let user = await VerifiedUserModel.findOne({
@@ -85,7 +87,7 @@ async function updatePfpStatus(uid, hasPfp) {
 
 async function getUserPublicInfoByUid(uid) {
     let userInfo = await VerifiedUserModel.findOne({ uid: uid });
-    let userPublicInfo = { username: userInfo['username'], pfp: `http://localhost:3000/${uid}.png` };
+    let userPublicInfo = { username: userInfo['username'], pfp: `${SERVER_URI}${uid}.png` };
     return userPublicInfo;
 }//remoteuser name、remote img
 

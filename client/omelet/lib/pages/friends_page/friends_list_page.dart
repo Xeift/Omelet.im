@@ -82,26 +82,32 @@ class FriendsList extends StatelessWidget {
       itemBuilder: (context, index) {
         // 获取当前好友信息
         Map<String, dynamic> friend = friends[index];
-
+        String? pfpUrl;
         // 提取好友的用户名、头像 URL 和 UID
         String username = friend['data']['username'];
-        String pfpUrl = friend['data']['pfp'];
+        print('[friends_list.dart]runtime:${friend['data']['pfp'].runtimeType}');
+        if(friend['data']['pfp'] != null){
+          pfpUrl = friend['data']['pfp'];
+          
+        }else{
+          pfpUrl = null;
+        }
         String userUid = friend['data']['uid'];
-
-        Widget avatarWidget = pfpUrl == 'http://localhost:3000/$userUid.png'
+        print('[friends_list.dart]pic:$pfpUrl');  
+        Widget avatarWidget = pfpUrl == null
             ? const Padding(
                 padding: EdgeInsets.all(10.0),
-                child: Icon(Icons.ac_unit_outlined),
+                child: Icon(Icons.egg_alt_rounded,size: 43,color:Color.fromARGB(255, 238, 108, 33),),
               )
             : Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Avatar.medium(
+                child: Avatar.sm(
                   url: pfpUrl,
                 ),
               );
         Future<void> onDeletedFriends(String userUid) async {
           await removeFriendApi(userUid);
-          print('[friends_list_page.dart]以刪除好友$userUid');
+          print('[friends_list_page.dart]已刪除好友$userUid');
         }
 
         return Slidable(
@@ -110,7 +116,7 @@ class FriendsList extends StatelessWidget {
             children: [
               SlidableAction(
                 onPressed: (context) => onDeletedFriends(userUid),
-                backgroundColor: Colors.blueGrey,
+                backgroundColor: const Color.fromARGB(255, 225, 106, 20),
                 icon: Icons.delete,
                 label: 'Delet Friend',
               )

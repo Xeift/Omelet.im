@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
+import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
 import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
@@ -126,17 +127,38 @@ class ChatRoomPageState extends State<ChatRoomPage> {
 }
 
 class AppBarTitle extends StatelessWidget {
-  const AppBarTitle({Key? key, required this.friendsInfo}) : super(key: key);
+  AppBarTitle({Key? key, required this.friendsInfo}) : super(key: key);
   final Map<String, dynamic> friendsInfo;
+
+  String? pfpUrl;
+
   @override
   Widget build(BuildContext context) {
+    if (friendsInfo['data']['pfp'] != null) {
+      pfpUrl = friendsInfo['data']['pfp'];
+    } else {
+      pfpUrl = null;
+    }
+
+    Widget avatarWidget = pfpUrl == null
+            ? const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Icon(Icons.egg_alt_rounded,size: 43,color:Color.fromARGB(255, 238, 108, 33),),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Avatar.sm(
+                  url: pfpUrl,
+                ),
+              );
+
     print('[chat_room_page.dart]friendsInfo$friendsInfo');
     return Row(
       children: [
         // Avatar.small(
         //   url: messageData.profilePicture,
         // ),
-        const Icon(Icons.ac_unit_outlined),
+        avatarWidget,
         const SizedBox(
           width: 16,
         ),
@@ -392,28 +414,55 @@ class _ActionBarState extends State<_ActionBar> {
     super.dispose();
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     print('[chat_room_page.dart]ActionBar被加載');
     return SafeArea(
       bottom: true,
       top: false,
       child: Row(
         children: [
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  width: 2,
-                  color: Theme.of(context).dividerColor,
+          GestureDetector(
+            onTap: () {
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CupertinoPopupSurface(
+                      child: SizedBox(
+                          height: 200,
+                          width: screenWidth,
+                          child: Row(
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    print('[chat_room_page.dart]uid:${ widget.friendsInfo['data']['uid']}');
+                                    onSelectImageBtnPressed(
+                                      widget.friendsInfo['data']['uid']
+                                       );
+                                  },
+                                  child: const Icon(
+                                      Icons.photo_size_select_actual_sharp))
+                            ],
+                          )), // 欲顯示於該視窗的內容
+                    );
+                  });
+            },
+            child: Container(
+              height: 60,
+              decoration: BoxDecoration(
+                border: Border(
+                  right: BorderSide(
+                    width: 2,
+                    color: Theme.of(context).dividerColor,
+                  ),
                 ),
               ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Icon(
-                CupertinoIcons.bars,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Icon(
+                  CupertinoIcons.bars,
+                ),
               ),
             ),
           ),

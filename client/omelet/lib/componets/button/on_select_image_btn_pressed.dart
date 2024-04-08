@@ -10,7 +10,7 @@ import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 
 Future<void> onSelectImageBtnPressed(
-    String theirUid, Function updateHintMsg) async {
+    String theirUid) async {
   final ourUid = await loadCurrentActiveAccount();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 

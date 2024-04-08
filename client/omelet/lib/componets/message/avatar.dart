@@ -18,6 +18,13 @@ class Avatar extends StatelessWidget {
   })  : radius = 16,
         super(key: key);
 
+  const Avatar.sm({
+    Key? key,
+    this.url,
+    this.onTap,
+  }) : radius = 22,
+      super(key: key);
+
   const Avatar.medium({
     Key? key,
     this.url,

@@ -17,8 +17,8 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayNotifications() async {
     List<dynamic> messages = await safeNotifyStore.readAllNotifications();
-    List<Map<String, dynamic>> jsonMessages =
-        messages.map((message) => message as Map<String, dynamic>).toList();
+    List<Map<String, dynamic>> jsonMessages = 
+      messages.map((message) => message as Map<String, dynamic>).toList();
     if (messages.isNotEmpty) {
       print('[notification_page.dart]通知內容物：$jsonMessages');
       return jsonMessages;
@@ -61,7 +61,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   } else if (realMsg[index]['type'] == 'system') {
                   } else {
                     print(
-                        '[notification_page.dart] Error type for notification');
+                      '[notification_page.dart] Error type for notification');
                   }
                 },
               ),
@@ -147,7 +147,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
                   child: Row(
                     children: [
                       const Padding(
-                        padding: EdgeInsets.all(10.0),
+                       padding: EdgeInsets.all(10.0),
                         // child: Avatar.medium(url: messageData.profilePicture),
                       ),
                       Expanded(
@@ -167,7 +167,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
                             ),
                             const SizedBox(
                               height: 20,
-                              child: Text(
+                               child: Text(
                                 '好友邀請',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(

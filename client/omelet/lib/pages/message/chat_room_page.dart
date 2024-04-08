@@ -207,7 +207,7 @@ class ReadMessageList extends StatelessWidget {
           itemBuilder: (context, index) {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
-            final isOwnMessage = realmessage['sender'].toString() == ourUid;
+            final isOwnMessage = realmessage['sender'].toString() != ourUid;
             return isOwnMessage
                 ? MessageTitle(
                     message: realmessage['content'],
@@ -392,7 +392,7 @@ class _ActionBarState extends State<_ActionBar> {
     super.dispose();
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     print('[chat_room_page.dart]ActionBar被加載');
     return SafeArea(

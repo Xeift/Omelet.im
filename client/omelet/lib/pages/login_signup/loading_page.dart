@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/utils/get_user_uid.dart';
@@ -50,12 +51,9 @@ class LoadingPageState extends State<LoadingPage> {
       // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
       // print('[loading_page.dart] ${jsonDecode(res.body)}');
 
-      print('[loading_page] JWT 狀態：${await isJwtExsist()}');
-
       // JWT 存在，直接連線到 Socket.io Server
       if (await isJwtExsist()) {
         final (token, ipkPub) = await loadJwtAndIpkPub();
-        print('[loading_page] $token $ipkPub');
 
         socket = io.io(
           serverUri,
@@ -68,19 +66,16 @@ class LoadingPageState extends State<LoadingPage> {
 
           // 回傳 JWT，驗證身份
           socket.emit(
-            'clientReturnJwtToServer',
-            {'token': token, 'ipkPub': ipkPub},
-          );
-
+              'clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub},);
+          
           socket.on('jwtValid', (data) async {
             print('--------------------------------');
             print('[loading_page.dart] 已連接至後端');
             print('[loading_page.dart] 本裝置的 socket.id 為： ${socket.id}');
             print('--------------------------------\n');
-
+          
             // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
             await checkOpkStatus();
-
             // 若伺服器中自己的 SPK 期限已到（7 天），則產生並上傳 SPK
             await checkSpkStatus();
 
@@ -131,21 +126,21 @@ class LoadingPageState extends State<LoadingPage> {
 
         socket.on(
             'disconnect', (_) => print('[loading_page.dart] 已與後端伺服器斷開連接🈹'));
-
+   
         // 後端檢查 JWT 是否過期
         socket.on('jwtExpired', (data) async {
           print('--------------------------------');
           print('[main.dart] JWT expired');
           print('--------------------------------\n');
 
-          if (!mounted) {
+          if (mounted) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const LoginPage(
                       title: '',
                     )));
             return;
           }
-
+         
           final (token, ipkPub) = await loadJwtAndIpkPub();
           socket.emit(
               'clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
@@ -176,6 +171,6 @@ class LoadingPageState extends State<LoadingPage> {
               child: CircularProgressIndicator(), // 顯示載入指示器
             ),
           )
-        : const Scaffold(body: Center(child: Text('加載失敗'))); // 或其他 UI
+        : const Scaffold(body:Center(child:Text('加載失敗'))); // 或其他 UI
   }
 }

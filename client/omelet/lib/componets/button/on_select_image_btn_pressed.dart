@@ -17,8 +17,10 @@ Future<void> onSelectImageBtnPressed(
   // 選擇圖片
   final picker = ImagePicker();
   var image = await picker.pickImage(source: ImageSource.gallery);
+  print('[on_select_imgage_btn_prssed.dart] 選完照片');
 
   if (image != null) {
+    print('[on_select_imgage_btn_prssed.dart] image不為空:$image');
     var img = File(image.path.toString());
     var imgBytes = jsonEncode(await img.readAsBytes());
 
@@ -31,15 +33,17 @@ Future<void> onSelectImageBtnPressed(
       'receiver': theirUid,
       'content': imgBytes,
     });
-
+    print('[on_select_imgage_btn_prssed.dart]儲存完照片');
     // 加密圖片
     final encryptedImg = await encryptMsg(theirUid, imgBytes);
     final ourEncryptedImg = encryptedImg['ourEncryptedMsg'];
     final theirEncryptedImg = encryptedImg['theirEncryptedMsg'];
+    print('[on_select_imgage_btn_prssed.dart]照片加密完成ourEncryptedImg:$ourEncryptedImg');
 
     if (!ourEncryptedImg.isEmpty) {
       for (var deviceId in ourEncryptedImg.keys) {
         // 將加密過的圖片上傳至伺服器
+        print('test');
         var filename = generateRandomFileName(); // 產生隨機檔名
         var res = await uploadImgApi(deviceId, ourEncryptedImg[deviceId],
             ourUid, ourUid, theirUid, imgBytes, filename);
@@ -47,6 +51,8 @@ Future<void> onSelectImageBtnPressed(
         print(
             '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
       }
+    }else{
+      print('[on_select_imgage_btn_prssed.dart]ourEncryptedImg空了:$ourEncryptedImg');
     }
 
     if (!theirEncryptedImg.isEmpty) {

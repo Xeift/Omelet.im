@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
@@ -141,16 +141,20 @@ class AppBarTitle extends StatelessWidget {
     }
 
     Widget avatarWidget = pfpUrl == null
-            ? const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Icon(Icons.egg_alt_rounded,size: 43,color:Color.fromARGB(255, 238, 108, 33),),
-              )
-            : Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Avatar.sm(
-                  url: pfpUrl,
-                ),
-              );
+        ? const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Icon(
+              Icons.egg_alt_rounded,
+              size: 43,
+              color: Color.fromARGB(255, 238, 108, 33),
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Avatar.sm(
+              url: pfpUrl,
+            ),
+          );
 
     print('[chat_room_page.dart]friendsInfo$friendsInfo');
     return Row(
@@ -230,19 +234,35 @@ class ReadMessageList extends StatelessWidget {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
             final isOwnMessage = realmessage['sender'].toString() != ourUid;
+            final isImage = realmessage['type'] != 'text';
+            var imageDataInt = isImage
+                ? (realmessage['content'] as String)
+                    .substring(1, realmessage['content'].length - 1)
+                    .split(',')
+                    .map((String byteString) => int.parse(byteString.trim()))
+                    .toList()
+                : null;
+
+            print('[chat_room_page.dart]img:imgDataInt:$imageDataInt');
+            final imageData =isImage? Uint8List.fromList(imageDataInt!):null;
+
             return isOwnMessage
-                ? MessageTitle(
-                    message: realmessage['content'],
-                    messageDate: DateFormat('MMMM/d h:mm a').format(
-                      DateTime.fromMillisecondsSinceEpoch(timestamp),
-                    ),
-                  )
-                : MessageOwnTitle(
-                    message: realmessage['content'],
-                    messageDate: DateFormat('MMMM/d h:mm a').format(
-                      DateTime.fromMillisecondsSinceEpoch(timestamp),
-                    ),
-                  );
+                ? isImage
+                    ? Image.memory(imageData!,height: 100,) // 显示图片消息
+                    : MessageOwnTitle(
+                        message: realmessage['content'],
+                        messageDate: DateFormat('MMMM/d h:mm a').format(
+                          DateTime.fromMillisecondsSinceEpoch(timestamp),
+                        ),
+                      )
+                : isImage
+                    ? Image.memory(imageData!,height: 100,)  // 显示图片消息
+                    : MessageTitle(
+                        message: realmessage['content'],
+                        messageDate: DateFormat('MMMM/d h:mm a').format(
+                          DateTime.fromMillisecondsSinceEpoch(timestamp),
+                        ),
+                      );
           },
         );
       },
@@ -436,10 +456,10 @@ class _ActionBarState extends State<_ActionBar> {
                             children: [
                               ElevatedButton(
                                   onPressed: () {
-                                    print('[chat_room_page.dart]uid:${ widget.friendsInfo['data']['uid']}');
+                                    print(
+                                        '[chat_room_page.dart]uid:${widget.friendsInfo['data']['uid']}');
                                     onSelectImageBtnPressed(
-                                      widget.friendsInfo['data']['uid']
-                                       );
+                                        widget.friendsInfo['data']['uid']);
                                   },
                                   child: const Icon(
                                       Icons.photo_size_select_actual_sharp))

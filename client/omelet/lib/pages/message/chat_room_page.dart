@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
@@ -78,7 +79,12 @@ class ChatRoomPageState extends State<ChatRoomPage> {
       // 数据尚未加载完成，显示加载指示器
       return const Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: LinearProgressIndicator(
+            minHeight: 6,
+            backgroundColor: Color.fromARGB(255, 2, 2, 2),
+            valueColor:
+                AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
+          ),
         ),
       );
     } else {
@@ -244,11 +250,15 @@ class ReadMessageList extends StatelessWidget {
                 : null;
 
             print('[chat_room_page.dart]img:imgDataInt:$imageDataInt');
-            final imageData =isImage? Uint8List.fromList(imageDataInt!):null;
+            final imageData =
+                isImage ? Uint8List.fromList(imageDataInt!) : null;
 
             return isOwnMessage
                 ? isImage
-                    ? Image.memory(imageData!,height: 100,) // 显示图片消息
+                    ? Image.memory(
+                        imageData!,
+                        height: 100,
+                      ) // 显示图片消息
                     : MessageOwnTitle(
                         message: realmessage['content'],
                         messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -256,7 +266,10 @@ class ReadMessageList extends StatelessWidget {
                         ),
                       )
                 : isImage
-                    ? Image.memory(imageData!,height: 100,)  // 显示图片消息
+                    ? Image.memory(
+                        imageData!,
+                        height: 100,
+                      ) // 显示图片消息
                     : MessageTitle(
                         message: realmessage['content'],
                         messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -405,6 +418,7 @@ class _ActionBar extends StatefulWidget {
 
 class _ActionBarState extends State<_ActionBar> {
   late TextEditingController _sendMsgController;
+  final bool isSpecial = false;
 
   @override
   void initState() {
@@ -446,27 +460,75 @@ class _ActionBarState extends State<_ActionBar> {
           GestureDetector(
             onTap: () {
               showCupertinoModalPopup(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CupertinoPopupSurface(
+                context: context,
+                builder: (BuildContext context) {
+                  return CupertinoPopupSurface(
+                    child: Material(
+                      // 将 Switch 包裹在 Material 中
                       child: SizedBox(
-                          height: 200,
-                          width: screenWidth,
-                          child: Row(
-                            children: [
-                              ElevatedButton(
+                        height: 130,
+                        width: screenWidth,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
                                   onPressed: () {
                                     print(
                                         '[chat_room_page.dart]uid:${widget.friendsInfo['data']['uid']}');
                                     onSelectImageBtnPressed(
                                         widget.friendsInfo['data']['uid']);
                                   },
-                                  child: const Icon(
-                                      Icons.photo_size_select_actual_sharp))
-                            ],
-                          )), // 欲顯示於該視窗的內容
-                    );
-                  });
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor:
+                                        const Color.fromARGB(255, 0, 0, 0),
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                  ),
+                                  child: const SizedBox(
+                                    child: Icon(
+                                      CupertinoIcons.folder,
+                                      size: 30,
+                                      color: Color.fromARGB(255, 255, 136, 25),
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  '傳送照片',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 40,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CupertinoSwitch(
+                                    value: true,
+                                    activeColor:
+                                        const Color.fromARGB(255, 244, 141, 15),
+                                    onChanged: (value) => print(value)),
+                                const Text(
+                                  '翻譯功能',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
             },
             child: Container(
               height: 60,

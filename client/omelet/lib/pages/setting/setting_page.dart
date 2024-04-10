@@ -133,6 +133,27 @@ class _SettingPageState extends State<SettingPage> {
                       .toggleTheme();
                 },
               ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: SizedBox(
+                  width: 200,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // 在这里添加登出逻辑
+                    },
+                    // style: ButtonStyle(
+                    //     backgroundColor: Theme.of(context)
+                    //         .elevatedButtonTheme
+                    //         .style
+                    //         ?.backgroundColor),
+                    child: Text('登出'),
+                  ),
+                ),
+              )
             ],
           ),
         ),

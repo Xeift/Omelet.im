@@ -43,30 +43,31 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let tone = req.body.tone;
     let msg = req.body.msg;
 
-    console.log(tone);
-    console.log(msg);
-    console.log(OPENAI_API_KEY);
-
     let myRole = getRole(tone);//串接回復模式選擇
     console.log(myRole); // 顯示回傳的值
     const resp = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',//使用gpt-3.5-turbo模型
         messages: [
-            { role: 'system', content: `Use ${myRole} tone to respond. Response has to be in same language.` },//傳給gpt的自訂指令
-            { role: 'system', content: 'Use 3 different standalone sentences to reply to user message. Follow the format of [Sentence1, Sentence2, Sentence3]' },
-            // { role: 'system', content: 'Every responses can\'t exceed 50 characters.' },
-            { role: 'user', content: `Here is the message: ${msg}` }],//傳送抓取到的訊息
+            { role: 'system', content: `Use this ${myRole} tone to respond` },
+            { role: 'system', content: 'Every responses do not exceed 50 characters' },
+            { role: 'user', content: `Read this conversation ${msg} and Respond to appropriate sentences in zh-TW` }
+        ],
         max_tokens: 160,
         stream: false,
+        n: 3
     });
 
-    console.log(JSON.stringify(resp));
-    console.log(resp);
+    let replyText0 = resp.choices[0]?.message?.content || '';
+    let replyText1 = resp.choices[1]?.message?.content || '';
+    let replyText2 = resp.choices[2]?.message?.content || '';
+
+    console.log(`[getGptResp] 推薦回覆： ${[replyText0, replyText1, replyText2]}`);
+
 
     try {
         res.status(200).json({
-            message: 'opk 上傳成功',
-            data: null,
+            message: '成功取得推薦回覆',
+            data: [replyText0, replyText1, replyText2],
             token: null
         });
     }

@@ -56,19 +56,17 @@ async function main() {
   console.log(myRole); // 顯示回傳的值
   const stream = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',//使用gpt-3.5-turbo模型
-    messages: [{ role: "system", content: `Use this ${myRole} tone to respond .` },//傳給gpt的自訂指令
-    { role: "system", content: `Give me three different responses.` },
-    { role: "system", content: `every responses only Maximum 50 characters.` },
-    { role: 'user', content: `read this conversation${history} and Respond to appropriate sentences in same languages` }],//傳送抓取到的訊息
+    messages: [
+      { role: "system", content: `Use this ${myRole} tone to respond.` },
+      { role: "system", content: `every responses only Maximum 50 characters.` },
+      { role: 'user', content: `read this conversation${history} and Respond to appropriate sentences in same languages` }
+  ],
     max_tokens: 90,
-    stream: true,
-
+    stream: false,
+    n: 3
   });
-  for await (const part of stream) {
-    process.stdout.write(part.choices[0]?.delta?.content || '');
-    process.stdout.write(part.choices[1]?.delta?.content || '');
-    process.stdout.write(part.choices[2]?.delta?.content || '');//gpt所回傳的3種回復
-  }
+
+  console.log(stream);
 }
 
 

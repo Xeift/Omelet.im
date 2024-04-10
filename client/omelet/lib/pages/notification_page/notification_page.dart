@@ -17,8 +17,8 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayNotifications() async {
     List<dynamic> messages = await safeNotifyStore.readAllNotifications();
-    List<Map<String, dynamic>> jsonMessages = 
-      messages.map((message) => message as Map<String, dynamic>).toList();
+    List<Map<String, dynamic>> jsonMessages =
+        messages.map((message) => message as Map<String, dynamic>).toList();
     if (messages.isNotEmpty) {
       print('[notification_page.dart]通知內容物：$jsonMessages');
       return jsonMessages;
@@ -39,11 +39,13 @@ class _NotificationPageState extends State<NotificationPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
+              valueColor:
+                  AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
             );
           }
-          List<Map<String, dynamic>> realMsg = snapshot.data!;
-          if (snapshot.hasData) {
+          List<Map<String, dynamic>> realMsg = snapshot.data ?? [];
+
+          if (snapshot.hasData && realMsg.isNotEmpty) {
             return RefreshIndicator(
               onRefresh: _handleRefresh9,
               child: ListView.builder(
@@ -61,14 +63,20 @@ class _NotificationPageState extends State<NotificationPage> {
                   } else if (realMsg[index]['type'] == 'system') {
                   } else {
                     print(
-                      '[notification_page.dart] Error type for notification');
+                        '[notification_page.dart] Error type for notification');
                   }
                 },
               ),
             );
           } else {
             return const Center(
-              child: Text('[notification_page.dart] you have no message now'),
+              child: Text(
+                '這裡很安靜 (蟬叫.....)，\n'
+                '現在沒訊息喔',
+                style: TextStyle(
+                  fontSize: 15,
+                
+                ),),
             );
           }
         });
@@ -121,8 +129,9 @@ class FriednsRequestItemTitle extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
-            );
+            valueColor:
+                AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
+          );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
@@ -147,7 +156,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
                   child: Row(
                     children: [
                       const Padding(
-                       padding: EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10.0),
                         // child: Avatar.medium(url: messageData.profilePicture),
                       ),
                       Expanded(
@@ -167,7 +176,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
                             ),
                             const SizedBox(
                               height: 20,
-                               child: Text(
+                              child: Text(
                                 '好友邀請',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(

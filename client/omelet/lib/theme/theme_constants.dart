@@ -33,40 +33,50 @@ ThemeData get lightMode => ThemeData(
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
     ),
-    shadowColor:const Color.fromARGB(255, 238, 236, 236).withOpacity(0.3),
+    shadowColor: const Color.fromARGB(255, 238, 236, 236).withOpacity(0.3),
     highlightColor: AppColors.borderColorLight,
     textTheme: const TextTheme(
-      bodyLarge:TextStyle(),
+      bodyLarge: TextStyle(),
     ).apply(
-      bodyColor:const Color.fromARGB(255, 0, 0, 0),
-    )
+      bodyColor: const Color.fromARGB(255, 0, 0, 0),
+    ),
+    // elevatedButtonTheme: ElevatedButtonThemeData(
+    //     style: ElevatedButton.styleFrom(
+    //       backgroundColor: const Color.fromARGB(255, 0, 0, 0), // 更改按钮的背景颜色为红色
+    //     ),
+    //   )
     );
 
 ThemeData get darkMode => ThemeData(
-    brightness: Brightness.dark,
-    colorScheme: const ColorScheme.dark(
-      background: Color.fromARGB(255, 16, 16, 16),
-      primary: Color.fromARGB(255, 203, 203, 203),
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color.fromARGB(0, 0, 0, 0),
-      elevation: 0,
-      centerTitle: true,
-      titleTextStyle: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 17,
+      brightness: Brightness.dark,
+      colorScheme: const ColorScheme.dark(
+        background: Color.fromARGB(255, 16, 16, 16),
+        primary: Color.fromARGB(255, 203, 203, 203),
       ),
-      systemOverlayStyle: SystemUiOverlayStyle.light,
-    ),
-    iconTheme: const IconThemeData(color: Colors.white),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.black,
-    ),
-    shadowColor:const Color.fromARGB(255, 146, 146, 146).withOpacity(0.3),
-    highlightColor:const Color.fromARGB(255, 255, 255, 255),
-    textTheme: const TextTheme(
-      bodyLarge:TextStyle(),
-    ).apply(
-      bodyColor: const Color.fromARGB(255, 255, 255, 255),
-    )
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Color.fromARGB(0, 0, 0, 0),
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 17,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
+      iconTheme: const IconThemeData(color: Colors.white),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.black,
+      ),
+      shadowColor: const Color.fromARGB(255, 146, 146, 146).withOpacity(0.3),
+      highlightColor: const Color.fromARGB(255, 255, 255, 255),
+      textTheme: const TextTheme(
+        bodyLarge: TextStyle(),
+      ).apply(
+        bodyColor: const Color.fromARGB(255, 255, 255, 255),
+      ),
+      // elevatedButtonTheme: ElevatedButtonThemeData(
+      //   style: ElevatedButton.styleFrom(
+      //     backgroundColor:const Color.fromARGB(255, 255, 255, 255), // 更改按钮的背景颜色为红色
+      //   ),
+      // )
     );

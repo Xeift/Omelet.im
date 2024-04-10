@@ -61,6 +61,8 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
         opkId: opkId
     });
 
+    console.log('[uploadImg] 圖片已上傳');
+
     try {
         res.status(200).json({
             message: '圖片上傳成功',

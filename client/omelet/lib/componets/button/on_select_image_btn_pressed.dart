@@ -9,8 +9,7 @@ import 'package:omelet/utils/generate_random_filename.dart';
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 
-Future<void> onSelectImageBtnPressed(
-    String theirUid) async {
+Future<void> onSelectImageBtnPressed(String theirUid) async {
   final ourUid = await loadCurrentActiveAccount();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -36,11 +35,16 @@ Future<void> onSelectImageBtnPressed(
     print('[on_select_imgage_btn_prssed.dart]儲存完照片');
     // 加密圖片
     final encryptedImg = await encryptMsg(theirUid, imgBytes);
-    final ourEncryptedImg = encryptedImg['ourEncryptedMsg'];
-    final theirEncryptedImg = encryptedImg['theirEncryptedMsg'];
-    print('[on_select_imgage_btn_prssed.dart]照片加密完成ourEncryptedImg:$ourEncryptedImg');
+    print('[on_select_imgage_btn_prssed.dart] encryptedImg: $encryptedImg');
 
-    if (!ourEncryptedImg.isEmpty) {
+    final ourEncryptedImg = encryptedImg['ourMsgInfo'];
+    final theirEncryptedImg = encryptedImg['theirMsgInfo'];
+    print(
+        '[on_select_imgage_btn_prssed.dart] ourEncryptedImg:$ourEncryptedImg');
+    print(
+        '[on_select_imgage_btn_prssed.dart] theirEncryptedImg:$theirEncryptedImg');
+
+    if (ourEncryptedImg != null) {
       for (var deviceId in ourEncryptedImg.keys) {
         // 將加密過的圖片上傳至伺服器
         print('test');
@@ -51,11 +55,12 @@ Future<void> onSelectImageBtnPressed(
         print(
             '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
       }
-    }else{
-      print('[on_select_imgage_btn_prssed.dart]ourEncryptedImg空了:$ourEncryptedImg');
+    } else {
+      print(
+          '[on_select_imgage_btn_prssed.dart]ourEncryptedImg空了:$ourEncryptedImg');
     }
 
-    if (!theirEncryptedImg.isEmpty) {
+    if (theirEncryptedImg != null) {
       for (var deviceId in theirEncryptedImg.keys) {
         // 將加密過的圖片上傳至伺服器
         var filename = generateRandomFileName(); // 產生隨機檔名

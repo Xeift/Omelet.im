@@ -118,7 +118,7 @@ Future<Map<String, dynamic>> encryptMsg(
   // 準備所有裝置的 Pre Key Bundle（包含自己及對方）
   final Map<String, dynamic> multiDevicesPreKeyBundle =
       await downloadPreKeyBundle(remoteUid);
-
+  print('[encrypt_msg] multiDevicesPreKeyBundle: $multiDevicesPreKeyBundle');
   // 自己其他裝置的 Pre Key Bundle
   final ourPreKeyBundleConverted =
       await multiDevicesPreKeyBundle['ourPreKeyBundleConverted'];
@@ -135,6 +135,7 @@ Future<Map<String, dynamic>> encryptMsg(
   for (var key in theirPreKeyBundleConverted.keys) {
     var value = theirPreKeyBundleConverted[key];
     theirMsgInfo[key] = await encryptSingleMsg(key, value, remoteUid);
+    print('😎 ${theirMsgInfo[key]}');
   }
 
   return {'ourMsgInfo': ourMsgInfo, 'theirMsgInfo': theirMsgInfo};

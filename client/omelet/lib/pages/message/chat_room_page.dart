@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -239,7 +238,7 @@ class ReadMessageList extends StatelessWidget {
           itemBuilder: (context, index) {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
-            final isOwnMessage = realmessage['sender'].toString() != ourUid;
+            final bool isOwnMessage = realmessage['sender'].toString() == ourUid;
             final isImage = realmessage['type'] != 'text';
             var imageDataInt = isImage
                 ? (realmessage['content'] as String)

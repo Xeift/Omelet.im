@@ -2,8 +2,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/componets/button/on_update_pfp_btn_pressed.dart';
 import 'package:omelet/models/setting.dart';
+import 'package:omelet/pages/login_signup/loading_page.dart';
+import 'package:omelet/utils/load_local_info.dart';
 import 'package:provider/provider.dart';
 
 import '../../componets/setting/avatar_card.dart';
@@ -18,6 +21,23 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  final LoadingPageState loadingPageState = LoadingPageState();
+
+  Future<void> _signOut() async {
+    await deletCurrentActiveAccount();
+    // await loadingPageState.deleteAll();
+  //   const storage = FlutterSecureStorage();
+  //  await storage.deleteAll();
+    print('登出');
+    // await loadingPageState.initSocket();
+    if (mounted) {
+      await Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoadingPage()),
+        (route) => false,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width; //抓取螢幕寬度
@@ -142,8 +162,8 @@ class _SettingPageState extends State<SettingPage> {
                   width: 200,
                   height: 40,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // 在这里添加登出逻辑
+                    onPressed: () async {
+                      await _signOut();
                     },
                     // style: ButtonStyle(
                     //     backgroundColor: Theme.of(context)

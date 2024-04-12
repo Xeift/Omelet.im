@@ -70,6 +70,14 @@ async function dealWithClientMsgs(msg, socket) {
         let timestamp = Date.now().toString();
         let newMsg;
 
+        const friendController = require('../controller/friendController.js');
+
+        if (!await friendController.isFriend(senderUid, receiverUid)) {
+            console.log('[socket.js] not friend');
+            socket.emit('notFriend');
+            return;
+        }
+
         if (msg['isPreKeySignalMessage']) { // 第一次發送訊息
             console.log('[socket.js] 此訊息為 PreKeySignalMessage');
             // 刪除傳送訊息時使用的 OPK

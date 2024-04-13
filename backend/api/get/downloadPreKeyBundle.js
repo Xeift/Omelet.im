@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
 const preKeyBundleController = require('../../controller/preKeyBundleController.js');
+const friendController = require('../../controller/friendController.js');
 
 router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
@@ -15,6 +16,13 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
         let ourPreKeyBundle = await preKeyBundleController.downloadMultiDevicesPreKeyBundle(ourUid, ourOpkIds);
         let theirPreKeyBundle = await preKeyBundleController.downloadMultiDevicesPreKeyBundle(theirUid, theirOpkIds);
 
+        if (!await friendController.isFriend(ourUid, theirUid)) {
+            res.status(401).json({
+                message: '新增好友後方可下載 Pre Key Bundle',
+                data: null,
+                token: null
+            });
+        }
 
         console.log(`[downloadPreKeyBundle.js] ourPreKeyBundle: ${JSON.stringify(ourPreKeyBundle)}`);
         console.log(`[downloadPreKeyBundle.js] theirPreKeyBundle: ${JSON.stringify(theirPreKeyBundle)}`);

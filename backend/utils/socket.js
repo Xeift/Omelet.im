@@ -1,6 +1,7 @@
 const jwt = require('./jwt');
 const msgController = require('../controller/msgController');
 const preKeyBundleController = require('../controller/preKeyBundleController.js');
+const friendController = require('../controller/friendController.js');
 const eventEmitter = require('../utils/eventEmitter.js');
 let userIdToRoomId = {};
 
@@ -69,8 +70,6 @@ async function dealWithClientMsgs(msg, socket) {
         let receiverDeviceId = msg['receiverDeviceId'];
         let timestamp = Date.now().toString();
         let newMsg;
-
-        const friendController = require('../controller/friendController.js');
 
         if (!await friendController.isFriend(senderUid, receiverUid)) {
             console.log('[socket.js] not friend');

@@ -18,9 +18,9 @@ late io.Socket socket;
 
 Future<void> initSocket() async {
   // TODO: debug 用：刪除所有儲存空間
-  // const storage = FlutterSecureStorage();
-  // await storage.deleteAll();
-  // print('[init_socket.dart] 已刪除本地資訊');
+  const storage = FlutterSecureStorage();
+  await storage.deleteAll();
+  print('[init_socket.dart] 已刪除本地資訊');
   // await Future.delayed(const Duration(seconds: 9999));
 
   // JWT 存在，直接連線到 Socket.io Server

@@ -157,9 +157,10 @@ class AppBarTitle extends StatelessWidget {
           )
         : Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Avatar.sm(
-              url: pfpUrl,
-            ),
+            child:Icon(Icons.ac_unit),
+            // child: Avatar.sm(
+            //   url: pfpUrl,
+            // ),
           );
 
     print('[chat_room_page.dart]friendsInfo$friendsInfo');
@@ -289,6 +290,10 @@ class ReadMessageList extends StatelessWidget {
     );
   }
 }
+
+
+
+
 
 class MessageTitle extends StatelessWidget {
   const MessageTitle(
@@ -526,6 +531,24 @@ class ImgOwnTitle extends StatelessWidget {
   }
 }
 
+
+class AIMessageTitle extends StatelessWidget {
+  const AIMessageTitle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class AIMessageOwnTitle extends StatelessWidget {
+  const AIMessageOwnTitle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
 
 class _ActionBar extends StatefulWidget {
   const _ActionBar({Key? key, required this.friendsInfo}) : super(key: key);

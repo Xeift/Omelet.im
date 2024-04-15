@@ -6,7 +6,7 @@ import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/utils/get_user_uid.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:omelet/pages/login_signup/login_page.dart';
-import 'package:omelet/utils/jwt.dart';
+import 'package:omelet/utils/current_active_account.dart';
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
@@ -34,7 +34,7 @@ class LoadingPageState extends State<LoadingPage> {
   }
 
   Future<void> waitForIsShowUserPage() async {
-    // 停止加载
+    // 停止加載
     setState(() {
       _isLoading = false;
     });
@@ -51,7 +51,7 @@ class LoadingPageState extends State<LoadingPage> {
       // print('[loading_page.dart] ${jsonDecode(res.body)}');
 
       // JWT 存在，直接連線到 Socket.io Server
-      if (await isJwtExsist()) {
+      if (await isCurrentActiveAccountExsist()) {
         final (token, ipkPub) = await loadJwtAndIpkPub();
 
         socket = io.io(

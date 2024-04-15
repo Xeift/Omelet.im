@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
@@ -218,7 +219,12 @@ class ReadMessageList extends StatelessWidget {
       future: fetchAndDisplayMessages(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // 在等待時顯示進度指示器
+          return const LinearProgressIndicator(
+            minHeight: 100,
+            backgroundColor: Color.fromARGB(255, 2, 2, 2),
+            valueColor:
+              AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
+          ); // 在等待時顯示進度指示器
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Text('無訊息');
@@ -254,10 +260,11 @@ class ReadMessageList extends StatelessWidget {
 
             return isOwnMessage
                 ? isImage
-                    ? Image.memory(
-                        imageData!,
-                        height: 100,
-                      ) // 显示图片消息
+                    ? ImgOwnTitle(
+                      imageData: imageData,
+                      messageDate:DateFormat('MMMM/d h:mm a').format(
+                          DateTime.fromMillisecondsSinceEpoch(timestamp),
+                        ),)// 显示图片消息
                     : MessageOwnTitle(
                         message: realmessage['content'],
                         messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -265,10 +272,11 @@ class ReadMessageList extends StatelessWidget {
                         ),
                       )
                 : isImage
-                    ? Image.memory(
-                        imageData!,
-                        height: 100,
-                      ) // 显示图片消息
+                    ? ImgTitle(
+                      imageData: imageData,
+                      messageDate:DateFormat('MMMM/d h:mm a').format(
+                          DateTime.fromMillisecondsSinceEpoch(timestamp),
+                        ),)// 显示图片消息
                     : MessageTitle(
                         message: realmessage['content'],
                         messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -406,6 +414,118 @@ class DateLable extends StatelessWidget {
     ));
   }
 }
+
+
+class ImgTitle extends StatelessWidget {
+  const ImgTitle({
+    Key? key,
+    required this.imageData,
+    required this.messageDate,
+  }) : super(key: key);
+
+  final Uint8List? imageData;
+  final String messageDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            InstaImageViewer(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 177, 177, 177),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 0,
+                  ),
+                  child: Image.memory(
+                    imageData!,
+                    height: 200,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                messageDate,
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class ImgOwnTitle extends StatelessWidget {
+  const ImgOwnTitle({
+    Key? key,
+    required this.imageData,
+    required this.messageDate,
+  }) : super(key: key);
+
+  final Uint8List? imageData;
+  final String messageDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            InstaImageViewer(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.secondary,
+                  
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 0,
+                  ),
+                  child: Image.memory(
+                    imageData!,
+                    height: 200,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                messageDate,
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 class _ActionBar extends StatefulWidget {
   const _ActionBar({Key? key, required this.friendsInfo}) : super(key: key);

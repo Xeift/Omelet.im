@@ -77,6 +77,7 @@ class LoadingPageState extends State<LoadingPage> {
 
             // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
             await checkOpkStatus();
+
             // 若伺服器中自己的 SPK 期限已到（7 天），則產生並上傳 SPK
             await checkSpkStatus();
 

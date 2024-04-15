@@ -60,7 +60,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
       return responseData;
     } catch (e) {
       // 处理错误
-      print('获取用户信息时出错: $e');
+      print('get Error Msg: $e');
       // 返回一个空的 Map 以避免空指针异常
       return {};
     }

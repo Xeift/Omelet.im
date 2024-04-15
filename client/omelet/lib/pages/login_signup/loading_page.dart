@@ -52,6 +52,8 @@ class LoadingPageState extends State<LoadingPage> {
 
       // JWT 存在，直接連線到 Socket.io Server
       if (await isCurrentActiveAccountExsist()) {
+        print('[main.dart] currentActiveAccount 存在✅');
+
         final (token, ipkPub) = await loadJwtAndIpkPub();
 
         socket = io.io(
@@ -148,7 +150,8 @@ class LoadingPageState extends State<LoadingPage> {
               'clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
         });
       } else {
-        print('[main.dart] jwt 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
+        print(
+            '[main.dart] currentActiveAccount 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
 
         if (mounted) {
           print('觸發跳轉');

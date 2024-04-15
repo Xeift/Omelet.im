@@ -101,9 +101,10 @@ class FriendsList extends StatelessWidget {
               )
             : Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Avatar.sm(
-                  url: pfpUrl,
-                ),
+                child:Icon(Icons.abc_sharp),
+                // child: Avatar.sm(
+                //   url: pfpUrl,
+                // ),
               );
         Future<void> onDeletedFriends(String userUid) async {
           await removeFriendApi(userUid);

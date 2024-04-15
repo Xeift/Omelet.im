@@ -7,9 +7,9 @@ import 'package:omelet/utils/get_user_uid.dart';
 
 // const serverUri = 'https://221f-125-227-227-205.ngrok-free.app';
 // const serverUri = 'http://localhost:3000';
-// const serverUri = 'https://omelet.im:8443';
+const serverUri = 'https://omelet.im:8443';
 // const serverUri = 'http://omelet.im:443';
-const serverUri = 'https://bf8b-60-249-247-100.ngrok-free.app';
+// const serverUri = 'https://bf8b-60-249-247-100.ngrok-free.app';
 
 Future<void> changeCurrentActiveAccount(String newUid) async {
   const storage = FlutterSecureStorage();

@@ -162,13 +162,13 @@ class LoginPageState extends State<LoginPage> {
           ),
           onPressed: () async {
             // 登入邏輯
-            
+
             _userEmail = emailTextFieldController.text;
             _userPassword = passwordTextFieldController.text;
-            
 
             final res = await loginApi(_userEmail, _userPassword);
-            print('[login_page.dart deBug]:userEmail:$_userEmail,_userPassword:$_userPassword');
+            print(
+                '[login_page.dart deBug]:userEmail:$_userEmail,_userPassword:$_userPassword');
             final statusCode = res.statusCode;
             print('[login_page.dart deBug]res report:$statusCode');
             final resBody = jsonDecode(res.body);
@@ -208,6 +208,7 @@ class LoginPageState extends State<LoginPage> {
                 print(
                     '[login_page] 目前所有 key：${(await storage.readAll()).keys}');
                 print('準備跳轉至使用者介面');
+
                 nextPage();
                 break;
               case 401:

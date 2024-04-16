@@ -14,6 +14,7 @@ import 'package:omelet/utils/check_unread_msg.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'dart:convert';
 import 'package:omelet/storage/safe_notify_store.dart';
+import 'package:omelet/storage/safe_config_store.dart';
 
 late io.Socket socket;
 
@@ -87,6 +88,11 @@ class LoadingPageState extends State<LoadingPage> {
             await checkUnreadMsg();
 
             await getUserUid();
+
+            // TODO: by Xeift：測試 safe_config_store 用
+            final safeConfigStore = SafeConfigStore();
+            await safeConfigStore.enableTranslation('234132');
+            // TODO: by Xeift：測試 safe_config_store 用
 
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(

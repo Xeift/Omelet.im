@@ -92,7 +92,8 @@ class LoadingPageState extends State<LoadingPage> {
             // TODO: by Xeift：測試 safe_config_store 用
             final safeConfigStore = SafeConfigStore();
             // await safeConfigStore.enableTranslation('234132');
-            await safeConfigStore.debugShowAllActiveTranslateUid();
+            // await safeConfigStore.disableTranslation('234132');
+            // await safeConfigStore.debugShowAllActiveTranslateUid();
             // TODO: by Xeift：測試 safe_config_store 用
 
             if (mounted) {

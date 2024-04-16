@@ -20,7 +20,7 @@ class SafeConfigStore {
     }
 
     print(
-        '[safe_config_store debugShowAllActiveTranslateUid] cfgList👉 $cfgList $ourUid');
+        '[safe_config_store debugShowAllActiveTranslateUid] 已啟用翻譯功能的對象👉 $cfgList');
   }
 
   Future<void> enableTranslation(String uid) async {
@@ -31,7 +31,6 @@ class SafeConfigStore {
 
     if (cfg != null) {
       cfgList = List<String>.from(jsonDecode(cfg));
-      print('not empty!😎');
     }
 
     if (!cfgList.contains(uid)) {
@@ -40,9 +39,23 @@ class SafeConfigStore {
           key: '${ourUid}_config_translationAciveTarget',
           value: jsonEncode(cfgList));
     }
+  }
 
-    final cfg2 =
+  Future<void> disableTranslation(String uid) async {
+    final ourUid = await loadCurrentActiveAccount();
+    final cfg =
         await storage.read(key: '${ourUid}_config_translationAciveTarget');
-    print('[safe_config_store enableTranslation] cfg2👉 $cfg2');
+    List<String> cfgList = [];
+
+    if (cfg != null) {
+      cfgList = List<String>.from(jsonDecode(cfg));
+    }
+
+    if (cfgList.contains(uid)) {
+      cfgList.remove(uid);
+      await storage.write(
+          key: '${ourUid}_config_translationAciveTarget',
+          value: jsonEncode(cfgList));
+    }
   }
 }

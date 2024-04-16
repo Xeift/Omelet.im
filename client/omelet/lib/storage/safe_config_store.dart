@@ -9,7 +9,7 @@ import 'package:omelet/utils/load_local_info.dart';
 class SafeConfigStore {
   final storage = const FlutterSecureStorage();
 
-  Future<void> debugShowAllActiveTranslateUid() async {
+  Future<List<String>> debugShowAllActiveTranslateUid() async {
     final ourUid = await loadCurrentActiveAccount();
     final cfg =
         await storage.read(key: '${ourUid}_config_translationAciveTarget');
@@ -19,8 +19,7 @@ class SafeConfigStore {
       cfgList = List<String>.from(jsonDecode(cfg));
     }
 
-    print(
-        '[safe_config_store debugShowAllActiveTranslateUid] 已啟用翻譯功能的對象👉 $cfgList');
+    return cfgList;
   }
 
   Future<void> enableTranslation(String uid) async {
@@ -57,5 +56,22 @@ class SafeConfigStore {
           key: '${ourUid}_config_translationAciveTarget',
           value: jsonEncode(cfgList));
     }
+  }
+
+  Future<bool> isTranslateActive(String uid) async {
+    final ourUid = await loadCurrentActiveAccount();
+    final cfg =
+        await storage.read(key: '${ourUid}_config_translationAciveTarget');
+    List<String> cfgList = [];
+
+    if (cfg != null) {
+      cfgList = List<String>.from(jsonDecode(cfg));
+    }
+
+    if (cfgList.contains(uid)) {
+      return true;
+    }
+
+    return false;
   }
 }

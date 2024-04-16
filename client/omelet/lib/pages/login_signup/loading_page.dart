@@ -93,7 +93,12 @@ class LoadingPageState extends State<LoadingPage> {
             final safeConfigStore = SafeConfigStore();
             // await safeConfigStore.enableTranslation('234132');
             // await safeConfigStore.disableTranslation('234132');
-            // await safeConfigStore.debugShowAllActiveTranslateUid();
+            // print(
+            //     '[safe_config_store debugShowAllActiveTranslateUid] 已啟用翻譯功能的對象👉 ${await safeConfigStore.debugShowAllActiveTranslateUid()}');
+            // print(
+            //     'uid 234132 是否已啟用翻譯功能？${await safeConfigStore.isTranslateActive('234132')}');
+            // print(
+            //     'uid 66666666 是否已啟用翻譯功能？${await safeConfigStore.isTranslateActive('66666666')}');
             // TODO: by Xeift：測試 safe_config_store 用
 
             if (mounted) {

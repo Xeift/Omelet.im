@@ -57,6 +57,7 @@ async function sendFriendRequest(initiatorUid, targetUid) {
         initiatorUid: initiatorUid,
         targetUid: targetUid,
         timestamp: Date.now(),
+        type: 'friend_request'
     });
     await friendRequest.save();
 

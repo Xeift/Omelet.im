@@ -63,7 +63,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   } else if (realMsg[index]['type'] == 'system') {
                   } else {
                     print(
-                        '[notification_page.dart] Error type for notification');
+                        '[notification_page.dart] Error type for notification ${realMsg[index]['type']}');
                   }
                 },
               ),
@@ -75,8 +75,8 @@ class _NotificationPageState extends State<NotificationPage> {
                 '現在沒訊息喔',
                 style: TextStyle(
                   fontSize: 15,
-                
-                ),),
+                ),
+              ),
             );
           }
         });

@@ -30,18 +30,17 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
         final String resBody = res.body;
         print('[friends_add_page] 好友邀請送出型態: $_requestFriendsType');
         print('[friends_add_page] 好友邀請狀態碼: $statusCode');
-        if(mounted){
-          if(statusCode == 200){
-            loginErrorMsg(context,'好友邀請傳送成功61550071007547392');
-          }else if(statusCode == 403){
-            loginErrorMsg(context,'傳送好友邀請者不存在');
-          } else if(statusCode == 409){
-            loginErrorMsg(context,'已為好友，無需傳送好友邀請');
-          }else{
-            loginErrorMsg(context,'伺服器發生錯誤');
+        if (mounted) {
+          if (statusCode == 200) {
+            loginErrorMsg(context, '好友邀請傳送成功61550071007547392');
+          } else if (statusCode == 403) {
+            loginErrorMsg(context, '傳送好友邀請者不存在');
+          } else if (statusCode == 409) {
+            loginErrorMsg(context, '已為好友，無需傳送好友邀請');
+          } else {
+            loginErrorMsg(context, '伺服器發生錯誤');
           }
         }
-        
 
         print('[friends_add_page] 好友邀請回應: $resBody');
 
@@ -54,9 +53,6 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
       // Handle error
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {

@@ -43,8 +43,8 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: lightMode, // 亮色模式主題
-      darkTheme: darkMode, //
+      theme: lightMode,
+      darkTheme: darkMode,
       home: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Form(
@@ -79,11 +79,11 @@ class LoginPageState extends State<LoginPage> {
 
   Widget buildTitle() {
     //Login字樣
-    return const Padding(
-      padding: EdgeInsets.all(8),
+    return Padding(
+      padding: const EdgeInsets.all(8),
       child: Text(
         'Login',
-        style: TextStyle(fontSize: 40),
+        style: Theme.of(context).textTheme.titleLarge,
       ),
     );
   }
@@ -96,6 +96,12 @@ class LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         // 隱藏密碼按鈕
         labelText: 'Password',
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 113, 113, 113)), // 未聚焦时的底线颜色
+        ),
+        labelStyle: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
+        ),
         suffixIcon: IconButton(
           icon: Icon(
             Icons.remove_red_eye,
@@ -118,7 +124,16 @@ class LoginPageState extends State<LoginPage> {
   Widget buildEmailTextField() {
     // Email輸入框
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'Email Address'),
+      decoration: InputDecoration(
+        labelText: 'Email Address',
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 113, 113, 113)), // 未聚焦时的底线颜色
+        ),
+        labelStyle: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+      ),
+      // style: TextStyle(color:Theme.of(context).colorScheme.secondary),
       controller: emailTextFieldController,
     );
   }
@@ -134,7 +149,10 @@ class LoginPageState extends State<LoginPage> {
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => const ForgetPage()));
           },
-          child: const Text('Forget password'),
+          child: const Text(
+            'Forget password',
+            style: TextStyle(color: Colors.grey),
+          ),
         ),
       ),
     );

@@ -12,6 +12,7 @@ import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
 import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
+import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/theme/theme_constants.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
@@ -28,9 +29,7 @@ class ChatRoomPage extends StatefulWidget {
       builder: (context) => ChatRoomPage(
             friendsUid: friendsUid,
           ));
-
   const ChatRoomPage({Key? key, required this.friendsUid}) : super(key: key);
-
   final String friendsUid;
 
   @override
@@ -39,13 +38,22 @@ class ChatRoomPage extends StatefulWidget {
 
 class ChatRoomPageState extends State<ChatRoomPage> {
   static GlobalKey updateChatKey = GlobalKey();
+  final SafeConfigStore safeConfigStore = SafeConfigStore();
   late String friendsUid;
+  late bool isTranslate;
   late Map<String, dynamic> friendsInfo = {}; // 初始为空Map，表示数据尚未加载完成
+  late List<String> debugTranslate = [];
 
   @override
   void initState() {
     super.initState();
     friendsUid = widget.friendsUid;
+    _initializeData();
+  }
+
+  void _initializeData() async {
+    isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
+    print('[chat_roon_page]該用戶翻譯功能裝態：$isTranslate');
     _fetchUserInfo().then((userInfo) {
       setState(() {
         friendsInfo = userInfo;
@@ -119,16 +127,21 @@ class ChatRoomPageState extends State<ChatRoomPage> {
                 friendsInfo: friendsInfo,
               ),
             ),
-            _ActionBar(friendsInfo: friendsInfo),
+            _ActionBar(
+              friendsInfo: friendsInfo,
+              isTranslate: isTranslate,
+            ),
           ],
         ),
       );
     }
   }
 
-  reloadData() {
-    setState(() {});
-    print('[chat_room_page]以刷新頁面');
+  reloadData() async {
+    print('[chat_room_page]已刷新頁面');
+    debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
+    isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
+    print('[chat_room_page]deBugTranslateList:$debugTranslate');
   }
 }
 
@@ -155,10 +168,10 @@ class AppBarTitle extends StatelessWidget {
               color: Color.fromARGB(255, 238, 108, 33),
             ),
           )
-          //TODO:記得換回使用者圖像
+        //TODO:記得換回使用者圖像
         : Padding(
             padding: const EdgeInsets.all(10.0),
-            child:Icon(Icons.ac_unit),
+            child: Icon(Icons.ac_unit),
             // child: Avatar.sm(
             //   url: pfpUrl,
             // ),
@@ -225,7 +238,7 @@ class ReadMessageList extends StatelessWidget {
             minHeight: 100,
             backgroundColor: Color.fromARGB(255, 2, 2, 2),
             valueColor:
-              AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
+                AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
           ); // 在等待時顯示進度指示器
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -246,7 +259,8 @@ class ReadMessageList extends StatelessWidget {
           itemBuilder: (context, index) {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
-            final bool isOwnMessage = realmessage['sender'].toString() == ourUid;
+            final bool isOwnMessage =
+                realmessage['sender'].toString() == ourUid;
             final isImage = realmessage['type'] != 'text';
             var imageDataInt = isImage
                 ? (realmessage['content'] as String)
@@ -263,10 +277,11 @@ class ReadMessageList extends StatelessWidget {
             return isOwnMessage
                 ? isImage
                     ? ImgOwnTitle(
-                      imageData: imageData,
-                      messageDate:DateFormat('MMMM/d h:mm a').format(
+                        imageData: imageData,
+                        messageDate: DateFormat('MMMM/d h:mm a').format(
                           DateTime.fromMillisecondsSinceEpoch(timestamp),
-                        ),)// 显示图片消息
+                        ),
+                      ) // 显示图片消息
                     : MessageOwnTitle(
                         message: realmessage['content'],
                         messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -275,10 +290,11 @@ class ReadMessageList extends StatelessWidget {
                       )
                 : isImage
                     ? ImgTitle(
-                      imageData: imageData,
-                      messageDate:DateFormat('MMMM/d h:mm a').format(
+                        imageData: imageData,
+                        messageDate: DateFormat('MMMM/d h:mm a').format(
                           DateTime.fromMillisecondsSinceEpoch(timestamp),
-                        ),)// 显示图片消息
+                        ),
+                      ) // 显示图片消息
                     : MessageTitle(
                         message: realmessage['content'],
                         messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -291,10 +307,6 @@ class ReadMessageList extends StatelessWidget {
     );
   }
 }
-
-
-
-
 
 class MessageTitle extends StatelessWidget {
   const MessageTitle(
@@ -421,7 +433,6 @@ class DateLable extends StatelessWidget {
   }
 }
 
-
 class ImgTitle extends StatelessWidget {
   const ImgTitle({
     Key? key,
@@ -476,7 +487,6 @@ class ImgTitle extends StatelessWidget {
   }
 }
 
-
 class ImgOwnTitle extends StatelessWidget {
   const ImgOwnTitle({
     Key? key,
@@ -486,6 +496,7 @@ class ImgOwnTitle extends StatelessWidget {
 
   final Uint8List? imageData;
   final String messageDate;
+
 
   @override
   Widget build(BuildContext context) {
@@ -501,7 +512,6 @@ class ImgOwnTitle extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                   color: AppColors.secondary,
-                  
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -532,7 +542,6 @@ class ImgOwnTitle extends StatelessWidget {
   }
 }
 
-
 class AIMessageTitle extends StatelessWidget {
   const AIMessageTitle({super.key});
 
@@ -552,8 +561,11 @@ class AIMessageOwnTitle extends StatelessWidget {
 }
 
 class _ActionBar extends StatefulWidget {
-  const _ActionBar({Key? key, required this.friendsInfo}) : super(key: key);
+  const _ActionBar(
+      {Key? key, required this.friendsInfo, required this.isTranslate})
+      : super(key: key);
   final Map<String, dynamic> friendsInfo;
+  final bool isTranslate;
 
   @override
   _ActionBarState createState() => _ActionBarState();
@@ -562,6 +574,7 @@ class _ActionBar extends StatefulWidget {
 class _ActionBarState extends State<_ActionBar> {
   late TextEditingController _sendMsgController;
   final bool isSpecial = false;
+  SafeConfigStore safeConfigStore = SafeConfigStore();
 
   @override
   void initState() {
@@ -589,6 +602,18 @@ class _ActionBarState extends State<_ActionBar> {
   void dispose() {
     _sendMsgController.dispose();
     super.dispose();
+  }
+
+  @override
+  void _changeTranslateStatus(bool isTranslateStatus) async {
+    if (isTranslateStatus) {
+      await safeConfigStore.enableTranslation(widget.friendsInfo['data']['uid']);
+      
+    } else {
+      await safeConfigStore.disableTranslation(widget.friendsInfo['data']['uid']);
+      
+    }ChatRoomPageState.currenInstance()?.reloadData();
+
   }
 
   @override
@@ -652,11 +677,19 @@ class _ActionBarState extends State<_ActionBar> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CupertinoSwitch(
-                                    value: true,
-                                    activeColor:
-                                        const Color.fromARGB(255, 244, 141, 15),
-                                    onChanged: (value) => print(value)),
+                                widget.isTranslate
+                                    ? ElevatedButton(
+                                        onPressed: () {
+                                          _changeTranslateStatus(!widget
+                                              .isTranslate); // Toggle the translate status
+                                        },
+                                        child:const  Icon(Icons.abc))
+                                    : ElevatedButton(
+                                        onPressed: () {
+                                          _changeTranslateStatus(!widget
+                                              .isTranslate); // Toggle the translate status
+                                        },
+                                        child:const  Icon(Icons.access_time)),
                                 const Text(
                                   '翻譯功能',
                                   style: TextStyle(

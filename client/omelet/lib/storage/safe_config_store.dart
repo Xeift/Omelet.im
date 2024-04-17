@@ -58,7 +58,7 @@ class SafeConfigStore {
     }
   }
 
-  Future<bool> isTranslateActive(String uid) async {
+  Future<bool> isTranslateActive(String uid) async {//檢查用戶是否啟用翻譯功能
     final ourUid = await loadCurrentActiveAccount();
     final cfg =
         await storage.read(key: '${ourUid}_config_translationAciveTarget');

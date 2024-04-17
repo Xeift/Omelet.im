@@ -17,6 +17,8 @@ ThemeData get lightMode => ThemeData(
     colorScheme: const ColorScheme.light(
       background: Colors.white,
       primary: Color.fromARGB(255, 94, 94, 94),
+      secondary: Color.fromARGB(255, 0, 0, 0)
+      
     ),
     appBarTheme: const AppBarTheme(
       iconTheme: IconThemeData(color: Colors.black),
@@ -36,7 +38,10 @@ ThemeData get lightMode => ThemeData(
     shadowColor: const Color.fromARGB(255, 238, 236, 236).withOpacity(0.3),
     highlightColor: AppColors.borderColorLight,
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(),
+           bodyLarge: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+        headlineMedium: TextStyle(color: Color.fromARGB(0, 255, 255, 255)),
+        titleLarge: TextStyle(color: Color.fromARGB(255, 0, 0, 0),fontSize: 40),
+        titleSmall: TextStyle(color:Color.fromARGB(255, 0, 0, 0)),
     ).apply(
       bodyColor: const Color.fromARGB(255, 0, 0, 0),
     ),
@@ -52,6 +57,7 @@ ThemeData get darkMode => ThemeData(
       colorScheme: const ColorScheme.dark(
         background: Color.fromARGB(255, 16, 16, 16),
         primary: Color.fromARGB(255, 203, 203, 203),
+        secondary: Color.fromARGB(255, 253, 253, 253)
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color.fromARGB(0, 0, 0, 0),
@@ -70,10 +76,14 @@ ThemeData get darkMode => ThemeData(
       shadowColor: const Color.fromARGB(255, 146, 146, 146).withOpacity(0.3),
       highlightColor: const Color.fromARGB(255, 255, 255, 255),
       textTheme: const TextTheme(
-        bodyLarge: TextStyle(),
+        bodyLarge: TextStyle(color: Colors.white),
+        headlineMedium: TextStyle(color: Color.fromARGB(0, 255, 255, 255)),
+        titleLarge: TextStyle(color: Colors.white,fontSize: 40),
+        titleSmall: TextStyle(color:Colors.white),
       ).apply(
         bodyColor: const Color.fromARGB(255, 255, 255, 255),
       ),
+
       // elevatedButtonTheme: ElevatedButtonThemeData(
       //   style: ElevatedButton.styleFrom(
       //     backgroundColor:const Color.fromARGB(255, 255, 255, 255), // 更改按钮的背景颜色为红色

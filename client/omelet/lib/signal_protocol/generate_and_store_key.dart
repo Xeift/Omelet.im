@@ -8,8 +8,27 @@ import 'package:omelet/signal_protocol/safe_spk_store.dart';
 import 'package:omelet/signal_protocol/safe_opk_store.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 import 'package:omelet/api/post/upload_pre_key_bundle_api.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/utils/load_local_info.dart';
+
+Future<bool> isPreKeyBundleExists() async {
+  const storage = FlutterSecureStorage();
+  final ourCurrentUid = await loadCurrentActiveAccount();
+  final hasIpk = await storage.read(key: '${ourCurrentUid}_selfIpk');
+  if (hasIpk == null) {
+    return false;
+  }
+
+  return true;
+}
 
 Future<void> generateAndStoreKey() async {
+  if (await isPreKeyBundleExists()) {
+    print('[generateAndStoreKey] 本地已有金鑰✅，已取消產生金鑰');
+    return;
+  }
+  print('[generateAndStoreKey] 本地無金鑰❌，已產生金鑰');
+
   final registrationId = generateRegistrationId(false);
   final selfIpk = generateIdentityKeyPair(); // 產生 IPK（長期金鑰對，平常不會動）
   final selfSpk = generateSignedPreKey(selfIpk, 0); // 產生 SPK（中期金鑰對，每 7 天更新一次）

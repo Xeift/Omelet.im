@@ -198,6 +198,7 @@ class LoginPageState extends State<LoginPage> {
 
                 // 產生並儲存 Signal Protocol 金鑰
                 await generateAndStoreKey();
+
                 await LoadingPageState().initSocket();
                 print('登入後的uid:{$ourUid}');
 

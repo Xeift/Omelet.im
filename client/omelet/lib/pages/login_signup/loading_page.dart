@@ -15,6 +15,7 @@ import 'package:omelet/storage/safe_msg_store.dart';
 import 'dart:convert';
 import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
+import 'package:omelet/utils/check_unread_notify.dart';
 
 late io.Socket socket;
 
@@ -86,6 +87,9 @@ class LoadingPageState extends State<LoadingPage> {
 
             // 若有未讀訊息，則儲存到本地
             await checkUnreadMsg();
+
+            // 若有未讀通知，則儲存到本地
+            await checkUnreadNotify();
 
             await getUserUid();
 

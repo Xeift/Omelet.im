@@ -43,10 +43,7 @@ Future<void> generateAndStoreKey() async {
     await opkStore.storePreKey(selfOpk.id, selfOpk);
   }
 
-  const deviceId = '0';
-
   await uploadPreKeyBundleApi(
-      deviceId,
       jsonEncode(selfIpk.getPublicKey().serialize()),
       jsonEncode({
         selfSpk.id.toString():

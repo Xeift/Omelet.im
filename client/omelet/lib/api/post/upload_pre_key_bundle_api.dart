@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:omelet/utils/load_local_info.dart';
 
 Future<http.Response> uploadPreKeyBundleApi(
-    deviceId, ipkPub, spkPub, spkSig, opkPub) async {
+    ipkPub, spkPub, spkSig, opkPub) async {
   final token = await loadJwt();
 
   final res =
@@ -17,7 +17,6 @@ Future<http.Response> uploadPreKeyBundleApi(
             'Authorization': 'Bearer $token'
           },
           body: jsonEncode(<String, String>{
-            'deviceId': deviceId,
             'ipkPub': ipkPub,
             'spkPub': spkPub,
             'spkSig': spkSig,

@@ -1,10 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-
-import 'package:omelet/api/get/get_unread_msg_api.dart';
 import 'package:omelet/api/get/get_friend_request_api.dart';
-
 import 'package:omelet/storage/safe_notify_store.dart';
 
 Future<void> checkUnreadNotify() async {

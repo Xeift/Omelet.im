@@ -65,6 +65,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     print(
                         '[notification_page.dart] Error type for notification ${realMsg[index]['type']}');
                   }
+                  return null;
                 },
               ),
             );

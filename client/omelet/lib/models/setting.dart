@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class Setting {
@@ -15,13 +15,8 @@ class Setting {
 
 final List<Setting> settings = [
   Setting(
-    title: 'Setting ',
-    route: '/',
-    icon: Icons.settings,
-  ),
-  Setting(
-    title: 'Statements',
-    route: '/',
-    icon: CupertinoIcons.doc_fill,
+    title: 'Developer',
+    route: 'DeveloperPage',
+    icon: Icons.accessible_forward,
   ),
 ];

@@ -2,7 +2,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/componets/button/on_update_pfp_btn_pressed.dart';
 import 'package:omelet/models/setting.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart';

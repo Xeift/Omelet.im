@@ -2,15 +2,9 @@
 
 // required lib
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-
 // required func
 // import './../debug_utils/debug_config.dart';
-import './store/safe_msg_store.dart';
-import './utils/get_unread_msg_api.dart';
-
 // widget
 import 'widgets/login_widget.dart';
 import 'widgets/reset_widget.dart';

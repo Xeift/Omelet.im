@@ -112,7 +112,9 @@ class ChatRoomPageState extends State<ChatRoomPage> {
                 leading: IconButton(
                     icon: const Icon(Icons.arrow_back_ios),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      if (mounted) {
+                        Navigator.of(context).pop();
+                      }
                     }),
                 backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
                 elevation: 0,
@@ -145,10 +147,13 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
     print('[chat_roon_page]該用戶翻譯功能裝態：$isTranslate');
     print('[chat_room_page]deBugTranslateList:$debugTranslate');
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 }
 
+// ignore: must_be_immutable
 class AppBarTitle extends StatelessWidget {
   AppBarTitle({Key? key, required this.friendsInfo}) : super(key: key);
   final Map<String, dynamic> friendsInfo;
@@ -172,13 +177,11 @@ class AppBarTitle extends StatelessWidget {
               color: Color.fromARGB(255, 238, 108, 33),
             ),
           )
-        //TODO:記得換回使用者圖像
         : Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(Icons.ac_unit),
-            // child: Avatar.sm(
-            //   url: pfpUrl,
-            // ),
+            child: Avatar.sm(
+              url: pfpUrl,
+            ),
           );
 
     print('[chat_room_page.dart]friendsInfo$friendsInfo');
@@ -600,10 +603,10 @@ class AIMessageTitleState extends State<AIMessageTitle> {
 
   Future<void> getTranslateMsg() async {
     var res = await getTranslatedSentenceApi(widget.message);
-    setState(() {
-       var resBody = jsonDecode(res.body);
-      translatedMsg = resBody['data'];
-    });
+      setState(() {
+        var resBody = jsonDecode(res.body);
+        translatedMsg = resBody['data'];
+      });
   }
 
   @override
@@ -617,7 +620,7 @@ class AIMessageTitleState extends State<AIMessageTitle> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              decoration:const BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 198, 198, 198),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(_borderRadius),
@@ -629,17 +632,15 @@ class AIMessageTitleState extends State<AIMessageTitle> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 20),
+                        horizontal: 12.0, vertical: 10),
                     child: Text(widget.message),
                   ),
                   const Divider(),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 20),
+                        horizontal: 12.0, vertical: 10),
                     child: Text(translatedMsg),
                   ),
-                 
-                  
                 ],
               ),
             ),
@@ -657,7 +658,6 @@ class AIMessageTitleState extends State<AIMessageTitle> {
     );
   }
 }
-
 
 class _ActionBar extends StatefulWidget {
   const _ActionBar(
@@ -703,7 +703,6 @@ class _ActionBarState extends State<_ActionBar> {
     super.dispose();
   }
 
-  @override
   void _changeTranslateStatus(bool isTranslateStatus) async {
     if (isTranslateStatus) {
       await safeConfigStore

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dart_ping/dart_ping.dart';
 import 'package:flutter/material.dart';
 import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -31,6 +32,68 @@ class LoginPageState extends State<LoginPage> {
   Color _eyeColor = Colors.grey;
   late TextEditingController emailTextFieldController;
   late TextEditingController passwordTextFieldController;
+  
+
+  final String _domain = 'omelet.im';
+  // 信号量
+  int _signalStrength = 0;
+  // 返回信息
+  String _resString = '';
+
+
+    void _doPing() {
+    _resString = 'ping $_domain \n\n';
+    final ping = Ping(_domain, count: 5);
+    ping.stream.listen((event) {
+      print(event);
+      if (event.error != null) {
+        // 错误
+        setState(() {
+          _resString = event.error.toString();
+        });
+      } else {
+        if (event.response != null) {
+          // 单次信息
+          setState(() {
+            _resString += '${event.response}\n';
+          });
+
+          // 信号强度
+          _signalStrength = calculateSignalStrength(
+              event.response?.time?.inMilliseconds ?? 0);
+        }
+
+        if (event.summary != null) {
+          setState(() {
+            _resString += '\n${event.summary}\n';
+          });
+        }
+      }
+    });
+  }
+
+  int calculateSignalStrength(int pingDelay) {
+    if (pingDelay < 0) {
+      // 无网络连接
+      return 0;
+    } else if (pingDelay < 100) {
+      // 延迟 < 100ms，信号强度为 5
+      return 5;
+    } else if (pingDelay < 200) {
+      // 延迟 < 200ms，信号强度为 4
+      return 4;
+    } else if (pingDelay < 300) {
+      // 延迟 < 300ms，信号强度为 3
+      return 3;
+    } else if (pingDelay < 500) {
+      // 延迟 < 500ms，信号强度为 2
+      return 2;
+    } else {
+      // 延迟 >= 500ms，信号强度为 1
+      return 1;
+    }
+  }
+
 
   @override
   void initState() {
@@ -54,6 +117,7 @@ class LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             children: [
               const SizedBox(height: kToolbarHeight),
+              
               const SizedBox(height: 50),
               buildTitle(),
               const SizedBox(height: 30),
@@ -70,6 +134,12 @@ class LoginPageState extends State<LoginPage> {
                   buildSignupPageButton(), //註冊button控件呼叫
                 ],
               ),
+              ElevatedButton(
+                onPressed: _doPing,
+                child: const Text('Start Ping'),
+              ),
+              Text('信号强度: $_signalStrength'),
+              Text(_resString),
             ],
           ),
         ),
@@ -97,7 +167,8 @@ class LoginPageState extends State<LoginPage> {
         // 隱藏密碼按鈕
         labelText: 'Password',
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Color.fromARGB(255, 113, 113, 113)), // 未聚焦时的底线颜色
+          borderSide: BorderSide(
+              color: Color.fromARGB(255, 113, 113, 113)), // 未聚焦时的底线颜色
         ),
         labelStyle: TextStyle(
           color: Theme.of(context).colorScheme.secondary,
@@ -127,7 +198,8 @@ class LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         labelText: 'Email Address',
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Color.fromARGB(255, 113, 113, 113)), // 未聚焦时的底线颜色
+          borderSide: BorderSide(
+              color: Color.fromARGB(255, 113, 113, 113)), // 未聚焦时的底线颜色
         ),
         labelStyle: TextStyle(
           color: Theme.of(context).colorScheme.secondary,

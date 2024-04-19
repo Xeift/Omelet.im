@@ -24,11 +24,11 @@ class _FriendsListPageState extends State<FriendsListPage> {
   }
 
   Future<void> _handleRefreshFriend() async {
-  setState(() {
-    _friendsListFuture = getFriendsList(); // Reload friend list
-  });
-  await _friendsListFuture; // Wait for the friend list to be reloaded
-}
+    setState(() {
+      _friendsListFuture = getFriendsList(); // Reload friend list
+    });
+    await _friendsListFuture; // Wait for the friend list to be reloaded
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,8 @@ class _FriendsListPageState extends State<FriendsListPage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const LinearProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
+                    valueColor: AlwaysStoppedAnimation(
+                        Color.fromARGB(255, 240, 118, 36)),
                   ); // 正在加載顯示進度指示器
                 }
                 if (snapshot.hasError) {
@@ -51,10 +52,11 @@ class _FriendsListPageState extends State<FriendsListPage> {
                 }
                 if (snapshot.hasData) {
                   return RefreshIndicator(
-                    onRefresh:_handleRefreshFriend ,
+                    onRefresh: _handleRefreshFriend,
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height - 150,
-                      child: FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
+                      child:
+                          FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
                     ),
                   );
                 } else {
@@ -85,19 +87,21 @@ class FriendsList extends StatelessWidget {
         String? pfpUrl;
         // 提取好友的用户名、头像 URL 和 UID
         String username = friend['data']['username'];
-        print('[friends_list.dart]runtime:${friend['data']['pfp'].runtimeType}');
-        if(friend['data']['pfp'] != null){
+        if (friend['data']['pfp'] != null) {
           pfpUrl = friend['data']['pfp'];
-          
-        }else{
+        } else {
           pfpUrl = null;
         }
         String userUid = friend['data']['uid'];
-        print('[friends_list.dart]pic:$pfpUrl');  
+        print('[friends_list.dart]pic:$pfpUrl');
         Widget avatarWidget = pfpUrl == null
             ? const Padding(
                 padding: EdgeInsets.all(10.0),
-                child: Icon(Icons.egg_alt_rounded,size: 43,color:Color.fromARGB(255, 238, 108, 33),),
+                child: Icon(
+                  Icons.egg_alt_rounded,
+                  size: 43,
+                  color: Color.fromARGB(255, 238, 108, 33),
+                ),
               )
             : Padding(
                 padding: const EdgeInsets.all(10.0),

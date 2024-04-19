@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const rateLimit = require('./utils/rateLimit.js');
 require('dotenv').config({ path: 'config/.env' });
-const BACKEND_PORT = process.env.BACKEND_PORT;
-const SERVER_URI = process.env.SERVER_URI; // 8443
+const AWS_BACKEND_PORT = process.env.AWS_BACKEND_PORT;
+const AWS_LOCAL_SERVER_URI = process.env.AWS_LOCAL_SERVER_URI; // 8443
 const fs = require('fs');
 
 const privateKey = fs.readFileSync('config/cf.key', 'utf8');
@@ -63,6 +63,6 @@ app.use('/api/v1/debug-reset-prekeybundle-and-unread-msg', rateLimit.authLimiter
 app.use('*', require('./api/notFound.js'));
 
 
-server.listen(BACKEND_PORT, () => {
-    console.log(`後端伺服器已啟動\n${SERVER_URI}`);
+server.listen(AWS_BACKEND_PORT, () => {
+    console.log(`後端伺服器已啟動\n${AWS_LOCAL_SERVER_URI}`);
 });

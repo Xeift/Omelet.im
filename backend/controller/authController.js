@@ -4,6 +4,8 @@ const VerifiedUserModel = require('../model/verifiedUserModel');
 const UnverifiedUserModel = require('../model/unverifiedUserModel');
 require('dotenv').config({ path: 'config/.env' });
 const AWS_SERVER_URI = process.env.AWS_SERVER_URI;
+const fs = require('fs');
+const path = require('path');
 
 async function isPasswordMatch(username, password) {
     let user = await VerifiedUserModel.findOne({
@@ -87,8 +89,10 @@ async function updatePfpStatus(uid, hasPfp) {
 
 async function getUserPublicInfoByUid(uid) {
     let userInfo = await VerifiedUserModel.findOne({ uid: uid });
+    let pfpExsist = fs.existsSync(path.join(__dirname, 'pfp', `${uid}.png`));
+
     let pfp;
-    if (userInfo.hasPfp) {
+    if (pfpExsist) {
         pfp = `${AWS_SERVER_URI}pfp/${uid}.png`;
     }
     else {
@@ -97,7 +101,7 @@ async function getUserPublicInfoByUid(uid) {
     let userPublicInfo = { username: userInfo['username'], pfp: pfp };
     console.log(userPublicInfo);
     return userPublicInfo;
-}//remoteuser name、remote img
+}
 
 async function getUidByEmail(email) {
     let user = await VerifiedUserModel.findOne({ email: email });

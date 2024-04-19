@@ -32,6 +32,7 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     let isPreKeySignalMessage = JSON.parse(req.body.isPreKeySignalMessage);
     let type = req.body.type;
     let sender = req.body.sender;
+    let senderIpkPub = req.body.senderIpkPub;
     let receiver = req.body.receiver;
     let receiverDeviceId = req.body.receiverDeviceId;
     let filename = req.body.content;
@@ -41,7 +42,6 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     console.log(`ourUid：${ourUid}`);
     
     console.log(`isPreKeySignalMessage：${isPreKeySignalMessage}`);
-    console.log(`isPreKeySignalMessage：${typeof(isPreKeySignalMessage)}`);
     console.log(`type：${type}`);
     console.log(`sender：${sender}`);
     console.log(`receiver：${receiver}`);
@@ -54,6 +54,7 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
         isPreKeySignalMessage: isPreKeySignalMessage,
         type: type,
         sender: sender,
+        senderIpkPub: senderIpkPub,
         receiver: receiver,
         receiverDeviceId: receiverDeviceId,
         content: `${receiver}_${receiverDeviceId}_${filename}.png`,

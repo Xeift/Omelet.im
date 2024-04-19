@@ -18,6 +18,7 @@ Future<http.StreamedResponse> uploadImgApi(deviceId, singleMsgInfo, receiverUid,
           ..fields['isPreKeySignalMessage'] = isPreKeySignalMessage.toString()
           ..fields['type'] = 'image'
           ..fields['sender'] = ourUid
+          ..fields['senderIpkPub'] = await loadIpkPub()
           ..fields['receiver'] = receiverUid
           ..fields['receiverDeviceId'] = deviceId
           ..fields['content'] = filename
@@ -32,6 +33,7 @@ Future<http.StreamedResponse> uploadImgApi(deviceId, singleMsgInfo, receiverUid,
           ..fields['isPreKeySignalMessage'] = isPreKeySignalMessage.toString()
           ..fields['type'] = 'image'
           ..fields['sender'] = ourUid
+          ..fields['senderIpkPub'] = await loadIpkPub()
           ..fields['receiver'] = receiverUid
           ..fields['receiverDeviceId'] = deviceId
           ..fields['content'] = filename

@@ -66,13 +66,17 @@ async function dealWithClientMsgs(msg, socket) {
     let userDevice = findUserDeviceBySocketId(socket.id);
     if (userDevice) {
         let senderUid = userDevice['uid'];
+        console.log(senderUid);
+        console.log(typeof(senderUid));
+        console.log(msg['senderIpkPub']);
+        console.log(typeof(msg['senderIpkPub']));
         let senderDeviceId = await preKeyBundleController.findDeviceIdByIpkPub(senderUid, msg['senderIpkPub']);
         let receiverUid = msg['receiver'];
         let receiverDeviceId = msg['receiverDeviceId'];
         let timestamp = Date.now().toString();
         let newMsg;
 
-        if (!await friendController.isFriend(senderUid, receiverUid)) {
+        if (!await friendController.isFriend(senderUid, receiverUid) && senderUid !== receiverUid) {
             console.log('[socket.js] not friend');
             socket.emit('notFriend');
             return;

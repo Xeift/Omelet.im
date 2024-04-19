@@ -46,5 +46,4 @@ Omelet-Social-Platform
 ├──.gitignore                   gitignore設定文件
 ├──LICENSE                      版權宣告
 └──README.md                    此檔案
-
 ```

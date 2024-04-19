@@ -53,7 +53,7 @@ class LoadingPageState extends State<LoadingPage> {
 
       // JWT 存在，直接連線到 Socket.io Server
       if (await isCurrentActiveAccountExsist()) {
-        print('[main.dart] currentActiveAccount 存在✅');
+        print('[loading_page] currentActiveAccount 存在✅');
 
         final (token, ipkPub) = await loadJwtAndIpkPub();
 
@@ -64,7 +64,8 @@ class LoadingPageState extends State<LoadingPage> {
 
         socket.onConnect((_) async {
           final safeNotifyStore = SafeNotifyStore();
-          print('所有通知內容：${await safeNotifyStore.readAllNotifications()}');
+          print(
+              '[loading_page] 所有通知內容：${await safeNotifyStore.readAllNotifications()}');
 
           // 回傳 JWT，驗證身份
           socket.emit(
@@ -73,10 +74,8 @@ class LoadingPageState extends State<LoadingPage> {
           );
 
           socket.on('jwtValid', (data) async {
-            print('--------------------------------');
-            print('[loading_page.dart] 已連接至後端');
-            print('[loading_page.dart] 本裝置的 socket.id 為： ${socket.id}');
-            print('--------------------------------\n');
+            print('[loading_page] 已連接至後端');
+            print('[loading_page] 本裝置的 socket.id 為： ${socket.id}');
 
             // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
             await checkOpkStatus();

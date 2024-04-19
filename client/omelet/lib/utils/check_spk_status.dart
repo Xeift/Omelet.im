@@ -13,7 +13,7 @@ import 'package:omelet/signal_protocol/safe_identity_store.dart';
 Future<void> checkSpkStatus() async {
   final getSelfSpkStatusRes = await getSelfSpkStatusApi();
   final getSelfSpkStatusResBody = jsonDecode(getSelfSpkStatusRes.body);
-  print('[main.dart] getSelfSpkStatusResBody: $getSelfSpkStatusResBody');
+  print('[check_spk_status] 狀態：$getSelfSpkStatusResBody');
   final spkStatus = getSelfSpkStatusResBody['data'];
   final spkExpired = spkStatus['spkExpired'];
   final lastBatchSpkId = spkStatus['lastBatchSpkId'];

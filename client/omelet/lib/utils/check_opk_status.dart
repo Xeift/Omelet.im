@@ -12,7 +12,7 @@ import 'package:omelet/signal_protocol/safe_opk_store.dart';
 Future<void> checkOpkStatus() async {
   final getSelfOpkStatusRes = await getSelfOpkStatusApi();
   final getSelfOpkStatusResBody = jsonDecode(getSelfOpkStatusRes.body);
-  print('[main.dart] getSelfOpkStatusResBody 內容：$getSelfOpkStatusResBody');
+  print('[check_opk_status] 狀態：$getSelfOpkStatusResBody');
 
   final outOfOpk = getSelfOpkStatusResBody['data']['outOfOpk'];
   final lastBatchMaxOpkId =

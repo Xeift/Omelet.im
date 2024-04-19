@@ -603,10 +603,10 @@ class AIMessageTitleState extends State<AIMessageTitle> {
 
   Future<void> getTranslateMsg() async {
     var res = await getTranslatedSentenceApi(widget.message);
-      setState(() {
-        var resBody = jsonDecode(res.body);
-        translatedMsg = resBody['data'];
-      });
+    setState(() {
+      var resBody = jsonDecode(res.body);
+      translatedMsg = resBody['data'];
+    });
   }
 
   @override
@@ -683,17 +683,12 @@ class _ActionBarState extends State<_ActionBar> {
 
   Future<void> _sendMessage() async {
     if (_sendMsgController.text.trim().isNotEmpty) {
-      print('[chat_room_page]以下是所有訊息');
-      print(_sendMsgController.text);
-      print('[chat_room_page]對方的uid ${widget.friendsInfo['data']['uid']}');
       onSendMsgBtnPressed(
           widget.friendsInfo['data']['uid'], _sendMsgController.text);
       setState(() {
         _sendMsgController.clear();
       });
       FocusScope.of(context).unfocus();
-      print('[chat_room_page]準備刪除輸入匡訊息');
-      print('[chat_room_page]刪除完畢');
     }
   }
 

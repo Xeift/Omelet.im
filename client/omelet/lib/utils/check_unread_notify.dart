@@ -9,7 +9,7 @@ Future<void> checkUnreadNotify() async {
   final getFriendRequestApiRes = await getFriendRequestApi();
   final List<dynamic> unreadNotify =
       jsonDecode(getFriendRequestApiRes.body)['data'];
-  print('[main.dart] 未讀通知👉 $unreadNotify');
+  print('[check_unread_notify] 未讀通知：$unreadNotify');
 
   // 儲存未讀通知
   if (unreadNotify.isNotEmpty) {

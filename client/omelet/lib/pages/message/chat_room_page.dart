@@ -54,7 +54,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
 
   void _initializeData() async {
     isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
-    print('[chat_roon_page]該用戶翻譯功能裝態：$isTranslate');
+    print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslate');
     _fetchUserInfo().then((userInfo) {
       setState(() {
         friendsInfo = userInfo;
@@ -145,7 +145,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     print('[chat_room_page]已刷新頁面');
     debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
     isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
-    print('[chat_roon_page]該用戶翻譯功能裝態：$isTranslate');
+    print('[chat_roon_page]該使用者翻譯功能狀態：$isTranslate');
     print('[chat_room_page]deBugTranslateList:$debugTranslate');
     if (mounted) {
       setState(() {});
@@ -184,7 +184,7 @@ class AppBarTitle extends StatelessWidget {
             ),
           );
 
-    print('[chat_room_page.dart]friendsInfo$friendsInfo');
+    print('[chat_room_page] 該好友資訊：$friendsInfo');
     return Row(
       children: [
         // Avatar.small(
@@ -227,7 +227,7 @@ class ReadMessageList extends StatelessWidget {
           .map((message) => jsonDecode(message))
           .toList()
           .cast<Map<String, dynamic>>();
-      print('[chat_room_page.dart]抓取內存訊息{$parsedMessages}');
+      print('[chat_room_page] 抓取內存訊息：$parsedMessages');
       return parsedMessages;
     } else {
       print('[chat_room_page.dart]沒有訊息資料');
@@ -237,7 +237,6 @@ class ReadMessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[chat_room_page.dart]加載一次');
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: fetchAndDisplayMessages(),
       builder: (context, snapshot) {
@@ -278,7 +277,7 @@ class ReadMessageList extends StatelessWidget {
                     .toList()
                 : null;
 
-            print('[chat_room_page.dart]img:imgDataInt:$imageDataInt');
+            print('[chat_room_page] 圖像資料：$imageDataInt');
             final imageData =
                 isImage ? Uint8List.fromList(imageDataInt!) : null;
 
@@ -719,7 +718,6 @@ class _ActionBarState extends State<_ActionBar> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    print('[chat_room_page.dart]ActionBar被加載');
     return SafeArea(
       bottom: true,
       top: false,

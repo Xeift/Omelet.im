@@ -230,7 +230,7 @@ class ReadMessageList extends StatelessWidget {
       print('[chat_room_page] 抓取內存訊息：$parsedMessages');
       return parsedMessages;
     } else {
-      print('[chat_room_page.dart]沒有訊息資料');
+      print('[chat_room_page] 沒有訊息資料');
       return []; // 添加一個默認返回值，例如空列表
     }
   }

@@ -99,7 +99,7 @@ async function getUserPublicInfoByUid(uid) {
         pfp = null;
     }
     let userPublicInfo = { username: userInfo['username'], pfp: pfp };
-    console.log(userPublicInfo);
+
     return userPublicInfo;
 }
 

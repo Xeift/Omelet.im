@@ -103,6 +103,7 @@ class SafeMsgStore {
       final decryptedMsg = await decryptMsg(
         unreadMsg['isPreKeySignalMessage'],
         int.parse(unreadMsg['sender']),
+        1, // sender deviceId
         unreadMsg['content'],
       );
 
@@ -139,6 +140,7 @@ class SafeMsgStore {
     final decryptedMsg = await decryptMsg(
       receivedMsg['isPreKeySignalMessage'],
       int.parse(receivedMsg['sender']),
+      1, // sender deviceId
       receivedMsg['content'],
     );
 

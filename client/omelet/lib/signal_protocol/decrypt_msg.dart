@@ -7,11 +7,11 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import 'package:omelet/signal_protocol/safe_signal_protocol_store.dart';
 
-Future<String> decryptMsg(
-    bool isPreKeySignalMessage, int remoteUid, String ciphertext) async {
+Future<String> decryptMsg(bool isPreKeySignalMessage, int remoteUid,
+    int remoteDeviceId, String ciphertext) async {
   final signalProtocolStore = SafeSignalProtocolStore();
-  final remoteAddress =
-      SignalProtocolAddress(remoteUid.toString(), 1); // Signal protocol 地址
+  final remoteAddress = SignalProtocolAddress(
+      remoteUid.toString(), remoteDeviceId); // Signal protocol 地址
 
   // 建立 SessionCipher，用於解密訊息
   final selfSessionCipher =

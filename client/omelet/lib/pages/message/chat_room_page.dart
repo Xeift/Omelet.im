@@ -142,11 +142,10 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   }
 
   reloadData() async {
-    print('[chat_room_page]已刷新頁面');
     debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
     isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
-    print('[chat_roon_page]該使用者翻譯功能狀態：$isTranslate');
-    print('[chat_room_page]deBugTranslateList:$debugTranslate');
+    print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslate');
+    print('[chat_room_page] deBugTranslateList：$debugTranslate');
     if (mounted) {
       setState(() {});
     }

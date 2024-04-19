@@ -4,15 +4,6 @@ Future<Map<String, dynamic>> returnMsgToServer(deviceId, singleMsgInfo,
     receiverUid, ourUid, theirUid, msgType, msgContent) async {
   final (cihertext, isPreKeySignalMessage, spkId, opkId) = singleMsgInfo;
 
-  print('🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃');
-  print(cihertext);
-  print(isPreKeySignalMessage);
-  print(spkId);
-  print(opkId);
-  print('🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃\n');
-
-  print('--------------------------------\n');
-
   // 訊息格式為 PreKeySignalMessage
   if (isPreKeySignalMessage) {
     return {

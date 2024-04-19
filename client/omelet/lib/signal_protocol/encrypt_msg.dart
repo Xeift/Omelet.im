@@ -25,15 +25,6 @@ Future<Map<String, dynamic>> encryptMsg(
     final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
         await singlePreKeyBundle;
 
-    print('--------------------------------');
-    print(ipkPub);
-    print(spkPub);
-    print(spkSig);
-    print(opkPub);
-    print(spkId);
-    print(opkId);
-    print('--------------------------------\n');
-
     final remoteAddress =
         SignalProtocolAddress(receiverUid, int.parse(deviceId));
 
@@ -95,21 +86,21 @@ Future<Map<String, dynamic>> encryptMsg(
 
     // 沒有 Session，Message 形態為 PreKeySignal，需要 SessionBuilder
     if (sessionNotExsist) {
-      print('[encrypt_msg.dart] no session!');
+      print('[encrypt_msg] session 不存在❌');
       return await encryptPreKeySignalMessage();
     }
     // 有 Session
     else {
-      print('[encrypt_msg.dart] have session!');
+      print('[encrypt_msg] session 已存在✅');
 
       // 對方未確認，Message 形態為 PreKeySignalMessage
       if (sessionState.hasUnacknowledgedPreKeyMessage()) {
-        print('[encrypt_msg.dart] have unack!');
+        print('[encrypt_msg] 對方尚未確認訊息❌');
         return await encryptPreKeySignalMessage();
       }
       // 對方已確認，Message 形態為 SignalMessage
       else {
-        print('[encrypt_msg.dart] no unack!');
+        print('[encrypt_msg] 對方已確認訊息✅');
         return await encryptSignalMessage();
       }
     }
@@ -118,7 +109,7 @@ Future<Map<String, dynamic>> encryptMsg(
   // 準備所有裝置的 Pre Key Bundle（包含自己及對方）
   final Map<String, dynamic> multiDevicesPreKeyBundle =
       await downloadPreKeyBundle(remoteUid);
-  print('[encrypt_msg] multiDevicesPreKeyBundle: $multiDevicesPreKeyBundle');
+
   // 自己其他裝置的 Pre Key Bundle
   final ourPreKeyBundleConverted =
       await multiDevicesPreKeyBundle['ourPreKeyBundleConverted'];
@@ -135,7 +126,6 @@ Future<Map<String, dynamic>> encryptMsg(
   for (var key in theirPreKeyBundleConverted.keys) {
     var value = theirPreKeyBundleConverted[key];
     theirMsgInfo[key] = await encryptSingleMsg(key, value, remoteUid);
-    print('😎 ${theirMsgInfo[key]}');
   }
 
   return {'ourMsgInfo': ourMsgInfo, 'theirMsgInfo': theirMsgInfo};

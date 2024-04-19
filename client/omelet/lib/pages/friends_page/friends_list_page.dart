@@ -93,7 +93,6 @@ class FriendsList extends StatelessWidget {
           pfpUrl = null;
         }
         String userUid = friend['data']['uid'];
-        print('[friends_list.dart]pic:$pfpUrl');
         Widget avatarWidget = pfpUrl == null
             ? const Padding(
                 padding: EdgeInsets.all(10.0),

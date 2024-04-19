@@ -61,3 +61,10 @@ Future<(String, String)> loadJwtAndIpkPub() async {
       (await ipkStore.getIdentityKeyPair()).getPublicKey().serialize());
   return (token, ipkPub);
 }
+
+Future<String> loadIpkPub() async {
+  final ipkStore = SafeIdentityKeyStore();
+  final ipkPub = jsonEncode(
+      (await ipkStore.getIdentityKeyPair()).getPublicKey().serialize());
+  return ipkPub;
+}

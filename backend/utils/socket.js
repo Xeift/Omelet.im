@@ -93,6 +93,7 @@ async function dealWithClientMsgs(msg, socket) {
             'timestamp': timestamp,
             'type': msg['type'],
             'sender': senderUid,
+            'senderDevideId': await preKeyBundleController.findDeviceIdByIpkPub(senderUid, msg['senderIpkPub']),
             'receiver': receiverUid,
             'receiverDeviceId': receiverDeviceId,
             'content': msg['content'],

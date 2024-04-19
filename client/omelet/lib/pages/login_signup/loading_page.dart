@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/utils/get_user_uid.dart';
@@ -90,7 +91,7 @@ class LoadingPageState extends State<LoadingPage> {
             // 若有未讀通知，則儲存到本地
             await checkUnreadNotify();
 
-            await getUserUid();
+            String ourUid = await loadCurrentActiveAccount();
 
             // TODO: by Xeift：測試 safe_config_store 用
             // final safeConfigStore = SafeConfigStore();
@@ -106,7 +107,7 @@ class LoadingPageState extends State<LoadingPage> {
 
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const NavBarControlPage()));
+                  builder: (context) => NavBarControlPage(ourUid:ourUid)));
             }
           });
 

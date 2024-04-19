@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:omelet/componets/message/avatar.dart';
-import 'package:omelet/utils/get_user_uid.dart';
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:http/http.dart' as http;
 
 class AvatarCard extends StatelessWidget {
   AvatarCard({
-    Key? key,
+    Key? key, required this.ourUid,
   }) : super(key: key);
 
-  final String imgUrl = '$serverUri/pfp/$ourUid.png';
-
+  final String imgUrl = '';
+  final String ourUid;
   Future<bool> isValidUrl(String url) async {
     if (url.isEmpty) return false; // 確保網址不是空的
 
@@ -25,7 +24,7 @@ class AvatarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('[setting_page]imgurl:$imgUrl');
-    print(ourUid);
+    print('$serverUri/pfp/$ourUid.png');
     return FutureBuilder<String>(
       future: loadUserName(),
       builder: (context, snapshot) {

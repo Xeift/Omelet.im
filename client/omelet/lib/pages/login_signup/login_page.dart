@@ -16,8 +16,6 @@ import 'package:omelet/signal_protocol/generate_and_store_key.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart'
     show LoadingPageState;
 
-String ourUid = '';
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -39,7 +37,7 @@ class LoginPageState extends State<LoginPage> {
   int _signalStrength = 0;
   // 返回信息
   String _resString = '';
-
+  String ourUid = '';
 
     void _doPing() {
     _resString = 'ping $_domain \n\n';
@@ -232,7 +230,7 @@ class LoginPageState extends State<LoginPage> {
 
   void nextPage() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const NavBarControlPage()),
+        MaterialPageRoute(builder: (context) =>  NavBarControlPage(ourUid:ourUid)),
         (route) => false);
   }
 

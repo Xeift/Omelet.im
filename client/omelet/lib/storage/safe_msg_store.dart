@@ -176,7 +176,7 @@ class SafeMsgStore {
     Map<String, String> allData = await storage.readAll();
     Map<String, dynamic> lastMsgWithEachUser = {};
     final ourCurrentUid = await loadCurrentActiveAccount();
-
+    print('[safe_msg_store]ourCurrentUid:$ourCurrentUid');
     for (var entry in allData.entries) {
       List<String> keyParts = entry.key.split('_');
       if (keyParts.length != 4 || keyParts[1] != 'msg') continue;

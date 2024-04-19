@@ -8,8 +8,8 @@ import 'package:omelet/utils/get_friends_list.dart';
 import 'package:omelet/storage/safe_util_store.dart';
 
 class FriendsListPage extends StatefulWidget {
-  const FriendsListPage({super.key});
-
+  const FriendsListPage({super.key, required this.ourUid});
+  final String ourUid;
   @override
   State<FriendsListPage> createState() => _FriendsListPageState();
 }
@@ -37,7 +37,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SearchBar(),
+            SearchBar(ourUid:widget.ourUid),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: _friendsListFuture,
               builder: (context, snapshot) {
@@ -56,7 +56,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height - 150,
                       child:
-                          FriendsList(friends: snapshot.data!), // 如果有數據，顯示好友列表
+                          FriendsList(friends: snapshot.data!, ourUid: widget.ourUid,), // 如果有數據，顯示好友列表
                     ),
                   );
                 } else {
@@ -75,8 +75,9 @@ class _FriendsListPageState extends State<FriendsListPage> {
 class FriendsList extends StatelessWidget {
   final List<Map<String, dynamic>> friends;
 
-  FriendsList({Key? key, required this.friends}) : super(key: key);
+  FriendsList({Key? key, required this.friends, required this.ourUid}) : super(key: key);
   SafeUtilStore safeUtilStore = SafeUtilStore();
+  final String ourUid;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -145,7 +146,8 @@ class FriendsList extends StatelessWidget {
               //跳轉至該用戶的聊天頁面
               await safeUtilStore.writeIsSend(friend['data']['uid'], true);
               // ignore: use_build_context_synchronously
-              Navigator.of(context).push(ChatRoomPage.route(userUid));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ChatRoomPage(ourUid:ourUid, friendsUid: friend['data']['uid'],)));
             },
           ),
         );
@@ -156,8 +158,8 @@ class FriendsList extends StatelessWidget {
 
 class SearchBar extends StatefulWidget {
   //搜尋框、搜尋好友、添加好友列表
-  const SearchBar({super.key});
-
+  const SearchBar({super.key, required this.ourUid});
+  final String ourUid;
   @override
   State<SearchBar> createState() => _SearchBarState();
 }
@@ -217,7 +219,7 @@ class _SearchBarState extends State<SearchBar> {
               Navigator.push(
                 // 跳轉至添加好有頁面(FriendsAddPage)
                 context,
-                MaterialPageRoute(builder: (context) => const FriendsAddPage()),
+              MaterialPageRoute(builder: (context) => FriendsAddPage(ourUid: widget.ourUid,)),
               );
             },
             icon: const Icon(Icons.add),

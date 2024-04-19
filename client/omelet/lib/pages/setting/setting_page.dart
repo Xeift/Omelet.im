@@ -13,7 +13,8 @@ import '../../componets/setting/setting_title.dart';
 import '../../theme/theme_provider.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  const SettingPage({Key? key, required this.ourUid}) : super(key: key);
+  final String ourUid;
 
   @override
   State<SettingPage> createState() => _SettingPageState();
@@ -123,7 +124,7 @@ class _SettingPageState extends State<SettingPage> {
                         );
                       });
                 },
-                child: AvatarCard(),
+                child: AvatarCard(ourUid: widget.ourUid,),
               ),
               const SizedBox(
                 height: 20,

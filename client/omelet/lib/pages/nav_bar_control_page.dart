@@ -5,7 +5,6 @@ import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/friends_page/friends_list_page.dart';
 import 'package:omelet/pages/notification_page/notification_page.dart';
 import 'package:omelet/pages/setting/setting_page.dart';
-import 'package:omelet/utils/get_user_uid.dart';
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,23 +13,16 @@ import 'message_list_page.dart';
 // import '../pages/notification_page.dart';
 
 class NavBarControlPage extends StatefulWidget {
-  const NavBarControlPage({Key? key}) : super(key: key);
-
+  const NavBarControlPage({Key? key, required this.ourUid}) : super(key: key);
+  final String ourUid;
   @override
   State<NavBarControlPage> createState() => _NavBarControlPageState();
 }
 
 class _NavBarControlPageState extends State<NavBarControlPage> {
   final ValueNotifier<int> pageIndex = ValueNotifier(1);
-
-  final List<Widget> pages = const [
-    NotificationPage(),
-    MessagePage(),
-    FriendsListPage(),
-  ];
+  late List<Widget> pages;
   final List<String> title = const ['Notification', 'Message', 'Friends'];
-
-  final String imgUrl = '$serverUri/pfp/$ourUid.png';
 
   late Future<bool> _urlValidFuture;
 
@@ -48,9 +40,13 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
   @override
   void initState() {
     super.initState();
-    _urlValidFuture = isValidUrl(imgUrl);
+    pages = [
+      NotificationPage(ourUid: widget.ourUid),
+      MessagePage(ourUid: widget.ourUid),
+      FriendsListPage(ourUid: widget.ourUid),
+    ];
+    _urlValidFuture = isValidUrl('$serverUri/pfp/${widget.ourUid}.png');
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +76,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => const SettingPage()),
+                              builder: (_) => SettingPage(ourUid:widget.ourUid)),
                         );
                       },
                     ),
@@ -101,7 +97,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                       ),
                     ); // 換成使用者頭像
                   } else {
-                    return Avatar.small(url: imgUrl); // 如果是有效的 URL，顯示圖片
+                    return Avatar.small(url: '$serverUri/pfp/${widget.ourUid}.png'); // 如果是有效的 URL，顯示圖片
                   }
                 },
               ),

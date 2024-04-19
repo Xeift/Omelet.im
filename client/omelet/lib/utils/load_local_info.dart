@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
-import 'package:omelet/utils/get_user_uid.dart';
 
 // const serverUri = 'https://25c8-125-227-108-213.ngrok-free.app';
 // const serverUri = 'http://localhost:3000';
@@ -24,7 +23,6 @@ Future<String> loadCurrentActiveAccount() async {
 Future<void> deletCurrentActiveAccount() async {
   const storage = FlutterSecureStorage();
   await storage.delete(key: 'currentActiveAccount');
-  print(ourUid);
 }
 
 Future<String> loadUid() async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
+import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_util_store.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
@@ -10,7 +11,9 @@ import '../models/message_data.dart';
 import 'package:omelet/utils/helpers.dart';
 
 class MessagePage extends StatefulWidget {
-  const MessagePage({Key? key}) : super(key: key);
+  const MessagePage({Key? key, required this.ourUid}) : super(key: key);
+
+  final String ourUid;
 
   @override
   State<MessagePage> createState() => _MessagePageState();
@@ -42,6 +45,7 @@ class _MessagePageState extends State<MessagePage> {
 
   Future<Map<String, dynamic>?> _loadIsSendedList() async {
     var resM = await safeMsgStore.getChatList();
+    print('[message_list_page.dart]leastMsg:$resM');
     return resM;
   }
 
@@ -103,7 +107,7 @@ class _MessagePageState extends State<MessagePage> {
               messageDate:
                   DateTime.fromMillisecondsSinceEpoch(int.parse(messageDate)),
               profilePicture: Helpers.randomPictureUrl(),
-            ),
+            ), ourUid: widget.ourUid,
           );
         }
       }
@@ -116,7 +120,8 @@ class _MessagePageState extends State<MessagePage> {
 
 // ignore: must_be_immutable
 class MessageItemTitle extends StatelessWidget {
-  MessageItemTitle({Key? key, required this.messageData}) : super(key: key);
+  MessageItemTitle({Key? key, required this.messageData, required this.ourUid}) : super(key: key);
+  final String ourUid;
 
   final MessageData messageData;
   SafeMsgStore safeMsgStore = SafeMsgStore();
@@ -127,7 +132,8 @@ class MessageItemTitle extends StatelessWidget {
     return InkWell(
       onTap: () async {
         // await safeUtilStore.writeIsSend(messageData.remoteUid,true);
-        Navigator.of(context).push(ChatRoomPage.route(messageData.remoteUid));
+        Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ChatRoomPage(ourUid:ourUid, friendsUid: messageData.remoteUid,)));
       },
       child: Container(
         height: 80,

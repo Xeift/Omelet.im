@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/componets/alert/alert_msg.dart';
-import 'package:omelet/utils/get_user_uid.dart';
+
 
 class FriendsAddPage extends StatefulWidget {
-  const FriendsAddPage({Key? key}) : super(key: key);
-
+  const FriendsAddPage({Key? key, required this.ourUid}) : super(key: key);
+  final String ourUid;
   @override
   State<FriendsAddPage> createState() => _FriendsAddPageState();
 }
@@ -56,7 +56,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('[friends_add_page]ourUid$ourUid');
+    print('[friends_add_page]ourUid${widget.ourUid}');
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -94,7 +94,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
               ),
               child: Center(
                 child: Text(
-                  '您的Uid: $ourUid',
+                '您的Uid: ${widget.ourUid}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,

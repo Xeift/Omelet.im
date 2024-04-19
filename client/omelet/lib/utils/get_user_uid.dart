@@ -1,9 +1,9 @@
-// ignore_for_file: avoid_print
+// // ignore_for_file: avoid_print
 
-import 'package:omelet/utils/load_local_info.dart';
+// import 'package:omelet/utils/load_local_info.dart';
 
-String ourUid = '';
+// String ourUid = '';
 
-Future<void> getUserUid() async {
-  ourUid = await loadCurrentActiveAccount();
-}
+// Future<void> getUserUid() async {
+//   ourUid = await loadCurrentActiveAccount();
+// }

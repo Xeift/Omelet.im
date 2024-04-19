@@ -19,19 +19,15 @@ import 'package:omelet/theme/theme_constants.dart';
 // import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:omelet/api/post/login_api.dart';
-import 'package:omelet/utils/get_user_uid.dart';
 
 // String remoteUid = '552415467919118336'; // xeift
 
 // String remoteUid = '551338674692820992'; // np
 
 class ChatRoomPage extends StatefulWidget {
-  static Route route(String friendsUid) => MaterialPageRoute(
-      builder: (context) => ChatRoomPage(
-            friendsUid: friendsUid,
-          ));
-  const ChatRoomPage({Key? key, required this.friendsUid}) : super(key: key);
+  const ChatRoomPage({Key? key, required this.friendsUid, required this.ourUid}) : super(key: key);
   final String friendsUid;
+  final String ourUid;
 
   @override
   State<ChatRoomPage> createState() => ChatRoomPageState();
@@ -129,6 +125,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
               child: ReadMessageList(
                 friendsInfo: friendsInfo,
                 isTranslate: isTranslate,
+                ourUid: widget.ourUid,
               ),
             ),
             _ActionBar(
@@ -215,9 +212,10 @@ class ReadMessageList extends StatelessWidget {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
 
   ReadMessageList(
-      {super.key, required this.friendsInfo, required this.isTranslate});
+      {super.key, required this.friendsInfo, required this.isTranslate, required this.ourUid});
   final Map<String, dynamic> friendsInfo;
   final bool isTranslate;
+  final String ourUid;
   Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
     List<String> messages =
         await safeMsgStore.readAllMsg(friendsInfo['data']['uid']);

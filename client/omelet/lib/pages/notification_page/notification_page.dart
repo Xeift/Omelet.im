@@ -6,8 +6,8 @@ import 'package:omelet/api/post/reply_friend_request_api.dart';
 import 'package:omelet/storage/safe_notify_store.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
-
+  const NotificationPage({Key? key, required this.ourUid}) : super(key: key);
+  final String ourUid;
   @override
   State<NotificationPage> createState() => _NotificationPageState();
 }

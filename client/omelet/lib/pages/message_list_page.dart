@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
@@ -46,17 +45,13 @@ class _MessagePageState extends State<MessagePage> {
     return resM;
   }
 
-  Future<void> _handleRefreshMdgList() async{
-    setState(() {
-      
-    });
+  Future<void> _handleRefreshMdgList() async {
+    setState(() {});
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
-    print('[message_list_page.dart]leastMsg:$leastMsg');
+    print('[message_list_page] 訊息列表：$leastMsg');
     return RefreshIndicator(
       onRefresh: _handleRefreshMdgList,
       child: ListView.builder(

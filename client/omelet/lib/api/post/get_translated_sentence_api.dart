@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:omelet/utils/load_local_info.dart';
 
 //翻譯API
-Future<http.Response> getTranslatedSentenceApi(String originalText) async {
+Future<http.Response> getTranslatedSentenceApi(
+    String originalText, String destLang) async {
   final token = await loadJwt();
   final res = await http.post(
     Uri.parse('$serverUri/api/v1/get-translated-sentence'),
@@ -15,7 +16,8 @@ Future<http.Response> getTranslatedSentenceApi(String originalText) async {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer $token'
     },
-    body: jsonEncode(<String, String>{'msg': originalText}),
+    body:
+        jsonEncode(<String, String>{'msg': originalText, 'destLang': destLang}),
   );
 
   return res;

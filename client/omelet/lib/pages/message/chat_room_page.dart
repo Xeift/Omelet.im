@@ -600,7 +600,7 @@ class AIMessageTitleState extends State<AIMessageTitle> {
   }
 
   Future<void> getTranslateMsg() async {
-    var res = await getTranslatedSentenceApi(widget.message);
+    var res = await getTranslatedSentenceApi(widget.message, 'Japanese');
     setState(() {
       var resBody = jsonDecode(res.body);
       translatedMsg = resBody['data'];

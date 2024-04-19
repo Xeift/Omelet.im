@@ -7,6 +7,7 @@ const UnreadMsgSchema = new mongoose.Schema({
     receiver: { type: String, required: true },
     receiverDeviceId: { type: String, required: true },
     sender: { type: String, required: true },
+    senderDeviceId: { type: String, required: true },
     content: { type: String, required: true },
     spkId: { type: Number },
     opkId: { type: Number },

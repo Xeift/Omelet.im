@@ -66,6 +66,7 @@ async function dealWithClientMsgs(msg, socket) {
     let userDevice = findUserDeviceBySocketId(socket.id);
     if (userDevice) {
         let senderUid = userDevice['uid'];
+        let senderDeviceId = await preKeyBundleController.findDeviceIdByIpkPub(senderUid, msg['senderIpkPub']);
         let receiverUid = msg['receiver'];
         let receiverDeviceId = msg['receiverDeviceId'];
         let timestamp = Date.now().toString();
@@ -93,7 +94,7 @@ async function dealWithClientMsgs(msg, socket) {
             'timestamp': timestamp,
             'type': msg['type'],
             'sender': senderUid,
-            'senderDevideId': await preKeyBundleController.findDeviceIdByIpkPub(senderUid, msg['senderIpkPub']),
+            'senderDeviceId': senderDeviceId,
             'receiver': receiverUid,
             'receiverDeviceId': receiverDeviceId,
             'content': msg['content'],

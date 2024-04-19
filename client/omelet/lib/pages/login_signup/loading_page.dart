@@ -14,7 +14,7 @@ import 'dart:convert';
 import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 late io.Socket socket;
 
@@ -116,8 +116,8 @@ class LoadingPageState extends State<LoadingPage> {
             print('--------------------------------\n');
             final safeMsgStore = SafeMsgStore();
             await safeMsgStore.storeReceivedMsg(msg);
-            print('[loading_page.dart]新增新接收到的訊息，模擬顯示在聊天室上');
-            print('[loading_page.dart]接收到資料：$msg');
+            print('[loading_page.dart] 新增新接收到的訊息，模擬顯示在聊天室上');
+            print('[loading_page.dart] 接收到資料：$msg');
             // TODO: 接收訊息時：顯示一則新訊息在聊天室
             ChatRoomPageState.currenInstance()?.reloadData();
           });

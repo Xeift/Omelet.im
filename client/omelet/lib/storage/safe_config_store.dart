@@ -58,7 +58,8 @@ class SafeConfigStore {
     }
   }
 
-  Future<bool> isTranslateActive(String uid) async {//檢查用戶是否啟用翻譯功能
+  Future<bool> isTranslateActive(String uid) async {
+    //檢查用戶是否啟用翻譯功能
     final ourUid = await loadCurrentActiveAccount();
     final cfg =
         await storage.read(key: '${ourUid}_config_translationAciveTarget');
@@ -73,5 +74,19 @@ class SafeConfigStore {
     }
 
     return false;
+  }
+
+  Future<void> setTranslationDestLang(String uid, String destLang) async {
+    final ourUid = await loadCurrentActiveAccount();
+
+    await storage.write(
+        key: '${ourUid}_config_translationDestLang', value: destLang);
+  }
+
+  Future<String> getTranslationDestLang(String uid) async {
+    final ourUid = await loadCurrentActiveAccount();
+
+    return (await storage.read(key: '${ourUid}_config_translationDestLang'))
+        .toString();
   }
 }

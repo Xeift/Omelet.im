@@ -9,11 +9,16 @@ class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key, required this.ourUid}) : super(key: key);
   final String ourUid;
   @override
-  State<NotificationPage> createState() => _NotificationPageState();
+  State<NotificationPage> createState() => NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
+
+class NotificationPageState extends State<NotificationPage> {
   final SafeNotifyStore safeNotifyStore = SafeNotifyStore();
+
+  Future<void> handleRefresh9() async {
+    setState(() {});
+  }
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayNotifications() async {
     List<dynamic> messages = await safeNotifyStore.readAllNotifications();
@@ -28,27 +33,23 @@ class _NotificationPageState extends State<NotificationPage> {
     }
   }
 
-  Future<void> _handleRefresh9() async {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-        future: fetchAndDisplayNotifications(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LinearProgressIndicator(
-              valueColor:
-                  AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
-            );
-          }
-          List<Map<String, dynamic>> realMsg = snapshot.data ?? [];
-
-          if (snapshot.hasData && realMsg.isNotEmpty) {
-            return RefreshIndicator(
-              onRefresh: _handleRefresh9,
-              child: ListView.builder(
+    return RefreshIndicator(
+      onRefresh:handleRefresh9,
+      child: FutureBuilder<List<Map<String, dynamic>>>(
+          future: fetchAndDisplayNotifications(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const LinearProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
+              );
+            }
+            List<Map<String, dynamic>> realMsg = snapshot.data ?? [];
+            if (snapshot.hasData && realMsg.isNotEmpty) {
+              return ListView.builder(
                 itemCount: realMsg.length,
                 itemBuilder: (context, index) {
                   if (realMsg[index]['type'] == 'friend_request') {
@@ -59,6 +60,12 @@ class _NotificationPageState extends State<NotificationPage> {
                       requestTime: requestTime,
                       requestData: realMsg,
                       requestUid: requestUid,
+                      onAccept: () {
+                        setState(() {});
+                      },
+                      onDismiss: () {
+                        setState(() {});
+                      },
                     );
                   } else if (realMsg[index]['type'] == 'system') {
                   } else {
@@ -67,34 +74,38 @@ class _NotificationPageState extends State<NotificationPage> {
                   }
                   return null;
                 },
-              ),
-            );
-          } else {
-            return const Center(
-              child: Text(
-                '這裡很安靜 (蟬叫.....)，\n'
-                '現在沒訊息喔',
-                style: TextStyle(
-                  fontSize: 15,
+              );
+            } else {
+              return const Center(
+                child: Text(
+                  '這裡很安靜 (蟬叫.....)，\n'
+                  '現在沒訊息喔',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
                 ),
-              ),
-            );
-          }
-        });
+              );
+            }
+          }),
+    );
   }
 }
 
 class FriednsRequestItemTitle extends StatelessWidget {
-  FriednsRequestItemTitle({
+  final List<Map<String, dynamic>> requestData;
+  final String requestUid;
+  final int requestTime;
+  final VoidCallback onAccept;
+  final VoidCallback onDismiss;
+
+   FriednsRequestItemTitle({
     Key? key,
     required this.requestTime,
     required this.requestData,
     required this.requestUid,
+    required this.onAccept,
+    required this.onDismiss,
   }) : super(key: key);
-
-  final List<Map<String, dynamic>> requestData;
-  final String requestUid;
-  final int requestTime;
 
   final SafeNotifyStore safeNotifyStore = SafeNotifyStore();
 
@@ -113,6 +124,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
     print('[notification_page.dart]已成為好友');
     await safeNotifyStore.deleteNotification(requestTime);
     print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
+    onAccept();
   }
 
   Future<void> _sendFriendsDismiss() async {
@@ -121,6 +133,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
     print('拒絕邀請🥲');
     await safeNotifyStore.deleteNotification(requestTime);
     print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
+    onDismiss();
   }
 
   @override
@@ -190,14 +203,16 @@ class FriednsRequestItemTitle extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: _sendFriendsAccept,
-                          child: const Text('accept')),
+                        onPressed: _sendFriendsAccept,
+                        child: const Text('accept'),
+                      ),
                       const SizedBox(
                         width: 5,
                       ),
                       ElevatedButton(
-                          onPressed: _sendFriendsDismiss,
-                          child: const Text('Dismiss'))
+                        onPressed: _sendFriendsDismiss,
+                        child: const Text('Dismiss'),
+                      )
                     ],
                   ),
                 ),

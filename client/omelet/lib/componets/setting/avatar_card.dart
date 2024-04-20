@@ -8,7 +8,6 @@ class AvatarCard extends StatelessWidget {
     Key? key, required this.ourUid,
   }) : super(key: key);
 
-  final String imgUrl = '';
   final String ourUid;
   Future<bool> isValidUrl(String url) async {
     if (url.isEmpty) return false; // 確保網址不是空的
@@ -23,7 +22,7 @@ class AvatarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[setting_page]imgurl:$imgUrl');
+    print('[setting_page]imgurl:$serverUri/pfp/$ourUid.png');
     print('$serverUri/pfp/$ourUid.png');
     return FutureBuilder<String>(
       future: loadUserName(),
@@ -31,14 +30,14 @@ class AvatarCard extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             return FutureBuilder<bool>(
-              future: isValidUrl(imgUrl),
+              future: isValidUrl('$serverUri/pfp/$ourUid.png'),
               builder: (context, urlSnapshot) {
                 if (urlSnapshot.connectionState == ConnectionState.done) {
                   final bool isUrlValid = urlSnapshot.data ?? false;
                   return Row(
                     children: [
                       if (isUrlValid) // 判斷是否為有效的 URL
-                        Avatar.large(url: imgUrl) // 如果是有效的 URL，顯示圖片
+                        Avatar.large(url:'$serverUri/pfp/$ourUid.png') // 如果是有效的 URL，顯示圖片
                       else
                         const Icon(
                           Icons.account_circle_outlined,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
+import 'package:omelet/pages/notification_page/notification_page.dart';
 import 'package:omelet/utils/get_user_uid.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:omelet/pages/login_signup/login_page.dart';

@@ -24,6 +24,7 @@ class _MessagePageState extends State<MessagePage> {
   SafeMsgStore safeMsgStore = SafeMsgStore();
   List<Map<String, dynamic>> isSended = [];
 
+
   Map<String, dynamic> leastMsg = {};
 
   @override
@@ -95,9 +96,18 @@ class _MessagePageState extends State<MessagePage> {
         // 檢查 message 是否為空
         if (message.containsKey('remoteUserInfo')) {
           final String senderName = message['remoteUserInfo']['username'];
-          final String messageContent = message['message']['content'];
+          String messageContent = '';
           final String remoteUid = senderUid;
           final String messageDate = message['message']['timestamp'];
+
+          print('[message_list_page.dart]message:$message');
+          
+
+          if(message['message']['type'] == 'image'){
+            messageContent = '圖片';
+          }else{
+            messageContent = message['message']['content'];
+          }
 
           return MessageItemTitle(
             messageData: MessageData(

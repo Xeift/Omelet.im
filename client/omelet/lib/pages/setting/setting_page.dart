@@ -22,12 +22,13 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   final LoadingPageState loadingPageState = LoadingPageState();
+  List<String> translateType = ['中文','English'];
 
   Future<void> _signOut() async {
     await deletCurrentActiveAccount();
     // await loadingPageState.deleteAll();
-  //   const storage = FlutterSecureStorage();
-  //  await storage.deleteAll();
+    //   const storage = FlutterSecureStorage();
+    //  await storage.deleteAll();
     print('登出');
     // await loadingPageState.initSocket();
     if (mounted) {
@@ -38,6 +39,7 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
+  String translateLangunage = 'Chinese';
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width; //抓取螢幕寬度
@@ -124,7 +126,9 @@ class _SettingPageState extends State<SettingPage> {
                         );
                       });
                 },
-                child: AvatarCard(ourUid: widget.ourUid,),
+                child: AvatarCard(
+                  ourUid: widget.ourUid,
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -138,6 +142,55 @@ class _SettingPageState extends State<SettingPage> {
                   settings.length,
                   (index) => SettingTitle(setting: settings[index]),
                 ),
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Container(
+                    height: 40,
+                    width: 40,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 190, 190, 190),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Icon(CupertinoIcons.ellipses_bubble_fill,
+                        color: const Color.fromARGB(255, 255, 255, 255)),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    '翻譯語言設定',
+                    style: textTheme.titleSmall,
+                  ),
+                  const Spacer(),
+                  DropdownButton(
+                    value: translateLangunage,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        translateLangunage = newValue!;
+                      });
+                      
+                    },
+                    icon: Icon(CupertinoIcons.chevron_compact_down),
+                    underline: Container(
+                      height: 2,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    items: const [
+                      DropdownMenuItem<String>(
+                        value: 'Chinese',
+                        child: Text('中文')),
+                        DropdownMenuItem<String>(
+                        value: 'English',
+                        child: Text('English')),
+                        DropdownMenuItem<String>(
+                        value: 'Japanese',
+                        child: Text('にほんご')),
+
+                    ],
+                    
+                    )
+                ],
               ),
               const Divider(),
               ListTile(

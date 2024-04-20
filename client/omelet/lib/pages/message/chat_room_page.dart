@@ -16,16 +16,9 @@ import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/theme/theme_constants.dart';
-// import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-//import 'package:omelet/api/post/login_api.dart';
-
-// String remoteUid = '552415467919118336'; // xeift
-
-// String remoteUid = '551338674692820992'; // np
-
 class ChatRoomPage extends StatefulWidget {
-  const ChatRoomPage({Key? key, required this.friendsUid, required this.ourUid}) : super(key: key);
+  const ChatRoomPage({Key? key, required this.friendsUid, required this.ourUid})
+      : super(key: key);
   final String friendsUid;
   final String ourUid;
 
@@ -38,7 +31,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   final SafeConfigStore safeConfigStore = SafeConfigStore();
   late String friendsUid;
   late bool isTranslate;
-  late Map<String, dynamic> friendsInfo = {}; // 初始为空Map，表示数据尚未加载完成
+  late Map<String, dynamic> friendsInfo = {}; 
   late List<String> debugTranslate = [];
 
   @override
@@ -52,10 +45,17 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
     print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslate');
     _fetchUserInfo().then((userInfo) {
-      setState(() {
-        friendsInfo = userInfo;
-      });
+      if (mounted) {
+        setState(() {
+          friendsInfo = userInfo;
+        });
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future<Map<String, dynamic>> _fetchUserInfo() async {
@@ -65,9 +65,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
       responseData['data']['uid'] = widget.friendsUid;
       return responseData;
     } catch (e) {
-      // 处理错误
       print('get Error Msg: $e');
-      // 返回一个空的 Map 以避免空指针异常
       return {};
     }
   }
@@ -81,7 +79,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   @override
   Widget build(BuildContext context) {
     if (friendsInfo.isEmpty) {
-      // 数据尚未加载完成，显示加载指示器
       return const Scaffold(
         body: Center(
           child: LinearProgressIndicator(
@@ -93,7 +90,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
         ),
       );
     } else {
-      // 数据加载完成，显示页面
       return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: PreferredSize(
@@ -212,7 +208,10 @@ class ReadMessageList extends StatelessWidget {
   final SafeMsgStore safeMsgStore = SafeMsgStore();
 
   ReadMessageList(
-      {super.key, required this.friendsInfo, required this.isTranslate, required this.ourUid});
+      {super.key,
+      required this.friendsInfo,
+      required this.isTranslate,
+      required this.ourUid});
   final Map<String, dynamic> friendsInfo;
   final bool isTranslate;
   final String ourUid;
@@ -264,9 +263,9 @@ class ReadMessageList extends StatelessWidget {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
             final bool isOwnMessage =
-                realmessage['sender'].toString() == ourUid;
+                realmessage['sender'].toString() == ourUid;//訊息數否為寄送者
             final isImage = realmessage['type'] != 'text';
-            var imageDataInt = isImage
+            var imageDataInt = isImage//判斷訊息是否為圖片
                 ? (realmessage['content'] as String)
                     .substring(1, realmessage['content'].length - 1)
                     .split(',')
@@ -286,7 +285,7 @@ class ReadMessageList extends StatelessWidget {
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ) // 显示图片消息
+                          ) 
                         : MessageOwnTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -299,12 +298,13 @@ class ReadMessageList extends StatelessWidget {
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ) // 显示图片消息
+                          ) 
                         : AIMessageTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
+                            ourUid: ourUid,
                           )))
                 : (isOwnMessage //非啟用情況
                     ? (isImage
@@ -313,7 +313,7 @@ class ReadMessageList extends StatelessWidget {
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ) // 显示图片消息
+                          ) 
                         : MessageOwnTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -326,7 +326,7 @@ class ReadMessageList extends StatelessWidget {
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ) // 显示图片消息
+                          ) 
                         : MessageTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -340,7 +340,7 @@ class ReadMessageList extends StatelessWidget {
   }
 }
 
-class MessageTitle extends StatelessWidget {
+class MessageTitle extends StatelessWidget {//好友的訊息框
   const MessageTitle(
       {Key? key, required this.message, required this.messageDate})
       : super(key: key);
@@ -360,9 +360,9 @@ class MessageTitle extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: const BorderRadius.only(
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 198, 198, 198),
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(_borderRadius),
                       topRight: Radius.circular(_borderRadius),
                       bottomRight: Radius.circular(_borderRadius),
@@ -387,7 +387,7 @@ class MessageTitle extends StatelessWidget {
   }
 }
 
-class MessageOwnTitle extends StatelessWidget {
+class MessageOwnTitle extends StatelessWidget {//自己的訊息框
   const MessageOwnTitle(
       {Key? key, required this.message, required this.messageDate})
       : super(key: key);
@@ -437,7 +437,7 @@ class MessageOwnTitle extends StatelessWidget {
   }
 }
 
-class DateLable extends StatelessWidget {
+class DateLable extends StatelessWidget {//訊息視覺話處理
   const DateLable({Key? key, required this.lable}) : super(key: key);
 
   final String lable;
@@ -465,7 +465,7 @@ class DateLable extends StatelessWidget {
   }
 }
 
-class ImgTitle extends StatelessWidget {
+class ImgTitle extends StatelessWidget {//圖片訊息框
   const ImgTitle({
     Key? key,
     required this.imageData,
@@ -573,15 +573,17 @@ class ImgOwnTitle extends StatelessWidget {
   }
 }
 
-class AIMessageTitle extends StatefulWidget {
+class AIMessageTitle extends StatefulWidget {//翻譯訊息框
   const AIMessageTitle({
     Key? key,
     required this.message,
     required this.messageDate,
+    required this.ourUid,
   }) : super(key: key);
 
   final String message;
   final String messageDate;
+  final String ourUid;
 
   @override
   AIMessageTitleState createState() => AIMessageTitleState();
@@ -590,19 +592,38 @@ class AIMessageTitle extends StatefulWidget {
 class AIMessageTitleState extends State<AIMessageTitle> {
   static const _borderRadius = 26.0;
   late String translatedMsg = '';
+  SafeConfigStore safeConfigStore = SafeConfigStore();
+  bool _isMounted = false; // 新增一個變量來追蹤State對象是否仍然在樹中
 
   @override
   void initState() {
     super.initState();
-    getTranslateMsg();
+    // 在初始化時檢查State對象是否仍然在widget樹中
+    _isMounted = true; // 將_isMounted設置為true，表示State對象已經被創建並且仍然在樹中
+    if (_isMounted) {
+      // 如果仍然在樹中，執行setState()
+      getTranslateMsg();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _isMounted = false; // 在dispose()方法中將_isMounted設置為false，表示State對象已被dispose
+   //防止載入未完成退出，導致crash
   }
 
   Future<void> getTranslateMsg() async {
-    var res = await getTranslatedSentenceApi(widget.message, 'Japanese');
-    setState(() {
-      var resBody = jsonDecode(res.body);
-      translatedMsg = resBody['data'];
-    });
+    String translateLanguage =
+        await safeConfigStore.getTranslationDestLang(widget.ourUid);
+    print('[chat_room_page.dart]使用語言:$translateLanguage');
+    var res = await getTranslatedSentenceApi(widget.message, translateLanguage);
+    if (_isMounted) { 
+      setState(() {
+        var resBody = jsonDecode(res.body);
+        translatedMsg = resBody['data'];
+      });
+    }
   }
 
   @override
@@ -704,8 +725,7 @@ class _ActionBarState extends State<_ActionBar> {
     }
 
     setState(() {
-      // Place here the code you want to execute after state change
-      // This code will be executed after the widget rebuilds
+
       ChatRoomPageState.currenInstance()?.reloadData();
     });
     // ignore: use_build_context_synchronously

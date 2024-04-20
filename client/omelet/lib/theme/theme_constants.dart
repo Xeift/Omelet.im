@@ -6,10 +6,10 @@ abstract class AppColors {
   static const secondary = Color(0xFF3B76F6);
   static const cardLight = Color(0xFFF9FAFE);
   static const cardDark = Color(0xFF303334);
-  static const textDark = Colors.black; // 修改为合适的颜色值
-  static const textLigth = Color(0xFFF5F5F5); // 修改为合适的颜色值
-  static const borderColorLight = Color.fromARGB(255, 0, 0, 0); // 修改为合适的边框颜色
-  static const borderColorDark = Colors.red; // 修改为合适的边框颜色
+  static const textDark = Colors.black; 
+  static const textLigth = Color(0xFFF5F5F5); 
+  static const borderColorLight = Color.fromARGB(255, 0, 0, 0); 
+  static const borderColorDark = Colors.red; 
 }
 
 ThemeData get lightMode => ThemeData(
@@ -45,11 +45,6 @@ ThemeData get lightMode => ThemeData(
     ).apply(
       bodyColor: const Color.fromARGB(255, 0, 0, 0),
     ),
-    // elevatedButtonTheme: ElevatedButtonThemeData(
-    //     style: ElevatedButton.styleFrom(
-    //       backgroundColor: const Color.fromARGB(255, 0, 0, 0), // 更改按钮的背景颜色为红色
-    //     ),
-    //   )
     );
 
 ThemeData get darkMode => ThemeData(
@@ -83,10 +78,4 @@ ThemeData get darkMode => ThemeData(
       ).apply(
         bodyColor: const Color.fromARGB(255, 255, 255, 255),
       ),
-
-      // elevatedButtonTheme: ElevatedButtonThemeData(
-      //   style: ElevatedButton.styleFrom(
-      //     backgroundColor:const Color.fromARGB(255, 255, 255, 255), // 更改按钮的背景颜色为红色
-      //   ),
-      // )
     );

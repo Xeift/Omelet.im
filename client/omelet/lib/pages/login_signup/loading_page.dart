@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
+
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
-import 'package:omelet/pages/notification_page/notification_page.dart';
-import 'package:omelet/utils/get_user_uid.dart';
+
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/utils/current_active_account.dart';
@@ -16,7 +15,7 @@ import 'dart:convert';
 import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 late io.Socket socket;
 
@@ -29,6 +28,8 @@ class LoadingPage extends StatefulWidget {
 
 class LoadingPageState extends State<LoadingPage> {
   bool _isLoading = true;
+
+  SafeConfigStore safeConfigStore = SafeConfigStore();
 
   @override
   void initState() {
@@ -105,7 +106,12 @@ class LoadingPageState extends State<LoadingPage> {
             // print(
             //     'uid 66666666 是否已啟用翻譯功能？${await safeConfigStore.isTranslateActive('66666666')}');
             // TODO: by Xeift：測試 safe_config_store 用
-
+            String getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
+            if(getTranslate == 'null'){
+              await safeConfigStore.setTranslationDestLang(ourUid, 'Chinese');
+            }
+            getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
+            print('[loading_page.dart]getTranslate:$getTranslate');
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => NavBarControlPage(ourUid:ourUid)));
@@ -120,7 +126,7 @@ class LoadingPageState extends State<LoadingPage> {
             await safeMsgStore.storeReceivedMsg(msg);
             print('[loading_page.dart] 新增新接收到的訊息，模擬顯示在聊天室上');
             print('[loading_page.dart] 接收到資料：$msg');
-            // TODO: 接收訊息時：顯示一則新訊息在聊天室
+            // 接收訊息時：顯示一則新訊息在聊天室
             ChatRoomPageState.currenInstance()?.reloadData();
           });
 
@@ -134,7 +140,7 @@ class LoadingPageState extends State<LoadingPage> {
             // 儲存好友邀請
             await safeNotifyStore.writeNotification(jsonDecode(msg));
             print('[loading_page] 完成');
-            // TODO: 顯示好友邀請
+            // 顯示好友邀請
           });
 
           socket.on('acceptedFriendRequest', (msg) async {
@@ -142,7 +148,7 @@ class LoadingPageState extends State<LoadingPage> {
             print('[main.dart] 對方已同意好友邀請👉 $msg');
             print('--------------------------------\n');
             await safeNotifyStore.writeNotification(jsonDecode(msg));
-            // TODO: 顯示「對方已同意好友邀請」
+            //  顯示「對方已同意好友邀請」
           });
         });
 
@@ -170,7 +176,8 @@ class LoadingPageState extends State<LoadingPage> {
       } else {
         print(
             '[main.dart] currentActiveAccount 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
-
+            String ourUid = await loadCurrentActiveAccount();
+            await safeConfigStore.setTranslationDestLang(ourUid,'Chinese');
         if (mounted) {
           print('觸發跳轉');
           Navigator.of(context).push(MaterialPageRoute(

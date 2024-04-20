@@ -6,7 +6,7 @@ class DeveloperPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 188, 139, 112),
+      backgroundColor:const Color.fromARGB(255, 188, 139, 112),
       appBar: AppBar(),
       body: Center(
         child: SingleChildScrollView(
@@ -102,6 +102,7 @@ class DeveloperCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _DeveloperCardState createState() => _DeveloperCardState();
 }
 

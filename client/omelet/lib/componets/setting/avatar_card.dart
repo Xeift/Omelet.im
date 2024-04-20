@@ -4,12 +4,12 @@ import 'package:omelet/utils/load_local_info.dart';
 import 'package:http/http.dart' as http;
 
 class AvatarCard extends StatelessWidget {
-  AvatarCard({
+  const AvatarCard({
     Key? key, required this.ourUid,
   }) : super(key: key);
 
   final String ourUid;
-  Future<bool> isValidUrl(String url) async {
+  Future<bool> _isValidUrl(String url) async {
     if (url.isEmpty) return false; // 確保網址不是空的
 
     try {
@@ -30,7 +30,7 @@ class AvatarCard extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             return FutureBuilder<bool>(
-              future: isValidUrl('$serverUri/pfp/$ourUid.png'),
+              future: _isValidUrl('$serverUri/pfp/$ourUid.png'),
               builder: (context, urlSnapshot) {
                 if (urlSnapshot.connectionState == ConnectionState.done) {
                   final bool isUrlValid = urlSnapshot.data ?? false;

@@ -90,7 +90,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                     return const CircularProgressIndicator(); // 加載指示器，當url驗證中
                   } else if (snapshot.hasError || !snapshot.data!) {
                     return const Padding(
-                      padding: EdgeInsets.only(left: 16.0), // 在leading左侧添加空白
+                      padding: EdgeInsets.only(left: 16.0), 
                       child: Icon(
                         Icons.account_circle_outlined,
                         size: 55,
@@ -148,18 +148,18 @@ class _BottonNavbarState extends State<BottonNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 获取当前上下文中的主题
+    final theme = Theme.of(context); 
 
     return SafeArea(
       child: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: theme.bottomNavigationBarTheme.backgroundColor, // 应用底部导航栏的背景颜色
+          color: theme.bottomNavigationBarTheme.backgroundColor, 
           boxShadow: [
             BoxShadow(
-              color: theme.shadowColor, // 阴影颜色
-              blurRadius: 5, // 模糊半径
-              offset: const Offset(0, -3), // 阴影偏移量，使其向上
+              color: theme.shadowColor, 
+              blurRadius: 5,
+              offset: const Offset(0, -3), 
             ),
           ],
         ),

@@ -30,33 +30,32 @@ class LoginPageState extends State<LoginPage> {
   Color _eyeColor = Colors.grey;
   late TextEditingController emailTextFieldController;
   late TextEditingController passwordTextFieldController;
-  
 
   final String _domain = 'omelet.im';
-  // 信号量
+  // 訊號量
   int _signalStrength = 0;
   // 返回信息
   String _resString = '';
   String ourUid = '';
 
-    void _doPing() {
+  void _doPing() {
     _resString = 'ping $_domain \n\n';
     final ping = Ping(_domain, count: 5);
     ping.stream.listen((event) {
       print(event);
       if (event.error != null) {
-        // 错误
+        // 錯誤
         setState(() {
           _resString = event.error.toString();
         });
       } else {
         if (event.response != null) {
-          // 单次信息
+       
           setState(() {
             _resString += '${event.response}\n';
           });
 
-          // 信号强度
+          // 訊號強度
           _signalStrength = calculateSignalStrength(
               event.response?.time?.inMilliseconds ?? 0);
         }
@@ -72,26 +71,25 @@ class LoginPageState extends State<LoginPage> {
 
   int calculateSignalStrength(int pingDelay) {
     if (pingDelay < 0) {
-      // 无网络连接
+      // 無網路連線
       return 0;
     } else if (pingDelay < 100) {
-      // 延迟 < 100ms，信号强度为 5
+      // delay < 100ms
       return 5;
     } else if (pingDelay < 200) {
-      // 延迟 < 200ms，信号强度为 4
+      // delay < 200ms
       return 4;
     } else if (pingDelay < 300) {
-      // 延迟 < 300ms，信号强度为 3
+      // delay < 300ms
       return 3;
     } else if (pingDelay < 500) {
-      // 延迟 < 500ms，信号强度为 2
+      // delay < 500ms
       return 2;
     } else {
-      // 延迟 >= 500ms，信号强度为 1
+      // delay >= 500ms
       return 1;
     }
   }
-
 
   @override
   void initState() {
@@ -115,28 +113,39 @@ class LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             children: [
               const SizedBox(height: kToolbarHeight),
-              
+
               const SizedBox(height: 50),
               buildTitle(),
               const SizedBox(height: 30),
-              buildEmailTextField(), //Email輸入框控件呼叫
+              buildEmailTextField(), 
               const SizedBox(height: 30),
-              buildPasswordTextField(), //Password輸入框控件呼叫
+              buildPasswordTextField(), 
               buildForgetPassword(),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildLoginButton(), //登入button控件呼叫
+                  buildLoginButton(),
                   const SizedBox(width: 30),
-                  buildSignupPageButton(), //註冊button控件呼叫
+                  buildSignupPageButton(),
                 ],
+              ),
+              const SizedBox(
+                height: 30,
               ),
               ElevatedButton(
                 onPressed: _doPing,
-                child: const Text('Start Ping'),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(const Color.fromARGB(255, 251, 120, 27)), // 按鈕背景色
+                  minimumSize: MaterialStateProperty.all<Size>(
+                    const Size(100, 50), // 按鈕的最小尺寸
+                  ),
+                ),
+                child: const Text('Start Ping Test'),
               ),
-              Text('信号强度: $_signalStrength'),
+
+              Text('訊號強度: $_signalStrength'),
               Text(_resString),
             ],
           ),
@@ -166,7 +175,7 @@ class LoginPageState extends State<LoginPage> {
         labelText: 'Password',
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-              color: Color.fromARGB(255, 113, 113, 113)), // 未聚焦时的底线颜色
+              color: Color.fromARGB(255, 113, 113, 113)), 
         ),
         labelStyle: TextStyle(
           color: Theme.of(context).colorScheme.secondary,
@@ -197,7 +206,7 @@ class LoginPageState extends State<LoginPage> {
         labelText: 'Email Address',
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-              color: Color.fromARGB(255, 113, 113, 113)), // 未聚焦时的底线颜色
+              color: Color.fromARGB(255, 113, 113, 113)), 
         ),
         labelStyle: TextStyle(
           color: Theme.of(context).colorScheme.secondary,
@@ -230,7 +239,8 @@ class LoginPageState extends State<LoginPage> {
 
   void nextPage() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) =>  NavBarControlPage(ourUid:ourUid)),
+        MaterialPageRoute(
+            builder: (context) => NavBarControlPage(ourUid: ourUid)),
         (route) => false);
   }
 

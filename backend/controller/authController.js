@@ -3,7 +3,7 @@ const passwordHelper = require('../utils/passwordHelper');
 const VerifiedUserModel = require('../model/verifiedUserModel');
 const UnverifiedUserModel = require('../model/unverifiedUserModel');
 require('dotenv').config({ path: 'config/.env' });
-const AWS_SERVER_URI = process.env.AWS_SERVER_URI;
+const AWS_PUBLIC_SERVER_URI = process.env.AWS_PUBLIC_SERVER_URI;
 const fs = require('fs');
 const path = require('path');
 
@@ -89,11 +89,11 @@ async function updatePfpStatus(uid, hasPfp) {
 
 async function getUserPublicInfoByUid(uid) {
     let userInfo = await VerifiedUserModel.findOne({ uid: uid });
-    let pfpExsist = fs.existsSync(path.join(__dirname, 'pfp', `${uid}.png`));
+    let pfpExsist = fs.existsSync(path.join(__dirname, '..', 'pfp', `${uid}.png`));
 
     let pfp;
     if (pfpExsist) {
-        pfp = `${AWS_SERVER_URI}pfp/${uid}.png`;
+        pfp = `${AWS_PUBLIC_SERVER_URI}pfp/${uid}.png`;
     }
     else {
         pfp = null;

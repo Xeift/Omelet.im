@@ -118,7 +118,7 @@ class _SettingPageState extends State<SettingPage> {
                                                       Color.fromARGB(
                                                           0, 255, 255, 255)),
                                               child: Text(
-                                                '選擇圖片',
+                                                'Select Image',
                                                 style: textTheme.titleSmall
                                                     ?.copyWith(
                                                   color: Theme.of(context)
@@ -144,7 +144,7 @@ class _SettingPageState extends State<SettingPage> {
                                                       Color.fromARGB(
                                                           0, 255, 255, 255)),
                                               child: Text(
-                                                '刪除照片',
+                                                'Delet Image',
                                                 style: textTheme.titleSmall
                                                     ?.copyWith(
                                                   color: Colors.red,

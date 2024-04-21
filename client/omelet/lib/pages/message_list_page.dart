@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
@@ -25,6 +26,7 @@ class _MessagePageState extends State<MessagePage> {
   List<Map<String, dynamic>> isSended = [];
 
   Map<String, dynamic> lastMsg = {};
+  bool _isLoading = false; // Track loading state
 
   @override
   void initState() {
@@ -33,14 +35,22 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   Future<void> _initialize() async {
+    setState(() {
+      _isLoading = true; // Set loading state
+    });
     Map<String, dynamic>? loadedMsg = await _loadIsSendedList();
     if (loadedMsg != null && loadedMsg.isNotEmpty) {
       if (mounted) {
         setState(() {
           lastMsg = loadedMsg;
           print('[message_list_page.dart]lastMsg:$lastMsg');
+          _isLoading = false; // Set loading state
         });
       }
+    } else {
+      setState(() {
+        _isLoading = false; // Set loading state
+      });
     }
   }
 
@@ -55,49 +65,64 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   Future<bool> _isValidUrl(String url) async {
-    if (url.isEmpty) return false; // 確保網址不是空的
+    if (url.isEmpty) return false; // Ensure the URL is not empty
 
     try {
       final response = await http.head(Uri.parse(url));
-      return response.statusCode == 200; // 如果狀態碼是 200，則視為有效的 URL
+      return response.statusCode == 200; // Consider URL valid if status code is 200
     } catch (e) {
-      return false; // 發生任何異常時都視為無效的 URL
+      return false; // Consider URL invalid for any exceptions
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print('[message_list_page] 訊息列表：$lastMsg');
-    return RefreshIndicator(
-      onRefresh: _handleRefreshMdgList,
-      child: lastMsg.isEmpty
-          ? const Center(
-              child: Text(
-                '這裡沒有訊息😮‍💨，\n 建議你可以叫你好友跟你聊聊🫠',
-                style: TextStyle(fontSize: 18),
-              ),
-            )
-          : ListView.builder(
-              itemCount: lastMsg.length,
-              itemBuilder: (context, index) {
-                return Slidable(
-                  startActionPane: ActionPane(
-                    motion: const StretchMotion(),
-                    children: [
-                      SlidableAction(
-                        flex: 1,
-                        backgroundColor: Colors.blueGrey,
-                        icon: Icons.delete,
-                        label: 'delet friend',
-                        onPressed: (context) => _onDeleted(),
-                      ),
-                    ],
-                  ),
-                  child: _delegate(context, index),
-                );
-              },
-            ),
+    print('[message_list_page] Messages: $lastMsg');
+    return Stack(
+      children: [
+        RefreshIndicator(
+          onRefresh: _handleRefreshMdgList,
+          child: _buildMessageList(),
+        ),
+        if (_isLoading)
+          const LinearProgressIndicator(
+            minHeight: 6,
+            backgroundColor: Color.fromARGB(255, 2, 2, 2),
+            valueColor:
+                AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
+          ),
+      ],
     );
+  }
+
+  Widget _buildMessageList() {
+    return lastMsg.isEmpty
+        ? const Center(
+            child: Text(
+              'There are no messages here 🫠',
+              style: TextStyle(fontSize: 18),
+            ),
+          )
+        : ListView.builder(
+            itemCount: lastMsg.length,
+            itemBuilder: (context, index) {
+              return Slidable(
+                startActionPane: ActionPane(
+                  motion: const StretchMotion(),
+                  children: [
+                    SlidableAction(
+                      flex: 1,
+                      backgroundColor: Colors.blueGrey,
+                      icon: Icons.delete,
+                      label: 'Delete friend',
+                      onPressed: (context) => _onDeleted(),
+                    ),
+                  ],
+                ),
+                child: _delegate(context, index),
+              );
+            },
+          );
   }
 
   void _onDeleted() {
@@ -161,11 +186,13 @@ class _MessagePageState extends State<MessagePage> {
 }
 
 // ignore: must_be_immutable
+
+// ignore: must_be_immutable
 class MessageItemTitle extends StatelessWidget {
   MessageItemTitle({Key? key, required this.messageData, required this.ourUid})
       : super(key: key);
-  final String ourUid;
 
+  final String ourUid;
   final MessageData messageData;
   SafeMsgStore safeMsgStore = SafeMsgStore();
   SafeUtilStore safeUtilStore = SafeUtilStore();
@@ -185,10 +212,11 @@ class MessageItemTitle extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
         decoration: const BoxDecoration(
           border: Border(
-              bottom: BorderSide(
-            color: Colors.grey,
-            width: 0.2,
-          )),
+            bottom: BorderSide(
+              color: Colors.grey,
+              width: 0.2,
+            ),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
@@ -198,33 +226,47 @@ class MessageItemTitle extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Avatar.medium(url: messageData.profilePicture),
               ),
+              SizedBox(width: 10,),
               Expanded(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    messageData.senderName,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      letterSpacing: 0.2,
-                      wordSpacing: 1.5,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                    child: Text(
-                      messageData.message,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      messageData.senderName,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 162, 162, 162),
+                        letterSpacing: 0.2,
+                        wordSpacing: 1.5,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 18,
                       ),
                     ),
-                  )
-                ],
-              ))
+                    SizedBox(
+                      height: 20,
+                      child: Text(
+                        messageData.message,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color.fromARGB(255, 162, 162, 162),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Add time widget here
+              SizedBox(
+                width: 80, // Adjust the width according to your preference
+                child: Text(
+                  DateFormat('MM/dd HH:mm').format(messageData.messageDate), // Format the date
+                  style:const TextStyle(
+                    fontSize: 12,
+                    color:  Color.fromARGB(255, 131, 130, 130),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

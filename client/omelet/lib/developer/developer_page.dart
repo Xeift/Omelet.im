@@ -15,12 +15,12 @@ class DeveloperPage extends StatelessWidget {
             children: [
               const Center(
                 child: Text(
-                  'Omelet廚師團隊',
+                  'Omelet Team',
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 255),
                     fontSize: 40,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 3,
+                    letterSpacing: 2,
                   ),
                 ),
               ),

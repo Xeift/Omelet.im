@@ -7,16 +7,16 @@ void loginErrorMsg(BuildContext context, String message) => showDialog(
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('提示'),
-          backgroundColor: Colors.white,
+          backgroundColor:Color.fromARGB(255, 253, 168, 98),
           content: Text(message),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },
-              child: const Text(
+              child: Text(
                 'CLOSE',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
             ),
           ],

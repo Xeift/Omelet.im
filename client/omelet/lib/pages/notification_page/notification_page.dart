@@ -77,8 +77,8 @@ class NotificationPageState extends State<NotificationPage> {
             } else {
               return const Center(
                 child: Text(
-                  '這裡很安靜 (蟬叫.....)，\n'
-                  '現在沒訊息喔',
+                  ' It\'s very quiet here'
+                  ,
                   style: TextStyle(
                     fontSize: 15,
                   ),

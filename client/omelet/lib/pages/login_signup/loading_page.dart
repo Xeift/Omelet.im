@@ -16,7 +16,6 @@ import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
 
-
 late io.Socket socket;
 
 class LoadingPage extends StatefulWidget {
@@ -95,26 +94,16 @@ class LoadingPageState extends State<LoadingPage> {
 
             String ourUid = await loadCurrentActiveAccount();
 
-            // TODO: by Xeift：測試 safe_config_store 用
-            // final safeConfigStore = SafeConfigStore();
-            // await safeConfigStore.enableTranslation('234132');
-            // await safeConfigStore.disableTranslation('234132');
-            // print(
-            //     '[safe_config_store debugShowAllActiveTranslateUid] 已啟用翻譯功能的對象👉 ${await safeConfigStore.debugShowAllActiveTranslateUid()}');
-            // print(
-            //     'uid 234132 是否已啟用翻譯功能？${await safeConfigStore.isTranslateActive('234132')}');
-            // print(
-            //     'uid 66666666 是否已啟用翻譯功能？${await safeConfigStore.isTranslateActive('66666666')}');
-            // TODO: by Xeift：測試 safe_config_store 用
-            String getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
-            if(getTranslate == 'null'){
+            String getTranslate =
+                await safeConfigStore.getTranslationDestLang(ourUid);
+            if (getTranslate == 'null') {
               await safeConfigStore.setTranslationDestLang(ourUid, 'Chinese');
             }
             getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
             print('[loading_page.dart]getTranslate:$getTranslate');
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => NavBarControlPage(ourUid:ourUid)));
+                  builder: (context) => NavBarControlPage(ourUid: ourUid)));
             }
           });
 
@@ -176,8 +165,8 @@ class LoadingPageState extends State<LoadingPage> {
       } else {
         print(
             '[main.dart] currentActiveAccount 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
-            String ourUid = await loadCurrentActiveAccount();
-            await safeConfigStore.setTranslationDestLang(ourUid,'Chinese');
+        String ourUid = await loadCurrentActiveAccount();
+        await safeConfigStore.setTranslationDestLang(ourUid, 'Chinese');
         if (mounted) {
           print('觸發跳轉');
           Navigator.of(context).push(MaterialPageRoute(

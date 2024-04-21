@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Omelet Login Page',
+      title: 'Omelet.im',
       theme: Provider.of<ThemeProvier>(context).themeData,
       darkTheme: darkMode,
       initialRoute: '/',

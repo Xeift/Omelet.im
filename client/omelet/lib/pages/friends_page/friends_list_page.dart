@@ -126,7 +126,7 @@ class FriendsList extends StatelessWidget {
                 onPressed: (context) => onDeletedFriends(userUid),
                 backgroundColor: const Color.fromARGB(255, 225, 106, 20),
                 icon: Icons.delete,
-                label: 'Delet Friend',
+                label: 'Delete Friend',
               )
             ],
           ),

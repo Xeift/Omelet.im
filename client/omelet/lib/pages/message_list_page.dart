@@ -123,7 +123,7 @@ class _MessagePageState extends State<MessagePage> {
           print('[message_list_page.dart]message:$message');
 
           if (message['message']['type'] == 'image') {
-            messageContent = '圖片';
+            messageContent = '[圖片]';
           } else {
             messageContent = message['message']['content'];
           }

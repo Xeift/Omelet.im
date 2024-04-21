@@ -129,7 +129,7 @@ class LoadingPageState extends State<LoadingPage> {
             print('[loading_page.dart] 接收到資料：$msg');
             // 接收訊息時：顯示一則新訊息在聊天室
             final notify = NotificationService();
-            await notify.showNotify(senderName, decryptedMsg);
+            await notify.showNotify('From $senderName:', decryptedMsg);
             ChatRoomPageState.currenInstance()?.reloadData();
           });
 

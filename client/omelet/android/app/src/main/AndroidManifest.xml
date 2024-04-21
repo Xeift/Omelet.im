@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- App 需要連網 -->
     <application
         android:label="omelet"
         android:name="${applicationName}"

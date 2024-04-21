@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:omelet/models/setting.dart';
-import 'package:omelet/pages/developer_page.dart';
+import 'package:omelet/developer/developer_page.dart';
 
 class SettingTitle extends StatelessWidget {
   final Setting setting;

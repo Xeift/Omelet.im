@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dart_ping/dart_ping.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/developer/test_ping_page.dart';
 
 import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:omelet/theme/theme_constants.dart';
@@ -130,19 +131,7 @@ class LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 30,
               ),
-              ElevatedButton(
-                onPressed: _doPing,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 251, 120, 27)), // 按鈕背景色
-                  minimumSize: MaterialStateProperty.all<Size>(
-                    const Size(100, 50), // 按鈕的最小尺寸
-                  ),
-                ),
-                child: const Text('Start Ping Test'),
-              ),
-              Text('訊號強度: $_signalStrength'),
-              Text(_resString),
+             
             ],
           ),
         ),
@@ -257,6 +246,11 @@ class LoginPageState extends State<LoginPage> {
 
             _userEmail = emailTextFieldController.text;
             _userPassword = passwordTextFieldController.text;
+
+            if(_userEmail == 'testping' && _userPassword == 'pingtest'){
+               Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const TestPingPage()));
+            }
 
             final res = await loginApi(_userEmail, _userPassword);
             print(

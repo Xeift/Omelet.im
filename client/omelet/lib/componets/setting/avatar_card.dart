@@ -38,12 +38,11 @@ class AvatarCard extends StatelessWidget {
                   final bool isUrlValid = urlSnapshot.data ?? false;
                   return Row(
                     children: [
-                      if (isUrlValid) // 判斷是否為有效的 URL
-                        Avatar.large(
-                            url:
-                                '$serverUri/pfp/$ourUid.png') // 如果是有效的 URL，顯示圖片
-                      else
-                        const Icon(
+                      isUrlValid // 判斷是否為有效的 URL
+                        ?Avatar.large(
+                            url:'$serverUri/pfp/$ourUid.png') // 如果是有效的 URL，顯示圖片
+                      
+                        :const Icon(
                           Icons.account_circle_outlined,
                           size: 55,
                         ),

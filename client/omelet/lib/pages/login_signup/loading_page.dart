@@ -109,6 +109,9 @@ class LoadingPageState extends State<LoadingPage> {
             if (getTranslate == 'null') {
               await safeConfigStore.setTranslationDestLang(
                   ourUid, 'Chinese Traditional');
+            }else{
+                await safeConfigStore.setTranslationDestLang(
+                  ourUid, 'Chinese Traditional');
             }
             getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
             print('[loading_page.dart]getTranslate:$getTranslate');

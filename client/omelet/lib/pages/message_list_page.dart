@@ -24,7 +24,7 @@ class _MessagePageState extends State<MessagePage> {
   SafeMsgStore safeMsgStore = SafeMsgStore();
   List<Map<String, dynamic>> isSended = [];
 
-  Map<String, dynamic> leastMsg = {};
+  Map<String, dynamic> lastMsg = {};
 
   @override
   void initState() {
@@ -37,7 +37,8 @@ class _MessagePageState extends State<MessagePage> {
     if (loadedMsg != null && loadedMsg.isNotEmpty) {
       if (mounted) {
         setState(() {
-          leastMsg = loadedMsg;
+          lastMsg = loadedMsg;
+          print('[message_list_page.dart]lastMsg:$lastMsg');
         });
       }
     }
@@ -45,7 +46,7 @@ class _MessagePageState extends State<MessagePage> {
 
   Future<Map<String, dynamic>?> _loadIsSendedList() async {
     var resM = await safeMsgStore.getChatList();
-    print('[message_list_page.dart]leastMsg:$resM');
+    print('[message_list_page.dart]lastMsg:$resM');
     return resM;
   }
 
@@ -66,10 +67,10 @@ class _MessagePageState extends State<MessagePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('[message_list_page] 訊息列表：$leastMsg');
+    print('[message_list_page] 訊息列表：$lastMsg');
     return RefreshIndicator(
       onRefresh: _handleRefreshMdgList,
-      child: leastMsg.isEmpty
+      child: lastMsg.isEmpty
           ? const Center(
               child: Text(
                 '這裡沒有訊息😮‍💨，\n 建議你可以叫你好友跟你聊聊🫠',
@@ -77,7 +78,7 @@ class _MessagePageState extends State<MessagePage> {
               ),
             )
           : ListView.builder(
-              itemCount: leastMsg.length,
+              itemCount: lastMsg.length,
               itemBuilder: (context, index) {
                 return Slidable(
                   startActionPane: ActionPane(
@@ -104,11 +105,11 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   Widget _delegate(BuildContext context, int index) {
-    if (leastMsg.isNotEmpty) {
-      final List<String> keys = leastMsg.keys.toList();
-      final List values = leastMsg.values.toList();
+    if (lastMsg.isNotEmpty) {
+      final List<String> keys = lastMsg.keys.toList();
+      final List values = lastMsg.values.toList();
 
-      if (index >= 0 && index < leastMsg.length) {
+      if (index >= 0 && index < lastMsg.length) {
         final String senderUid = keys[index];
         final Map<String, dynamic> message = values[index];
 
@@ -154,7 +155,7 @@ class _MessagePageState extends State<MessagePage> {
       }
     }
 
-    // 如果 leastMsg 為空或 index 不在範圍內，返回一個空的小部件或其他適當的處理方式
+    // 如果 lastMsg 為空或 index 不在範圍內，返回一個空的小部件或其他適當的處理方式
     return const SizedBox(); // 添加了明確的返回語句
   }
 }

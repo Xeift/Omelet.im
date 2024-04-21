@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import 'package:omelet/pages/message/chat_room_page.dart';
@@ -99,7 +100,7 @@ class LoadingPageState extends State<LoadingPage> {
             String getTranslate =
                 await safeConfigStore.getTranslationDestLang(ourUid);
             if (getTranslate == 'null') {
-              await safeConfigStore.setTranslationDestLang(ourUid, 'Chinese');
+              await safeConfigStore.setTranslationDestLang(ourUid, 'Chinese Traditional');
             }
             getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
             print('[loading_page.dart]getTranslate:$getTranslate');
@@ -171,7 +172,7 @@ class LoadingPageState extends State<LoadingPage> {
         print(
             '[main.dart] currentActiveAccount 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
         String ourUid = await loadCurrentActiveAccount();
-        await safeConfigStore.setTranslationDestLang(ourUid, 'Chinese');
+        await safeConfigStore.setTranslationDestLang(ourUid, 'Chinese Traditional');
         if (mounted) {
           print('觸發跳轉');
           Navigator.of(context).push(MaterialPageRoute(

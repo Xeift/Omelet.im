@@ -81,13 +81,16 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   @override
   Widget build(BuildContext context) {
     if (friendsInfo.isEmpty) {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
-          child: LinearProgressIndicator(
-            minHeight: 6,
-            backgroundColor: Color.fromARGB(255, 2, 2, 2),
-            valueColor:
-                AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
+          child: Semantics(
+            excludeSemantics: true,
+            child: const LinearProgressIndicator(
+              minHeight: 6,
+              backgroundColor: Color.fromARGB(255, 2, 2, 2),
+              valueColor:
+                  AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
+            ),
           ),
         ),
       );
@@ -142,7 +145,9 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslate');
     print('[chat_room_page] deBugTranslateList：$debugTranslate');
     if (mounted) {
-      setState(() {});
+      setState(() {
+        ReadMessageList;
+      });
     }
   }
 }
@@ -238,16 +243,10 @@ class ReadMessageList extends StatelessWidget {
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: fetchAndDisplayMessages(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LinearProgressIndicator(
-            minHeight: 100,
-            backgroundColor: Color.fromARGB(255, 2, 2, 2),
-            valueColor:
-                AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
-          ); // 在等待時顯示進度指示器
-        }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Text('無訊息');
+          return const Center(
+            child: Text('無訊息'),
+          );
         }
         List<Map<String, dynamic>> realMsg = snapshot.data!;
 
@@ -712,7 +711,7 @@ class _ActionBarState extends State<_ActionBar> {
       setState(() {
         _sendMsgController.clear();
       });
-      FocusScope.of(context).unfocus();
+      
     }
   }
 

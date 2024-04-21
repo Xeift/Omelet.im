@@ -14,7 +14,7 @@ class Avatar extends StatelessWidget {
   const Avatar.small({
     Key? key,
     this.url,
-    this.onTap,
+    this.onTap, required Null Function() onPressed,
   })  : radius = 16,
         super(key: key);
 

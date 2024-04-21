@@ -89,22 +89,40 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                 future: _urlValidFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator(); // 加載指示器，當url驗證中
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError || !snapshot.data!) {
-                    return const Padding(
-                      padding: EdgeInsets.only(left: 16.0),
-                      child: Icon(
-                        Icons.account_circle_outlined,
-                        size: 55,
-                      ),
-                    ); // 換成使用者頭像
+                    return IconButton(
+                      icon: const Icon(Icons.account_circle_outlined, size: 55),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  SettingPage(ourUid: widget.ourUid)),
+                        );
+                      },
+                    ); // 更改为使用者默认头像图标
                   } else {
-                    return Avatar.small(
-                        url:
-                            '$serverUri/pfp/${widget.ourUid}.png'); // 如果是有效的 URL，顯示圖片
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  SettingPage(ourUid: widget.ourUid)),
+                        );
+                      },
+                      child: Avatar.small(
+                        url: '$serverUri/pfp/${widget.ourUid}.png',
+                        onPressed: () {
+                          print('');
+                        },
+                      ),
+                    ); // 如果是有效的 URL，显示图片
                   }
                 },
               ),
+
               backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
               elevation: 0,
               centerTitle: true, // 讓標題居中

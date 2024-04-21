@@ -211,11 +211,17 @@ class _SettingPageState extends State<SettingPage> {
                               height: 2,
                               color: Theme.of(context).colorScheme.secondary,
                             ),
+
                             items: const [
                               DropdownMenuItem<String>(
-                                  value: 'Chinese', child: Text('中文,Chinese')),
+                                  value: 'Chinese Traditional',
+                                  child: Text('繁體中文,Chinese Traditional')),
                               DropdownMenuItem<String>(
-                                  value: 'English', child: Text('English')),
+                                  value: 'Chinese Simplified',
+                                  child: Text('简体中文,Chinese Simplified')),
+                              DropdownMenuItem<String>(
+                                  value: 'English',
+                                  child: Text('English')),
                               DropdownMenuItem<String>(
                                   value: 'Japanese',
                                   child: Text('日本語,Japanese')),

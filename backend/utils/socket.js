@@ -2,6 +2,7 @@ const jwt = require('./jwt');
 const msgController = require('../controller/msgController');
 const preKeyBundleController = require('../controller/preKeyBundleController.js');
 const friendController = require('../controller/friendController.js');
+const authController = require('../controller/authController.js');
 const eventEmitter = require('../utils/eventEmitter.js');
 let userIdToRoomId = {};
 
@@ -66,11 +67,8 @@ async function dealWithClientMsgs(msg, socket) {
     let userDevice = findUserDeviceBySocketId(socket.id);
     if (userDevice) {
         let senderUid = userDevice['uid'];
-        console.log(senderUid);
-        console.log(typeof(senderUid));
-        console.log(msg['senderIpkPub']);
-        console.log(typeof(msg['senderIpkPub']));
         let senderDeviceId = await preKeyBundleController.findDeviceIdByIpkPub(senderUid, msg['senderIpkPub']);
+        let senderUsername = (await authController.getUserPublicInfoByUid(senderUid))['username'];
         let receiverUid = msg['receiver'];
         let receiverDeviceId = msg['receiverDeviceId'];
         let timestamp = Date.now().toString();
@@ -99,6 +97,7 @@ async function dealWithClientMsgs(msg, socket) {
             'type': msg['type'],
             'sender': senderUid,
             'senderDeviceId': senderDeviceId,
+            'senderUsername': senderUsername,
             'receiver': receiverUid,
             'receiverDeviceId': receiverDeviceId,
             'content': msg['content'],

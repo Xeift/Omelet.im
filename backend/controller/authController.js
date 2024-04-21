@@ -98,6 +98,7 @@ async function getUserPublicInfoByUid(uid) {
     else {
         pfp = null;
     }
+
     let userPublicInfo = { username: userInfo['username'], pfp: pfp };
 
     return userPublicInfo;

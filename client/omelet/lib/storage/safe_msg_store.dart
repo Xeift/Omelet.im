@@ -172,9 +172,9 @@ class SafeMsgStore {
       'content': decryptedMsg
     });
 
-    final senderName = receivedMsg['sender'].toString();
+    final senderName = receivedMsg['senderUsername'].toString();
     if (receivedMsg['type'] == 'image') {
-      return ('[圖片]', senderName);
+      return (senderName, '[圖片]');
     } else {
       return (senderName, decryptedMsg);
     }

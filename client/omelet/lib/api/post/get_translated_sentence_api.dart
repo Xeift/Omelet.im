@@ -1,12 +1,10 @@
 // 翻譯 API
-
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/load_local_info.dart';
 
-//翻譯API
 Future<http.Response> getTranslatedSentenceApi(
     String originalText, String destLang) async {
   final token = await loadJwt();

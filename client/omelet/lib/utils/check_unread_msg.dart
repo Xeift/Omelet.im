@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:omelet/api/get/get_unread_msg_api.dart';
-
 import 'package:omelet/storage/safe_msg_store.dart';
 
 Future<void> checkUnreadMsg() async {

@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
+
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
 import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
@@ -16,6 +17,7 @@ import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/theme/theme_constants.dart';
+
 class ChatRoomPage extends StatefulWidget {
   const ChatRoomPage({Key? key, required this.friendsUid, required this.ourUid})
       : super(key: key);
@@ -31,7 +33,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   final SafeConfigStore safeConfigStore = SafeConfigStore();
   late String friendsUid;
   late bool isTranslate;
-  late Map<String, dynamic> friendsInfo = {}; 
+  late Map<String, dynamic> friendsInfo = {};
   late List<String> debugTranslate = [];
 
   @override
@@ -263,9 +265,9 @@ class ReadMessageList extends StatelessWidget {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
             final bool isOwnMessage =
-                realmessage['sender'].toString() == ourUid;//訊息數否為寄送者
+                realmessage['sender'].toString() == ourUid; //訊息數否為寄送者
             final isImage = realmessage['type'] != 'text';
-            var imageDataInt = isImage//判斷訊息是否為圖片
+            var imageDataInt = isImage //判斷訊息是否為圖片
                 ? (realmessage['content'] as String)
                     .substring(1, realmessage['content'].length - 1)
                     .split(',')
@@ -285,7 +287,7 @@ class ReadMessageList extends StatelessWidget {
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ) 
+                          )
                         : MessageOwnTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -298,7 +300,7 @@ class ReadMessageList extends StatelessWidget {
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ) 
+                          )
                         : AIMessageTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -313,7 +315,7 @@ class ReadMessageList extends StatelessWidget {
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ) 
+                          )
                         : MessageOwnTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -326,7 +328,7 @@ class ReadMessageList extends StatelessWidget {
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ) 
+                          )
                         : MessageTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
@@ -340,7 +342,8 @@ class ReadMessageList extends StatelessWidget {
   }
 }
 
-class MessageTitle extends StatelessWidget {//好友的訊息框
+class MessageTitle extends StatelessWidget {
+  //好友的訊息框
   const MessageTitle(
       {Key? key, required this.message, required this.messageDate})
       : super(key: key);
@@ -387,7 +390,8 @@ class MessageTitle extends StatelessWidget {//好友的訊息框
   }
 }
 
-class MessageOwnTitle extends StatelessWidget {//自己的訊息框
+class MessageOwnTitle extends StatelessWidget {
+  //自己的訊息框
   const MessageOwnTitle(
       {Key? key, required this.message, required this.messageDate})
       : super(key: key);
@@ -437,7 +441,8 @@ class MessageOwnTitle extends StatelessWidget {//自己的訊息框
   }
 }
 
-class DateLable extends StatelessWidget {//訊息視覺話處理
+class DateLable extends StatelessWidget {
+  //訊息視覺話處理
   const DateLable({Key? key, required this.lable}) : super(key: key);
 
   final String lable;
@@ -465,7 +470,8 @@ class DateLable extends StatelessWidget {//訊息視覺話處理
   }
 }
 
-class ImgTitle extends StatelessWidget {//圖片訊息框
+class ImgTitle extends StatelessWidget {
+  //圖片訊息框
   const ImgTitle({
     Key? key,
     required this.imageData,
@@ -573,7 +579,8 @@ class ImgOwnTitle extends StatelessWidget {
   }
 }
 
-class AIMessageTitle extends StatefulWidget {//翻譯訊息框
+class AIMessageTitle extends StatefulWidget {
+  //翻譯訊息框
   const AIMessageTitle({
     Key? key,
     required this.message,
@@ -610,7 +617,7 @@ class AIMessageTitleState extends State<AIMessageTitle> {
   void dispose() {
     super.dispose();
     _isMounted = false; // 在dispose()方法中將_isMounted設置為false，表示State對象已被dispose
-   //防止載入未完成退出，導致crash
+    //防止載入未完成退出，導致crash
   }
 
   Future<void> getTranslateMsg() async {
@@ -618,7 +625,7 @@ class AIMessageTitleState extends State<AIMessageTitle> {
         await safeConfigStore.getTranslationDestLang(widget.ourUid);
     print('[chat_room_page.dart]使用語言:$translateLanguage');
     var res = await getTranslatedSentenceApi(widget.message, translateLanguage);
-    if (_isMounted) { 
+    if (_isMounted) {
       setState(() {
         var resBody = jsonDecode(res.body);
         translatedMsg = resBody['data'];
@@ -725,7 +732,6 @@ class _ActionBarState extends State<_ActionBar> {
     }
 
     setState(() {
-
       ChatRoomPageState.currenInstance()?.reloadData();
     });
     // ignore: use_build_context_synchronously

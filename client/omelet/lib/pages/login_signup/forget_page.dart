@@ -1,8 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../componets/alert/alert_msg.dart';
+import 'package:omelet/componets/alert/alert_msg.dart';
 import 'package:omelet/api/post/reset_password_api.dart';
 import 'package:omelet/utils/load_local_info.dart';
 

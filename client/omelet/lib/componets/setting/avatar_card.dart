@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/utils/load_local_info.dart';
-import 'package:http/http.dart' as http;
 
 class AvatarCard extends StatelessWidget {
   const AvatarCard({
-    Key? key, required this.ourUid,
+    Key? key,
+    required this.ourUid,
   }) : super(key: key);
 
   final String ourUid;
@@ -37,7 +39,9 @@ class AvatarCard extends StatelessWidget {
                   return Row(
                     children: [
                       if (isUrlValid) // 判斷是否為有效的 URL
-                        Avatar.large(url:'$serverUri/pfp/$ourUid.png') // 如果是有效的 URL，顯示圖片
+                        Avatar.large(
+                            url:
+                                '$serverUri/pfp/$ourUid.png') // 如果是有效的 URL，顯示圖片
                       else
                         const Icon(
                           Icons.account_circle_outlined,

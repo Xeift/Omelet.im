@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_import
 
 import 'package:flutter/material.dart';
-import '../theme/theme_constants.dart';
+import 'package:omelet/theme/theme_constants.dart';
 
 class ThemeProvier with ChangeNotifier {
   ThemeData _themeData = lightMode;
@@ -12,8 +12,8 @@ class ThemeProvier with ChangeNotifier {
     _themeData = themeData;
     notifyListeners();
   }
-void toggleTheme() {
+
+  void toggleTheme() {
     themeData = _themeData == lightMode ? darkMode : lightMode;
   }
 }
-

@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
-
-import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/utils/current_active_account.dart';
 import 'package:omelet/utils/load_local_info.dart';
@@ -11,7 +13,6 @@ import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
-import 'dart:convert';
 import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
@@ -48,9 +49,9 @@ class LoadingPageState extends State<LoadingPage> {
     print('[loading_page] 初始狀態檢查開始 --------------------');
     try {
       // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
-      // const storage = FlutterSecureStorage();
-      // await storage.deleteAll();
-      // print('[loading_page] 已刪除所有儲存空間');
+      const storage = FlutterSecureStorage();
+      await storage.deleteAll();
+      print('[loading_page] 已刪除所有儲存空間');
       // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
       // print('[loading_page.dart] ${jsonDecode(res.body)}');
 

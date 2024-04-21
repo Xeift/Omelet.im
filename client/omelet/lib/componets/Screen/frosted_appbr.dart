@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+
 import 'package:omelet/theme/theme_constants.dart';
 
 // ignore: must_be_immutable

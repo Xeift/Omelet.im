@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:omelet/models/setting.dart';
 import 'package:omelet/pages/developer_page.dart';
 
@@ -16,9 +17,9 @@ class SettingTitle extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const DeveloperPage()),
-            );
+          context,
+          MaterialPageRoute(builder: (context) => const DeveloperPage()),
+        );
       }, //navigation
       child: Row(
         children: [

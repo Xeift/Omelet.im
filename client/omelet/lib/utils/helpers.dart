@@ -47,9 +47,9 @@ abstract class Helpers {
     return null;
   }
 
-  static DateTime randomDate(){
+  static DateTime randomDate() {
     final random = Random();
-    final currentDate =DateTime.now();
+    final currentDate = DateTime.now();
     return currentDate.subtract(Duration(seconds: random.nextInt(2000000)));
   }
 }

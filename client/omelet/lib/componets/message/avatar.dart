@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 // 顯示用戶照片，可分small、medium、large的大小
 
@@ -22,8 +22,8 @@ class Avatar extends StatelessWidget {
     Key? key,
     this.url,
     this.onTap,
-  }) : radius = 22,
-      super(key: key);
+  })  : radius = 22,
+        super(key: key);
 
   const Avatar.medium({
     Key? key,

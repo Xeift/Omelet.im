@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/reply_friend_request_api.dart';
 import 'package:omelet/storage/safe_notify_store.dart';
@@ -11,7 +12,6 @@ class NotificationPage extends StatefulWidget {
   @override
   State<NotificationPage> createState() => NotificationPageState();
 }
-
 
 class NotificationPageState extends State<NotificationPage> {
   final SafeNotifyStore safeNotifyStore = SafeNotifyStore();
@@ -33,11 +33,10 @@ class NotificationPageState extends State<NotificationPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh:handleRefresh9,
+      onRefresh: handleRefresh9,
       child: FutureBuilder<List<Map<String, dynamic>>>(
           future: fetchAndDisplayNotifications(),
           builder: (context, snapshot) {
@@ -98,7 +97,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
   final VoidCallback onAccept;
   final VoidCallback onDismiss;
 
-   FriednsRequestItemTitle({
+  FriednsRequestItemTitle({
     Key? key,
     required this.requestTime,
     required this.requestData,

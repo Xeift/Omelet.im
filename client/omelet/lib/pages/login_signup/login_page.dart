@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:dart_ping/dart_ping.dart';
 import 'package:flutter/material.dart';
-import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/utils/load_local_info.dart';
-
-import '../../componets/alert/alert_msg.dart';
-import '../nav_bar_control_page.dart';
-import 'sign_up_page.dart';
-
+import 'package:omelet/componets/alert/alert_msg.dart';
+import 'package:omelet/pages/nav_bar_control_page.dart';
+import 'package:omelet/pages/login_signup/sign_up_page.dart';
 import 'package:omelet/api/post/login_api.dart';
 import 'package:omelet/signal_protocol/generate_and_store_key.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart'
@@ -50,7 +49,6 @@ class LoginPageState extends State<LoginPage> {
         });
       } else {
         if (event.response != null) {
-       
           setState(() {
             _resString += '${event.response}\n';
           });
@@ -113,13 +111,12 @@ class LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             children: [
               const SizedBox(height: kToolbarHeight),
-
               const SizedBox(height: 50),
               buildTitle(),
               const SizedBox(height: 30),
-              buildEmailTextField(), 
+              buildEmailTextField(),
               const SizedBox(height: 30),
-              buildPasswordTextField(), 
+              buildPasswordTextField(),
               buildForgetPassword(),
               const SizedBox(height: 20),
               Row(
@@ -136,15 +133,14 @@ class LoginPageState extends State<LoginPage> {
               ElevatedButton(
                 onPressed: _doPing,
                 style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(const Color.fromARGB(255, 251, 120, 27)), // 按鈕背景色
+                  backgroundColor: MaterialStateProperty.all(
+                      const Color.fromARGB(255, 251, 120, 27)), // 按鈕背景色
                   minimumSize: MaterialStateProperty.all<Size>(
                     const Size(100, 50), // 按鈕的最小尺寸
                   ),
                 ),
                 child: const Text('Start Ping Test'),
               ),
-
               Text('訊號強度: $_signalStrength'),
               Text(_resString),
             ],
@@ -174,8 +170,7 @@ class LoginPageState extends State<LoginPage> {
         // 隱藏密碼按鈕
         labelText: 'Password',
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: Color.fromARGB(255, 113, 113, 113)), 
+          borderSide: BorderSide(color: Color.fromARGB(255, 113, 113, 113)),
         ),
         labelStyle: TextStyle(
           color: Theme.of(context).colorScheme.secondary,
@@ -205,8 +200,7 @@ class LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         labelText: 'Email Address',
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: Color.fromARGB(255, 113, 113, 113)), 
+          borderSide: BorderSide(color: Color.fromARGB(255, 113, 113, 113)),
         ),
         labelStyle: TextStyle(
           color: Theme.of(context).colorScheme.secondary,

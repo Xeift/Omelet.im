@@ -1,17 +1,16 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:omelet/componets/button/on_update_pfp_btn_pressed.dart';
 import 'package:omelet/models/setting.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/load_local_info.dart';
-import 'package:provider/provider.dart';
-
-import '../../componets/setting/avatar_card.dart';
-import '../../componets/setting/setting_title.dart';
-import '../../theme/theme_provider.dart';
+import 'package:omelet/componets/setting/avatar_card.dart';
+import 'package:omelet/componets/setting/setting_title.dart';
+import 'package:omelet/theme/theme_provider.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key, required this.ourUid}) : super(key: key);
@@ -68,7 +67,7 @@ class _SettingPageState extends State<SettingPage> {
                 backgroundColor: Color.fromARGB(255, 2, 2, 2),
                 valueColor:
                     AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
-              ), 
+              ),
             );
           } else if (snapshot.hasError) {
             // 如果加載過程中出現錯誤，則顯示錯誤信息

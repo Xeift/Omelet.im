@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:omelet/utils/load_local_info.dart';
 
 class SafeUtilStore {

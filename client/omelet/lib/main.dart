@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:omelet/pages/login_signup/loading_page.dart';
-import './theme/theme_constants.dart';
-import 'theme/theme_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'package:omelet/pages/login_signup/loading_page.dart';
+import 'package:omelet/theme/theme_constants.dart';
+import 'package:omelet/theme/theme_provider.dart';
 
 final hintMsgKey = GlobalKey();
 void main() {

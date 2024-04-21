@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:http/http.dart';
+
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/get/get_friend_list_api.dart';
 

@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../componets/alert/alert_msg.dart';
+import 'package:omelet/componets/alert/alert_msg.dart';
 
-import './../../api/post/signup_api.dart';
+import 'package:omelet/api/post/signup_api.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);

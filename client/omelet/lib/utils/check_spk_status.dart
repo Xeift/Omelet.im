@@ -6,7 +6,6 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import 'package:omelet/api/post/update_spk_api.dart';
 import 'package:omelet/api/get/get_self_spk_status_api.dart';
-
 import 'package:omelet/signal_protocol/safe_spk_store.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 

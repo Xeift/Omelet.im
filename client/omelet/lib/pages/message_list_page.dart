@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_util_store.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:http/http.dart' as http;
 import 'package:omelet/utils/load_local_info.dart';
-import '../models/message_data.dart';
+import 'package:omelet/models/message_data.dart';
 import 'package:omelet/utils/helpers.dart';
 
 class MessagePage extends StatefulWidget {
@@ -22,7 +23,6 @@ class _MessagePageState extends State<MessagePage> {
   SafeUtilStore safeUtilStore = SafeUtilStore();
   SafeMsgStore safeMsgStore = SafeMsgStore();
   List<Map<String, dynamic>> isSended = [];
-
 
   Map<String, dynamic> leastMsg = {};
 
@@ -53,7 +53,7 @@ class _MessagePageState extends State<MessagePage> {
     setState(() {});
   }
 
-    Future<bool> _isValidUrl(String url) async {
+  Future<bool> _isValidUrl(String url) async {
     if (url.isEmpty) return false; // 確保網址不是空的
 
     try {
@@ -63,98 +63,96 @@ class _MessagePageState extends State<MessagePage> {
       return false; // 發生任何異常時都視為無效的 URL
     }
   }
-  
 
-@override
-Widget build(BuildContext context) {
-  print('[message_list_page] 訊息列表：$leastMsg');
-  return RefreshIndicator(
-    onRefresh: _handleRefreshMdgList,
-    child: leastMsg.isEmpty
-        ? const Center(
-            child: Text(
-              '這裡沒有訊息😮‍💨，\n 建議你可以叫你好友跟你聊聊🫠',
-              style: TextStyle(fontSize: 18),
+  @override
+  Widget build(BuildContext context) {
+    print('[message_list_page] 訊息列表：$leastMsg');
+    return RefreshIndicator(
+      onRefresh: _handleRefreshMdgList,
+      child: leastMsg.isEmpty
+          ? const Center(
+              child: Text(
+                '這裡沒有訊息😮‍💨，\n 建議你可以叫你好友跟你聊聊🫠',
+                style: TextStyle(fontSize: 18),
+              ),
+            )
+          : ListView.builder(
+              itemCount: leastMsg.length,
+              itemBuilder: (context, index) {
+                return Slidable(
+                  startActionPane: ActionPane(
+                    motion: const StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        flex: 1,
+                        backgroundColor: Colors.blueGrey,
+                        icon: Icons.delete,
+                        label: 'delet friend',
+                        onPressed: (context) => _onDeleted(),
+                      ),
+                    ],
+                  ),
+                  child: _delegate(context, index),
+                );
+              },
             ),
-          )
-        : ListView.builder(
-            itemCount: leastMsg.length,
-            itemBuilder: (context, index) {
-              return Slidable(
-                startActionPane: ActionPane(
-                  motion: const StretchMotion(),
-                  children: [
-                    SlidableAction(
-                      flex: 1,
-                      backgroundColor: Colors.blueGrey,
-                      icon: Icons.delete,
-                      label: 'delet friend',
-                      onPressed: (context) => _onDeleted(),
-                    ),
-                  ],
-                ),
-                child: _delegate(context, index),
-              );
-            },
-          ),
-  );
-}
-
+    );
+  }
 
   void _onDeleted() {
     //TODO:寫入刪除訊息列的邏輯
   }
 
-Widget _delegate(BuildContext context, int index) {
-  if (leastMsg.isNotEmpty) {
-    final List<String> keys = leastMsg.keys.toList();
-    final List values = leastMsg.values.toList();
+  Widget _delegate(BuildContext context, int index) {
+    if (leastMsg.isNotEmpty) {
+      final List<String> keys = leastMsg.keys.toList();
+      final List values = leastMsg.values.toList();
 
-    if (index >= 0 && index < leastMsg.length) {
-      final String senderUid = keys[index];
-      final Map<String, dynamic> message = values[index];
+      if (index >= 0 && index < leastMsg.length) {
+        final String senderUid = keys[index];
+        final Map<String, dynamic> message = values[index];
 
-      // 檢查 message 是否為空
-      if (message.containsKey('remoteUserInfo')) {
-        final String senderName = message['remoteUserInfo']['username'];
-        String messageContent = '';
-        final String remoteUid = senderUid;
-        final String messageDate = message['message']['timestamp'];
+        // 檢查 message 是否為空
+        if (message.containsKey('remoteUserInfo')) {
+          final String senderName = message['remoteUserInfo']['username'];
+          String messageContent = '';
+          final String remoteUid = senderUid;
+          final String messageDate = message['message']['timestamp'];
 
-        print('[message_list_page.dart]message:$message');
+          print('[message_list_page.dart]message:$message');
 
-        if (message['message']['type'] == 'image') {
-          messageContent = '圖片';
-        } else {
-          messageContent = message['message']['content'];
+          if (message['message']['type'] == 'image') {
+            messageContent = '圖片';
+          } else {
+            messageContent = message['message']['content'];
+          }
+
+          return FutureBuilder<bool>(
+            future: _isValidUrl('$serverUri/pfp/$remoteUid.png'),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                final bool isUrlValid = snapshot.data ?? false;
+                return MessageItemTitle(
+                  messageData: MessageData(
+                    senderName: senderName,
+                    message: messageContent,
+                    remoteUid: remoteUid,
+                    messageDate: DateTime.fromMillisecondsSinceEpoch(
+                        int.parse(messageDate)),
+                    profilePicture: isUrlValid
+                        ? '$serverUri/pfp/$remoteUid.png'
+                        : Helpers.randomPictureUrl(),
+                  ),
+                  ourUid: widget.ourUid,
+                );
+              } else {
+                return const SizedBox(); // 加載中返回空的小部件
+              }
+            },
+          );
         }
-
-        return FutureBuilder<bool>(
-          future: _isValidUrl('$serverUri/pfp/$remoteUid.png'),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              final bool isUrlValid = snapshot.data ?? false;
-              return MessageItemTitle(
-                messageData: MessageData(
-                  senderName: senderName,
-                  message: messageContent,
-                  remoteUid: remoteUid,
-                  messageDate:
-                      DateTime.fromMillisecondsSinceEpoch(int.parse(messageDate)),
-                  profilePicture: isUrlValid
-                      ? '$serverUri/pfp/$remoteUid.png'
-                      : Helpers.randomPictureUrl(),
-                ),
-                ourUid: widget.ourUid,
-              );
-            } else {
-              return const SizedBox(); // 加載中返回空的小部件
-            }
-          },
-        );
       }
     }
-  }
 
     // 如果 leastMsg 為空或 index 不在範圍內，返回一個空的小部件或其他適當的處理方式
     return const SizedBox(); // 添加了明確的返回語句
@@ -163,7 +161,8 @@ Widget _delegate(BuildContext context, int index) {
 
 // ignore: must_be_immutable
 class MessageItemTitle extends StatelessWidget {
-  MessageItemTitle({Key? key, required this.messageData, required this.ourUid}) : super(key: key);
+  MessageItemTitle({Key? key, required this.messageData, required this.ourUid})
+      : super(key: key);
   final String ourUid;
 
   final MessageData messageData;
@@ -175,7 +174,10 @@ class MessageItemTitle extends StatelessWidget {
     return InkWell(
       onTap: () async {
         Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ChatRoomPage(ourUid:ourUid, friendsUid: messageData.remoteUid,)));
+            builder: (context) => ChatRoomPage(
+                  ourUid: ourUid,
+                  friendsUid: messageData.remoteUid,
+                )));
       },
       child: Container(
         height: 80,

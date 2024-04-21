@@ -1,15 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/friends_page/friends_list_page.dart';
 import 'package:omelet/pages/notification_page/notification_page.dart';
 import 'package:omelet/pages/setting/setting_page.dart';
 import 'package:omelet/utils/load_local_info.dart';
-import 'package:http/http.dart' as http;
-
-import '../theme/theme_constants.dart';
-import 'message_list_page.dart';
+import 'package:omelet/theme/theme_constants.dart';
+import 'package:omelet/pages/message_list_page.dart';
 // import '../pages/notification_page.dart';
 
 class NavBarControlPage extends StatefulWidget {
@@ -47,6 +47,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
     ];
     _urlValidFuture = isValidUrl('$serverUri/pfp/${widget.ourUid}.png');
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +77,8 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => SettingPage(ourUid:widget.ourUid)),
+                              builder: (_) =>
+                                  SettingPage(ourUid: widget.ourUid)),
                         );
                       },
                     ),
@@ -90,14 +92,16 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                     return const CircularProgressIndicator(); // 加載指示器，當url驗證中
                   } else if (snapshot.hasError || !snapshot.data!) {
                     return const Padding(
-                      padding: EdgeInsets.only(left: 16.0), 
+                      padding: EdgeInsets.only(left: 16.0),
                       child: Icon(
                         Icons.account_circle_outlined,
                         size: 55,
                       ),
                     ); // 換成使用者頭像
                   } else {
-                    return Avatar.small(url: '$serverUri/pfp/${widget.ourUid}.png'); // 如果是有效的 URL，顯示圖片
+                    return Avatar.small(
+                        url:
+                            '$serverUri/pfp/${widget.ourUid}.png'); // 如果是有效的 URL，顯示圖片
                   }
                 },
               ),
@@ -148,18 +152,18 @@ class _BottonNavbarState extends State<BottonNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); 
+    final theme = Theme.of(context);
 
     return SafeArea(
       child: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: theme.bottomNavigationBarTheme.backgroundColor, 
+          color: theme.bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: theme.shadowColor, 
+              color: theme.shadowColor,
               blurRadius: 5,
-              offset: const Offset(0, -3), 
+              offset: const Offset(0, -3),
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/componets/alert/alert_msg.dart';
-
 
 class FriendsAddPage extends StatefulWidget {
   const FriendsAddPage({Key? key, required this.ourUid}) : super(key: key);
@@ -94,7 +94,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
               ),
               child: Center(
                 child: Text(
-                '您的Uid: ${widget.ourUid}',
+                  '您的Uid: ${widget.ourUid}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,

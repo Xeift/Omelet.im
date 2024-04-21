@@ -127,7 +127,8 @@ class SafeMsgStore {
     }
   }
 
-  Future<void> storeReceivedMsg(Map<String, dynamic> receivedMsg) async {
+  Future<(String, String)> storeReceivedMsg(
+      Map<String, dynamic> receivedMsg) async {
     // 若為圖片，則根據檔名下載加密過的圖片
     if (receivedMsg['type'] == 'image') {
       print('😎img $receivedMsg');
@@ -170,6 +171,13 @@ class SafeMsgStore {
       'receiver': receivedMsg['receiver'],
       'content': decryptedMsg
     });
+
+    final senderName = receivedMsg['sender'].toString();
+    if (receivedMsg['type'] == 'image') {
+      return ('[圖片]', senderName);
+    } else {
+      return (senderName, decryptedMsg);
+    }
   }
 
   Future<Map<String, dynamic>> getChatList() async {

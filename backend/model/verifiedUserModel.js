@@ -6,8 +6,6 @@ const VerifiedUserSchema = new mongoose.Schema({
     username: { type: String, unique: true },
     email: { type: String, unique: true },
     password: { type: String },
-    room_joined: { type: [String], default: [] },
-    hasPfp: { type: Boolean, default: false },
     lastDeviceId: { type: Number },
     friends: { type: [String], default: [] },
 });

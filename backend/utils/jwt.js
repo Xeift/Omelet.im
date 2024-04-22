@@ -17,7 +17,7 @@ async function generateRegisterJWT(_uid, _email) {
     const encoded_token = jwt.sign(
         { _uid, _email },
         JWT_SECRET,
-        { expiresIn: '5m' }
+        { expiresIn: '15m' }
     );
     return encoded_token;
 }
@@ -26,7 +26,7 @@ async function generateRestorePasswordJWT(_email) {
     const encoded_token = jwt.sign(
         { email: _email },
         JWT_SECRET,
-        { expiresIn: '5m' },
+        { expiresIn: '15m' },
     );
     return encoded_token;
 }

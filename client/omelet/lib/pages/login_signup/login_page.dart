@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dart_ping/dart_ping.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/developer/test_ping_page.dart';
@@ -32,7 +31,6 @@ class LoginPageState extends State<LoginPage> {
   late TextEditingController passwordTextFieldController;
 
   String ourUid = '';
-
 
   @override
   void initState() {
@@ -75,7 +73,6 @@ class LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 30,
               ),
-             
             ],
           ),
         ),
@@ -190,8 +187,8 @@ class LoginPageState extends State<LoginPage> {
             _userEmail = emailTextFieldController.text;
             _userPassword = passwordTextFieldController.text;
 
-            if(_userEmail == 'testping' && _userPassword == 'pingtest'){
-               Navigator.of(context).push(MaterialPageRoute(
+            if (_userEmail == 'testping' && _userPassword == 'pingtest') {
+              Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const TestPingPage()));
             }
 
@@ -200,8 +197,9 @@ class LoginPageState extends State<LoginPage> {
                 '[login_page.dart deBug]:userEmail:$_userEmail,_userPassword:$_userPassword');
             final statusCode = res.statusCode;
             print('[login_page.dart deBug]res report:$statusCode');
+            print('[home_page.dart] API 回應內容：${res.body}');
+
             final resBody = jsonDecode(res.body);
-            print('[home_page.dart] API 回應內容：$resBody');
 
             if (!context.mounted) {
               return;

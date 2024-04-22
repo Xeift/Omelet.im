@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/avatar_user.dart';
 import 'package:omelet/pages/friends_page/friends_list_page.dart';
 import 'package:omelet/pages/notification_page/notification_page.dart';
@@ -102,20 +101,19 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                                   SettingPage(ourUid: widget.ourUid)),
                         );
                       },
-                    ); // 更改为使用者默认头像图标
+                    );
                   } else {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) =>
+                              builder: (context) =>
                                   SettingPage(ourUid: widget.ourUid)),
                         );
                       },
                       child: AvatarUser.small(
                         url: '$serverUri/pfp/${widget.ourUid}.png',
-                       
                       ),
                     ); // 如果是有效的 URL，显示图片
                   }

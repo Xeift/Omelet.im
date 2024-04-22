@@ -53,10 +53,6 @@ class _SettingPageState extends State<SettingPage> {
     await safeConfigStore.setTranslationDestLang(widget.ourUid, newValue);
   }
 
-  Future<void> clearCacheForUrl(String url) async{
-  CachedNetworkImage.evictFromCache(url);
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +112,7 @@ class _SettingPageState extends State<SettingPage> {
                                             height: 55,
                                             child: ElevatedButton(
                                               onPressed: () async {
-                                                await clearCacheForUrl('$serverUri/pfp/${widget.ourUid}');
+                                          
                                                 await onUpdatePfpBtnPressed();
                                                 
                                                 print('[setting_page.dart]$serverUri/pfp/${widget.ourUid}');

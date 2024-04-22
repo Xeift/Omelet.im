@@ -36,12 +36,7 @@ class AvatarUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (url != null) {
-          clearCacheForUrl(url!);
-        }
-        onTap?.call();
-      },
+      onTap: onTap,
       child: _avatar(context),
     );
   }
@@ -50,8 +45,7 @@ class AvatarUser extends StatelessWidget {
     if (url != null) {
       return CircleAvatar(
         radius: radius,
-        backgroundImage: Image.network("$url?v=${DateTime.now()}").image,
-
+        backgroundImage: Image.network('$url?v=${DateTime.now()}').image,
         backgroundColor: Theme.of(context).cardColor,
       );
     } else {

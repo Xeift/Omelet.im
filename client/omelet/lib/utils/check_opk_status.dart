@@ -25,9 +25,6 @@ Future<void> checkOpkStatus() async {
         newOpk.id.toString():
             jsonEncode(newOpk.getKeyPair().publicKey.serialize())
     }));
-    print('--------------------------------');
-    print('[main.dart] new opk👉 ${res.body}');
-    print('--------------------------------\n');
 
     final opkStore = SafeOpkStore();
     for (final newOpk in newOpks) {

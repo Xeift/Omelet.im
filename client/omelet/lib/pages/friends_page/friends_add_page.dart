@@ -32,7 +32,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
         print('[friends_add_page] 好友邀請狀態碼: $statusCode');
         if (mounted) {
           if (statusCode == 200) {
-            loginErrorMsg(context, '好友邀請傳送成功61550071007547392');
+            loginErrorMsg(context, '好友邀請傳送成功');
           } else if (statusCode == 403) {
             loginErrorMsg(context, '傳送好友邀請者不存在');
           } else if (statusCode == 409) {

@@ -58,16 +58,16 @@ class LoadingPageState extends State<LoadingPage> {
       print(permission);
       String ourUid = await loadCurrentActiveAccount();
 
-            String getTranslate =
-                await safeConfigStore.getTranslationDestLang(ourUid);
-            if (getTranslate == 'null') {
-              await safeConfigStore.setTranslationDestLang(
-                  ourUid, 'Chinese Traditional');
-            }else if(getTranslate == 'Chinese'){
-                await safeConfigStore.setTranslationDestLang(
-                  ourUid, 'Chinese Traditional');
-            }
-            getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
+      String getTranslate =
+          await safeConfigStore.getTranslationDestLang(ourUid);
+      if (getTranslate == 'null') {
+        await safeConfigStore.setTranslationDestLang(
+            ourUid, 'Chinese Traditional');
+      } else if (getTranslate == 'Chinese') {
+        await safeConfigStore.setTranslationDestLang(
+            ourUid, 'Chinese Traditional');
+      }
+      getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
       // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
       // const storage = FlutterSecureStorage();
       // await storage.deleteAll();
@@ -113,7 +113,6 @@ class LoadingPageState extends State<LoadingPage> {
             // 若有未讀通知，則儲存到本地
             await checkUnreadNotify();
 
-            
             print('[loading_page.dart]getTranslate:$getTranslate');
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(
@@ -166,7 +165,7 @@ class LoadingPageState extends State<LoadingPage> {
           print('--------------------------------');
           print('[main.dart] JWT expired');
           print('--------------------------------\n');
-         
+
           if (mounted) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const LoginPage(

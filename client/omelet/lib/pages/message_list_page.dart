@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:omelet/api/multi_screen/multi_screen_page.dart';
 
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
@@ -207,6 +208,12 @@ class MessageItemTitle extends StatelessWidget {
                   friendsUid: messageData.remoteUid,
                 )));
       },
+      onLongPress:(){
+        //  Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) =>const MultiScreenPage(
+            
+        //         )));
+      },
       child: Container(
         height: 80,
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -226,7 +233,7 @@ class MessageItemTitle extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Avatar.medium(url: messageData.profilePicture),
               ),
-              SizedBox(width: 10,),
+              const SizedBox(width: 10,),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

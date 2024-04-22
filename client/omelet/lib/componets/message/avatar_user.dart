@@ -3,52 +3,45 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 // 顯示用戶照片，可分small、medium、large的大小
 
-class Avatar extends StatelessWidget {
-  const Avatar({
+class AvatarUser extends StatelessWidget {
+  const AvatarUser({
     Key? key,
     this.url,
     required this.radius,
     this.onTap,
   }) : super(key: key);
 
-  const Avatar.small({
-    Key? key,
-    this.url,
-    this.onTap, required Null Function() onPressed,
-  })  : radius = 16,
-        super(key: key);
-
-  const Avatar.sm({
+  const AvatarUser.small({
     Key? key,
     this.url,
     this.onTap,
-  })  : radius = 22,
+  })  : radius = 20,
         super(key: key);
 
-  const Avatar.medium({
-    Key? key,
-    this.url,
-    this.onTap,
-  })  : radius = 26,
-        super(key: key);
-
-  const Avatar.large({
+  const AvatarUser.large({
     Key? key,
     this.url,
     this.onTap,
   })  : radius = 34,
         super(key: key);
 
-  
-
   final double radius;
   final String? url;
   final VoidCallback? onTap;
 
+  void clearCacheForUrl(String url) {
+    CachedNetworkImage.evictFromCache(url);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        if (url != null) {
+          clearCacheForUrl(url!);
+        }
+        onTap?.call();
+      },
       child: _avatar(context),
     );
   }
@@ -57,7 +50,8 @@ class Avatar extends StatelessWidget {
     if (url != null) {
       return CircleAvatar(
         radius: radius,
-        backgroundImage: CachedNetworkImageProvider(url!),
+        backgroundImage: Image.network("$url?v=${DateTime.now()}").image,
+
         backgroundColor: Theme.of(context).cardColor,
       );
     } else {

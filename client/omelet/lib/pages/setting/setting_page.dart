@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,11 @@ class _SettingPageState extends State<SettingPage> {
   Future<void> _updateTranslateLanguage(String newValue) async {
     await safeConfigStore.setTranslationDestLang(widget.ourUid, newValue);
   }
+
+  Future<void> clearCacheForUrl(String url) async{
+  CachedNetworkImage.evictFromCache(url);
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +116,10 @@ class _SettingPageState extends State<SettingPage> {
                                             height: 55,
                                             child: ElevatedButton(
                                               onPressed: () async {
-                                                onUpdatePfpBtnPressed();
+                                                await clearCacheForUrl('$serverUri/pfp/${widget.ourUid}');
+                                                await onUpdatePfpBtnPressed();
+                                                
+                                                print('[setting_page.dart]$serverUri/pfp/${widget.ourUid}');
                                                 setState(() {});
                                               },
                                               style: ElevatedButton.styleFrom(
@@ -137,6 +146,7 @@ class _SettingPageState extends State<SettingPage> {
                                             height: 55,
                                             child: ElevatedButton(
                                               onPressed: () async {
+                                                
                                                 print('[setting_page]刪除圖片');
                                               },
                                               style: ElevatedButton.styleFrom(

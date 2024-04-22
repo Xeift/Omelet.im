@@ -29,15 +29,37 @@ dependencies:
   glassmorphism_widgets:
   flutter_secure_storage: ^9.0.0
   libsignal_protocol_dart: ^0.7.1
+  flutter_launcher_icons: ^0.13.1
   meta: ^1.9.1
   path_provider: ^2.1.2
   socket_io_client: ^2.0.3+1
   flutter_local_notifications: ^17.0.1
   permission_handler: ^11.0.1
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "OmeletIcon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "OmeletIcon.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "OmeletIcon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "OmeletIcon.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -48,7 +70,8 @@ flutter:
   assets:
     - assets/nini.png
     - assets/maple.png
-    - assets/OmeletIcon.png
+    # - assets/OmeletIcon.png
     - assets/thomas.png
     - assets/xeift.png
     - assets/userOmelet.png
+    # - OmeletIcon.png

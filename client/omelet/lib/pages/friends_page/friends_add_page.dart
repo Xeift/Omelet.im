@@ -38,7 +38,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
           } else if (statusCode == 409) {
             loginErrorMsg(context, '已為好友，無需傳送好友邀請');
           } else {
-            loginErrorMsg(context, '伺服器發生錯誤');
+            loginErrorMsg(context, '伺服器發生錯誤 \n 請確認點選送出類型');
           }
         }
 
@@ -140,7 +140,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _requestFriendsType == 'uid'
-                              ? Colors.black
+                              ? Color.fromARGB(255, 255, 136, 67)
                               : Colors.white,
                         ),
                         child: Text(
@@ -161,7 +161,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _requestFriendsType == 'email'
-                              ? Colors.black
+                              ? const Color.fromARGB(255, 255, 136, 67)
                               : Colors.white,
                         ),
                         child: Text(
@@ -187,6 +187,9 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                       ),
                       onSubmitted: (_) => _sendRequest(),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   // Submit button
                   ElevatedButton(

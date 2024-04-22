@@ -31,64 +31,8 @@ class LoginPageState extends State<LoginPage> {
   late TextEditingController emailTextFieldController;
   late TextEditingController passwordTextFieldController;
 
-  final String _domain = 'omelet.im';
-  // 訊號量
-  int _signalStrength = 0;
-  // 返回信息
-  String _resString = '';
   String ourUid = '';
 
-  void _doPing() {
-    _resString = 'ping $_domain \n\n';
-    final ping = Ping(_domain, count: 5);
-    ping.stream.listen((event) {
-      print(event);
-      if (event.error != null) {
-        // 錯誤
-        setState(() {
-          _resString = event.error.toString();
-        });
-      } else {
-        if (event.response != null) {
-          setState(() {
-            _resString += '${event.response}\n';
-          });
-
-          // 訊號強度
-          _signalStrength = calculateSignalStrength(
-              event.response?.time?.inMilliseconds ?? 0);
-        }
-
-        if (event.summary != null) {
-          setState(() {
-            _resString += '\n${event.summary}\n';
-          });
-        }
-      }
-    });
-  }
-
-  int calculateSignalStrength(int pingDelay) {
-    if (pingDelay < 0) {
-      // 無網路連線
-      return 0;
-    } else if (pingDelay < 100) {
-      // delay < 100ms
-      return 5;
-    } else if (pingDelay < 200) {
-      // delay < 200ms
-      return 4;
-    } else if (pingDelay < 300) {
-      // delay < 300ms
-      return 3;
-    } else if (pingDelay < 500) {
-      // delay < 500ms
-      return 2;
-    } else {
-      // delay >= 500ms
-      return 1;
-    }
-  }
 
   @override
   void initState() {
@@ -243,7 +187,6 @@ class LoginPageState extends State<LoginPage> {
           ),
           onPressed: () async {
             // 登入邏輯
-
             _userEmail = emailTextFieldController.text;
             _userPassword = passwordTextFieldController.text;
 

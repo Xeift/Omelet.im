@@ -493,7 +493,7 @@ class ImgTitle extends StatelessWidget {
             InstaImageViewer(
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 177, 177, 177),
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -547,7 +547,7 @@ class ImgOwnTitle extends StatelessWidget {
             InstaImageViewer(
               child: Container(
                 decoration: const BoxDecoration(
-                  color: AppColors.secondary,
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -768,6 +768,7 @@ class _ActionBarState extends State<_ActionBar> {
                                         '[chat_room_page.dart]uid:${widget.friendsInfo['data']['uid']}');
                                     onSelectImageBtnPressed(
                                         widget.friendsInfo['data']['uid']);
+                                        Navigator.of(context).pop();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor:

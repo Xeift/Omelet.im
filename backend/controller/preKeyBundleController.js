@@ -144,11 +144,6 @@ async function findDeviceIdByIpkPub(uid, ipkPub) {
             'deviceId',
         )).deviceId;
         
-        console.log(await PreKeyBundleModel.findOne(
-            { uid: uid, ipkPub: ipkPub },
-            'deviceId',
-        ));
-        
         return deviceId;
     }
     catch (error) {

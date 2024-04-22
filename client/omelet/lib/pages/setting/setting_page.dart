@@ -112,10 +112,9 @@ class _SettingPageState extends State<SettingPage> {
                                             height: 55,
                                             child: ElevatedButton(
                                               onPressed: () async {
-                                          
                                                 await onUpdatePfpBtnPressed();
-                                                
                                                 print('[setting_page.dart]$serverUri/pfp/${widget.ourUid}');
+                                                Navigator.of(context).pop();
                                                 setState(() {});
                                               },
                                               style: ElevatedButton.styleFrom(
@@ -144,6 +143,7 @@ class _SettingPageState extends State<SettingPage> {
                                               onPressed: () async {
                                                 
                                                 print('[setting_page]刪除圖片');
+                                                Navigator.of(context).pop();
                                               },
                                               style: ElevatedButton.styleFrom(
                                                   backgroundColor:

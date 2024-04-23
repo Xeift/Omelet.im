@@ -19,6 +19,7 @@ import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
 import 'package:omelet/notify/notify.dart';
+import 'package:omelet/storage/safe_device_id_store.dart';
 
 late io.Socket socket;
 
@@ -74,6 +75,15 @@ class LoadingPageState extends State<LoadingPage> {
       // print('[loading_page] 已刪除所有儲存空間');
       // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
       // print('[loading_page.dart] ${jsonDecode(res.body)}');
+
+      // final safeDeviceIdStore = SafeDeviceIdStore();
+      // await safeDeviceIdStore
+      //     .updateOthersDeviceIds('1234', ['1', '3', '5', '7']);
+      // print('完成deviceId寫入');
+      // await safeDeviceIdStore.removeOthersDeviceIds('1234');
+      // final othersDeviceIds =
+      //     await safeDeviceIdStore.getOthersDeviceIds('1234');
+      // print('別人的裝置id：${othersDeviceIds}');
 
       // JWT 存在，直接連線到 Socket.io Server
       if (await isCurrentActiveAccountExsist()) {

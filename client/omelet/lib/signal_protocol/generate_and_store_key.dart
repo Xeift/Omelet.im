@@ -3,12 +3,14 @@
 import 'dart:convert';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:omelet/signal_protocol/safe_spk_store.dart';
 import 'package:omelet/signal_protocol/safe_opk_store.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 import 'package:omelet/api/post/upload_pre_key_bundle_api.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/storage/safe_device_id_store.dart';
+
 import 'package:omelet/utils/load_local_info.dart';
 
 Future<bool> isPreKeyBundleExists() async {
@@ -43,7 +45,7 @@ Future<void> generateAndStoreKey() async {
     await opkStore.storePreKey(selfOpk.id, selfOpk);
   }
 
-  await uploadPreKeyBundleApi(
+  final res = await uploadPreKeyBundleApi(
       jsonEncode(selfIpk.getPublicKey().serialize()),
       jsonEncode({
         selfSpk.id.toString():
@@ -55,4 +57,8 @@ Future<void> generateAndStoreKey() async {
           selfOpk.id.toString():
               jsonEncode(selfOpk.getKeyPair().publicKey.serialize())
       }));
+
+  final deviceId = jsonDecode(res.body)['data']['deviceId'].toString();
+  final safeDeviceIdStore = SafeDeviceIdStore();
+  await safeDeviceIdStore.writeLocalDeviceId(deviceId);
 }

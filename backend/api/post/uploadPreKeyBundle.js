@@ -13,12 +13,12 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let spkSig = JSON.parse(req.body.spkSig);
     let opkPub = JSON.parse(req.body.opkPub);
 
-    await preKeyBundleController.uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub);
+    let deviceId = await preKeyBundleController.uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub);
 
     try {
         res.status(200).json({
             message: '上傳成功',
-            data: null,
+            data: { deviceId: deviceId },
             token: null
         });
     }

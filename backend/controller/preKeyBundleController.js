@@ -13,6 +13,8 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
         { deviceId: deviceId, ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastBatchSpkUpdateTime: lastBatchSpkUpdateTime, lastBatchSpkId: lastBatchSpkId },
         { upsert: true }
     );
+
+    return deviceId;
 }
 
 async function downloadMultiDevicesPreKeyBundle(uid, opkIds) {

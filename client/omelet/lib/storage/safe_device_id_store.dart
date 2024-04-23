@@ -7,6 +7,21 @@ import 'package:omelet/utils/load_local_info.dart';
 class SafeDeviceIdStore {
   final storage = const FlutterSecureStorage();
 
+  Future<void> writeLocalDeviceId(String deviceId) async {
+    final ourUid = await loadCurrentActiveAccount();
+    await storage.write(key: '${ourUid}_localDeviceId', value: deviceId);
+  }
+
+  Future<String> getLocalDeviceId() async {
+    final ourUid = await loadCurrentActiveAccount();
+    final localDeviceId = await storage.read(key: '${ourUid}_localDeviceId');
+    if (localDeviceId == null) {
+      return '';
+    } else {
+      return localDeviceId;
+    }
+  }
+
   Future<void> updateTheirDeviceIds(
       String theirUid, List<String> deviceIdList) async {
     final ourUid = await loadCurrentActiveAccount();

@@ -165,6 +165,17 @@ async function getDeviceIdsByUids(uids) {
     return results;
 }
 
+async function getOurOtherDeviceIds(ourUid, ourDeviceId) {
+    let ourDeviceIds = await PreKeyBundleModel.find(
+        { uid: ourUid },
+        'deviceId'
+    ).lean();
+
+    // 從 ourDeviceIds 刪除 ourDeviceId，不需要取得自己的 deviceId
+    ourDeviceIds = ourDeviceIds.filter(device => device.deviceId !== ourDeviceId);
+
+    return ourDeviceIds;
+}
 
 async function debugResetPreKeyBundle() {
     console.log('preKeyBundleController.js--------------------------------');
@@ -188,5 +199,6 @@ module.exports = {
     updateSpk,
     findDeviceIdByIpkPub,
     debugResetPreKeyBundle,
-    getDeviceIdsByUids
+    getDeviceIdsByUids,
+    getOurOtherDeviceIds
 };

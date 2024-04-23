@@ -8,14 +8,15 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let decodedToken = req.decodedToken;
         let ourUid = decodedToken._uid;
+        let ourDeviceId = req.query.ourDeviceId;
 
-        let friendList = await friendController.getFriendsList(ourUid);
-        friendList.push(ourUid);
-        let friendDeviceIds = await preKeyBundleController.getDeviceIdsByUids(friendList, ourUid);
+        let friendUidList = await friendController.getFriendsList(ourUid);
+        let friendDeviceIds = await preKeyBundleController.getDeviceIdsByUids(friendUidList);
+        let ourOtherDeviceIds = await preKeyBundleController.getOurOtherDeviceIds(ourUid, ourDeviceId);
 
         res.status(200).json({
             message: '成功取得 deviceId',
-            data: friendDeviceIds,
+            data: { ourOtherDeviceIds: ourOtherDeviceIds, friendDeviceIds: friendDeviceIds },
             token: null
         });
     }

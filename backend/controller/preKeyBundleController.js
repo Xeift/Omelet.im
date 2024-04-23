@@ -166,14 +166,17 @@ async function getDeviceIdsByUids(uids) {
 }
 
 async function getOurOtherDeviceIds(ourUid, ourDeviceId) {
+    console.log(ourUid);
+    console.log(ourDeviceId);
     let ourDeviceIds = await PreKeyBundleModel.find(
         { uid: ourUid },
         'deviceId'
     ).lean();
 
     // 從 ourDeviceIds 刪除 ourDeviceId，不需要取得自己的 deviceId
-    ourDeviceIds = ourDeviceIds.filter(device => device.deviceId !== ourDeviceId);
+    ourDeviceIds = ourDeviceIds.filter(device => device.deviceId.toString() !== ourDeviceId);
 
+    ourDeviceIds = ourDeviceIds.map(device => device.deviceId);
     return ourDeviceIds;
 }
 

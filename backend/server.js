@@ -38,6 +38,7 @@ app.use('/api/v1/cancel-friend-request', rateLimit.authLimiter, require('./api/p
 app.use('/api/v1/reply-friend-request', rateLimit.authLimiter, require('./api/post/replyFriendRequest.js'));
 app.use('/api/v1/get-friend-request', rateLimit.authLimiter, require('./api/get/getFriendRequest.js'));
 app.use('/api/v1/get-friend-list', rateLimit.authLimiter, require('./api/get/getFriendList.js'));
+app.use('/api/v1/get-device-ids', rateLimit.authLimiter, require('./api/get/getDeviceIds.js'));
 app.use('/api/v1/remove-friend', rateLimit.authLimiter, require('./api/post/removeFriend.js'));
 app.use('/api/v1/get-gpt-resp', rateLimit.authLimiter, require('./api/post/getGptResp.js'));
 app.use('/api/v1/get-translated-sentence', rateLimit.authLimiter, require('./api/post/getTranslatedSentence.js'));

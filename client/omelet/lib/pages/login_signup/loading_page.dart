@@ -15,6 +15,7 @@ import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
+import 'package:omelet/utils/check_device_id.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
@@ -70,6 +71,7 @@ class LoadingPageState extends State<LoadingPage> {
             ourUid, 'Chinese Traditional');
       }
       getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
+
       // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
       // const storage = FlutterSecureStorage();
       // await storage.deleteAll();
@@ -77,14 +79,8 @@ class LoadingPageState extends State<LoadingPage> {
       // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
       // print('[loading_page.dart] ${jsonDecode(res.body)}');
 
-      // final safeDeviceIdStore = SafeDeviceIdStore();
-      // await safeDeviceIdStore
-      //     .updateOthersDeviceIds('1234', ['1', '3', '5', '7']);
-      // print('完成deviceId寫入');
-      // await safeDeviceIdStore.removeOthersDeviceIds('1234');
-      // final othersDeviceIds =
-      //     await safeDeviceIdStore.getOthersDeviceIds('1234');
-      // print('別人的裝置id：${othersDeviceIds}');
+      final safeDeviceIdStore = SafeDeviceIdStore();
+      print(await safeDeviceIdStore.getLocalDeviceId());
 
       // JWT 存在，直接連線到 Socket.io Server
       if (await isCurrentActiveAccountExsist()) {
@@ -123,6 +119,9 @@ class LoadingPageState extends State<LoadingPage> {
 
             // 若有未讀通知，則儲存到本地
             await checkUnreadNotify();
+
+            // 更新裝置 id 資訊並儲存到本地
+            await checkDeviceId();
 
             print('[loading_page.dart]getTranslate:$getTranslate');
             if (mounted) {

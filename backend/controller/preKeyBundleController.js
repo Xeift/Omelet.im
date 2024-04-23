@@ -13,6 +13,8 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
         { deviceId: deviceId, ipkPub: ipkPub, spkPub: spkPub, spkSig: spkSig, opkPub: opkPub, lastBatchMaxOpkId: Object.keys(opkPub)[Object.keys(opkPub).length - 1], lastBatchSpkUpdateTime: lastBatchSpkUpdateTime, lastBatchSpkId: lastBatchSpkId },
         { upsert: true }
     );
+
+    return deviceId;
 }
 
 async function downloadMultiDevicesPreKeyBundle(uid, opkIds) {
@@ -151,6 +153,31 @@ async function findDeviceIdByIpkPub(uid, ipkPub) {
     }
 }
 
+async function getDeviceIdsByUids(uids) {
+    let results = {};
+    for (let uid of uids) {
+        let devices = await PreKeyBundleModel.find(
+            { uid: uid },
+            'deviceId'
+        ).lean();
+        results[uid] = devices.map(device => device.deviceId);
+    }
+    return results;
+}
+
+async function getOurOtherDeviceIds(ourUid, ourDeviceId) {
+    let ourDeviceIds = await PreKeyBundleModel.find(
+        { uid: ourUid },
+        'deviceId'
+    ).lean();
+
+    // 從 ourDeviceIds 刪除 ourDeviceId，不需要取得自己的 deviceId
+    ourDeviceIds = ourDeviceIds.filter(device => device.deviceId.toString() !== ourDeviceId);
+
+    ourDeviceIds = ourDeviceIds.map(device => device.deviceId);
+    return ourDeviceIds;
+}
+
 async function debugResetPreKeyBundle() {
     console.log('preKeyBundleController.js--------------------------------');
     await PreKeyBundleModel.deleteMany({});
@@ -172,5 +199,7 @@ module.exports = {
     getSelfSpkStatus,
     updateSpk,
     findDeviceIdByIpkPub,
-    debugResetPreKeyBundle
+    debugResetPreKeyBundle,
+    getDeviceIdsByUids,
+    getOurOtherDeviceIds
 };

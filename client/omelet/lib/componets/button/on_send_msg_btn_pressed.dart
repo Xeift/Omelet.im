@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:omelet/pages/message/chat_room_page.dart';
+import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
 import 'package:omelet/utils/return_msg_to_server.dart';
 import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
@@ -49,4 +50,8 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
   }
   //發送訊息時，顯示一則新訊息在聊天室
   ChatRoomPageState.currenInstance()?.reloadData();
+
+  print('ready update multiScreen');
+  MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
+
 }

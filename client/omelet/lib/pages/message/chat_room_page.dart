@@ -752,7 +752,6 @@ class _ActionBarState extends State<_ActionBar> {
                 builder: (BuildContext context) {
                   return CupertinoPopupSurface(
                     child: Material(
-                      // 将 Switch 包裹在 Material 中
                       child: SizedBox(
                         height: 130,
                         width: screenWidth,

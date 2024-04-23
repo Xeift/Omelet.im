@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 
-// const serverUri = 'https://3d36-125-227-108-215.ngrok-free.app';
+// const serverUri = 'https://8384-60-249-247-100.ngrok-free.app';
 // const serverUri = 'http://localhost:3000';
 const serverUri = 'https://omelet.im:8443';
 

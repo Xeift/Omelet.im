@@ -25,7 +25,8 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
   });
 
   // 加密訊息
-  final encryptedMsg = await encryptMsg(theirUid, msgContent);
+  final encryptedMsg =
+      await encryptMsg(theirUid, '$msgContent $currentTimestamp'); // TODO: 計算延遲
   final ourEncryptedMsg = encryptedMsg['ourMsgInfo'];
   final theirEncryptedMsg = encryptedMsg['theirMsgInfo'];
 

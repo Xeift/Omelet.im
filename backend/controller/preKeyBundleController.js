@@ -151,6 +151,19 @@ async function findDeviceIdByIpkPub(uid, ipkPub) {
     }
 }
 
+async function getDeviceIdsByUids(uids) {
+    let results = {};
+    for (let uid of uids) {
+        let devices = await PreKeyBundleModel.find(
+            { uid: uid },
+            'deviceId'
+        ).lean();
+        results[uid] = devices.map(device => device.deviceId);
+    }
+    return results;
+}
+
+
 async function debugResetPreKeyBundle() {
     console.log('preKeyBundleController.js--------------------------------');
     await PreKeyBundleModel.deleteMany({});
@@ -172,5 +185,6 @@ module.exports = {
     getSelfSpkStatus,
     updateSpk,
     findDeviceIdByIpkPub,
-    debugResetPreKeyBundle
+    debugResetPreKeyBundle,
+    getDeviceIdsByUids
 };

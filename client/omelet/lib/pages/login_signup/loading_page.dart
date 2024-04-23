@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:permission_handler/permission_handler.dart';
@@ -142,7 +143,11 @@ class LoadingPageState extends State<LoadingPage> {
             // 接收訊息時：顯示一則新訊息在聊天室
             final notify = NotificationService();
             await notify.showNotify('From $senderName:', decryptedMsg);
+            print('reload');
             ChatRoomPageState.currenInstance()?.reloadData();
+            print('1');
+            MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
+            print('2');
           });
 
           socket.on('receivedFriendRequest', (msg) async {

@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:omelet/api/post/remove_friend_api.dart';
+import 'package:omelet/componets/alert/alert_msg.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
+import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
 import 'package:omelet/utils/get_friends_list.dart';
 import 'package:omelet/storage/safe_util_store.dart';
 
@@ -17,6 +20,8 @@ class FriendsListPage extends StatefulWidget {
 
 class _FriendsListPageState extends State<FriendsListPage> {
   late Future<List<Map<String, dynamic>>> _friendsListFuture;
+
+  List<String> selectMultiFrends = [];
 
   @override
   void initState() {
@@ -75,22 +80,29 @@ class _FriendsListPageState extends State<FriendsListPage> {
 }
 
 // ignore: must_be_immutable
-class FriendsList extends StatelessWidget {
+class FriendsList extends StatefulWidget {
   final List<Map<String, dynamic>> friends;
+  final String ourUid;
 
   FriendsList({Key? key, required this.friends, required this.ourUid})
       : super(key: key);
-  SafeUtilStore safeUtilStore = SafeUtilStore();
-  final String ourUid;
+
+  @override
+  _FriendsListState createState() => _FriendsListState();
+}
+
+class _FriendsListState extends State<FriendsList> {
+  final SafeUtilStore safeUtilStore = SafeUtilStore();
+  List<String> selectMultiFrends = [];
+
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return ListView.builder(
-      itemCount: friends.length,
+      itemCount: widget.friends.length,
       itemBuilder: (context, index) {
-        // 获取当前好友信息
-        Map<String, dynamic> friend = friends[index];
+        Map<String, dynamic> friend = widget.friends[index];
         String? pfpUrl;
-        // 提取好友的用户名、头像 URL 和 UID
         String username = friend['data']['username'];
         if (friend['data']['pfp'] != null) {
           pfpUrl = friend['data']['pfp'];
@@ -113,6 +125,7 @@ class FriendsList extends StatelessWidget {
                   url: pfpUrl,
                 ),
               );
+
         Future<void> onDeletedFriends(String userUid) async {
           await removeFriendApi(userUid);
           print('[friends_list_page.dart]已刪除好友$userUid');
@@ -148,13 +161,87 @@ class FriendsList extends StatelessWidget {
             ),
             onTap: () async {
               //跳轉至該用戶的聊天頁面
-              await safeUtilStore.writeIsSend(friend['data']['uid'], true);
-              // ignore: use_build_context_synchronously
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ChatRoomPage(
-                        ourUid: ourUid,
+                        ourUid: widget.ourUid,
                         friendsUid: friend['data']['uid'],
                       )));
+            },
+            onLongPress: () {
+              showCupertinoModalPopup(
+                context: context,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return CupertinoPopupSurface(
+                        child: Material(
+                          child: SizedBox(
+                            height: 350, // 增加高度以容納按鈕
+                            width: screenWidth,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: widget.friends.length,
+                                    itemBuilder: (context, index) {
+                                      Map<String, dynamic> friendSelect =
+                                          widget.friends[index];
+                                      bool isSelected =
+                                          friendSelect['selected'] ??
+                                              false; // 根據 friendSelect['selected'] 的值設置 isSelected
+                                      return CheckboxListTile(
+                                        title: Text(
+                                            friendSelect['data']['username']),
+                                        value: isSelected,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            if (value == true) {
+                                              selectMultiFrends.add(
+                                                  friendSelect['data']['uid']);
+                                            } else {
+                                              selectMultiFrends.remove(
+                                                  friendSelect['data']['uid']);
+                                            }
+                                            friendSelect['selected'] =
+                                                value; // 更新 friendSelect['selected']
+                                            print(friendSelect);
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    print('[friends_list_page.dart] selectMultiFrends :$selectMultiFrends');
+                                    // 在提交按鈕的事件處理器中使用選擇的用戶
+                                    if (selectMultiFrends.length == 2) {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MultiChatRoomPage(
+                                                    friends_uidA:
+                                                        selectMultiFrends[0],
+                                                    friends_uidB:
+                                                        selectMultiFrends[1],
+                                                    ourUid: widget.ourUid,
+                                                  )));
+                                    } else {
+                                      loginErrorMsg(
+                                          context, '請選擇兩位好友');
+                                    }
+                                  },
+                                  child: Text('提交'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
             },
           ),
         );
@@ -162,6 +249,7 @@ class FriendsList extends StatelessWidget {
     );
   }
 }
+
 
 class SearchBar extends StatefulWidget {
   //搜尋框、搜尋好友、添加好友列表

@@ -14,13 +14,13 @@ import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
+import 'package:omelet/utils/check_device_id.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
 import 'package:omelet/notify/notify.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
-import 'package:omelet/api/get/get_device_ids_api.dart';
 
 late io.Socket socket;
 
@@ -71,8 +71,6 @@ class LoadingPageState extends State<LoadingPage> {
       }
       getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
 
-      final res = await getDeviceIdsApi();
-      print('😎😎😎😎 ${res.body}');
       // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
       // const storage = FlutterSecureStorage();
       // await storage.deleteAll();
@@ -120,6 +118,9 @@ class LoadingPageState extends State<LoadingPage> {
 
             // 若有未讀通知，則儲存到本地
             await checkUnreadNotify();
+
+            // 更新裝置 id 資訊並儲存到本地
+            await checkDeviceId();
 
             print('[loading_page.dart]getTranslate:$getTranslate');
             if (mounted) {

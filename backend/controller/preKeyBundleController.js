@@ -166,8 +166,6 @@ async function getDeviceIdsByUids(uids) {
 }
 
 async function getOurOtherDeviceIds(ourUid, ourDeviceId) {
-    console.log(ourUid);
-    console.log(ourDeviceId);
     let ourDeviceIds = await PreKeyBundleModel.find(
         { uid: ourUid },
         'deviceId'

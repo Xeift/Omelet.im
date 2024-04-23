@@ -22,6 +22,12 @@ class SafeDeviceIdStore {
     }
   }
 
+  Future<void> updateOurDeviceIds(List<String> deviceIdList) async {
+    final ourUid = await loadCurrentActiveAccount();
+    await storage.write(
+        key: '${ourUid}_deviceId_$ourUid', value: jsonEncode(deviceIdList));
+  }
+
   Future<void> updateTheirDeviceIds(
       String theirUid, List<String> deviceIdList) async {
     final ourUid = await loadCurrentActiveAccount();
@@ -34,7 +40,7 @@ class SafeDeviceIdStore {
     await storage.delete(key: '${ourUid}_deviceId_$theirUid');
   }
 
-  Future<List<String>> getOurDeviceIds(String theirUid) async {
+  Future<List<String>> getOurDeviceIds() async {
     final ourUid = await loadCurrentActiveAccount();
     final ourDeviceIds = await storage.read(key: '${ourUid}_deviceId_$ourUid');
     if (ourDeviceIds == null) {

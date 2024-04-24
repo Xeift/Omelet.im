@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
@@ -15,21 +14,18 @@ import 'package:omelet/signal_protocol/download_pre_key_bundle.dart';
 import 'package:omelet/signal_protocol/v2_encrypt_pre_key_signal_message.dart';
 import 'package:omelet/signal_protocol/v2_encrypt_signal_message.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
+import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
 
-Future<Map<String, dynamic>> v2EncryptMsg(
-    String theirUid, String plainText) async {
+Future<void> v2EncryptMsg(
+    String theirUid, String plainText, String msgType) async {
   final ourUid = await loadCurrentActiveAccount();
-  final ipkStore = SafeIdentityKeyStore();
-  final registrationId = await ipkStore.getLocalRegistrationId();
-  final spkStore = SafeSpkStore();
-  final opkStore = SafeOpkStore();
   final safeDeviceIdStore = SafeDeviceIdStore();
 
   final ourDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(ourUid);
   final theirDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(theirUid);
 
-  // 加密單一一則訊息
-  Future<void> encryptSingleMsg(
+  // 加密單一訊息
+  Future<(bool, String)> encryptSingleMsg(
       String receiverUid, String receiverDeviceId) async {
     final receiverAddress =
         SignalProtocolAddress(receiverUid, int.parse(receiverDeviceId));
@@ -47,19 +43,6 @@ Future<Map<String, dynamic>> v2EncryptMsg(
     // 判斷是否有未確認的訊息
     final unackMsgExsists = sessionState.hasUnacknowledgedPreKeyMessage();
 
-    // 判斷加密的訊息類型
-    if (!sessionExsists) {
-      await v2EncryptPreKeySignalMessage(
-          receiverUid, receiverDeviceId, receiverAddress);
-    } else {
-      if (unackMsgExsists) {
-        await v2EncryptPreKeySignalMessage(
-            receiverUid, receiverDeviceId, receiverAddress);
-      } else {
-        await v2EncryptSignalMessage(receiverAddress, plainText);
-      }
-    }
-
     print('🤎🤎🤎');
     print('接收者地址為：$receiverAddress');
     print('是否有 Session？$sessionExsists');
@@ -67,21 +50,59 @@ Future<Map<String, dynamic>> v2EncryptMsg(
     print('是否有 session？$sessionExsists');
     print('是否有未確認的訊息？$unackMsgExsists');
     print('🤎🤎🤎\n');
+
+    // 判斷加密的訊息類型
+    if (!sessionExsists) {
+      // 沒 Session，PreKeySignalMessage
+      return await v2EncryptPreKeySignalMessage(
+          receiverUid, receiverDeviceId, receiverAddress, plainText);
+    } else {
+      // 有 Session
+      if (unackMsgExsists) {
+        // 有 unackMsg，PreKeySignalMessage
+        return await v2EncryptPreKeySignalMessage(
+            receiverUid, receiverDeviceId, receiverAddress, plainText);
+      } else {
+        // 沒有 unackMsg，SignalMessage
+        return await v2EncryptSignalMessage(receiverAddress, plainText);
+      }
+    }
   }
 
-  // 主要程式由此開始
   for (var ourDeviceId in ourDeviceIds) {
-    await encryptSingleMsg(ourUid, ourDeviceId);
+    final (isPreKeySignalMessage, cipherText) =
+        await encryptSingleMsg(ourUid, ourDeviceId);
+    socket.emit(
+        'clientSendMsgToServer',
+        jsonEncode({
+          'isPreKeySignalMessage': isPreKeySignalMessage,
+          'type': msgType,
+          'senderIpkPub': await loadIpkPub(),
+          'sender': ourUid,
+          'receiver': ourUid,
+          'receiverDeviceId': ourDeviceId,
+          'content': cipherText
+        }));
   }
 
   for (var theirDeviceId in theirDeviceIds) {
-    await encryptSingleMsg(theirUid, theirDeviceId);
+    final (isPreKeySignalMessage, cipherText) =
+        await encryptSingleMsg(theirUid, theirDeviceId);
+    socket.emit(
+        'clientSendMsgToServer',
+        jsonEncode({
+          'isPreKeySignalMessage': isPreKeySignalMessage,
+          'type': msgType,
+          'senderIpkPub': await loadIpkPub(),
+          'sender': ourUid,
+          'receiver': theirUid,
+          'receiverDeviceId': theirDeviceId,
+          'content': cipherText
+        }));
   }
 
   print('😊😊😊😊😊');
   print(ourDeviceIds);
   print(theirDeviceIds);
   print('😊😊😊😊😊');
-
-  return {'ourMsgInfo': 'ourMsgInfo666', 'theirMsgInfo': 'theirMsgInfo666'};
 }

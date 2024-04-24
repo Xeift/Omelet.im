@@ -145,7 +145,8 @@ class LoadingPageState extends State<LoadingPage> {
             print('reload');
             ChatRoomPageState.currenInstance()?.reloadData();
             print('1');
-            MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
+            MultiChatRoomPageState.currenInstanceInMultiChat()
+                ?.reloadDataInMulti();
             print('2');
           });
 

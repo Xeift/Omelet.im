@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
@@ -11,122 +12,76 @@ import 'package:omelet/signal_protocol/safe_opk_store.dart';
 import 'package:omelet/signal_protocol/safe_session_store.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 import 'package:omelet/signal_protocol/download_pre_key_bundle.dart';
+import 'package:omelet/signal_protocol/v2_encrypt_pre_key_signal_message.dart';
+import 'package:omelet/signal_protocol/v2_encrypt_signal_message.dart';
+import 'package:omelet/storage/safe_device_id_store.dart';
 
 Future<Map<String, dynamic>> v2EncryptMsg(
-    String remoteUid, String msgContent) async {
+    String theirUid, String plainText) async {
   final ourUid = await loadCurrentActiveAccount();
   final ipkStore = SafeIdentityKeyStore();
   final registrationId = await ipkStore.getLocalRegistrationId();
   final spkStore = SafeSpkStore();
   final opkStore = SafeOpkStore();
+  final safeDeviceIdStore = SafeDeviceIdStore();
 
-  Future<(String, bool, dynamic, dynamic)> encryptSingleMsg(
-      String deviceId, dynamic singlePreKeyBundle, String receiverUid) async {
-    final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
-        await singlePreKeyBundle;
+  final ourDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(ourUid);
+  final theirDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(theirUid);
 
-    final remoteAddress =
-        SignalProtocolAddress(receiverUid, int.parse(deviceId));
+  // 加密單一一則訊息
+  Future<void> encryptSingleMsg(
+      String receiverUid, String receiverDeviceId) async {
+    final receiverAddress =
+        SignalProtocolAddress(receiverUid, int.parse(receiverDeviceId));
 
     // 建立 SessionStore
     final sessionStore = SafeSessionStore();
-    final sessionNotExsist =
-        !(await sessionStore.containsSession(remoteAddress));
+
+    // 判斷是否有 Session
+    final sessionExsists = await sessionStore.containsSession(receiverAddress);
 
     // 讀取 SessionRecord
-    final sessionRecord = await sessionStore.loadSession(remoteAddress);
+    final sessionRecord = await sessionStore.loadSession(receiverAddress);
     final sessionState = sessionRecord.sessionState;
 
-    Future<(String, bool, dynamic, dynamic)>
-        encryptPreKeySignalMessage() async {
-      final sessionBuilder = SessionBuilder(
-          sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
+    // 判斷是否有未確認的訊息
+    final unackMsgExsists = sessionState.hasUnacknowledgedPreKeyMessage();
 
-      // 用 SessionBuilder 處理 PreKeyBundle
-      final retrievedPreKeyBundle = PreKeyBundle(registrationId,
-          int.parse(deviceId), opkId, opkPub, spkId, spkPub, spkSig, ipkPub);
-      await sessionBuilder.processPreKeyBundle(retrievedPreKeyBundle);
-
-      // 建立 SessionCipher，用於加密訊息
-      final sessionCipher = SessionCipher(
-          sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
-
-      // ciphertext 形態為 PreKeySignalMessage(prekeyType)
-      final ciphertext = await sessionCipher
-          .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
-      final isPreKeySignalMessage =
-          ciphertext.getType() == CiphertextMessage.prekeyType;
-
-      return (
-        jsonEncode(ciphertext.serialize()),
-        isPreKeySignalMessage,
-        spkId,
-        opkId
-      );
-    }
-
-    Future<(String, bool, dynamic, dynamic)> encryptSignalMessage() async {
-      // 建立 SessionCipher，用於加密訊息
-      final sessionCipher = SessionCipher(
-          sessionStore, opkStore, spkStore, ipkStore, remoteAddress);
-
-      // ciphertext 形態可能為 PreKeySignalMessage(prekeyType) 或 SignalMessage(whisperType)
-      final ciphertext = await sessionCipher
-          .encrypt(Uint8List.fromList(utf8.encode(msgContent)));
-      final isPreKeySignalMessage =
-          ciphertext.getType() == CiphertextMessage.prekeyType;
-
-      return (
-        jsonEncode(ciphertext.serialize()),
-        isPreKeySignalMessage,
-        null,
-        null
-      );
-    }
-
-    // 沒有 Session，Message 形態為 PreKeySignal，需要 SessionBuilder
-    if (sessionNotExsist) {
-      print('[encrypt_msg] session 不存在❌');
-      return await encryptPreKeySignalMessage();
-    }
-    // 有 Session
-    else {
-      print('[encrypt_msg] session 已存在✅');
-
-      // 對方未確認，Message 形態為 PreKeySignalMessage
-      if (sessionState.hasUnacknowledgedPreKeyMessage()) {
-        print('[encrypt_msg] 對方尚未確認訊息❌');
-        return await encryptPreKeySignalMessage();
-      }
-      // 對方已確認，Message 形態為 SignalMessage
-      else {
-        print('[encrypt_msg] 對方已確認訊息✅');
-        return await encryptSignalMessage();
+    // 判斷加密的訊息類型
+    if (!sessionExsists) {
+      await v2EncryptPreKeySignalMessage(
+          receiverUid, receiverDeviceId, receiverAddress);
+    } else {
+      if (unackMsgExsists) {
+        await v2EncryptPreKeySignalMessage(
+            receiverUid, receiverDeviceId, receiverAddress);
+      } else {
+        await v2EncryptSignalMessage(receiverAddress, plainText);
       }
     }
+
+    print('🤎🤎🤎');
+    print('接收者地址為：$receiverAddress');
+    print('是否有 Session？$sessionExsists');
+    print('是否有 未確認的訊息？$unackMsgExsists');
+    print('是否有 session？$sessionExsists');
+    print('是否有未確認的訊息？$unackMsgExsists');
+    print('🤎🤎🤎\n');
   }
 
-  // 準備所有裝置的 Pre Key Bundle（包含自己及對方）
-  final Map<String, dynamic> multiDevicesPreKeyBundle =
-      await downloadPreKeyBundle(remoteUid);
-
-  // 自己其他裝置的 Pre Key Bundle
-  final ourPreKeyBundleConverted =
-      await multiDevicesPreKeyBundle['ourPreKeyBundleConverted'];
-  final Map<String, dynamic> ourMsgInfo = {};
-  for (var key in ourPreKeyBundleConverted.keys) {
-    var value = ourPreKeyBundleConverted[key];
-    ourMsgInfo[key] = await encryptSingleMsg(key, value, ourUid);
+  // 主要程式由此開始
+  for (var ourDeviceId in ourDeviceIds) {
+    await encryptSingleMsg(ourUid, ourDeviceId);
   }
 
-  // 對方所有裝置的 Pre Key Bundle
-  final theirPreKeyBundleConverted =
-      await multiDevicesPreKeyBundle['theirPreKeyBundleConverted'];
-  final Map<String, dynamic> theirMsgInfo = {};
-  for (var key in theirPreKeyBundleConverted.keys) {
-    var value = theirPreKeyBundleConverted[key];
-    theirMsgInfo[key] = await encryptSingleMsg(key, value, remoteUid);
+  for (var theirDeviceId in theirDeviceIds) {
+    await encryptSingleMsg(theirUid, theirDeviceId);
   }
 
-  return {'ourMsgInfo': ourMsgInfo, 'theirMsgInfo': theirMsgInfo};
+  print('😊😊😊😊😊');
+  print(ourDeviceIds);
+  print(theirDeviceIds);
+  print('😊😊😊😊😊');
+
+  return {'ourMsgInfo': 'ourMsgInfo666', 'theirMsgInfo': 'theirMsgInfo666'};
 }

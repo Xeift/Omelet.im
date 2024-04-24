@@ -5,13 +5,13 @@ import 'dart:convert';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
 import 'package:omelet/utils/return_msg_to_server.dart';
-import 'package:omelet/signal_protocol/encrypt_msg.dart';
+import 'package:omelet/signal_protocol/v2_encrypt_msg.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 
 Future<void> v2OnSendMsgBtnPressed(String theirUid, String msgContent) async {
-  print('[on_send_msg_btn_pressed 1] 訊息原始內容: $msgContent');
+  print('[v2_on_send_msg_btn_pressed] 訊息原始內容: $msgContent');
   final ourUid = await loadCurrentActiveAccount();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -25,10 +25,10 @@ Future<void> v2OnSendMsgBtnPressed(String theirUid, String msgContent) async {
     'content': msgContent,
   });
 
-  // // 加密訊息
-  // final encryptedMsg = await encryptMsg(theirUid, msgContent);
-  // final ourEncryptedMsg = encryptedMsg['ourMsgInfo'];
-  // final theirEncryptedMsg = encryptedMsg['theirMsgInfo'];
+  // 加密訊息
+  final encryptedMsg = await v2EncryptMsg(theirUid, msgContent);
+  final ourEncryptedMsg = encryptedMsg['ourMsgInfo'];
+  final theirEncryptedMsg = encryptedMsg['theirMsgInfo'];
 
   // // 將加密過的訊息傳回 Server
   // for (var deviceId in ourEncryptedMsg.keys) {
@@ -50,5 +50,5 @@ Future<void> v2OnSendMsgBtnPressed(String theirUid, String msgContent) async {
 
   //發送訊息時，顯示一則新訊息在聊天室
   ChatRoomPageState.currenInstance()?.reloadData();
-    MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
+  MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
 }

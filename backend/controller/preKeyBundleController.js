@@ -17,6 +17,29 @@ async function uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub) {
     return deviceId;
 }
 
+async function downloadPreKeyBundle(uid, deviceId, opkId) {
+    console.log(`[preKeyController.js] ${deviceId}   ${opkId}`);
+
+    let pkb = await PreKeyBundleModel.findOne(
+        { uid: uid, deviceId: deviceId },
+        'ipkPub spkPub spkSig opkPub'
+    ).lean();
+
+    let latestSpkIndex = ( Math.max(...Object.keys(pkb['spkPub']).map(Number)) ).toString();
+    let newPreKeyBundle = {};
+
+    newPreKeyBundle['ipkPub'] = pkb['ipkPub'];
+
+    newPreKeyBundle['spkId'] = latestSpkIndex;
+    newPreKeyBundle['spkPub'] = pkb['spkPub'][latestSpkIndex];
+    newPreKeyBundle['spkSig'] = pkb['spkSig'][latestSpkIndex];
+
+    newPreKeyBundle['opkId'] = opkId;
+    newPreKeyBundle['opkPub'] = pkb['opkPub'][opkId];
+
+    return newPreKeyBundle;
+}
+
 async function downloadMultiDevicesPreKeyBundle(uid, opkIds) {
     let allPreKeyBundle = {};
 
@@ -45,6 +68,19 @@ async function downloadMultiDevicesPreKeyBundle(uid, opkIds) {
     return allPreKeyBundle;
 }
 
+async function getAvailableOpkIndex(uid, deviceId) {
+    let pkb = await PreKeyBundleModel.find(
+        { uid: uid, deviceId: deviceId },
+        'opkPub'
+    ).lean();
+
+    let opkIds = [];
+    for (let opkId of pkb) {
+        opkIds.push(...Object.keys(opkId.opkPub));
+    }
+    return opkIds;
+}
+
 async function getMultiDevicesAvailableOpkIndex(uid, isSelf, deviceId) {
     let multiDevicesPreKeyBundles = await PreKeyBundleModel.find(
         { uid: uid },
@@ -63,6 +99,14 @@ async function getMultiDevicesAvailableOpkIndex(uid, isSelf, deviceId) {
     });
 
     return multiDevicesAvailableOpkIndex;
+}
+
+async function v2DeleteOpkPub(uid, deviceId, opkId) {
+    let result = await PreKeyBundleModel.updateOne(
+        { uid: uid, deviceId: deviceId },
+        { $unset: { [`opkPub.${opkId}`]: true } }
+    );
+    return result;
 }
 
 async function deleteOpkPub(uid, opkId) {
@@ -191,8 +235,11 @@ async function debugResetPreKeyBundle() {
 
 module.exports = {
     uploadPreKeyBundle,
+    downloadPreKeyBundle,
     downloadMultiDevicesPreKeyBundle,
+    getAvailableOpkIndex,
     getMultiDevicesAvailableOpkIndex,
+    v2DeleteOpkPub,
     deleteOpkPub,
     updateOpk,
     getSelfOpkStatus,

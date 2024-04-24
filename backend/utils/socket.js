@@ -82,11 +82,11 @@ async function dealWithClientMsgs(msg, socket) {
 
         if (msg['isPreKeySignalMessage']) { // 第一次發送訊息
             console.log('[socket.js] 此訊息為 PreKeySignalMessage');
-            // 刪除傳送訊息時使用的 OPK
-            if (msg['opkId']) {
-                console.log(`[socket.js] 刪除opkid👉 ${msg['opkId']}`);
-                await preKeyBundleController.deleteOpkPub(receiverUid, msg['opkId']);
-            }
+            // // 刪除傳送訊息時使用的 OPK
+            // if (msg['opkId']) {
+            //     console.log(`[socket.js] 刪除opkid👉 ${msg['opkId']}`);
+            //     await preKeyBundleController.deleteOpkPub(receiverUid, msg['opkId']);
+            // }
         }
         else { // 第二次以後發送訊息
             console.log('[socket.js] 此訊息為 SignalMessage');

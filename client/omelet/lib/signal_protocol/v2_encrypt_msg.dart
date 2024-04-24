@@ -15,20 +15,17 @@ import 'package:omelet/signal_protocol/download_pre_key_bundle.dart';
 import 'package:omelet/signal_protocol/v2_encrypt_pre_key_signal_message.dart';
 import 'package:omelet/signal_protocol/v2_encrypt_signal_message.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
+import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
 
-Future<Map<String, dynamic>> v2EncryptMsg(
-    String theirUid, String plainText) async {
+Future<void> v2EncryptMsg(
+    String theirUid, String plainText, String msgType) async {
   final ourUid = await loadCurrentActiveAccount();
-  final ipkStore = SafeIdentityKeyStore();
-  final registrationId = await ipkStore.getLocalRegistrationId();
-  final spkStore = SafeSpkStore();
-  final opkStore = SafeOpkStore();
   final safeDeviceIdStore = SafeDeviceIdStore();
 
   final ourDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(ourUid);
   final theirDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(theirUid);
 
-  // 加密單一一則訊息
+  // 加密單一訊息
   Future<(bool, String)> encryptSingleMsg(
       String receiverUid, String receiverDeviceId) async {
     final receiverAddress =
@@ -57,33 +54,56 @@ Future<Map<String, dynamic>> v2EncryptMsg(
 
     // 判斷加密的訊息類型
     if (!sessionExsists) {
+      // 沒 Session，PreKeySignalMessage
       return await v2EncryptPreKeySignalMessage(
           receiverUid, receiverDeviceId, receiverAddress, plainText);
     } else {
+      // 有 Session
       if (unackMsgExsists) {
+        // 有 unackMsg，PreKeySignalMessage
         return await v2EncryptPreKeySignalMessage(
             receiverUid, receiverDeviceId, receiverAddress, plainText);
       } else {
+        // 沒有 unackMsg，SignalMessage
         return await v2EncryptSignalMessage(receiverAddress, plainText);
       }
     }
   }
 
-  // 主要程式由此開始
   for (var ourDeviceId in ourDeviceIds) {
     final (isPreKeySignalMessage, cipherText) =
         await encryptSingleMsg(ourUid, ourDeviceId);
+    socket.emit(
+        'clientSendMsgToServer',
+        jsonEncode({
+          'isPreKeySignalMessage': isPreKeySignalMessage,
+          'type': msgType,
+          'senderIpkPub': await loadIpkPub(),
+          'sender': ourUid,
+          'receiver': ourUid,
+          'receiverDeviceId': ourDeviceId,
+          'content': cipherText
+        }));
   }
 
   for (var theirDeviceId in theirDeviceIds) {
     final (isPreKeySignalMessage, cipherText) =
         await encryptSingleMsg(theirUid, theirDeviceId);
+    socket.emit(
+        'clientSendMsgToServer',
+        jsonEncode({
+          'isPreKeySignalMessage': isPreKeySignalMessage,
+          'type': msgType,
+          'senderIpkPub': await loadIpkPub(),
+          'sender': ourUid,
+          'receiver': ourUid,
+          'receiverDeviceId': theirDeviceId,
+          'content': cipherText
+        }));
   }
 
   print('😊😊😊😊😊');
   print(ourDeviceIds);
   print(theirDeviceIds);
   print('😊😊😊😊😊');
-
-  return {'ourMsgInfo': 'ourMsgInfo666', 'theirMsgInfo': 'theirMsgInfo666'};
 }

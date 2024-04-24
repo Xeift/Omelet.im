@@ -26,27 +26,7 @@ Future<void> v2OnSendMsgBtnPressed(String theirUid, String msgContent) async {
   });
 
   // 加密訊息
-  final encryptedMsg = await v2EncryptMsg(theirUid, msgContent);
-  final ourMsgInfo = encryptedMsg['ourMsgInfo'];
-  final theirMsgInfo = encryptedMsg['theirMsgInfo'];
-
-  // // 將加密過的訊息傳回 Server
-  // for (var deviceId in ourEncryptedMsg.keys) {
-  //   var singleMsg = await returnMsgToServer(deviceId, ourEncryptedMsg[deviceId],
-  //       ourUid, ourUid, theirUid, 'text', msgContent);
-  //   socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
-  // }
-  // for (var deviceId in theirEncryptedMsg.keys) {
-  //   var singleMsg = await returnMsgToServer(
-  //       deviceId,
-  //       theirEncryptedMsg[deviceId],
-  //       theirUid,
-  //       ourUid,
-  //       theirUid,
-  //       'text',
-  //       msgContent);
-  //   socket.emit('clientSendMsgToServer', jsonEncode(singleMsg));
-  // }
+  await v2EncryptMsg(theirUid, msgContent, 'text');
 
   //發送訊息時，顯示一則新訊息在聊天室
   ChatRoomPageState.currenInstance()?.reloadData();

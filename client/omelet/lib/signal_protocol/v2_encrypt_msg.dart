@@ -96,7 +96,7 @@ Future<void> v2EncryptMsg(
           'type': msgType,
           'senderIpkPub': await loadIpkPub(),
           'sender': ourUid,
-          'receiver': ourUid,
+          'receiver': theirUid,
           'receiverDeviceId': theirDeviceId,
           'content': cipherText
         }));

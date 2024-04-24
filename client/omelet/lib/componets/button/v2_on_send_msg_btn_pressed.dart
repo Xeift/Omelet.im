@@ -27,8 +27,8 @@ Future<void> v2OnSendMsgBtnPressed(String theirUid, String msgContent) async {
 
   // 加密訊息
   final encryptedMsg = await v2EncryptMsg(theirUid, msgContent);
-  final ourEncryptedMsg = encryptedMsg['ourMsgInfo'];
-  final theirEncryptedMsg = encryptedMsg['theirMsgInfo'];
+  final ourMsgInfo = encryptedMsg['ourMsgInfo'];
+  final theirMsgInfo = encryptedMsg['theirMsgInfo'];
 
   // // 將加密過的訊息傳回 Server
   // for (var deviceId in ourEncryptedMsg.keys) {

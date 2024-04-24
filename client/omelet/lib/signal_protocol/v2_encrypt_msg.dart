@@ -29,7 +29,7 @@ Future<Map<String, dynamic>> v2EncryptMsg(
   final theirDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(theirUid);
 
   // 加密單一一則訊息
-  Future<void> encryptSingleMsg(
+  Future<(bool, String)> encryptSingleMsg(
       String receiverUid, String receiverDeviceId) async {
     final receiverAddress =
         SignalProtocolAddress(receiverUid, int.parse(receiverDeviceId));
@@ -47,19 +47,6 @@ Future<Map<String, dynamic>> v2EncryptMsg(
     // 判斷是否有未確認的訊息
     final unackMsgExsists = sessionState.hasUnacknowledgedPreKeyMessage();
 
-    // 判斷加密的訊息類型
-    if (!sessionExsists) {
-      await v2EncryptPreKeySignalMessage(
-          receiverUid, receiverDeviceId, receiverAddress);
-    } else {
-      if (unackMsgExsists) {
-        await v2EncryptPreKeySignalMessage(
-            receiverUid, receiverDeviceId, receiverAddress);
-      } else {
-        await v2EncryptSignalMessage(receiverAddress, plainText);
-      }
-    }
-
     print('🤎🤎🤎');
     print('接收者地址為：$receiverAddress');
     print('是否有 Session？$sessionExsists');
@@ -67,15 +54,30 @@ Future<Map<String, dynamic>> v2EncryptMsg(
     print('是否有 session？$sessionExsists');
     print('是否有未確認的訊息？$unackMsgExsists');
     print('🤎🤎🤎\n');
+
+    // 判斷加密的訊息類型
+    if (!sessionExsists) {
+      return await v2EncryptPreKeySignalMessage(
+          receiverUid, receiverDeviceId, receiverAddress, plainText);
+    } else {
+      if (unackMsgExsists) {
+        return await v2EncryptPreKeySignalMessage(
+            receiverUid, receiverDeviceId, receiverAddress, plainText);
+      } else {
+        return await v2EncryptSignalMessage(receiverAddress, plainText);
+      }
+    }
   }
 
   // 主要程式由此開始
   for (var ourDeviceId in ourDeviceIds) {
-    await encryptSingleMsg(ourUid, ourDeviceId);
+    final (isPreKeySignalMessage, cipherText) =
+        await encryptSingleMsg(ourUid, ourDeviceId);
   }
 
   for (var theirDeviceId in theirDeviceIds) {
-    await encryptSingleMsg(theirUid, theirDeviceId);
+    final (isPreKeySignalMessage, cipherText) =
+        await encryptSingleMsg(theirUid, theirDeviceId);
   }
 
   print('😊😊😊😊😊');

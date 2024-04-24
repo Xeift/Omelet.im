@@ -8,7 +8,7 @@ import 'package:omelet/signal_protocol/safe_opk_store.dart';
 import 'package:omelet/signal_protocol/safe_session_store.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 
-Future<(String, bool, dynamic, dynamic)> v2EncryptSignalMessage(
+Future<(bool, String)> v2EncryptSignalMessage(
     SignalProtocolAddress receiverAddress, String plainText) async {
   final ipkStore = SafeIdentityKeyStore();
   final spkStore = SafeSpkStore();
@@ -24,11 +24,10 @@ Future<(String, bool, dynamic, dynamic)> v2EncryptSignalMessage(
       await sessionCipher.encrypt(Uint8List.fromList(utf8.encode(plainText)));
   final isPreKeySignalMessage =
       ciphertext.getType() == CiphertextMessage.prekeyType;
+  print('✨✨✨✨✨');
+  print(
+      '[v2_encrypt_signal_message] isPreKeySignalMessage: $isPreKeySignalMessage');
+  print('✨✨✨✨✨');
 
-  return (
-    jsonEncode(ciphertext.serialize()),
-    isPreKeySignalMessage,
-    null,
-    null
-  );
+  return (isPreKeySignalMessage, jsonEncode(ciphertext.serialize()));
 }

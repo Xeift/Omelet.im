@@ -8,6 +8,7 @@ import 'package:omelet/signal_protocol/safe_spk_store.dart';
 import 'package:omelet/signal_protocol/safe_opk_store.dart';
 import 'package:omelet/signal_protocol/safe_session_store.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
+import 'package:omelet/signal_protocol/v2_pre_key_bundle_converter.dart';
 
 Future<void> v2EncryptPreKeySignalMessage(String theirUid, String theirDeviceId,
     SignalProtocolAddress receiverAddress) async {
@@ -16,9 +17,16 @@ Future<void> v2EncryptPreKeySignalMessage(String theirUid, String theirDeviceId,
   final opkStore = SafeOpkStore();
   final sessionStore = SafeSessionStore();
 
-  // TODO: 下載單一 PreKeyBundle
-  final preKeyBundle = await v2DownloadPreKeyBundleApi(theirUid, theirDeviceId);
+  // 下載單一 PreKeyBundle
+  final res = await v2DownloadPreKeyBundleApi(theirUid, theirDeviceId);
+  final preKeyBundle = jsonDecode(res.body)['data']['PreKeyBundle'];
   print('❌❌❌❌❌');
-  print(preKeyBundle.body);
+  // 轉換成函式庫能使用的形態
+  final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
+      await preKeyBundleTypeConverter(theirDeviceId, preKeyBundle);
+
+  print(ipkPub.publicKey.serialize());
+  print(spkSig);
+  print(spkId);
   print('❌❌❌❌❌');
 }

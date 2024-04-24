@@ -53,7 +53,6 @@ class _SettingPageState extends State<SettingPage> {
     await safeConfigStore.setTranslationDestLang(widget.ourUid, newValue);
   }
 
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width; //抓取螢幕寬度
@@ -113,7 +112,8 @@ class _SettingPageState extends State<SettingPage> {
                                             child: ElevatedButton(
                                               onPressed: () async {
                                                 await onUpdatePfpBtnPressed();
-                                                print('[setting_page.dart]$serverUri/pfp/${widget.ourUid}');
+                                                print(
+                                                    '[setting_page.dart]$serverUri/pfp/${widget.ourUid}');
                                                 Navigator.of(context).pop();
                                                 setState(() {});
                                               },
@@ -141,7 +141,6 @@ class _SettingPageState extends State<SettingPage> {
                                             height: 55,
                                             child: ElevatedButton(
                                               onPressed: () async {
-                                                
                                                 print('[setting_page]刪除圖片');
                                                 Navigator.of(context).pop();
                                               },
@@ -194,16 +193,19 @@ class _SettingPageState extends State<SettingPage> {
                               color: const Color.fromARGB(255, 190, 190, 190),
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Icon(CupertinoIcons.ellipses_bubble_fill,
-                                color:
-                                    const Color.fromARGB(255, 255, 255, 255)),
+                            child: Icon(
+                              CupertinoIcons.ellipses_bubble_fill,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                            ),
                           ),
                           const SizedBox(width: 10),
-                          Text(
-                            '翻譯語言設定',
-                            style: textTheme.titleSmall,
+                          Expanded(
+                            child: Text(
+                              'Local Language',
+                              style: textTheme.titleSmall,
+                              overflow: TextOverflow.ellipsis
+                            ),
                           ),
-                          const Spacer(),
                           DropdownButton(
                             value: translateLangunage,
                             onChanged: (String? newValue) async {
@@ -215,59 +217,79 @@ class _SettingPageState extends State<SettingPage> {
                             icon: Icon(CupertinoIcons.chevron_compact_down),
                             underline: Container(
                               height: 2,
+                              width: 1,
                               color: Theme.of(context).colorScheme.secondary,
                             ),
-
                             items: const [
                               DropdownMenuItem<String>(
-                                  value: 'Chinese Traditional',
-                                  child: Text('繁體中文,Chinese Traditional')),
+                                value: 'Chinese Traditional',
+                                child: Text('繁體中文,Chinese Traditional', overflow: TextOverflow.ellipsis,),
+                                
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Chinese Simplified',
-                                  child: Text('简体中文,Chinese Simplified')),
+                                value: 'Chinese Simplified',
+                                child: Text('简体中文,Chinese Simplified', overflow: TextOverflow.ellipsis,),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'English',
-                                  child: Text('English')),
+                                value: 'English',
+                                child: Text('English', overflow: TextOverflow.ellipsis,),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Japanese',
-                                  child: Text('日本語,Japanese')),
+                                value: 'Japanese',
+                                child: Text('日本語,Japanese', overflow: TextOverflow.ellipsis,),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'French',
-                                  child: Text('français,French')),
+                                value: 'French',
+                                child: Text('français,French', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'German',
-                                  child: Text('Deutsch,German')),
+                                value: 'German',
+                                child: Text('Deutsch,German', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Spanish',
-                                  child: Text('Español,Spanish')),
+                                value: 'Spanish',
+                                child: Text('Español,Spanish', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Croatia',
-                                  child: Text('Hrvatski,Croatia')),
+                                value: 'Croatia',
+                                child: Text('Hrvatski,Croatia', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Italian',
-                                  child: Text('Italiano,Italian')),
+                                value: 'Italian',
+                                child: Text('Italiano,Italian', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Lithuania',
-                                  child: Text('lietuvių kalba,Lithuania')),
+                                value: 'Lithuania',
+                                child: Text('lietuvių kalba,Lithuania', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Ukrainian',
-                                  child: Text('українська мова,Ukrainian')),
+                                value: 'Ukrainian',
+                                child: Text('українська мова,Ukrainian', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Hungary',
-                                  child: Text('Magyar,Hungary')),
+                                value: 'Hungary',
+                                child: Text('Magyar,Hungary', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Korean', child: Text('한국어,Korean')),
+                                value: 'Korean',
+                                child: Text('한국어,Korean', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Vietnamese',
-                                  child: Text('Việt Ngữ,Vietnamese')),
+                                value: 'Vietnamese',
+                                child: Text('Việt Ngữ,Vietnamese', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Thai', child: Text('ภาษาไทย,Thai')),
+                                value: 'Thai',
+                                child: Text('ภาษาไทย,Thai', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Indonesia',
-                                  child: Text('Bahasa Indonesia,Indonesia')),
+                                value: 'Indonesia',
+                                child: Text('Bahasa Indonesia,Indonesia', overflow: TextOverflow.ellipsis),
+                              ),
                               DropdownMenuItem<String>(
-                                  value: 'Russian',
-                                  child: Text('русский язык,Russian')),
+                                value: 'Russian',
+                                child: Text('русский язык,Russian', overflow: TextOverflow.ellipsis),
+                              ),
                             ],
                           )
                         ],
@@ -298,11 +320,36 @@ class _SettingPageState extends State<SettingPage> {
                             onPressed: () async {
                               await _signOut();
                             },
-                            // style: ButtonStyle(
-                            //     backgroundColor: Theme.of(context)
-                            //         .elevatedButtonTheme
-                            //         .style
-                            //         ?.backgroundColor),
+                            child: Text('登出'),
+                          ),
+                        ),
+                      ),
+                      const Divider(),
+                      ListTile(
+                        leading: Icon(Icons.dark_mode),
+                        title: Text(
+                          'Dark theme',
+                          style: textTheme.titleSmall?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        onTap: () {
+                          Provider.of<ThemeProvier>(context, listen: false)
+                              .toggleTheme();
+                        },
+                      ),
+                      const Divider(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: SizedBox(
+                          width: 200,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              await _signOut();
+                            },
                             child: Text('登出'),
                           ),
                         ),

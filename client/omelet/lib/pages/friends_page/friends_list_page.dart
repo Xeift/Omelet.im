@@ -180,59 +180,104 @@ class _FriendsListState extends State<FriendsList> {
                             width: screenWidth,
                             child: Column(
                               children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    'Multi Window Mode',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
                                 Expanded(
                                   child: ListView.builder(
                                     itemCount: widget.friends.length,
                                     itemBuilder: (context, index) {
                                       Map<String, dynamic> friendSelect =
                                           widget.friends[index];
-                                      bool isSelected =
-                                          friendSelect['selected'] ??
-                                              false; // 根據 friendSelect['selected'] 的值設置 isSelected
-                                      return CheckboxListTile(
-                                        title: Text(
-                                            friendSelect['data']['username']),
-                                        value: isSelected,
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            if (value == true) {
-                                              selectMultiFrends.add(
-                                                  friendSelect['data']['uid']);
-                                            } else {
-                                              selectMultiFrends.remove(
-                                                  friendSelect['data']['uid']);
-                                            }
-                                            friendSelect['selected'] =
-                                                value; // 更新 friendSelect['selected']
-                                            print(friendSelect);
-                                          });
-                                        },
-                                      );
+                                      bool isSelected = friendSelect[
+                                              'selected'] ??
+                                          false; // 根據 friendSelect['selected'] 的值設置 isSelected
+                                      return Column(children: [
+                                        CheckboxListTile(
+                                          title: Text(
+                                            friendSelect['data']['username'],
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          value: isSelected,
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              if (value == true) {
+                                                selectMultiFrends.add(
+                                                    friendSelect['data']
+                                                        ['uid']);
+                                              } else {
+                                                selectMultiFrends.remove(
+                                                    friendSelect['data']
+                                                        ['uid']);
+                                              }
+                                              friendSelect['selected'] =
+                                                  value; // 更新 friendSelect['selected']
+                                              print(friendSelect);
+                                            });
+                                          },
+                                        ),
+                                        const Divider(),
+                                      ]);
                                     },
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    print('[friends_list_page.dart] selectMultiFrends :$selectMultiFrends');
-                                    // 在提交按鈕的事件處理器中使用選擇的用戶
-                                    if (selectMultiFrends.length == 2) {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MultiChatRoomPage(
-                                                    friends_uidA:
-                                                        selectMultiFrends[0],
-                                                    friends_uidB:
-                                                        selectMultiFrends[1],
-                                                    ourUid: widget.ourUid,
-                                                  )));
-                                    } else {
-                                      loginErrorMsg(
-                                          context, '請選擇兩位好友');
-                                    }
-                                  },
-                                  child: Text('提交'),
-                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 30),
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      minimumSize:
+                                          MaterialStateProperty.all<Size>(
+                                        const Size(80, 50), // 设置按钮的最小尺寸
+                                      ),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .secondary, // 设置按钮的背景颜色
+                                      ),
+                                      padding: MaterialStateProperty.all<
+                                          EdgeInsetsGeometry>(
+                                        const EdgeInsets.symmetric(
+                                            vertical: 10,
+                                            horizontal: 20), // 设置按钮的内边距
+                                      ),
+                                      // 其他样式属性
+                                    ),
+                                    onPressed: () {
+                                      print(
+                                          '[friends_list_page.dart] selectMultiFrends :$selectMultiFrends');
+                                      // 在提交按鈕的事件處理器中使用選擇的用戶
+                                      if (selectMultiFrends.length == 2) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MultiChatRoomPage(
+                                                      friends_uidA:
+                                                          selectMultiFrends[0],
+                                                      friends_uidB:
+                                                          selectMultiFrends[1],
+                                                      ourUid: widget.ourUid,
+                                                    )));
+                                      } else {
+                                        loginErrorMsg(context, '請選擇兩位好友');
+                                      }
+                                    },
+                                    child: Text(
+                                      'Submit',
+                                      style: TextStyle(
+                                        fontSize: 15, // 设置按钮文字的大小
+                                        fontWeight:
+                                            FontWeight.bold, // 设置按钮文字的粗细
+                                      ),
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -249,7 +294,6 @@ class _FriendsListState extends State<FriendsList> {
     );
   }
 }
-
 
 class SearchBar extends StatefulWidget {
   //搜尋框、搜尋好友、添加好友列表

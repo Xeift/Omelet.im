@@ -177,8 +177,8 @@ class SafeMsgStore {
       return (senderName, '[圖片]');
     } else {
       print('🕐🕐🕐🕐🕐🕐🕐🕐🕐🕐');
-      // print(
-      //     '[safe_msg_store] ${(DateTime.now().millisecondsSinceEpoch) - (int.parse(decryptedMsg.replaceAll('-', '')))}'); // TODO: 計算延遲
+      print(
+          '[safe_msg_store] ${(DateTime.now().millisecondsSinceEpoch) - (int.parse(decryptedMsg.replaceAll('-', '')))}'); // TODO: 計算延遲
       print('🕐🕐🕐🕐🕐🕐🕐🕐🕐🕐');
       return (senderName, decryptedMsg);
     }

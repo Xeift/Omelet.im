@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,39 +11,74 @@ import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
 import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
 import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
+import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/glow_bar.dart';
-import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
+import 'package:omelet/theme/theme_constants.dart';
 
 class MultiChatRoomPage extends StatefulWidget {
   const MultiChatRoomPage(
-      {super.key,
+      {Key? key,
       required this.friends_uidA,
       required this.friends_uidB,
       required this.ourUid});
+
   final String friends_uidA;
   final String friends_uidB;
   final String ourUid;
-  
+
   @override
   State<MultiChatRoomPage> createState() => MultiChatRoomPageState();
 }
 
 class MultiChatRoomPageState extends State<MultiChatRoomPage> {
   static GlobalKey updateMultiChatKey = GlobalKey();
-  final List<ChatMessage> _messages = [];
-  final TextEditingController _textController = TextEditingController();
-  late Map<String, dynamic> friendsAInfo;
-  late Map<String, dynamic> friendsBInfo;
+  final SafeConfigStore safeConfigStore = SafeConfigStore();
+
   bool isChangeWindow = false;
   bool isLoading = true;
+  late bool isTranslateA;
+  late bool isTranslateB;
+  late Map<String, dynamic> friendsInfo = {};
+  late List<String> debugTranslate = [];
+  late Map<String, dynamic> friendsAInfo = {};
+  late Map<String, dynamic> friendsBInfo = {};
+  late String friendsUid;
 
   @override
   void initState() {
     super.initState();
-    // 在初始化时获取好友数据
+
     _initializeData();
+  }
+
+  void _initializeData() async {
+    try {
+      await safeConfigStore.disableTranslation(widget.friends_uidA);
+      await safeConfigStore.disableTranslation(widget.friends_uidB);
+      isTranslateA =
+          await safeConfigStore.isTranslateActive(widget.friends_uidA);
+      print('isTranslateA:$isTranslateA');
+      isTranslateB =
+          await safeConfigStore.isTranslateActive(widget.friends_uidB);
+
+      print('isTranslateB:$isTranslateB');
+      print('widget.friends_uidA:${widget.friends_uidA}');
+      await Future.wait([
+        _fetchUserInfo(widget.friends_uidA),
+        _fetchUserInfo(widget.friends_uidB),
+      ]).then((List<Map<String, dynamic>> results) {
+        setState(() {
+          friendsAInfo = results[0];
+          friendsBInfo = results[1];
+          isLoading = false;
+          // 数据加载完成后执行页面刷新操作
+        });
+      });
+    } catch (e) {
+      print('Error initializing data: $e');
+    }
   }
 
   @override
@@ -50,171 +86,161 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
     super.dispose();
   }
 
-  void _initializeData() async {
+  Future<Map<String, dynamic>> _fetchUserInfo(String userUid) async {
     try {
-      // 使用 Future.wait 等待两个异步操作完成
-      await Future.wait([
-        _fetchUserInfo(widget.friends_uidA),
-        _fetchUserInfo(widget.friends_uidB),
-      ]).then((List<Map<String, dynamic>> results) {
-        // results 是一个包含两个 Map 的列表，分别是 friendsAInfo 和 friendsBInfo
-        setState(() {
-          friendsAInfo = results[0];
-          friendsBInfo = results[1];
-          isLoading = false; // 加载完成后将 isLoading 设置为 false
-        });
-      });
+      print('_fetchUserInfo uid :$userUid');
+      final response = await getUserPublicInfoApi(userUid);
+      Map<String, dynamic> responseData = jsonDecode(response.body);
+      print('responseData:$responseData');
+      responseData['data']['uid'] = userUid;
+      print('responseDatadatauid:${responseData['data']['uid']}');
+      print('responseData:$responseData');
+      return responseData;
     } catch (e) {
-      print('Error initializing data: $e');
-      setState(() {
-        isLoading = false; // 如果发生错误，也要将 isLoading 设置为 false
-      });
+      print('get Error Msg: $e');
+      return {};
     }
   }
 
   static currenInstanceInMultiChat() {
     var state = MultiChatRoomPageState.updateMultiChatKey.currentContext
         ?.findAncestorStateOfType();
+
+    if (state == null) {
+      print('1null');
+    } else {
+      print('have data');
+    }
     return state;
   }
-  
-
-  Future<Map<String, dynamic>> _fetchUserInfo(String userUid) async {
-    try {
-      final response = await getUserPublicInfoApi(userUid);
-      if (response.statusCode == 200) {
-        Map<String, dynamic> responseData = jsonDecode(response.body);
-        responseData['data']['uid'] = userUid;
-        return responseData;
-      } else {
-        throw Exception('Failed to fetch user info');
-      }
-    } catch (e) {
-      print('Error fetching user info: $e');
-      return {};
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text('Loading...'),
-        ),
         body: Center(
-          child: CircularProgressIndicator(),
+          child: Semantics(
+            excludeSemantics: true,
+            child: const LinearProgressIndicator(
+              minHeight: 6,
+              backgroundColor: Color.fromARGB(255, 2, 2, 2),
+              valueColor:
+                  AlwaysStoppedAnimation(Color.fromARGB(255, 243, 128, 33)),
+            ),
+          ),
         ),
       );
     } else {
-      // 加载完成后显示整个页面
+      print('friendsAInfo:$friendsAInfo');
       return Scaffold(
-        appBar: AppBar(
-          title: Text('Multi_windows'),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  isChangeWindow = !isChangeWindow;
-                });
-                print('[multi_chat_room.dart]isChangeWindow:$isChangeWindow');
-              },
-              child: Icon(Icons.account_tree_rounded),
-            )
-          ],
+        backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50), // 設定所需的高度
+          child: Container(
+            decoration: BoxDecoration(
+        border:
+            Border.all(color: Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
+        borderRadius: BorderRadius.circular(5), // 设置边框圆角
+      ),
+            child: AppBar(
+              title: _AppBarTitle(
+                friendsInfo: isChangeWindow ? friendsAInfo : friendsBInfo,
+              ),
+              leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  }),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(6.0), // 设置按钮的外围宽度
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isChangeWindow = !isChangeWindow;
+                      });
+                      print(
+                          '[multi_chat_room.dart]isChangeWindow:$isChangeWindow');
+                    },
+                    style: ButtonStyle(
+                        minimumSize:
+                            MaterialStateProperty.all<Size>(const Size(50, 10)),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromARGB(255, 250, 143, 21)) // 设置按钮的最小尺寸
+                        // 其他样式属性
+                        ),
+                    child: const Icon(
+                      Icons.change_circle,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ),
+                ),
+              ],
+              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+              elevation: 0,
+            ),
+          ),
         ),
+        key: updateMultiChatKey,
         body: Column(
-          children: <Widget>[
+          children: [
             Expanded(
               child: _ReadMessageList(
                 friendsInfo: isChangeWindow ? friendsAInfo : friendsBInfo,
-                isTranslate: false,
+                isTranslate: isChangeWindow ? isTranslateA : isTranslateB,
                 ourUid: widget.ourUid,
               ),
             ),
-
-            Container(
-              height: 2,
-              color: Colors.amber,
+            _MiddleBar(
+              friendsInfo: isChangeWindow ? friendsBInfo : friendsAInfo,
             ),
-
             Expanded(
               child: _ReadMessageList(
                 friendsInfo: isChangeWindow ? friendsBInfo : friendsAInfo,
-                isTranslate: false,
+                isTranslate: isChangeWindow ? isTranslateA : isTranslateB,
                 ourUid: widget.ourUid,
               ),
             ),
-            Divider(height: 1.0),
             _ActionBarForMulti(
-              friendsInfo: isChangeWindow ? friendsBInfo : friendsAInfo,
-              isTranslate: false,
+              friendsAInfo: isChangeWindow ? friendsAInfo : friendsBInfo,
+              friendsBInfo: isChangeWindow ? friendsBInfo : friendsAInfo,
+              isTranslate: isTranslateA,
             ),
           ],
         ),
       );
     }
-    
   }
- reloadDataInMulti() async{
-    setState(() {
-      print('update whol page');
-    _ReadMessageList;
-    });
-  }
-}
 
-class ChatMessage extends StatelessWidget {
-  const ChatMessage({
-    Key? key,
-  }) : super(key: key);
-  final String text = '';
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(child: Text('User')),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'User',
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5.0),
-                child: Text(text),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+  reloadDataInMulti() async {
+    if (mounted) {
+      setState(() {
+        print('chat_room_setState');
+        _ReadMessageList;
+      });
+    }
   }
 }
 
 //==============讀取訊息=====================
 
 class _ReadMessageList extends StatelessWidget {
-  final SafeMsgStore safeMsgStore = SafeMsgStore();
+  const _ReadMessageList({
+    Key? key,
+    required this.friendsInfo,
+    required this.isTranslate,
+    required this.ourUid,
+  }) : super(key: key);
 
-  _ReadMessageList(
-      {super.key,
-      required this.friendsInfo,
-      required this.isTranslate,
-      required this.ourUid});
   final Map<String, dynamic> friendsInfo;
   final bool isTranslate;
   final String ourUid;
-  Future<List<Map<String, dynamic>>> fetchAndDisplayMessages() async {
+
+  Future<List<Map<String, dynamic>>> fetchAndDisplayMessagesed() async {
     print('test:${friendsInfo['data']['uid']}');
+    final SafeMsgStore safeMsgStore = SafeMsgStore();
     List<String> messages =
         await safeMsgStore.readAllMsg(friendsInfo['data']['uid']);
     if (messages.isNotEmpty) {
@@ -234,7 +260,7 @@ class _ReadMessageList extends StatelessWidget {
   Widget build(BuildContext context) {
     print('加載訊息中....');
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: fetchAndDisplayMessages(),
+      future: fetchAndDisplayMessagesed(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(
@@ -274,26 +300,26 @@ class _ReadMessageList extends StatelessWidget {
             return isTranslate //判斷翻譯功能
                 ? (isOwnMessage //啟用情況下
                     ? (isImage
-                        ? ImgOwnTitle(
+                        ? _ImgOwnTitle(
                             imageData: imageData,
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
                           )
-                        : MessageOwnTitle(
+                        : _MessageOwnTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
                           ))
                     : (isImage
-                        ? ImgTitle(
+                        ? _ImgTitle(
                             imageData: imageData,
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
                           )
-                        : AIMessageTitle(
+                        : _AIMessageTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
@@ -302,31 +328,31 @@ class _ReadMessageList extends StatelessWidget {
                           )))
                 : (isOwnMessage //非啟用情況
                     ? (isImage
-                        ? ImgOwnTitle(
+                        ? _ImgOwnTitle(
                             imageData: imageData,
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
                           )
-                        : MessageOwnTitle(
+                        : _MessageOwnTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
                           ))
                     : (isImage
-                        ? ImgTitle(
+                        ? _ImgTitle(
                             imageData: imageData,
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
                           )
-                        : MessageTitle(
+                        : _MessageTitle(
                             message: realmessage['content'],
                             messageDate: DateFormat('MMMM/d h:mm a').format(
                               DateTime.fromMillisecondsSinceEpoch(timestamp),
                             ),
-                          ))); // 如果不需要顯示消息，返回一個空的容器
+                          )));
           },
         );
       },
@@ -334,11 +360,452 @@ class _ReadMessageList extends StatelessWidget {
   }
 }
 
+class _MiddleBar extends StatelessWidget {
+  _MiddleBar({Key? key, required this.friendsInfo}) : super(key: key);
+
+  final Map<String, dynamic> friendsInfo;
+
+  String? _pfpUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    if (friendsInfo['data']['pfp'] != null) {
+      _pfpUrl = friendsInfo['data']['pfp'];
+    } else {
+      _pfpUrl = null;
+    }
+
+    Widget avatarWidget = _pfpUrl == null
+        ? const Padding(
+            padding: EdgeInsets.all(1.0),
+            child: Icon(
+              Icons.egg_alt_rounded,
+              size: 35,
+              color: Color.fromARGB(255, 238, 108, 33),
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Avatar.sm(
+              url: _pfpUrl,
+            ),
+          );
+
+    print('[chat_room_page] 該好友資訊：$friendsInfo');
+    return Container(
+      decoration: BoxDecoration(
+        border:
+            Border.all(color: Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
+        borderRadius: BorderRadius.circular(5), // 设置边框圆角
+      ),
+      padding: const EdgeInsets.all(8), // 设置内边距
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 30,
+          ),
+          avatarWidget,
+          const SizedBox(
+            width: 30,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  friendsInfo['data']['username'],
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w800),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class _AppBarTitle extends StatelessWidget {
+  _AppBarTitle({Key? key, required this.friendsInfo}) : super(key: key);
+  final Map<String, dynamic> friendsInfo;
+
+  String? pfpUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    if (friendsInfo['data']['pfp'] != null) {
+      pfpUrl = friendsInfo['data']['pfp'];
+    } else {
+      pfpUrl = null;
+    }
+
+    Widget avatarWidget = pfpUrl == null
+        ? const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Icon(
+              Icons.egg_alt_rounded,
+              size: 35,
+              color: Color.fromARGB(255, 238, 108, 33),
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Avatar.sm(
+              url: pfpUrl,
+            ),
+          );
+
+    print('[chat_room_page] 該好友資訊：$friendsInfo');
+    return Row(
+      children: [
+        avatarWidget,
+        const SizedBox(
+          width: 16,
+        ),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                friendsInfo['data']['username'],
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MessageTitle extends StatelessWidget {
+  //好友的訊息框
+  const _MessageTitle(
+      {Key? key, required this.message, required this.messageDate})
+      : super(key: key);
+
+  final String message;
+  final String messageDate;
+  static const _borderRadius = 26.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 198, 198, 198),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(_borderRadius),
+                      topRight: Radius.circular(_borderRadius),
+                      bottomRight: Radius.circular(_borderRadius),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 20),
+                    child: Text(message),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(messageDate,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+              ]),
+        ));
+  }
+}
+
+class _MessageOwnTitle extends StatelessWidget {
+  //自己的訊息框
+  const _MessageOwnTitle(
+      {Key? key, required this.message, required this.messageDate})
+      : super(key: key);
+
+  final String message;
+  final String messageDate;
+  static const _borderRadius = 26.0;
+
+  @override
+  Widget build(BuildContext context) {
+    print('[chat_room_page]訊息框:$message');
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(_borderRadius),
+                      bottomRight: Radius.circular(_borderRadius),
+                      bottomLeft: Radius.circular(_borderRadius),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 15),
+                    child: Text(message,
+                        style: const TextStyle(
+                          color: AppColors.textLigth,
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(messageDate,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+              ]),
+        ));
+  }
+}
+
+class _ImgTitle extends StatelessWidget {
+  //圖片訊息框
+  const _ImgTitle({
+    Key? key,
+    required this.imageData,
+    required this.messageDate,
+  }) : super(key: key);
+
+  final Uint8List? imageData;
+  final String messageDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            InstaImageViewer(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 0,
+                  ),
+                  child: Image.memory(
+                    imageData!,
+                    height: 150,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                messageDate,
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ImgOwnTitle extends StatelessWidget {
+  const _ImgOwnTitle({
+    Key? key,
+    required this.imageData,
+    required this.messageDate,
+  }) : super(key: key);
+
+  final Uint8List? imageData;
+  final String messageDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            InstaImageViewer(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 0,
+                  ),
+                  child: Image.memory(
+                    imageData!,
+                    height: 150,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                messageDate,
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AIMessageTitle extends StatefulWidget {
+  //翻譯訊息框
+  const _AIMessageTitle({
+    Key? key,
+    required this.message,
+    required this.messageDate,
+    required this.ourUid,
+  }) : super(key: key);
+
+  final String message;
+  final String messageDate;
+  final String ourUid;
+
+  @override
+  _AIMessageTitleState createState() => _AIMessageTitleState();
+}
+
+class _AIMessageTitleState extends State<_AIMessageTitle> {
+  static const _borderRadius = 26.0;
+  late String translatedMsg = '';
+  SafeConfigStore safeConfigStore = SafeConfigStore();
+  bool _isMounted = false; // 新增一個變量來追蹤State對象是否仍然在樹中
+
+  @override
+  void initState() {
+    super.initState();
+    // 在初始化時檢查State對象是否仍然在widget樹中
+    _isMounted = true; // 將_isMounted設置為true，表示State對象已經被創建並且仍然在樹中
+    if (_isMounted) {
+      // 如果仍然在樹中，執行setState()
+      getTranslateMsg();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _isMounted = false; // 在dispose()方法中將_isMounted設置為false，表示State對象已被dispose
+    //防止載入未完成退出，導致crash
+  }
+
+  Future<void> getTranslateMsg() async {
+    String translateLanguage =
+        await safeConfigStore.getTranslationDestLang(widget.ourUid);
+    print('[chat_room_page.dart]使用語言:$translateLanguage');
+    var res = await getTranslatedSentenceApi(widget.message, translateLanguage);
+    if (_isMounted) {
+      setState(() {
+        var resBody = jsonDecode(res.body);
+        translatedMsg = resBody['data'];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 198, 198, 198),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(_borderRadius),
+                  topRight: Radius.circular(_borderRadius),
+                  bottomRight: Radius.circular(_borderRadius),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 10),
+                    child: Text(widget.message),
+                  ),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 10),
+                    child: Text(translatedMsg),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(widget.messageDate,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ActionBarForMulti extends StatefulWidget {
   const _ActionBarForMulti(
-      {Key? key, required this.friendsInfo, required this.isTranslate})
+      {Key? key,
+      required this.isTranslate,
+      required this.friendsAInfo,
+      required this.friendsBInfo})
       : super(key: key);
-  final Map<String, dynamic> friendsInfo;
+  final Map<String, dynamic> friendsAInfo;
+  final Map<String, dynamic> friendsBInfo;
   final bool isTranslate;
 
   @override
@@ -358,8 +825,11 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
 
   Future<void> _sendMessage() async {
     if (_sendMsgController.text.trim().isNotEmpty) {
-      onSendMsgBtnPressed(
-          widget.friendsInfo['data']['uid'], _sendMsgController.text);
+      // TODO: V2 為新版
+      await onSendMsgBtnPressed(
+          widget.friendsAInfo['data']['uid'], _sendMsgController.text);
+      // await v2OnSendMsgBtnPressed(
+      //     widget.friendsInfo['data']['uid'], _sendMsgController.text);
       setState(() {
         _sendMsgController.clear();
       });
@@ -374,15 +844,21 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
 
   void _changeTranslateStatus(bool isTranslateStatus) async {
     if (isTranslateStatus) {
+      print(
+          '[multi_chat_room]widget.friendsInfo${widget.friendsAInfo['data']['uid']}');
       await safeConfigStore
-          .enableTranslation(widget.friendsInfo['data']['uid']);
+          .enableTranslation(widget.friendsAInfo['data']['uid']);
+      await safeConfigStore
+          .enableTranslation(widget.friendsBInfo['data']['uid']);
     } else {
       await safeConfigStore
-          .disableTranslation(widget.friendsInfo['data']['uid']);
+          .disableTranslation(widget.friendsAInfo['data']['uid']);
+      await safeConfigStore
+          .disableTranslation(widget.friendsBInfo['data']['uid']);
     }
 
     setState(() {
-      ChatRoomPageState.currenInstance()?.reloadData();
+      MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
     });
     // ignore: use_build_context_synchronously
     Navigator.of(context).pop();
@@ -415,9 +891,9 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
                                 ElevatedButton(
                                   onPressed: () {
                                     print(
-                                        '[chat_room_page.dart]uid:${widget.friendsInfo['data']['uid']}');
+                                        '[chat_room_page.dart]uid:${widget.friendsAInfo['data']['uid']}');
                                     onSelectImageBtnPressed(
-                                        widget.friendsInfo['data']['uid']);
+                                        widget.friendsAInfo['data']['uid']);
                                     Navigator.of(context).pop();
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -499,7 +975,7 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
                 controller: _sendMsgController,
                 style: const TextStyle(fontSize: 14),
                 decoration: const InputDecoration(
-                  hintText: 'Type something...',
+                  hintText: 'Reply to the message above...',
                   border: InputBorder.none,
                 ),
                 onSubmitted: (_) => _sendMessage(),
@@ -509,12 +985,18 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
           Padding(
             padding: const EdgeInsets.only(
               left: 15,
-              right: 20,
+              right: 5,
             ),
-            child: GlowingActionButton(
-              color: const Color.fromARGB(255, 0, 0, 0),
-              icon: Icons.send_rounded,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                minimumSize:
+                    MaterialStateProperty.all<Size>(const Size(50, 50)),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.secondary), // 设置按钮的最小尺寸
+                // 其他样式属性
+              ),
               onPressed: _sendMessage,
+              child: const Icon(Icons.send_rounded),
             ),
           ),
         ],

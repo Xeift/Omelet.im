@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
 import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
+import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 // import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/button/v2_on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
@@ -76,6 +77,12 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   static currenInstance() {
     var state = ChatRoomPageState.updateChatKey.currentContext
         ?.findAncestorStateOfType();
+
+       if(state == null ){
+      print('1null');
+    }else{
+      print('have data');
+    }
     return state;
   }
 
@@ -147,6 +154,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     print('[chat_room_page] deBugTranslateList：$debugTranslate');
     if (mounted) {
       setState(() {
+        print('chat_room_setState');
         ReadMessageList;
       });
     }
@@ -187,9 +195,6 @@ class AppBarTitle extends StatelessWidget {
     print('[chat_room_page] 該好友資訊：$friendsInfo');
     return Row(
       children: [
-        // Avatar.small(
-        //   url: messageData.profilePicture,
-        // ),
         avatarWidget,
         const SizedBox(
           width: 16,
@@ -402,6 +407,7 @@ class MessageOwnTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('[chat_room_page]訊息框:$message');
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Align(
@@ -708,10 +714,10 @@ class _ActionBarState extends State<_ActionBar> {
   Future<void> _sendMessage() async {
     if (_sendMsgController.text.trim().isNotEmpty) {
       // TODO: V2 為新版
-      // await onSendMsgBtnPressed(
-      //     widget.friendsInfo['data']['uid'], _sendMsgController.text);
-      await v2OnSendMsgBtnPressed(
+      await onSendMsgBtnPressed(
           widget.friendsInfo['data']['uid'], _sendMsgController.text);
+      // await v2OnSendMsgBtnPressed(
+      //     widget.friendsInfo['data']['uid'], _sendMsgController.text);
       setState(() {
         _sendMsgController.clear();
       });
@@ -861,12 +867,18 @@ class _ActionBarState extends State<_ActionBar> {
           Padding(
             padding: const EdgeInsets.only(
               left: 15,
-              right: 20,
+              right: 5,
             ),
-            child: GlowingActionButton(
-              color: const Color.fromARGB(255, 0, 0, 0),
-              icon: Icons.send_rounded,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                minimumSize:
+                    MaterialStateProperty.all<Size>(const Size(50, 50)),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.secondary), // 设置按钮的最小尺寸
+                // 其他样式属性
+              ),
               onPressed: _sendMessage,
+              child: const Icon(Icons.send_rounded),
             ),
           ),
         ],

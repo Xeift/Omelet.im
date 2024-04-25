@@ -154,7 +154,6 @@ class LoadingPageState extends State<LoadingPage> {
             print('--------------------------------');
             print('[main.dart] 已接收到好友邀請👉 $msg');
             print('--------------------------------\n');
-
             print('[loading_page] ${jsonDecode(msg).runtimeType}');
 
             // 儲存好友邀請

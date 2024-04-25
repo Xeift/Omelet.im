@@ -27,4 +27,7 @@ Future<void> checkDeviceId() async {
     await safeDeviceIdStore.updateTheirDeviceIds(
         entry.key, friendDeviceIdsString);
   }
+  print('✨✨✨✨✨');
+  print('已完成 check_device_id');
+  print('✨✨✨✨✨');
 }

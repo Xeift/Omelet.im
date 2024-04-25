@@ -26,7 +26,7 @@ Future<void> v2OnSendMsgBtnPressed(String theirUid, String msgContent) async {
   });
 
   // 加密訊息
-  await v2EncryptMsg(theirUid, '$msgContent $currentTimestamp', 'text');
+  await v2EncryptMsg(theirUid, msgContent, 'text');
   // TODO: v2計算延遲
   // 發送訊息時，顯示一則新訊息在聊天室
   ChatRoomPageState.currenInstance()?.reloadData();

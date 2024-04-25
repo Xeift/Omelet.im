@@ -78,9 +78,9 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     var state = ChatRoomPageState.updateChatKey.currentContext
         ?.findAncestorStateOfType();
 
-       if(state == null ){
+    if (state == null) {
       print('1null');
-    }else{
+    } else {
       print('have data');
     }
     return state;
@@ -714,10 +714,10 @@ class _ActionBarState extends State<_ActionBar> {
   Future<void> _sendMessage() async {
     if (_sendMsgController.text.trim().isNotEmpty) {
       // TODO: V2 為新版
-      await onSendMsgBtnPressed(
-          widget.friendsInfo['data']['uid'], _sendMsgController.text);
-      // await v2OnSendMsgBtnPressed(
+      // await onSendMsgBtnPressed(
       //     widget.friendsInfo['data']['uid'], _sendMsgController.text);
+      await v2OnSendMsgBtnPressed(
+          widget.friendsInfo['data']['uid'], _sendMsgController.text);
       setState(() {
         _sendMsgController.clear();
       });

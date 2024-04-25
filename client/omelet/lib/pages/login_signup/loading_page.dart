@@ -48,7 +48,7 @@ class LoadingPageState extends State<LoadingPage> {
     setState(() {
       _isLoading = false;
     });
-    await initSocket(); // 等待 3 秒後開始初始化Socket
+    await initSocket(); // 等待 3 秒後開始初始化 Socket
   }
 
   Future<void> initSocket() async {

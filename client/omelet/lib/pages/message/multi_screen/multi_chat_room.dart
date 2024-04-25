@@ -55,14 +55,25 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
 
   void _initializeData() async {
     try {
-      await safeConfigStore.disableTranslation(widget.friends_uidA);
-      await safeConfigStore.disableTranslation(widget.friends_uidB);
       isTranslateA =
           await safeConfigStore.isTranslateActive(widget.friends_uidA);
       print('isTranslateA:$isTranslateA');
       isTranslateB =
           await safeConfigStore.isTranslateActive(widget.friends_uidB);
 
+      if (isTranslateA == true && isTranslateB == false) {
+        await safeConfigStore.enableTranslation(widget.friends_uidB);
+      } else if (isTranslateA == true && isTranslateB == true) {
+      } else if (isTranslateA == false && isTranslateB == true) {
+        await safeConfigStore.disableTranslation(widget.friends_uidB);
+      } else if (isTranslateA == false && isTranslateB == false) {
+      } else {
+        print('eorro');
+      }
+      var _debugTranslateInit =
+          await safeConfigStore.debugShowAllActiveTranslateUid();
+
+      print('[chat_room_page] deBugTranslateList：$_debugTranslateInit');
       print('isTranslateB:$isTranslateB');
       print('widget.friends_uidA:${widget.friends_uidA}');
       await Future.wait([
@@ -138,10 +149,10 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
           preferredSize: const Size.fromHeight(50), // 設定所需的高度
           child: Container(
             decoration: BoxDecoration(
-        border:
-            Border.all(color: Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
-        borderRadius: BorderRadius.circular(5), // 设置边框圆角
-      ),
+              border: Border.all(
+                  color: Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
+              borderRadius: BorderRadius.circular(5), // 设置边框圆角
+            ),
             child: AppBar(
               title: _AppBarTitle(
                 friendsInfo: isChangeWindow ? friendsAInfo : friendsBInfo,
@@ -168,7 +179,8 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
                         minimumSize:
                             MaterialStateProperty.all<Size>(const Size(50, 10)),
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromARGB(255, 250, 143, 21)) // 设置按钮的最小尺寸
+                            const Color.fromARGB(
+                                255, 250, 143, 21)) // 设置按钮的最小尺寸
                         // 其他样式属性
                         ),
                     child: const Icon(
@@ -215,6 +227,10 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
   }
 
   reloadDataInMulti() async {
+        debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
+    isTranslateA = await safeConfigStore.isTranslateActive(widget.friends_uidA);
+    print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslateA');
+    print('[chat_room_page] deBugTranslateList：$debugTranslate');
     if (mounted) {
       setState(() {
         print('chat_room_setState');
@@ -385,7 +401,7 @@ class _MiddleBar extends StatelessWidget {
             ),
           )
         : Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(1.0),
             child: Avatar.sm(
               url: _pfpUrl,
             ),
@@ -857,6 +873,10 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
           .disableTranslation(widget.friendsBInfo['data']['uid']);
     }
 
+    var _debugTranslate =
+        await safeConfigStore.debugShowAllActiveTranslateUid();
+
+    print('[chat_room_page] deBugTranslateList：$_debugTranslate');
     setState(() {
       MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
     });

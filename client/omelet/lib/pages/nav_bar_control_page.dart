@@ -58,71 +58,74 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
         child: ClipRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AppBar(
-              title: ValueListenableBuilder<int>(
-                valueListenable: pageIndex,
-                builder: (context, value, child) {
-                  return Center(
-                    child: Text(title[value]),
-                  );
-                },
-              ),
-              actions: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.settings),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  SettingPage(ourUid: widget.ourUid)),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-              leading: FutureBuilder<bool>(
-                future: _urlValidFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError || !snapshot.data!) {
-                    return IconButton(
-                      icon: const Icon(Icons.account_circle_outlined, size: 55),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  SettingPage(ourUid: widget.ourUid)),
-                        );
-                      },
+            child: Padding(
+              padding: EdgeInsets.only(top:15,right: 15,left: 15),
+              child: AppBar(
+                title: ValueListenableBuilder<int>(
+                  valueListenable: pageIndex,
+                  builder: (context, value, child) {
+                    return Center(
+                      child: Text(title[value]),
                     );
-                  } else {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SettingPage(ourUid: widget.ourUid)),
-                        );
-                      },
-                      child: AvatarUser.small(
-                        url: '$serverUri/pfp/${widget.ourUid}.png',
+                  },
+                ),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.settings),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    SettingPage(ourUid: widget.ourUid)),
+                          );
+                        },
                       ),
-                    ); // 如果是有效的 URL，显示图片
-                  }
-                },
+                    ],
+                  ),
+                ],
+                leading: FutureBuilder<bool>(
+                  future: _urlValidFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError || !snapshot.data!) {
+                      return IconButton(
+                        icon: const Icon(Icons.account_circle_outlined, size: 55),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    SettingPage(ourUid: widget.ourUid)),
+                          );
+                        },
+                      );
+                    } else {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SettingPage(ourUid: widget.ourUid)),
+                          );
+                        },
+                        child: AvatarUser.small(
+                          url: '$serverUri/pfp/${widget.ourUid}.png',
+                        ),
+                      ); // 如果是有效的 URL，显示图片
+                    }
+                  },
+                ),
+                    
+                backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+                elevation: 0,
+                centerTitle: true, // 讓標題居中
               ),
-
-              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-              elevation: 0,
-              centerTitle: true, // 讓標題居中
             ),
           ),
         ),

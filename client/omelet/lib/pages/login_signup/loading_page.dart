@@ -167,7 +167,10 @@ class LoadingPageState extends State<LoadingPage> {
             print('[main.dart] 對方已同意好友邀請👉 $msg');
             print('--------------------------------\n');
             await safeNotifyStore.writeNotification(jsonDecode(msg));
-            //  顯示「對方已同意好友邀請」
+            // TODO: 顯示「對方已同意好友邀請」
+
+            // 更新裝置 id 資訊並儲存到本地
+            await checkDeviceId();
           });
         });
 

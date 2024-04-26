@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/reply_friend_request_api.dart';
 import 'package:omelet/storage/safe_notify_store.dart';
+import 'package:omelet/utils/check_device_id.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key, required this.ourUid}) : super(key: key);
@@ -77,8 +78,7 @@ class NotificationPageState extends State<NotificationPage> {
             } else {
               return const Center(
                 child: Text(
-                  ' It\'s very quiet here'
-                  ,
+                  ' It\'s very quiet here',
                   style: TextStyle(
                     fontSize: 15,
                   ),
@@ -123,6 +123,8 @@ class FriednsRequestItemTitle extends StatelessWidget {
     print('[notification_page.dart]已成為好友');
     await safeNotifyStore.deleteNotification(requestTime);
     print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
+    // 更新裝置 id 資訊並儲存到本地
+    await checkDeviceId();
     onAccept();
   }
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -170,7 +171,14 @@ class LoadingPageState extends State<LoadingPage> {
             // TODO: 顯示「對方已同意好友邀請」
 
             // 更新裝置 id 資訊並儲存到本地
+            var res = await getUserPublicInfoApi(msg['targetUid']);
+            var resB = jsonDecode(res.body);
+            String notifyFriendsInfo = resB['data']['username'];
+            // TODO: 顯示「對方已同意好友邀請」
+            // 更新裝置 id 資訊並儲存到本地
             await checkDeviceId();
+            final notify = NotificationService();
+            await notify.showNotify('Friend confirmation received', '$notifyFriendsInfo accepted your friend request.');
           });
 
           socket.on('friendsDevicesUpdated', (msg) async {

@@ -324,36 +324,6 @@ class _SettingPageState extends State<SettingPage> {
                           ),
                         ),
                       ),
-                      const Divider(),
-                      ListTile(
-                        leading: Icon(Icons.dark_mode),
-                        title: Text(
-                          'Dark theme',
-                          style: textTheme.titleSmall?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        onTap: () {
-                          Provider.of<ThemeProvier>(context, listen: false)
-                              .toggleTheme();
-                        },
-                      ),
-                      const Divider(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: SizedBox(
-                          width: 200,
-                          height: 40,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await _signOut();
-                            },
-                            child: Text('登出'),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),

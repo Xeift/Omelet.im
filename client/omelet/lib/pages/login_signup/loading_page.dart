@@ -172,6 +172,16 @@ class LoadingPageState extends State<LoadingPage> {
             // 更新裝置 id 資訊並儲存到本地
             await checkDeviceId();
           });
+
+          socket.on('friendsDevicesUpdated', (msg) async {
+            print('--------------------------------');
+            print('[main.dart] 更新好友裝置👉 $msg');
+            print('--------------------------------\n');
+            print(msg['friendNewDevicesIds'].runtimeType);
+            // 更新裝置 id 資訊並儲存到本地
+            await safeDeviceIdStore.updateTheirDeviceIds(
+                msg['friendUid'], msg['friendNewDevicesIds']);
+          });
         });
 
         socket.on(

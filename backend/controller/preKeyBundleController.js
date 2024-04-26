@@ -209,6 +209,17 @@ async function getDeviceIdsByUids(uids) {
     return results;
 }
 
+async function getOurDeviceIds(ourUid) {
+    let ourDeviceIds = await PreKeyBundleModel.find(
+        { uid: ourUid },
+        'deviceId'
+    ).lean();
+
+
+    ourDeviceIds = ourDeviceIds.map(device => device.deviceId);
+    return ourDeviceIds;
+}
+
 async function getOurOtherDeviceIds(ourUid, ourDeviceId) {
     let ourDeviceIds = await PreKeyBundleModel.find(
         { uid: ourUid },
@@ -248,5 +259,6 @@ module.exports = {
     findDeviceIdByIpkPub,
     debugResetPreKeyBundle,
     getDeviceIdsByUids,
+    getOurDeviceIds,
     getOurOtherDeviceIds
 };

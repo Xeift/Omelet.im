@@ -10,8 +10,6 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
         let theirUid = req.query.theirUid; // direct in api query
         let theirDeviceId = req.query.theirDeviceId; // direct in api query
         let opkId = JSON.parse(req.query.opkId);
-        
-        
 
         if (!await friendController.isFriend(ourUid, theirUid)) {
             if (ourUid !== theirUid) {

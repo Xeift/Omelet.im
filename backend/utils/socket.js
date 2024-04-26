@@ -49,8 +49,10 @@ function isOnline(uid, deviceId) {
 
 function getOnlineSocketIdsByUid(uid) {
     const onlineSocketIds = [];
+    console.log(`${uid}🧨🧨`);
   
     if (userIdToRoomId[uid]) {
+        console.log('在🧨🧨');
         for (const deviceId in userIdToRoomId[uid]) {
             const socketId = userIdToRoomId[uid][deviceId];
             onlineSocketIds.push(socketId);
@@ -171,6 +173,26 @@ module.exports = function(io) {
                 socket
                     .to(initiatorSocketId)
                     .emit('acceptedFriendRequest', JSON.stringify(msg));
+            }
+        });
+
+        // 監聽 uploadPreKeyBundle.js 的 friendsDevicesUpdated event
+        eventEmitter.on('friendsDevicesUpdatedJs', async(msg) => {
+            console.log('好友已新增裝置😎😎😎:', JSON.stringify(msg));
+            
+            let targetUids = msg['target'];
+
+            for (let targetUid of targetUids) {
+
+                let targetSocketIds = getOnlineSocketIdsByUid(targetUid);
+                console.log(`[socket] 目前上線的 target socketid: ${targetSocketIds}`);
+                // emit event 到對方有上線的 device
+                for (let targetSocketId of targetSocketIds) {
+                    console.log(`emit 成功訊息到 ${targetUid} ${targetSocketId}\n內容：${JSON.stringify(msg)}`);
+                    socket
+                        .to(targetSocketId)
+                        .emit('friendsDevicesUpdated', JSON.stringify({ friendUid: msg['friendUid'], friendNewDevicesIds: msg['friendNewDevicesIds'] }));
+                }
             }
         });
 

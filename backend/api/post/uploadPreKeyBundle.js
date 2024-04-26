@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
+const friendController = require('../../controller/friendController.js');
 const preKeyBundleController = require('../../controller/preKeyBundleController.js');
+const eventEmitter = require('../../utils/eventEmitter.js');
 
 router.post('/', jwt.verifyJWT, async(req, res) => {
     let decodedToken = req.decodedToken;
@@ -16,6 +18,10 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let deviceId = await preKeyBundleController.uploadPreKeyBundle(uid, ipkPub, spkPub, spkSig, opkPub);
 
     try {
+        let friendUidList = await friendController.getFriendsList(uid);
+        let ourDeviceIds = await preKeyBundleController.getOurDeviceIds(uid);
+        eventEmitter.emit('friendsDevicesUpdatedJs', { friendUid: uid, friendNewDevicesIds: ourDeviceIds, target: friendUidList });
+
         res.status(200).json({
             message: '上傳成功',
             data: { deviceId: deviceId },

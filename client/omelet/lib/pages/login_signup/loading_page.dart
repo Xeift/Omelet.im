@@ -59,7 +59,7 @@ class LoadingPageState extends State<LoadingPage> {
       if (permission.isDenied) {
         Permission.notification.request();
       }
-      print(permission);
+      print('[loading_page] 通知權限狀態：$permission');
       String ourUid = await loadCurrentActiveAccount();
 
       String getTranslate =
@@ -124,7 +124,6 @@ class LoadingPageState extends State<LoadingPage> {
             // 更新裝置 id 資訊並儲存到本地
             await checkDeviceId();
 
-            print('[loading_page.dart]getTranslate:$getTranslate');
             if (mounted) {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => NavBarControlPage(ourUid: ourUid)));

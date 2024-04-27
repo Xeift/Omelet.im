@@ -243,7 +243,10 @@ class FriednsRequestItemTitle extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: _sendFriendsAccept,
-                        child: const Text('accept'),
+                        child: const Text('Accept'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 255, 111, 34)
+                        ),
                       ),
                       const SizedBox(
                         width: 5,
@@ -251,6 +254,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
                       ElevatedButton(
                         onPressed: _sendFriendsDismiss,
                         child: const Text('Dismiss'),
+                      
                       )
                     ],
                   ),
@@ -378,7 +382,7 @@ class SystemNotify extends StatelessWidget {
               ),
             );
           } else {
-            return const Center(child: Text('获取用户信息失败，请联系我们的团队'));
+            return const Center(child: Text('Failed to retrieve user information. \n Please contact Omelet team for assistance🧑‍💻👩‍💻'));
           }
         }
       },

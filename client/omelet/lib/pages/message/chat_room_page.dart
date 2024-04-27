@@ -791,7 +791,7 @@ class _ActionBarState extends State<_ActionBar> {
                                   ),
                                 ),
                                 const Text(
-                                  '傳送照片',
+                                  'Photo library',
                                   style: TextStyle(
                                     fontSize: 11,
                                   ),
@@ -814,8 +814,9 @@ class _ActionBarState extends State<_ActionBar> {
                                     });
                                   },
                                 ),
+                                const SizedBox(height: 10,),
                                 const Text(
-                                  '翻譯功能',
+                                  'AI Translation',
                                   style: TextStyle(
                                     fontSize: 10,
                                   ),

@@ -6,8 +6,6 @@ import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/componets/alert/alert_msg.dart';
 
-
-
 class FriendsAddPage extends StatefulWidget {
   const FriendsAddPage({Key? key, required this.ourUid}) : super(key: key);
   final String ourUid;
@@ -41,7 +39,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
         final res = await sendFriendRequestApi(
             _requestFriendsController.text, _requestFriendsType);
         final statusCode = res.statusCode;
-        final String resBody = res.body;
+        final resBody = jsonDecode(res.body);
         print('[friends_add_page] 好友邀請送出型態: $_requestFriendsType');
         print('[friends_add_page] 好友邀請狀態碼: $statusCode');
         if (mounted) {
@@ -50,9 +48,19 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
           } else if (statusCode == 403) {
             loginErrorMsg(context, 'Sender of friend request does not exist');
           } else if (statusCode == 409) {
-            loginErrorMsg(context, 'Already friends, no need to send friend request');
+            if (resBody['message'] == '已為好友，無需傳送好友邀請') {
+              loginErrorMsg(
+                  context, 'Already friends, no need to send friend request.');
+            } else if (resBody['message'] == '您不能傳送好友邀請給自己') {
+              loginErrorMsg(
+                  context, 'You cannot send friend request to yourself.');
+            } else if (resBody['message'] == '已傳送過好友邀請，請等待對方回覆') {
+              loginErrorMsg(context,
+                  'Friend request already sent. Please wait for their response.');
+            }
           } else {
-            loginErrorMsg(context, 'Server encountered an error. \n Please make sure to select a submission type');
+            loginErrorMsg(context,
+                'Server encountered an error. \n Please make sure to select a submission type');
           }
         }
 
@@ -162,10 +170,10 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: _requestFriendsType ==
-                                        'username'
-                                    ? Color.fromARGB(255, 255, 136, 67)
-                                    : Colors.white,
+                                backgroundColor:
+                                    _requestFriendsType == 'username'
+                                        ? Color.fromARGB(255, 255, 136, 67)
+                                        : Colors.white,
                               ),
                               child: Text(
                                 'Username',
@@ -220,10 +228,9 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                         ElevatedButton(
                           onPressed: _sendRequest,
                           style: ElevatedButton.styleFrom(
-                            fixedSize:
-                                Size(150, 50), // 设置按钮的固定尺寸
-                            backgroundColor: Color.fromARGB(
-                                255, 255, 136, 67), // 设置按钮的背景颜色
+                            fixedSize: Size(150, 50), // 设置按钮的固定尺寸
+                            backgroundColor:
+                                Color.fromARGB(255, 255, 136, 67), // 设置按钮的背景颜色
                           ),
                           child: const Text(
                             'Submit',

@@ -22,7 +22,7 @@ class NavBarControlPage extends StatefulWidget {
 class _NavBarControlPageState extends State<NavBarControlPage> {
   final ValueNotifier<int> pageIndex = ValueNotifier(1);
   late List<Widget> pages;
-  final List<String> title = const ['Notification', 'Message', 'Friends'];
+  final List<String> title = const ['Notifications', 'Messages', 'Friends'];
 
   late Future<bool> _urlValidFuture;
 
@@ -59,7 +59,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Padding(
-              padding: EdgeInsets.only(top:15,right: 15,left: 15),
+              padding: EdgeInsets.only(top: 15, right: 15, left: 15),
               child: AppBar(
                 title: ValueListenableBuilder<int>(
                   valueListenable: pageIndex,
@@ -94,7 +94,8 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                       return const CircularProgressIndicator();
                     } else if (snapshot.hasError || !snapshot.data!) {
                       return IconButton(
-                        icon: const Icon(Icons.account_circle_outlined, size: 55),
+                        icon:
+                            const Icon(Icons.account_circle_outlined, size: 55),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -121,7 +122,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
                     }
                   },
                 ),
-                    
+
                 backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
                 elevation: 0,
                 centerTitle: true, // 讓標題居中
@@ -196,7 +197,7 @@ class _BottonNavbarState extends State<BottonNavbar> {
                 onTap: handleItemSelected),
             NavBarItem(
                 index: 1,
-                label: '   Message   ',
+                label: '   Messages   ',
                 icon: Icons.message,
                 isSelected: (selectedIndex == 1),
                 onTap: handleItemSelected),

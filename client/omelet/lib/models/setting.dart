@@ -14,7 +14,7 @@ class Setting {
 
 final List<Setting> settings = [
   Setting(
-    title: 'Developer',
+    title: 'Developers',
     route: 'DeveloperPage',
     icon: Icons.accessible_forward,
   ),

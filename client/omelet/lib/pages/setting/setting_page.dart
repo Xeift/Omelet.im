@@ -200,11 +200,9 @@ class _SettingPageState extends State<SettingPage> {
                           ),
                           const SizedBox(width: 10),
                           Expanded(
-                            child: Text(
-                              'Local Language',
-                              style: textTheme.titleSmall,
-                              overflow: TextOverflow.ellipsis
-                            ),
+                            child: Text('Local Language',
+                                style: textTheme.titleSmall,
+                                overflow: TextOverflow.ellipsis),
                           ),
                           DropdownButton(
                             value: translateLangunage,
@@ -223,72 +221,96 @@ class _SettingPageState extends State<SettingPage> {
                             items: const [
                               DropdownMenuItem<String>(
                                 value: 'Chinese Traditional',
-                                child: Text('繁體中文,Chinese Traditional', overflow: TextOverflow.ellipsis,),
-                                
+                                child: Text(
+                                  '繁體中文,Chinese Traditional',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Chinese Simplified',
-                                child: Text('简体中文,Chinese Simplified', overflow: TextOverflow.ellipsis,),
+                                child: Text(
+                                  '简体中文,Chinese Simplified',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'English',
-                                child: Text('English', overflow: TextOverflow.ellipsis,),
+                                child: Text(
+                                  'English',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Japanese',
-                                child: Text('日本語,Japanese', overflow: TextOverflow.ellipsis,),
+                                child: Text(
+                                  '日本語,Japanese',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'French',
-                                child: Text('français,French', overflow: TextOverflow.ellipsis),
+                                child: Text('français,French',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'German',
-                                child: Text('Deutsch,German', overflow: TextOverflow.ellipsis),
+                                child: Text('Deutsch,German',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Spanish',
-                                child: Text('Español,Spanish', overflow: TextOverflow.ellipsis),
+                                child: Text('Español,Spanish',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Croatia',
-                                child: Text('Hrvatski,Croatia', overflow: TextOverflow.ellipsis),
+                                child: Text('Hrvatski,Croatia',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Italian',
-                                child: Text('Italiano,Italian', overflow: TextOverflow.ellipsis),
+                                child: Text('Italiano,Italian',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Lithuania',
-                                child: Text('lietuvių kalba,Lithuania', overflow: TextOverflow.ellipsis),
+                                child: Text('lietuvių kalba,Lithuania',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Ukrainian',
-                                child: Text('українська мова,Ukrainian', overflow: TextOverflow.ellipsis),
+                                child: Text('українська мова,Ukrainian',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Hungary',
-                                child: Text('Magyar,Hungary', overflow: TextOverflow.ellipsis),
+                                child: Text('Magyar,Hungary',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Korean',
-                                child: Text('한국어,Korean', overflow: TextOverflow.ellipsis),
+                                child: Text('한국어,Korean',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Vietnamese',
-                                child: Text('Việt Ngữ,Vietnamese', overflow: TextOverflow.ellipsis),
+                                child: Text('Việt Ngữ,Vietnamese',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Thai',
-                                child: Text('ภาษาไทย,Thai', overflow: TextOverflow.ellipsis),
+                                child: Text('ภาษาไทย,Thai',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Indonesia',
-                                child: Text('Bahasa Indonesia,Indonesia', overflow: TextOverflow.ellipsis),
+                                child: Text('Bahasa Indonesia,Indonesia',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                               DropdownMenuItem<String>(
                                 value: 'Russian',
-                                child: Text('русский язык,Russian', overflow: TextOverflow.ellipsis),
+                                child: Text('русский язык,Russian',
+                                    overflow: TextOverflow.ellipsis),
                               ),
                             ],
                           )
@@ -298,7 +320,7 @@ class _SettingPageState extends State<SettingPage> {
                       ListTile(
                         leading: Icon(Icons.dark_mode),
                         title: Text(
-                          'Dark theme',
+                          'Dark Theme',
                           style: textTheme.titleSmall?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                           ),
@@ -320,7 +342,7 @@ class _SettingPageState extends State<SettingPage> {
                             onPressed: () async {
                               await _signOut();
                             },
-                            child: Text('登出'),
+                            child: Text('Log Out'),
                           ),
                         ),
                       ),

@@ -94,16 +94,22 @@ class LoadingPageState extends State<LoadingPage> {
           io.OptionBuilder().setTransports(['websocket']).build(),
         );
 
+        // 回傳 JWT，驗證身份
+        socket.emit(
+          'clientReturnJwtToServer',
+          {'token': token, 'ipkPub': ipkPub},
+        );
+
         socket.onConnect((_) async {
           final safeNotifyStore = SafeNotifyStore();
           print(
               '[loading_page] 所有通知內容：${await safeNotifyStore.readAllNotifications()}');
 
-          // 回傳 JWT，驗證身份
-          socket.emit(
-            'clientReturnJwtToServer',
-            {'token': token, 'ipkPub': ipkPub},
-          );
+          // // 回傳 JWT，驗證身份
+          // socket.emit(
+          //   'clientReturnJwtToServer',
+          //   {'token': token, 'ipkPub': ipkPub},
+          // );
 
           socket.on('jwtValid', (data) async {
             print('[loading_page] 已連接至後端');
@@ -132,14 +138,11 @@ class LoadingPageState extends State<LoadingPage> {
 
           socket.on('serverForwardMsgToClient', (msg) async {
             print('--------------------------------');
-            print('[main.dart] 已接收訊息👉 $msg');
+            print('[loading_page] 已接收訊息👉 $msg');
             print('--------------------------------\n');
             final safeMsgStore = SafeMsgStore();
             final (senderName, decryptedMsg) =
                 await safeMsgStore.storeReceivedMsg(msg);
-            print('[loading_page.dart] 新增新接收到的訊息，模擬顯示在聊天室上');
-            print('[loading_page.dart] 接收到資料：$msg');
-            // 接收訊息時：顯示一則新訊息在聊天室
             final notify = NotificationService();
             await notify.showNotify('From $senderName:', decryptedMsg);
             print('reload');

@@ -225,6 +225,11 @@ module.exports = function(io) {
             await dealWithClientMsgs(singleMsg, socket);
         });
 
+        socket.on('logout', async(msg) => {
+            removeUser(socket.id);
+            console.log('out!!!!!!!!!!!!!!!');
+        });
+
         socket.on('disconnect', () => {
             removeUser(socket.id);
             console.log('--------------------------------');

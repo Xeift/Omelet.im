@@ -172,7 +172,7 @@ class LoadingPageState extends State<LoadingPage> {
             print('[main.dart] 對方已同意好友邀請👉 $msg');
             print('--------------------------------\n');
             await safeNotifyStore.writeNotification(jsonDecode(msg));
-
+            print('friends require reply ${jsonDecode(msg)}');
             final res =
                 await getUserPublicInfoApi(jsonDecode(msg)['targetUid']);
             final resJson = jsonDecode(res.body);

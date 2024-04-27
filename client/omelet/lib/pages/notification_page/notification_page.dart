@@ -18,10 +18,10 @@ class NotificationPageState extends State<NotificationPage> {
   final SafeNotifyStore safeNotifyStore = SafeNotifyStore();
   static GlobalKey updateNotiKey = GlobalKey();
 
- Future<void> handleRefresh9() async {
-  await fetchAndDisplayNotifications(); // 重新获取通知数据
-  setState(() {}); // 刷新页面
-}
+  Future<void> handleRefresh9() async {
+    await fetchAndDisplayNotifications(); // 重新获取通知数据
+    setState(() {}); // 刷新页面
+  }
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayNotifications() async {
     List<dynamic> messages = await safeNotifyStore.readAllNotifications();
@@ -36,7 +36,7 @@ class NotificationPageState extends State<NotificationPage> {
     }
   }
 
-    static currenInstanceForNoti() {
+  static currenInstanceForNoti() {
     var state = NotificationPageState.updateNotiKey.currentContext
         ?.findAncestorStateOfType();
 
@@ -84,6 +84,18 @@ class NotificationPageState extends State<NotificationPage> {
                         },
                       );
                     } else if (realMsg[index]['type'] == 'system') {
+                    } else if (realMsg[index]['type'] == 'system_notify') {
+                      final String requestUid = realMsg[index]['initiatorUid'];
+                      final int requestTime = realMsg[index]['timestamp'];
+                      print(
+                          '[notification_page.dart]friends reply${realMsg[index]}');
+                      return SystemNotify(
+                        senderUid: requestUid,
+                        sendTime: requestTime,
+                        onDelete: () {
+                          setState(() {});
+                        },
+                      );
                     } else {
                       print(
                           '[notification_page.dart] Error type for notification ${realMsg[index]['type']}');
@@ -108,7 +120,8 @@ class NotificationPageState extends State<NotificationPage> {
           }),
     );
   }
-  reloadDataNoti() async{
+
+  reloadDataNoti() async {
     setState(() {
       print('[notification_page.dart]setStata');
     });
@@ -217,7 +230,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                               child: Text(
-                                '好友邀請',
+                                'Friend Require',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 14,
@@ -246,6 +259,126 @@ class FriednsRequestItemTitle extends StatelessWidget {
             );
           } else {
             return const Center(child: Text('錯誤資料，請回報Omelet.im團隊'));
+          }
+        }
+      },
+    );
+  }
+}
+
+class SystemNotify extends StatelessWidget {
+  SystemNotify({
+    super.key,
+    required this.senderUid,
+    required this.sendTime,
+    required this.onDelete,
+  });
+
+  final String senderUid;
+  final int sendTime;
+  final VoidCallback onDelete;
+  final SafeNotifyStore safeNotifyStore = SafeNotifyStore();
+
+  Future<Map<String, dynamic>> fetchAndDisplayPublicInfo() async {
+    try {
+      var res = await getUserPublicInfoApi(senderUid);
+      String responseBody = res.body.toString();
+      Map<String, dynamic> resBody = jsonDecode(responseBody);
+      print('[notification_page.dart]抓取用戶資料{$resBody}');
+      return resBody;
+    } catch (e) {
+      print('[notification_page.dart]获取用户信息失败: $e');
+      throw e; // 继续抛出异常以便 FutureBuilder 处理
+    }
+  }
+
+  Future<void> _deleteNotification() async {
+    try {
+      await safeNotifyStore.deleteNotification(sendTime);
+      print('[notification_page.dart]訊息列表已刪除 Time:$sendTime');
+      onDelete();
+    } catch (e) {
+      print('[notification_page.dart]删除通知失败: $e');
+      // 在这里你可以添加适当的错误处理，比如显示一个SnackBar或者弹出对话框
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: fetchAndDisplayPublicInfo(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LinearProgressIndicator(
+            valueColor:
+                AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
+          );
+        } else if (snapshot.hasError) {
+          return Text('错误: ${snapshot.error}');
+        } else {
+          final Map<String, dynamic>? data = snapshot.data;
+          if (data != null) {
+            String username = data['data']['username'].toString();
+            print('[notification.dart] username:$username');
+            return InkWell(
+              child: Container(
+                height: 80,
+                margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey,
+                      width: 0.2,
+                    ),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        // child: Avatar.medium(url: messageData.profilePicture),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              username,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                letterSpacing: 0.2,
+                                wordSpacing: 1.5,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'has accepted your friend request🎉',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      IconButton(onPressed: _deleteNotification,
+                      icon:const Icon(Icons.cancel_presentation),color:const Color.fromARGB(255, 236, 106, 59),iconSize: 35,)
+                      
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return const Center(child: Text('获取用户信息失败，请联系我们的团队'));
           }
         }
       },

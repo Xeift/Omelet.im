@@ -16,10 +16,12 @@ class NotificationPage extends StatefulWidget {
 
 class NotificationPageState extends State<NotificationPage> {
   final SafeNotifyStore safeNotifyStore = SafeNotifyStore();
+  static GlobalKey updateNotiKey = GlobalKey();
 
-  Future<void> handleRefresh9() async {
-    setState(() {});
-  }
+ Future<void> handleRefresh9() async {
+  await fetchAndDisplayNotifications(); // 重新获取通知数据
+  setState(() {}); // 刷新页面
+}
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayNotifications() async {
     List<dynamic> messages = await safeNotifyStore.readAllNotifications();
@@ -32,6 +34,18 @@ class NotificationPageState extends State<NotificationPage> {
       print('[notification_page.dart]沒有通知資料');
       return []; // Adding a default return value, for example, an empty list
     }
+  }
+
+    static currenInstanceForNoti() {
+    var state = NotificationPageState.updateNotiKey.currentContext
+        ?.findAncestorStateOfType();
+
+    if (state == null) {
+      print('1null');
+    } else {
+      print('have data');
+    }
+    return state;
   }
 
   @override
@@ -49,44 +63,55 @@ class NotificationPageState extends State<NotificationPage> {
             }
             List<Map<String, dynamic>> realMsg = snapshot.data ?? [];
             if (snapshot.hasData && realMsg.isNotEmpty) {
-              return ListView.builder(
-                itemCount: realMsg.length,
-                itemBuilder: (context, index) {
-                  if (realMsg[index]['type'] == 'friend_request') {
-                    final String requestUid = realMsg[index]['initiatorUid'];
-                    final int requestTime = realMsg[index]['timestamp'];
-                    print('[notification_page.dart]realMsg:$realMsg');
-                    return FriednsRequestItemTitle(
-                      requestTime: requestTime,
-                      requestData: realMsg,
-                      requestUid: requestUid,
-                      onAccept: () {
-                        setState(() {});
-                      },
-                      onDismiss: () {
-                        setState(() {});
-                      },
-                    );
-                  } else if (realMsg[index]['type'] == 'system') {
-                  } else {
-                    print(
-                        '[notification_page.dart] Error type for notification ${realMsg[index]['type']}');
-                  }
-                  return null;
-                },
+              return RefreshIndicator(
+                onRefresh: handleRefresh9,
+                child: ListView.builder(
+                  itemCount: realMsg.length,
+                  itemBuilder: (context, index) {
+                    if (realMsg[index]['type'] == 'friend_request') {
+                      final String requestUid = realMsg[index]['initiatorUid'];
+                      final int requestTime = realMsg[index]['timestamp'];
+                      print('[notification_page.dart]realMsg:$realMsg');
+                      return FriednsRequestItemTitle(
+                        requestTime: requestTime,
+                        requestData: realMsg,
+                        requestUid: requestUid,
+                        onAccept: () {
+                          setState(() {});
+                        },
+                        onDismiss: () {
+                          setState(() {});
+                        },
+                      );
+                    } else if (realMsg[index]['type'] == 'system') {
+                    } else {
+                      print(
+                          '[notification_page.dart] Error type for notification ${realMsg[index]['type']}');
+                    }
+                    return null;
+                  },
+                ),
               );
             } else {
-              return const Center(
-                child: Text(
-                  ' It\'s very quiet here',
-                  style: TextStyle(
-                    fontSize: 15,
+              return RefreshIndicator(
+                onRefresh: handleRefresh9,
+                child: const Center(
+                  child: Text(
+                    ' It\'s very quiet here',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               );
             }
           }),
     );
+  }
+  reloadDataNoti() async{
+    setState(() {
+      print('[notification_page.dart]setStata');
+    });
   }
 }
 

@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
@@ -12,20 +10,19 @@ import 'package:omelet/api/post/get_translated_sentence_api.dart';
 import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
 import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
-import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/theme/theme_constants.dart';
 
 class MultiChatRoomPage extends StatefulWidget {
   const MultiChatRoomPage(
-      {Key? key,
-      required this.friends_uidA,
-      required this.friends_uidB,
+      {super.key,
+      required this.friendsUidA,
+      required this.friendsUidB,
       required this.ourUid});
 
-  final String friends_uidA;
-  final String friends_uidB;
+  final String friendsUidA;
+  final String friendsUidB;
   final String ourUid;
 
   @override
@@ -56,29 +53,29 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
   void _initializeData() async {
     try {
       isTranslateA =
-          await safeConfigStore.isTranslateActive(widget.friends_uidA);
+          await safeConfigStore.isTranslateActive(widget.friendsUidA);
       print('isTranslateA:$isTranslateA');
       isTranslateB =
-          await safeConfigStore.isTranslateActive(widget.friends_uidB);
+          await safeConfigStore.isTranslateActive(widget.friendsUidB);
 
       if (isTranslateA == true && isTranslateB == false) {
-        await safeConfigStore.enableTranslation(widget.friends_uidB);
+        await safeConfigStore.enableTranslation(widget.friendsUidB);
       } else if (isTranslateA == true && isTranslateB == true) {
       } else if (isTranslateA == false && isTranslateB == true) {
-        await safeConfigStore.disableTranslation(widget.friends_uidB);
+        await safeConfigStore.disableTranslation(widget.friendsUidB);
       } else if (isTranslateA == false && isTranslateB == false) {
       } else {
         print('eorro');
       }
-      var _debugTranslateInit =
+      var debugTranslateInit =
           await safeConfigStore.debugShowAllActiveTranslateUid();
 
-      print('[chat_room_page] deBugTranslateList：$_debugTranslateInit');
+      print('[chat_room_page] deBugTranslateList：$debugTranslateInit');
       print('isTranslateB:$isTranslateB');
-      print('widget.friends_uidA:${widget.friends_uidA}');
+      print('widget.friends_uidA:${widget.friendsUidA}');
       await Future.wait([
-        _fetchUserInfo(widget.friends_uidA),
-        _fetchUserInfo(widget.friends_uidB),
+        _fetchUserInfo(widget.friendsUidA),
+        _fetchUserInfo(widget.friendsUidB),
       ]).then((List<Map<String, dynamic>> results) {
         setState(() {
           friendsAInfo = results[0];
@@ -150,7 +147,7 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                  color: Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
+                  color:const Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
               borderRadius: BorderRadius.circular(5), // 设置边框圆角
             ),
             child: AppBar(
@@ -228,7 +225,7 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
 
   reloadDataInMulti() async {
         debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
-    isTranslateA = await safeConfigStore.isTranslateActive(widget.friends_uidA);
+    isTranslateA = await safeConfigStore.isTranslateActive(widget.friendsUidA);
     print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslateA');
     print('[chat_room_page] deBugTranslateList：$debugTranslate');
     if (mounted) {
@@ -376,6 +373,7 @@ class _ReadMessageList extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class _MiddleBar extends StatelessWidget {
   _MiddleBar({Key? key, required this.friendsInfo}) : super(key: key);
 
@@ -411,7 +409,7 @@ class _MiddleBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border:
-            Border.all(color: Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
+            Border.all(color:const Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
         borderRadius: BorderRadius.circular(5), // 设置边框圆角
       ),
       padding: const EdgeInsets.all(8), // 设置内边距
@@ -873,10 +871,10 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
           .disableTranslation(widget.friendsBInfo['data']['uid']);
     }
 
-    var _debugTranslate =
+    var debugTranslate =
         await safeConfigStore.debugShowAllActiveTranslateUid();
 
-    print('[chat_room_page] deBugTranslateList：$_debugTranslate');
+    print('[chat_room_page] deBugTranslateList：$debugTranslate');
     setState(() {
       MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
     });

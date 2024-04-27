@@ -168,17 +168,18 @@ class LoadingPageState extends State<LoadingPage> {
             print('[main.dart] 對方已同意好友邀請👉 $msg');
             print('--------------------------------\n');
             await safeNotifyStore.writeNotification(jsonDecode(msg));
+
+            final res =
+                await getUserPublicInfoApi(jsonDecode(msg)['targetUid']);
+            final resJson = jsonDecode(res.body);
+            String notifyFriendsInfo = resJson['data']['username'];
             // TODO: 顯示「對方已同意好友邀請」
 
             // 更新裝置 id 資訊並儲存到本地
-            var res = await getUserPublicInfoApi(msg['targetUid']);
-            var resB = jsonDecode(res.body);
-            String notifyFriendsInfo = resB['data']['username'];
-            // TODO: 顯示「對方已同意好友邀請」
-            // 更新裝置 id 資訊並儲存到本地
             await checkDeviceId();
             final notify = NotificationService();
-            await notify.showNotify('Friend confirmation received', '$notifyFriendsInfo accepted your friend request.');
+            await notify.showNotify('Friend confirmation received',
+                '$notifyFriendsInfo accepted your friend request.');
           });
 
           socket.on('friendsDevicesUpdated', (msg) async {

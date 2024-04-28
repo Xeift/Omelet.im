@@ -12,7 +12,6 @@ import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/pages/login_signup/sign_up_page.dart';
 import 'package:omelet/api/post/login_api.dart';
 import 'package:omelet/signal_protocol/generate_and_store_key.dart';
-import 'package:omelet/utils/check_device_id.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart'
     show LoadingPageState;
 
@@ -97,6 +96,7 @@ class LoginPageState extends State<LoginPage> {
     return TextFormField(
       obscureText: _isObscure,
       controller: passwordTextFieldController,
+      style: TextStyle(color: Theme.of(context).colorScheme.secondary,),
       decoration: InputDecoration(
         // 隱藏密碼按鈕
         labelText: 'Password',
@@ -128,8 +128,10 @@ class LoginPageState extends State<LoginPage> {
   Widget buildEmailTextField() {
     // Email輸入框
     return TextFormField(
+       style: TextStyle(color: Theme.of(context).colorScheme.secondary,),
       decoration: InputDecoration(
         labelText: 'Email Address',
+        
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Color.fromARGB(255, 113, 113, 113)),
         ),

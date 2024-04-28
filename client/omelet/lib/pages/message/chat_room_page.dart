@@ -11,11 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
 import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
-import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 // import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/button/v2_on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
-import 'package:omelet/componets/message/glow_bar.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/theme/theme_constants.dart';
@@ -793,7 +791,7 @@ class _ActionBarState extends State<_ActionBar> {
                                   ),
                                 ),
                                 const Text(
-                                  '傳送照片',
+                                  'Photo library',
                                   style: TextStyle(
                                     fontSize: 11,
                                   ),
@@ -816,8 +814,9 @@ class _ActionBarState extends State<_ActionBar> {
                                     });
                                   },
                                 ),
+                                const SizedBox(height: 10,),
                                 const Text(
-                                  '翻譯功能',
+                                  'AI Translation',
                                   style: TextStyle(
                                     fontSize: 10,
                                   ),

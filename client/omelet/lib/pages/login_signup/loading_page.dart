@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
+import 'package:omelet/pages/notification_page/notification_page.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:permission_handler/permission_handler.dart';
@@ -162,6 +163,7 @@ class LoadingPageState extends State<LoadingPage> {
             // 儲存好友邀請
             await safeNotifyStore.writeNotification(jsonDecode(msg));
             print('[loading_page] 完成');
+            NotificationPageState.currenInstanceForNoti()?.reloadDataNoti();
             // 顯示好友邀請
           });
 
@@ -170,7 +172,7 @@ class LoadingPageState extends State<LoadingPage> {
             print('[main.dart] 對方已同意好友邀請👉 $msg');
             print('--------------------------------\n');
             await safeNotifyStore.writeNotification(jsonDecode(msg));
-
+            print('friends require reply ${jsonDecode(msg)}');
             final res =
                 await getUserPublicInfoApi(jsonDecode(msg)['targetUid']);
             final resJson = jsonDecode(res.body);

@@ -258,9 +258,9 @@ class _FriendsListState extends State<FriendsList> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     MultiChatRoomPage(
-                                                      friends_uidA:
+                                                      friendsUidA:
                                                           selectMultiFrends[0],
-                                                      friends_uidB:
+                                                      friendsUidB:
                                                           selectMultiFrends[1],
                                                       ourUid: widget.ourUid,
                                                     )));

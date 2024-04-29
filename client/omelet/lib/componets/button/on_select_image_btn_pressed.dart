@@ -19,7 +19,7 @@ Future<void> onSelectImageBtnPressed(String theirUid) async {
   // 選擇圖片
   final picker = ImagePicker();
   var image =
-      await picker.pickImage(source: ImageSource.gallery, imageQuality: 60);
+      await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
   print('[on_select_imgage_btn_prssed.dart] 選完照片');
 
   if (image != null) {

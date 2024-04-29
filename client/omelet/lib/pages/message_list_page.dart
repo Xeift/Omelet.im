@@ -69,7 +69,8 @@ class _MessagePageState extends State<MessagePage> {
 
     try {
       final response = await http.head(Uri.parse(url));
-      return response.statusCode == 200; // Consider URL valid if status code is 200
+      return response.statusCode ==
+          200; // Consider URL valid if status code is 200
     } catch (e) {
       return false; // Consider URL invalid for any exceptions
     }
@@ -207,10 +208,10 @@ class MessageItemTitle extends StatelessWidget {
                   friendsUid: messageData.remoteUid,
                 )));
       },
-      onLongPress:(){
+      onLongPress: () {
         //  Navigator.of(context).push(MaterialPageRoute(
         //     builder: (context) =>const MultiScreenPage(
-            
+
         //         )));
       },
       child: Container(
@@ -232,7 +233,9 @@ class MessageItemTitle extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Avatar.medium(url: messageData.profilePicture),
               ),
-              const SizedBox(width: 10,),
+              const SizedBox(
+                width: 10,
+              ),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -266,10 +269,11 @@ class MessageItemTitle extends StatelessWidget {
               SizedBox(
                 width: 80, // Adjust the width according to your preference
                 child: Text(
-                  DateFormat('MM/dd HH:mm').format(messageData.messageDate), // Format the date
-                  style:const TextStyle(
+                  DateFormat('MM/dd HH:mm')
+                      .format(messageData.messageDate), // Format the date
+                  style: const TextStyle(
                     fontSize: 12,
-                    color:  Color.fromARGB(255, 131, 130, 130),
+                    color: Color.fromARGB(255, 131, 130, 130),
                   ),
                 ),
               ),

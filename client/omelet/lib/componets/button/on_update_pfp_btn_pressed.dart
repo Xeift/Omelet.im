@@ -6,14 +6,9 @@ import 'package:omelet/api/post/update_pfp_api.dart';
 Future<void> onUpdatePfpBtnPressed() async {
   final picker = ImagePicker();
   var image =
-      await picker.pickImage(source: ImageSource.gallery, imageQuality: 60);
+      await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
 
   if (image != null) {
-    final res = await updatePfpApi(image.path);
-    if (res.statusCode == 200) {
-      print('[on_update_pfp_btn_pressed.dart] update pfp successfully');
-    }
-  } else {
-    print('No image selected.');
+    await updatePfpApi(image.path);
   }
 }

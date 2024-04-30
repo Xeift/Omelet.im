@@ -4,17 +4,14 @@
 ## 使用方法
 
 ### 後端伺服器
-
-1. 確定終端機路徑為 C:\Users\你的使用者名稱\Desktop（我是放在桌面）\Omelet.im>
-2. cd backend
-3. npm i
-4. nodemon server.js
-5. 用 Postman 測試 http://localhost:3000 （後端）
+1. npm i
+2. node server.js 或 node aws_server.js
 
 ### Flutter 客戶端
 1. flutter pub get
 
 ## 資料夾介紹
+主要分為 backend 與 client 資料夾，backend 為後端伺服器，client 為 flutter 客戶端 App。
 
 ```
 Omelet-Social-Platform

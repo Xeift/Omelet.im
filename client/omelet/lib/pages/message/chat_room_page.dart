@@ -154,6 +154,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
       setState(() {
         print('chat_room_setState');
         ReadMessageList;
+        AIMessageTitle;
       });
     }
   }
@@ -268,7 +269,7 @@ class ReadMessageList extends StatelessWidget {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
             final bool isOwnMessage =
-                realmessage['sender'].toString() == ourUid; //訊息數否為寄送者
+                realmessage['sender'].toString() != ourUid; //訊息數否為寄送者
             final isImage = realmessage['type'] != 'text';
             var imageDataInt = isImage //判斷訊息是否為圖片
                 ? (realmessage['content'] as String)
@@ -376,8 +377,13 @@ class MessageTitle extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 20),
-                    child: Text(message),
+                        horizontal: 20.0, vertical: 20),
+                    child: Text(
+                      message,
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
@@ -584,7 +590,6 @@ class ImgOwnTitle extends StatelessWidget {
 }
 
 class AIMessageTitle extends StatefulWidget {
-  //翻譯訊息框
   const AIMessageTitle({
     Key? key,
     required this.message,
@@ -596,49 +601,17 @@ class AIMessageTitle extends StatefulWidget {
   final String messageDate;
   final String ourUid;
 
+  static const _borderRadius = 26.0;
+
   @override
-  AIMessageTitleState createState() => AIMessageTitleState();
+  State<AIMessageTitle> createState() => _AIMessageTitleState();
 }
 
-class AIMessageTitleState extends State<AIMessageTitle> {
-  static const _borderRadius = 26.0;
-  late String translatedMsg = '';
-  SafeConfigStore safeConfigStore = SafeConfigStore();
-  bool _isMounted = false; // 新增一個變量來追蹤State對象是否仍然在樹中
-
-  @override
-  void initState() {
-    super.initState();
-    // 在初始化時檢查State對象是否仍然在widget樹中
-    _isMounted = true; // 將_isMounted設置為true，表示State對象已經被創建並且仍然在樹中
-    if (_isMounted) {
-      // 如果仍然在樹中，執行setState()
-      getTranslateMsg();
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _isMounted = false; // 在dispose()方法中將_isMounted設置為false，表示State對象已被dispose
-    //防止載入未完成退出，導致crash
-  }
-
-  Future<void> getTranslateMsg() async {
-    String translateLanguage =
-        await safeConfigStore.getTranslationDestLang(widget.ourUid);
-    print('[chat_room_page.dart]使用語言:$translateLanguage');
-    var res = await getTranslatedSentenceApi(widget.message, translateLanguage);
-    if (_isMounted) {
-      setState(() {
-        var resBody = jsonDecode(res.body);
-        translatedMsg = resBody['data'];
-      });
-    }
-  }
-
+class _AIMessageTitleState extends State<AIMessageTitle> {
   @override
   Widget build(BuildContext context) {
+    final safeConfigStore = SafeConfigStore();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
       child: Align(
@@ -651,39 +624,71 @@ class AIMessageTitleState extends State<AIMessageTitle> {
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 198, 198, 198),
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(_borderRadius),
-                  topRight: Radius.circular(_borderRadius),
-                  bottomRight: Radius.circular(_borderRadius),
+                  topLeft: Radius.circular(AIMessageTitle._borderRadius),
+                  topRight: Radius.circular(AIMessageTitle._borderRadius),
+                  bottomRight: Radius.circular(AIMessageTitle._borderRadius),
                 ),
               ),
               child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 10),
-                    child: Text(widget.message),
+                        horizontal: 20.0, vertical: 20),
+                    child: Text(
+                      widget.message,
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ),
                   ),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 10),
-                    child: Text(translatedMsg),
+                  const Divider(height: 1,),
+                  FutureBuilder<String>(
+                    future: _getTranslatedMessage(
+                        widget.message, widget.ourUid, safeConfigStore),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox.shrink(); // 不顯示任何內容
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final translatedMsg = snapshot.data!;
+                        return Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: 10, right: 10, left: 10),
+                          child: Text(translatedMsg),
+                        );
+                      }
+                    },
                   ),
                 ],
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: Text(widget.messageDate,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  )),
+              child: Text(
+                widget.messageDate,
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<String> _getTranslatedMessage(
+    String message,
+    String ourUid,
+    SafeConfigStore safeConfigStore,
+  ) async {
+    String translateLanguage = await safeConfigStore.getTranslationDestLang(ourUid);
+    print('[chat_room_page.dart]使用語言:$translateLanguage');
+    var res = await getTranslatedSentenceApi(message, translateLanguage);
+    var resBody = jsonDecode(res.body);
+    return resBody['data'];
   }
 }
 

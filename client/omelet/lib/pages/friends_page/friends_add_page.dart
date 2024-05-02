@@ -93,7 +93,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // 如果异步操作尚未完成，显示加载中的状态
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.connectionState == ConnectionState.done) {
               // 如果异步操作已完成，获取到名字后构建 UI
               String ourName = snapshot.data ?? ''; // 获取到的名字
@@ -170,10 +170,10 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    _requestFriendsType == 'username'
-                                        ? Color.fromARGB(255, 255, 136, 67)
-                                        : Colors.white,
+                                backgroundColor: _requestFriendsType ==
+                                        'username'
+                                    ? const Color.fromARGB(255, 255, 136, 67)
+                                    : Colors.white,
                               ),
                               child: Text(
                                 'Username',
@@ -228,9 +228,9 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                         ElevatedButton(
                           onPressed: _sendRequest,
                           style: ElevatedButton.styleFrom(
-                            fixedSize: Size(150, 50), // 设置按钮的固定尺寸
-                            backgroundColor:
-                                Color.fromARGB(255, 255, 136, 67), // 设置按钮的背景颜色
+                            fixedSize: const Size(150, 50), // 设置按钮的固定尺寸
+                            backgroundColor: const Color.fromARGB(
+                                255, 255, 136, 67), // 设置按钮的背景颜色
                           ),
                           child: const Text(
                             'Submit',

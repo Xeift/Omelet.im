@@ -20,7 +20,7 @@ Future<void> checkOpkStatus() async {
   if (outOfOpk) {
     final newOpks = generatePreKeys(lastBatchMaxOpkId + 1, 100);
 
-    final res = await updateOpkApi(jsonEncode({
+    await updateOpkApi(jsonEncode({
       for (var newOpk in newOpks)
         newOpk.id.toString():
             jsonEncode(newOpk.getKeyPair().publicKey.serialize())

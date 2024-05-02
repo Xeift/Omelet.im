@@ -243,10 +243,10 @@ class FriednsRequestItemTitle extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: _sendFriendsAccept,
-                        child: const Text('Accept'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 111, 34)
-                        ),
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 111, 34)),
+                        child: const Text('Accept'),
                       ),
                       const SizedBox(
                         width: 5,
@@ -254,7 +254,6 @@ class FriednsRequestItemTitle extends StatelessWidget {
                       ElevatedButton(
                         onPressed: _sendFriendsDismiss,
                         child: const Text('Dismiss'),
-                      
                       )
                     ],
                   ),
@@ -292,7 +291,7 @@ class SystemNotify extends StatelessWidget {
       return resBody;
     } catch (e) {
       print('[notification_page.dart]获取用户信息失败: $e');
-      throw e; // 继续抛出异常以便 FutureBuilder 处理
+      rethrow; // 继续抛出异常以便 FutureBuilder 处理
     }
   }
 
@@ -373,16 +372,21 @@ class SystemNotify extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 5),
-                      IconButton(onPressed: _deleteNotification,
-                      icon:const Icon(Icons.cancel_presentation),color:const Color.fromARGB(255, 236, 106, 59),iconSize: 35,)
-                      
+                      IconButton(
+                        onPressed: _deleteNotification,
+                        icon: const Icon(Icons.cancel_presentation),
+                        color: const Color.fromARGB(255, 236, 106, 59),
+                        iconSize: 35,
+                      )
                     ],
                   ),
                 ),
               ),
             );
           } else {
-            return const Center(child: Text('Failed to retrieve user information. \n Please contact Omelet team for assistance🧑‍💻👩‍💻'));
+            return const Center(
+                child: Text(
+                    'Failed to retrieve user information. \n Please contact Omelet team for assistance🧑‍💻👩‍💻'));
           }
         }
       },

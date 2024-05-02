@@ -59,7 +59,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Padding(
-              padding: EdgeInsets.only(top: 15, right: 15, left: 15),
+              padding: const EdgeInsets.only(top: 15, right: 15, left: 15),
               child: AppBar(
                 title: ValueListenableBuilder<int>(
                   valueListenable: pageIndex,

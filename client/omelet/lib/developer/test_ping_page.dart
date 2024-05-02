@@ -1,5 +1,4 @@
 import 'package:dart_ping/dart_ping.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TestPingPage extends StatefulWidget {
@@ -68,7 +67,7 @@ class _TestPingPageState extends State<TestPingPage> {
     return Center(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('PingTest'),
+          title: const Text('PingTest'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

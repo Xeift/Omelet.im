@@ -200,7 +200,7 @@ class _FriendsListState extends State<FriendsList> {
                                         CheckboxListTile(
                                           title: Text(
                                             friendSelect['data']['username'],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w600),
                                           ),
@@ -268,7 +268,7 @@ class _FriendsListState extends State<FriendsList> {
                                         loginErrorMsg(context, '請選擇兩位好友');
                                       }
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Submit',
                                       style: TextStyle(
                                         fontSize: 15, // 设置按钮文字的大小

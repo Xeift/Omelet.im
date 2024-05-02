@@ -178,10 +178,11 @@ class LoadingPageState extends State<LoadingPage> {
                 await getUserPublicInfoApi(jsonDecode(msg)['targetUid']);
             final resJson = jsonDecode(res.body);
             String notifyFriendsInfo = resJson['data']['username'];
-            // TODO: 顯示「對方已同意好友邀請」
 
             // 更新裝置 id 資訊並儲存到本地
             await checkDeviceId();
+
+            // 顯示「對方已同意好友邀請」
             final notify = NotificationService();
             await notify.showNotify('Friend confirmation received',
                 '$notifyFriendsInfo accepted your friend request.');

@@ -2,7 +2,8 @@
 
 import 'package:http/http.dart' as http;
 
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/storage/safe_account_store.dart';
+import 'package:omelet/utils/server_uri.dart';
 
 Future<http.Response> getFriendRequestApi() async {
   final token = await loadJwt();

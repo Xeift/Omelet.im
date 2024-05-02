@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 import 'package:omelet/signal_protocol/safe_session_store.dart';
 import 'package:omelet/signal_protocol/v2_encrypt_pre_key_signal_message.dart';
 import 'package:omelet/signal_protocol/v2_encrypt_signal_message.dart';

@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:libsignal_protocol_dart/src/signal_protocol_address.dart';
 import 'package:libsignal_protocol_dart/src/state/session_record.dart';
 import 'package:libsignal_protocol_dart/src/state/session_store.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 class SafeSessionStore implements SessionStore {
   final storage = const FlutterSecureStorage();

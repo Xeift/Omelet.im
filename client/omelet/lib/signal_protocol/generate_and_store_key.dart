@@ -11,7 +11,7 @@ import 'package:omelet/signal_protocol/safe_identity_store.dart';
 import 'package:omelet/api/post/upload_pre_key_bundle_api.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
 
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 Future<bool> isPreKeyBundleExists() async {
   const storage = FlutterSecureStorage();

@@ -7,7 +7,7 @@ import 'package:omelet/componets/message/avatar_user.dart';
 import 'package:omelet/pages/friends_page/friends_list_page.dart';
 import 'package:omelet/pages/notification_page/notification_page.dart';
 import 'package:omelet/pages/setting/setting_page.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/pages/message_list_page.dart';
 // import '../pages/notification_page.dart';

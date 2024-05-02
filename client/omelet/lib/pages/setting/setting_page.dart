@@ -8,10 +8,11 @@ import 'package:omelet/componets/button/on_update_pfp_btn_pressed.dart';
 import 'package:omelet/models/setting.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart';
 import 'package:omelet/storage/safe_config_store.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/componets/setting/avatar_card.dart';
 import 'package:omelet/componets/setting/setting_title.dart';
 import 'package:omelet/theme/theme_provider.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key, required this.ourUid}) : super(key: key);

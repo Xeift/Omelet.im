@@ -13,7 +13,7 @@ import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/pages/login_signup/login_page.dart';
 import 'package:omelet/utils/current_active_account.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';
 import 'package:omelet/utils/check_unread_msg.dart';
@@ -24,6 +24,7 @@ import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
 import 'package:omelet/notify/notify.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 
 late io.Socket socket;

@@ -2,7 +2,8 @@
 
 import 'package:http/http.dart' as http;
 
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 Future<http.Response> v2GetAvailableOpkIndexApi(
     String remoteUid, String deviceId) async {

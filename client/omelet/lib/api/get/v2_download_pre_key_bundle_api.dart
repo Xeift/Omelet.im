@@ -5,8 +5,9 @@ import 'dart:math';
 
 import 'package:http/http.dart' as http;
 
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/api/get/v2_get_available_opk_index_api.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 Future<http.Response> v2DownloadPreKeyBundleApi(
     String theirUid, String theirDeviceId) async {

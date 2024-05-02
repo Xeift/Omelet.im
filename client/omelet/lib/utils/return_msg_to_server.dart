@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_print
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 Future<Map<String, dynamic>> returnMsgToServer(deviceId, singleMsgInfo,
     receiverUid, ourUid, theirUid, msgType, msgContent) async {

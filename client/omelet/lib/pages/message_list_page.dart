@@ -7,7 +7,7 @@ import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_util_store.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/models/message_data.dart';
 import 'package:omelet/utils/helpers.dart';
 

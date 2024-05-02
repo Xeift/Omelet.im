@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
 
 Future<http.Response> signUpSendMailApi(
     String email, String username, String password) async {

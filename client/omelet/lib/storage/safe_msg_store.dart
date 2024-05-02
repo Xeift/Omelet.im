@@ -6,8 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:omelet/api/get/get_user_public_info_api.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/signal_protocol/decrypt_msg.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 class SafeMsgStore {
   final storage = const FlutterSecureStorage();

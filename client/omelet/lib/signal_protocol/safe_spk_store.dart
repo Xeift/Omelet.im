@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:libsignal_protocol_dart/src/invalid_key_id_exception.dart';
 import 'package:libsignal_protocol_dart/src/state/signed_pre_key_record.dart';
 import 'package:libsignal_protocol_dart/src/state/signed_pre_key_store.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 class SafeSpkStore implements SignedPreKeyStore {
   final storage = const FlutterSecureStorage();

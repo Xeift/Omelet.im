@@ -9,7 +9,7 @@ import 'package:libsignal_protocol_dart/src/identity_key.dart';
 import 'package:libsignal_protocol_dart/src/identity_key_pair.dart';
 import 'package:libsignal_protocol_dart/src/signal_protocol_address.dart';
 import 'package:libsignal_protocol_dart/src/state/identity_key_store.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 class SafeIdentityKeyStore implements IdentityKeyStore {
   static const storage = FlutterSecureStorage();

@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/avatar_user.dart';
-import 'package:omelet/utils/load_local_info.dart';
+import 'package:omelet/utils/server_uri.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 
 class AvatarCard extends StatefulWidget {
   const AvatarCard({
@@ -46,13 +47,14 @@ class _AvatarCardState extends State<AvatarCard> {
                   return Row(
                     children: [
                       isUrlValid // 判斷是否為有效的 URL
-                        ?AvatarUser.large(
-                            url:'$serverUri/pfp/${widget.ourUid}.png') // 如果是有效的 URL，顯示圖片
-                          
-                        :const Icon(
-                          Icons.account_circle_outlined,
-                          size: 55,
-                        ),
+                          ? AvatarUser.large(
+                              url:
+                                  '$serverUri/pfp/${widget.ourUid}.png') // 如果是有效的 URL，顯示圖片
+
+                          : const Icon(
+                              Icons.account_circle_outlined,
+                              size: 55,
+                            ),
                       const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

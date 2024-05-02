@@ -230,7 +230,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                               child: Text(
-                                'Friend Require',
+                                'Friend Request',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 14,

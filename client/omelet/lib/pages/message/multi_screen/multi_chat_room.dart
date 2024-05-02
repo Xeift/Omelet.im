@@ -7,7 +7,7 @@ import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
-import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
+import 'package:omelet/componets/button/v2_on_select_image_btn_pressed.dart';
 import 'package:omelet/componets/button/v2_on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/storage/safe_config_store.dart';
@@ -908,7 +908,7 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
                                   onPressed: () {
                                     print(
                                         '[chat_room_page.dart]uid:${widget.friendsAInfo['data']['uid']}');
-                                    onSelectImageBtnPressed(
+                                    v2OnSelectImageBtnPressed(
                                         widget.friendsAInfo['data']['uid']);
                                     Navigator.of(context).pop();
                                   },

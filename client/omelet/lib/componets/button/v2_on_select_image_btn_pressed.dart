@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:omelet/api/post/upload_img_api.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
-import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/utils/generate_random_filename.dart';
 import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/storage/safe_msg_store.dart';

@@ -104,8 +104,8 @@ Future<void> v2EncryptMsg(
           await encryptSingleMsg(ourUid, ourDeviceId);
 
       var filename = generateRandomFileName(); // 產生隨機檔名
-      var res = await uploadImgApi(isPreKeySignalMessage, ourUid, ourUid,
-          ourDeviceId, cipherText, filename);
+      await uploadImgApi(isPreKeySignalMessage, ourUid, ourUid, ourDeviceId,
+          cipherText, filename);
     }
 
     for (var theirDeviceId in theirDeviceIds) {
@@ -113,7 +113,7 @@ Future<void> v2EncryptMsg(
           await encryptSingleMsg(theirUid, theirDeviceId);
 
       var filename = generateRandomFileName(); // 產生隨機檔名
-      var res = await uploadImgApi(isPreKeySignalMessage, theirUid, theirUid,
+      await uploadImgApi(isPreKeySignalMessage, theirUid, theirUid,
           theirDeviceId, cipherText, filename);
     }
     // if (ourEncryptedImg != null) {

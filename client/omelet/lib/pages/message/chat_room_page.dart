@@ -182,7 +182,6 @@ class AppBarTitle extends StatelessWidget {
             ),
           );
 
-    print('[chat_room_page] 該好友資訊：$friendsInfo');
     return Row(
       children: [
         avatarWidget,

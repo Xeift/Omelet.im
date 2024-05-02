@@ -398,7 +398,6 @@ class _MiddleBar extends StatelessWidget {
             ),
           );
 
-    print('[chat_room_page] 該好友資訊：$friendsInfo');
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -466,7 +465,6 @@ class _AppBarTitle extends StatelessWidget {
             ),
           );
 
-    print('[chat_room_page] 該好友資訊：$friendsInfo');
     return Row(
       children: [
         avatarWidget,

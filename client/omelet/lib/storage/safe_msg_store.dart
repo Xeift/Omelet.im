@@ -11,7 +11,7 @@ import 'package:omelet/signal_protocol/decrypt_msg.dart';
 
 class SafeMsgStore {
   final storage = const FlutterSecureStorage();
-  final ourUid = loadUid();
+  final ourUid = loadCurrentActiveAccount();
 
   Future<String> uidToKey(String remoteUid, int index) async {
     final ourUid = await loadCurrentActiveAccount();

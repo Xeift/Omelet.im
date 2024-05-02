@@ -25,14 +25,6 @@ Future<void> deletCurrentActiveAccount() async {
   await storage.delete(key: 'currentActiveAccount');
 }
 
-Future<String> loadUid() async {
-  const storage = FlutterSecureStorage();
-  final ourCurrentUid = await loadCurrentActiveAccount();
-  final uid = (await storage.read(key: '${ourCurrentUid}_uid')).toString();
-
-  return uid;
-}
-
 Future<String> loadUserName() async {
   const storage = FlutterSecureStorage();
   final ourCurrentUid = await loadCurrentActiveAccount();

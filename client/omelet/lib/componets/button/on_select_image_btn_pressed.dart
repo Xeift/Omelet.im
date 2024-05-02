@@ -53,11 +53,11 @@ Future<void> onSelectImageBtnPressed(String theirUid) async {
         // 將加密過的圖片上傳至伺服器
         print('test');
         var filename = generateRandomFileName(); // 產生隨機檔名
-        var res = await uploadImgApi(deviceId, ourEncryptedImg[deviceId],
-            ourUid, ourUid, theirUid, imgBytes, filename);
+        // var res = await uploadImgApi(deviceId, ourEncryptedImg[deviceId],
+        //     ourUid, ourUid, theirUid, imgBytes, filename);
 
-        print(
-            '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+        // print(
+        //     '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
       }
     } else {
       print(
@@ -68,11 +68,11 @@ Future<void> onSelectImageBtnPressed(String theirUid) async {
       for (var deviceId in theirEncryptedImg.keys) {
         // 將加密過的圖片上傳至伺服器
         var filename = generateRandomFileName(); // 產生隨機檔名
-        var res = await uploadImgApi(deviceId, theirEncryptedImg[deviceId],
-            theirUid, ourUid, theirUid, imgBytes, filename);
+        // var res = await uploadImgApi(deviceId, theirEncryptedImg[deviceId],
+        //     theirUid, ourUid, theirUid, imgBytes, filename);
 
-        print(
-            '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+        // print(
+        //     '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
       }
     }
     ChatRoomPageState.currenInstance()?.reloadData();

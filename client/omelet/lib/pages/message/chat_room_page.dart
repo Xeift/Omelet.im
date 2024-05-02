@@ -10,9 +10,11 @@ import 'package:intl/intl.dart';
 
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
-import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
+// import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
 // import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
+import 'package:omelet/componets/button/v2_on_select_image_btn_pressed.dart';
 import 'package:omelet/componets/button/v2_on_send_msg_btn_pressed.dart';
+import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
@@ -45,7 +47,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
 
   void _initializeData() async {
     isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
-    print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslate');
     _fetchUserInfo().then((userInfo) {
       if (mounted) {
         setState(() {
@@ -76,11 +77,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     var state = ChatRoomPageState.updateChatKey.currentContext
         ?.findAncestorStateOfType();
 
-    if (state == null) {
-      print('1null');
-    } else {
-      print('have data');
-    }
     return state;
   }
 
@@ -148,8 +144,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   reloadData() async {
     debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
     isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
-    print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslate');
-    print('[chat_room_page] deBugTranslateList：$debugTranslate');
     if (mounted) {
       setState(() {
         print('chat_room_setState');
@@ -279,7 +273,6 @@ class ReadMessageList extends StatelessWidget {
                     .toList()
                 : null;
 
-            print('[chat_room_page] 圖像資料：$imageDataInt');
             final imageData =
                 isImage ? Uint8List.fromList(imageDataInt!) : null;
 
@@ -641,7 +634,9 @@ class _AIMessageTitleState extends State<AIMessageTitle> {
                       ),
                     ),
                   ),
-                  const Divider(height: 1,),
+                  const Divider(
+                    height: 1,
+                  ),
                   FutureBuilder<String>(
                     future: _getTranslatedMessage(
                         widget.message, widget.ourUid, safeConfigStore),
@@ -653,8 +648,8 @@ class _AIMessageTitleState extends State<AIMessageTitle> {
                       } else {
                         final translatedMsg = snapshot.data!;
                         return Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 10, right: 10, left: 10),
+                          padding: const EdgeInsets.only(
+                              bottom: 10, right: 10, left: 10),
                           child: Text(translatedMsg),
                         );
                       }
@@ -684,7 +679,8 @@ class _AIMessageTitleState extends State<AIMessageTitle> {
     String ourUid,
     SafeConfigStore safeConfigStore,
   ) async {
-    String translateLanguage = await safeConfigStore.getTranslationDestLang(ourUid);
+    String translateLanguage =
+        await safeConfigStore.getTranslationDestLang(ourUid);
     print('[chat_room_page.dart]使用語言:$translateLanguage');
     var res = await getTranslatedSentenceApi(message, translateLanguage);
     var resBody = jsonDecode(res.body);
@@ -775,9 +771,9 @@ class _ActionBarState extends State<_ActionBar> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    print(
-                                        '[chat_room_page.dart]uid:${widget.friendsInfo['data']['uid']}');
-                                    onSelectImageBtnPressed(
+                                    // onSelectImageBtnPressed(
+                                    //     widget.friendsInfo['data']['uid']);
+                                    v2OnSelectImageBtnPressed(
                                         widget.friendsInfo['data']['uid']);
                                     Navigator.of(context).pop();
                                   },
@@ -819,7 +815,9 @@ class _ActionBarState extends State<_ActionBar> {
                                     });
                                   },
                                 ),
-                                const SizedBox(height: 10,),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 const Text(
                                   'AI Translation',
                                   style: TextStyle(

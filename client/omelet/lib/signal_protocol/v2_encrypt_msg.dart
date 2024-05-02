@@ -10,6 +10,8 @@ import 'package:omelet/signal_protocol/v2_encrypt_pre_key_signal_message.dart';
 import 'package:omelet/signal_protocol/v2_encrypt_signal_message.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
+import 'package:omelet/utils/generate_random_filename.dart';
+import 'package:omelet/api/post/upload_img_api.dart';
 
 Future<void> v2EncryptMsg(
     String theirUid, String plainText, String msgType) async {
@@ -64,40 +66,82 @@ Future<void> v2EncryptMsg(
     }
   }
 
-  for (var ourDeviceId in ourDeviceIds) {
-    final (isPreKeySignalMessage, cipherText) =
-        await encryptSingleMsg(ourUid, ourDeviceId);
-    socket.emit(
-        'clientSendMsgToServer',
-        jsonEncode({
-          'isPreKeySignalMessage': isPreKeySignalMessage,
-          'type': msgType,
-          'senderIpkPub': await loadIpkPub(),
-          'sender': ourUid,
-          'receiver': ourUid,
-          'receiverDeviceId': ourDeviceId,
-          'content': cipherText
-        }));
-  }
+  if (msgType == 'text') {
+    for (var ourDeviceId in ourDeviceIds) {
+      final (isPreKeySignalMessage, cipherText) =
+          await encryptSingleMsg(ourUid, ourDeviceId);
+      socket.emit(
+          'clientSendMsgToServer',
+          jsonEncode({
+            'isPreKeySignalMessage': isPreKeySignalMessage,
+            'type': msgType,
+            'senderIpkPub': await loadIpkPub(),
+            'sender': ourUid,
+            'receiver': ourUid,
+            'receiverDeviceId': ourDeviceId,
+            'content': cipherText
+          }));
+    }
 
-  for (var theirDeviceId in theirDeviceIds) {
-    final (isPreKeySignalMessage, cipherText) =
-        await encryptSingleMsg(theirUid, theirDeviceId);
-    socket.emit(
-        'clientSendMsgToServer',
-        jsonEncode({
-          'isPreKeySignalMessage': isPreKeySignalMessage,
-          'type': msgType,
-          'senderIpkPub': await loadIpkPub(),
-          'sender': ourUid,
-          'receiver': theirUid,
-          'receiverDeviceId': theirDeviceId,
-          'content': cipherText
-        }));
-  }
+    for (var theirDeviceId in theirDeviceIds) {
+      final (isPreKeySignalMessage, cipherText) =
+          await encryptSingleMsg(theirUid, theirDeviceId);
+      socket.emit(
+          'clientSendMsgToServer',
+          jsonEncode({
+            'isPreKeySignalMessage': isPreKeySignalMessage,
+            'type': msgType,
+            'senderIpkPub': await loadIpkPub(),
+            'sender': ourUid,
+            'receiver': theirUid,
+            'receiverDeviceId': theirDeviceId,
+            'content': cipherText
+          }));
+    }
+  } else if (msgType == 'image') {
+    for (var ourDeviceId in ourDeviceIds) {
+      final (isPreKeySignalMessage, cipherText) =
+          await encryptSingleMsg(ourUid, ourDeviceId);
 
-  print('😊😊😊😊😊');
-  print(ourDeviceIds);
-  print(theirDeviceIds);
-  print('😊😊😊😊😊');
+      var filename = generateRandomFileName(); // 產生隨機檔名
+      var res = await uploadImgApi(isPreKeySignalMessage, ourUid, ourUid,
+          ourDeviceId, cipherText, filename);
+    }
+
+    for (var theirDeviceId in theirDeviceIds) {
+      final (isPreKeySignalMessage, cipherText) =
+          await encryptSingleMsg(theirUid, theirDeviceId);
+
+      var filename = generateRandomFileName(); // 產生隨機檔名
+      var res = await uploadImgApi(isPreKeySignalMessage, theirUid, theirUid,
+          theirDeviceId, cipherText, filename);
+    }
+    // if (ourEncryptedImg != null) {
+    //   for (var deviceId in ourEncryptedImg.keys) {
+    //     // 將加密過的圖片上傳至伺服器
+    //     print('test');
+    //     var filename = generateRandomFileName(); // 產生隨機檔名
+    //     var res = await uploadImgApi(deviceId, ourEncryptedImg[deviceId],
+    //         ourUid, ourUid, theirUid, imgBytes, filename);
+
+    //     print(
+    //         '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+    //   }
+    // } else {
+    //   print(
+    //       '[on_select_imgage_btn_prssed.dart]ourEncryptedImg空了:$ourEncryptedImg');
+    // }
+
+    // if (theirEncryptedImg != null) {
+    //   for (var deviceId in theirEncryptedImg.keys) {
+    //     // 將加密過的圖片上傳至伺服器
+    //     var filename = generateRandomFileName(); // 產生隨機檔名
+    //     var res = await uploadImgApi(deviceId, theirEncryptedImg[deviceId],
+    //         theirUid, ourUid, theirUid, imgBytes, filename);
+
+    //     print(
+    //         '[on_send_msg_btn_pressed.dart] ${await res.stream.bytesToString()}');
+    //   }
+    // }
+  }
 }

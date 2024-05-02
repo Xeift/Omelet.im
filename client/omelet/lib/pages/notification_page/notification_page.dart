@@ -40,11 +40,6 @@ class NotificationPageState extends State<NotificationPage> {
     var state = NotificationPageState.updateNotiKey.currentContext
         ?.findAncestorStateOfType();
 
-    if (state == null) {
-      print('1null');
-    } else {
-      print('have data');
-    }
     return state;
   }
 

@@ -11,7 +11,6 @@ import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 
 Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
-
   print('[on_send_msg_btn_pressed 1] 訊息原始內容: $msgContent');
   final ourUid = await loadCurrentActiveAccount();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
@@ -59,5 +58,5 @@ Future<void> onSendMsgBtnPressed(String theirUid, String msgContent) async {
 // } else {
 //   print('Failed to get MultiChatRoomPageState instance.');
 // }
- MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
+  MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
 }

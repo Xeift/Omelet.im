@@ -36,8 +36,6 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     let receiver = req.body.receiver;
     let receiverDeviceId = req.body.receiverDeviceId;
     let filename = req.body.content;
-    let spkId = JSON.parse(req.body.spkId);
-    let opkId = JSON.parse(req.body.opkId);
 
     console.log(`ourUid：${ourUid}`);
     
@@ -47,8 +45,6 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
     console.log(`receiver：${receiver}`);
     console.log(`receiverDeviceId：${receiverDeviceId}`);
     console.log(`filename：${filename}`);
-    console.log(`spkId：${spkId}`);
-    console.log(`opkId：${opkId}`);
 
     eventEmitter.emit('newImgUploadedJs', {
         isPreKeySignalMessage: isPreKeySignalMessage,
@@ -58,8 +54,6 @@ router.post('/', jwt.verifyJWT, upload.single('imgData'), async(req, res) => {
         receiver: receiver,
         receiverDeviceId: receiverDeviceId,
         content: `${receiver}_${receiverDeviceId}_${filename}.png`,
-        spkId: spkId,
-        opkId: opkId
     });
 
     console.log('[uploadImg] 圖片已上傳');

@@ -114,11 +114,6 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
     var state = MultiChatRoomPageState.updateMultiChatKey.currentContext
         ?.findAncestorStateOfType();
 
-    if (state == null) {
-      print('1null');
-    } else {
-      print('have data');
-    }
     return state;
   }
 
@@ -147,7 +142,7 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                  color:const Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
+                  color: const Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
               borderRadius: BorderRadius.circular(5), // 设置边框圆角
             ),
             child: AppBar(
@@ -224,9 +219,8 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
   }
 
   reloadDataInMulti() async {
-        debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
+    debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
     isTranslateA = await safeConfigStore.isTranslateActive(widget.friendsUidA);
-    print('[chat_roon_page] 該使用者翻譯功能狀態：$isTranslateA');
     print('[chat_room_page] deBugTranslateList：$debugTranslate');
     if (mounted) {
       setState(() {
@@ -306,7 +300,6 @@ class _ReadMessageList extends StatelessWidget {
                     .toList()
                 : null;
 
-            print('[chat_room_page] 圖像資料：$imageDataInt');
             final imageData =
                 isImage ? Uint8List.fromList(imageDataInt!) : null;
 
@@ -408,8 +401,8 @@ class _MiddleBar extends StatelessWidget {
     print('[chat_room_page] 該好友資訊：$friendsInfo');
     return Container(
       decoration: BoxDecoration(
-        border:
-            Border.all(color:const Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
+        border: Border.all(
+            color: const Color.fromARGB(255, 253, 131, 30)), // 设置边框颜色和宽度
         borderRadius: BorderRadius.circular(5), // 设置边框圆角
       ),
       padding: const EdgeInsets.all(8), // 设置内边距
@@ -764,7 +757,9 @@ class _AIMessageTitleState extends State<_AIMessageTitle> {
                       ),
                     ),
                   ),
-                  const Divider(height: 1,),
+                  const Divider(
+                    height: 1,
+                  ),
                   FutureBuilder<String>(
                     future: _getTranslatedMessage(
                         widget.message, widget.ourUid, safeConfigStore),
@@ -776,8 +771,8 @@ class _AIMessageTitleState extends State<_AIMessageTitle> {
                       } else {
                         final translatedMsg = snapshot.data!;
                         return Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 10, right: 10, left: 10),
+                          padding: const EdgeInsets.only(
+                              bottom: 10, right: 10, left: 10),
                           child: Text(translatedMsg),
                         );
                       }
@@ -807,7 +802,8 @@ class _AIMessageTitleState extends State<_AIMessageTitle> {
     String ourUid,
     SafeConfigStore safeConfigStore,
   ) async {
-    String translateLanguage = await safeConfigStore.getTranslationDestLang(ourUid);
+    String translateLanguage =
+        await safeConfigStore.getTranslationDestLang(ourUid);
     print('[chat_room_page.dart]使用語言:$translateLanguage');
     var res = await getTranslatedSentenceApi(message, translateLanguage);
     var resBody = jsonDecode(res.body);
@@ -875,8 +871,7 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
           .disableTranslation(widget.friendsBInfo['data']['uid']);
     }
 
-    var debugTranslate =
-        await safeConfigStore.debugShowAllActiveTranslateUid();
+    var debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
 
     print('[chat_room_page] deBugTranslateList：$debugTranslate');
     setState(() {

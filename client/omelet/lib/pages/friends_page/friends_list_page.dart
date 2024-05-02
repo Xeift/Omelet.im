@@ -84,7 +84,7 @@ class FriendsList extends StatefulWidget {
   final List<Map<String, dynamic>> friends;
   final String ourUid;
 
-  FriendsList({Key? key, required this.friends, required this.ourUid})
+  const FriendsList({Key? key, required this.friends, required this.ourUid})
       : super(key: key);
 
   @override

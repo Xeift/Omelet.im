@@ -12,7 +12,6 @@ import 'package:omelet/utils/load_local_info.dart';
 import 'package:omelet/componets/setting/avatar_card.dart';
 import 'package:omelet/componets/setting/setting_title.dart';
 import 'package:omelet/theme/theme_provider.dart';
-import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key, required this.ourUid}) : super(key: key);

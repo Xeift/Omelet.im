@@ -24,6 +24,7 @@ import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
 import 'package:omelet/notify/notify.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
+import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 
 late io.Socket socket;
 

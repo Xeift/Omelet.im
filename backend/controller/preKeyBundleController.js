@@ -237,8 +237,8 @@ async function debugResetPreKeyBundle() {
     console.log('preKeyBundleController.js--------------------------------');
     await PreKeyBundleModel.deleteMany({});
     console.log('所有PreKeyBundleModel的document已被刪除');
-    await VerifiedUserModel.updateMany({}, { $unset: { lastDeviceId: 1 } });
-    console.log('VerifiedUserModel中所有document的deviceId欄位已被刪除');
+    await VerifiedUserModel.updateMany({}, { $unset: { lastDeviceId: 1, friends: 1 } });
+    console.log('VerifiedUserModel中所有document的deviceId和friendds欄位已被刪除');
     await MsgModel.deleteMany({});
     console.log('所有UnreadMsg的document已被刪除');
     console.log('preKeyBundleController.js--------------------------------');

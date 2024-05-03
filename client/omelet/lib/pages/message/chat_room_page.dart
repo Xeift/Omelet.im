@@ -259,7 +259,7 @@ class ReadMessageList extends StatelessWidget {
             final realmessage = realMsg[index];
             int timestamp = int.parse(realmessage['timestamp']);
             final bool isOwnMessage =
-                realmessage['sender'].toString() != ourUid; //訊息數否為寄送者
+                realmessage['sender'].toString() == ourUid; //訊息數否為寄送者
             final isImage = realmessage['type'] != 'text';
             var imageDataInt = isImage //判斷訊息是否為圖片
                 ? (realmessage['content'] as String)

@@ -17,6 +17,7 @@ Future<void> v2EncryptMsg(
     String theirUid, String plainText, String msgType) async {
   final ourUid = await loadCurrentActiveAccount();
   final safeDeviceIdStore = SafeDeviceIdStore();
+  final senderDeviceId = await safeDeviceIdStore.getLocalDeviceId();
 
   final ourDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(ourUid);
   final theirDeviceIds = await safeDeviceIdStore.getTheirDeviceIds(theirUid);
@@ -75,7 +76,7 @@ Future<void> v2EncryptMsg(
           jsonEncode({
             'isPreKeySignalMessage': isPreKeySignalMessage,
             'type': msgType,
-            'senderIpkPub': await loadIpkPub(),
+            'senderDeviceId': senderDeviceId,
             'sender': ourUid,
             'receiver': ourUid,
             'receiverDeviceId': ourDeviceId,
@@ -91,7 +92,7 @@ Future<void> v2EncryptMsg(
           jsonEncode({
             'isPreKeySignalMessage': isPreKeySignalMessage,
             'type': msgType,
-            'senderIpkPub': await loadIpkPub(),
+            'senderDeviceId': senderDeviceId,
             'sender': ourUid,
             'receiver': theirUid,
             'receiverDeviceId': theirDeviceId,

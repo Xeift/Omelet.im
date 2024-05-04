@@ -4,10 +4,13 @@ import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/storage/safe_account_store.dart';
+import 'package:omelet/storage/safe_device_id_store.dart';
 
 Future<http.StreamedResponse> uploadImgApi(isPreKeySignalMessage, sender,
     receiver, receiverDeviceId, content, filename) async {
   final token = await loadJwt();
+  final safeDeviceIdStore = SafeDeviceIdStore();
+  final senderDeviceId = await safeDeviceIdStore.getLocalDeviceId();
   http.MultipartRequest request;
 
   print('--------------------------------');
@@ -20,7 +23,7 @@ Future<http.StreamedResponse> uploadImgApi(isPreKeySignalMessage, sender,
         ..fields['isPreKeySignalMessage'] = isPreKeySignalMessage.toString()
         ..fields['type'] = 'image'
         ..fields['sender'] = sender
-        ..fields['senderIpkPub'] = await loadIpkPub()
+        ..fields['senderDeviceId'] = senderDeviceId
         ..fields['receiver'] = receiver
         ..fields['receiverDeviceId'] = receiverDeviceId
         ..fields['content'] = filename;

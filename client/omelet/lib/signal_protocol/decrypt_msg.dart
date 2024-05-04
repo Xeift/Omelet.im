@@ -7,7 +7,7 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import 'package:omelet/signal_protocol/safe_signal_protocol_store.dart';
 
-Future<String> decryptMsg(bool isPreKeySignalMessage, int remoteUid,
+Future<String> decryptMsg(bool isPreKeySignalMessage, String remoteUid,
     int remoteDeviceId, String ciphertext) async {
   final signalProtocolStore = SafeSignalProtocolStore();
   final remoteAddress = SignalProtocolAddress(

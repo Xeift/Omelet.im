@@ -69,7 +69,8 @@ async function dealWithClientMsgs(msg, socket) {
     let userDevice = findUserDeviceBySocketId(socket.id);
     if (userDevice) {
         let senderUid = userDevice['uid'];
-        let senderDeviceId = await preKeyBundleController.findDeviceIdByIpkPub(senderUid, msg['senderIpkPub']);
+        let senderDeviceId = msg['senderDeviceId'];
+        console.log(`發送者裝置id為 ${senderDeviceId}`);
         let senderUsername = (await authController.getUserPublicInfoByUid(senderUid))['username'];
         let receiverUid = msg['receiver'];
         let receiverDeviceId = msg['receiverDeviceId'];
@@ -84,11 +85,6 @@ async function dealWithClientMsgs(msg, socket) {
 
         if (msg['isPreKeySignalMessage']) { // 第一次發送訊息
             console.log('[socket.js] 此訊息為 PreKeySignalMessage');
-            // // 刪除傳送訊息時使用的 OPK
-            // if (msg['opkId']) {
-            //     console.log(`[socket.js] 刪除opkid👉 ${msg['opkId']}`);
-            //     await preKeyBundleController.deleteOpkPub(receiverUid, msg['opkId']);
-            // }
         }
         else { // 第二次以後發送訊息
             console.log('[socket.js] 此訊息為 SignalMessage');

@@ -12,7 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/pages/login_signup/login_page.dart';
-import 'package:omelet/utils/current_active_account.dart';
+import 'package:omelet/storage/safe_account_store.dart';
 import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/utils/check_opk_status.dart';
 import 'package:omelet/utils/check_spk_status.dart';

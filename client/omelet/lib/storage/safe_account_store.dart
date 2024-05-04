@@ -16,6 +16,11 @@ Future<String> loadCurrentActiveAccount() async {
   return uid;
 }
 
+Future<bool> isCurrentActiveAccountExsist() async {
+  const storage = FlutterSecureStorage();
+  return (await storage.read(key: 'currentActiveAccount')) != null;
+}
+
 Future<void> deletCurrentActiveAccount() async {
   const storage = FlutterSecureStorage();
   await storage.delete(key: 'currentActiveAccount');

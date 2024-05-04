@@ -5,7 +5,7 @@
 
 ### 後端伺服器
 1. npm i
-2. node server.js 或 node aws_server.js
+2. node server.js（本地測試） 或 node aws_server.js（AWS 部署）
 
 ### Flutter 客戶端
 1. flutter pub get

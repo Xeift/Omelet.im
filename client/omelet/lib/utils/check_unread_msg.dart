@@ -9,7 +9,7 @@ Future<void> checkUnreadMsg() async {
   // 取得未讀訊息
   final getUnreadMsgAPIRes = await getUnreadMsgApi();
   final List<dynamic> unreadMsgs = jsonDecode(getUnreadMsgAPIRes.body)['data'];
-  print('[check_unread_msg] 未讀訊息：$unreadMsgs');
+  print('[check_unread_msg] 未讀訊息：${jsonDecode(getUnreadMsgAPIRes.body)}');
 
   // 儲存未讀訊息
   if (unreadMsgs.isNotEmpty) {

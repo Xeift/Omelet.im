@@ -7,8 +7,7 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let decodedToken = req.decodedToken;
     let ourUid = decodedToken._uid;
 
-    let ipkPub = req.body.ipkPub;
-    let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(ourUid, ipkPub);
+    let deviceId = req.body.deviceId;
     let spkPub = JSON.parse(req.body.spkPub);
     let spkSig = JSON.parse(req.body.spkSig);
 

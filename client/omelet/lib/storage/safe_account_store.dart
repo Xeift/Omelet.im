@@ -42,13 +42,3 @@ Future<String> loadJwt() async {
 
   return token;
 }
-
-Future<(String, String)> loadJwtAndIpkPub() async {
-  const storage = FlutterSecureStorage();
-  final ourCurrentUid = await loadCurrentActiveAccount();
-  final token = (await storage.read(key: '${ourCurrentUid}_token')).toString();
-  final ipkStore = SafeIdentityKeyStore();
-  final ipkPub = jsonEncode(
-      (await ipkStore.getIdentityKeyPair()).getPublicKey().serialize());
-  return (token, ipkPub);
-}

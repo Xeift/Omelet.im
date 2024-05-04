@@ -194,7 +194,7 @@ module.exports = function(io) {
 
         socket.on('clientReturnJwtToServer', async(data) => {
             let token = data.token;
-            let ipkPub = data.ipkPub;
+            let deviceId = data.deviceId;
 
             let decodedToken = await jwt.verifyJWTSocket(token);
             if (decodedToken === null) {
@@ -203,8 +203,6 @@ module.exports = function(io) {
             }
             else {
                 let uid = decodedToken['_uid'];
-                let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(uid, ipkPub);
-
                 addUser(uid, deviceId, socket.id);
                 console.log(`[socket.js] uid: ${uid}, deviceId: ${deviceId}, socket.id: ${socket.id}`);
                 socket.emit('jwtValid');

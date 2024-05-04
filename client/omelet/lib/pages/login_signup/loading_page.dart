@@ -26,6 +26,7 @@ import 'package:omelet/notify/notify.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
 import 'package:omelet/storage/safe_account_store.dart';
 import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
+import 'package:omelet/storage/safe_device_id_store.dart';
 
 late io.Socket socket;
 
@@ -83,14 +84,13 @@ class LoadingPageState extends State<LoadingPage> {
       // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
       // print('[loading_page.dart] ${jsonDecode(res.body)}');
 
-      final safeDeviceIdStore = SafeDeviceIdStore();
-      print(await safeDeviceIdStore.getLocalDeviceId());
-
       // JWT 存在，直接連線到 Socket.io Server
       if (await isCurrentActiveAccountExsist()) {
         print('[loading_page] currentActiveAccount 存在✅');
 
-        final (token, ipkPub) = await loadJwtAndIpkPub();
+        final token = await loadJwt();
+        final safeDeviceIdStore = SafeDeviceIdStore();
+        final deviceId = await safeDeviceIdStore.getLocalDeviceId();
 
         socket = io.io(
           serverUri,
@@ -100,7 +100,7 @@ class LoadingPageState extends State<LoadingPage> {
         // 回傳 JWT，驗證身份
         socket.emit(
           'clientReturnJwtToServer',
-          {'token': token, 'ipkPub': ipkPub},
+          {'token': token, 'deviceId': deviceId},
         );
 
         socket.onConnect((_) async {

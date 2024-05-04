@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
-
 import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/componets/alert/alert_msg.dart';
 
@@ -16,14 +15,17 @@ class FriendsAddPage extends StatefulWidget {
 
 class _FriendsAddPageState extends State<FriendsAddPage> {
   TextEditingController _requestFriendsController = TextEditingController();
-  String _requestFriendsType = ''; // Store the type of friend request
+  String _requestFriendsType = 'username'; // 預設按鈕為'username'
   String ourName = '';
 
   @override
   void initState() {
     super.initState();
     _requestFriendsController = TextEditingController();
+    // 將_requestFriendsType設置為 'username'
+    _requestFriendsType = 'username';
   }
+
 
   Future<String> getOurName() async {
     var res = await getUserPublicInfoApi(widget.ourUid);
@@ -40,8 +42,8 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
             _requestFriendsController.text, _requestFriendsType);
         final statusCode = res.statusCode;
         final resBody = jsonDecode(res.body);
-        print('[friends_add_page] 好友邀請送出型態: $_requestFriendsType');
-        print('[friends_add_page] 好友邀請狀態碼: $statusCode');
+        // print('[friends_add_page] 好友邀請送出型態: $_requestFriendsType');
+        // print('[friends_add_page] 好友邀請狀態碼: $statusCode');
         if (mounted) {
           if (statusCode == 200) {
             loginErrorMsg(context, 'Friend request sent successfully.');
@@ -78,7 +80,6 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('[friends_add_page]ourUid${widget.ourUid}');
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -89,14 +90,14 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
       ),
       body: Center(
         child: FutureBuilder<String>(
-          future: getOurName(), // 等待获取名字的异步操作
+          future: getOurName(), // 等待獲取名字
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // 如果异步操作尚未完成，显示加载中的状态
+              // 若異步未完成，則需等待
               return const CircularProgressIndicator();
             } else if (snapshot.connectionState == ConnectionState.done) {
-              // 如果异步操作已完成，获取到名字后构建 UI
-              String ourName = snapshot.data ?? ''; // 获取到的名字
+              
+              String ourName = snapshot.data ?? ''; // get the name
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -125,7 +126,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                     ),
                     child: Center(
                       child: Text(
-                        'Your Username: $ourName', // 使用获取到的名字
+                        'Your Username: $ourName',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
@@ -228,9 +229,9 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                         ElevatedButton(
                           onPressed: _sendRequest,
                           style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(150, 50), // 设置按钮的固定尺寸
+                            fixedSize: const Size(150, 50), 
                             backgroundColor: const Color.fromARGB(
-                                255, 255, 136, 67), // 设置按钮的背景颜色
+                                255, 255, 136, 67),
                           ),
                           child: const Text(
                             'Submit',
@@ -244,7 +245,6 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                 ],
               );
             } else {
-              // 如果发生错误，显示错误信息
               return Text('Error: ${snapshot.error}');
             }
           },

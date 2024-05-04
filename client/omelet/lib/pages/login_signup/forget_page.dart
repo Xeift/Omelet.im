@@ -96,8 +96,6 @@ class ForgetPageState extends State<ForgetPage> {
             final statusCode = res.statusCode;
             final resBody = jsonDecode(res.body);
 
-            print('[forget_page.dart] API 回應內容：$resBody');
-
             if (!context.mounted) {
               return;
             }

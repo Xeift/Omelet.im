@@ -65,14 +65,13 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
         await safeConfigStore.disableTranslation(widget.friendsUidB);
       } else if (isTranslateA == false && isTranslateB == false) {
       } else {
-        print('eorro');
+        print('Error');
       }
       var debugTranslateInit =
           await safeConfigStore.debugShowAllActiveTranslateUid();
 
       print('[chat_room_page] deBugTranslateList：$debugTranslateInit');
       print('isTranslateB:$isTranslateB');
-      print('widget.friends_uidA:${widget.friendsUidA}');
       await Future.wait([
         _fetchUserInfo(widget.friendsUidA),
         _fetchUserInfo(widget.friendsUidB),
@@ -96,13 +95,9 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
 
   Future<Map<String, dynamic>> _fetchUserInfo(String userUid) async {
     try {
-      print('_fetchUserInfo uid :$userUid');
       final response = await getUserPublicInfoApi(userUid);
       Map<String, dynamic> responseData = jsonDecode(response.body);
-      print('responseData:$responseData');
       responseData['data']['uid'] = userUid;
-      print('responseDatadatauid:${responseData['data']['uid']}');
-      print('responseData:$responseData');
       return responseData;
     } catch (e) {
       print('get Error Msg: $e');
@@ -134,7 +129,6 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
         ),
       );
     } else {
-      print('friendsAInfo:$friendsAInfo');
       return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: PreferredSize(
@@ -158,22 +152,19 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
                   }),
               actions: [
                 Padding(
-                  padding: const EdgeInsets.all(6.0), // 设置按钮的外围宽度
+                  padding: const EdgeInsets.all(6.0), 
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
                         isChangeWindow = !isChangeWindow;
                       });
-                      print(
-                          '[multi_chat_room.dart]isChangeWindow:$isChangeWindow');
                     },
                     style: ButtonStyle(
                         minimumSize:
                             MaterialStateProperty.all<Size>(const Size(50, 10)),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color.fromARGB(
-                                255, 250, 143, 21)) // 设置按钮的最小尺寸
-                        // 其他样式属性
+                                255, 250, 143, 21)) 
                         ),
                     child: const Icon(
                       Icons.change_circle,
@@ -221,10 +212,8 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
   reloadDataInMulti() async {
     debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
     isTranslateA = await safeConfigStore.isTranslateActive(widget.friendsUidA);
-    print('[chat_room_page] deBugTranslateList：$debugTranslate');
     if (mounted) {
       setState(() {
-        print('chat_room_setState');
         _ReadMessageList;
       });
     }
@@ -271,7 +260,7 @@ class _ReadMessageList extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(
-            child: Text('無訊息'),
+            child: Text('No Message'),
           );
         }
         List<Map<String, dynamic>> realMsg = snapshot.data!;
@@ -554,7 +543,6 @@ class _MessageOwnTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[chat_room_page]訊息框:$message');
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Align(
@@ -925,7 +913,7 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
                                   ),
                                 ),
                                 const Text(
-                                  '傳送照片',
+                                  'Photo library',
                                   style: TextStyle(
                                     fontSize: 11,
                                   ),
@@ -949,7 +937,7 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
                                   },
                                 ),
                                 const Text(
-                                  '翻譯功能',
+                                  'AI Translation',
                                   style: TextStyle(
                                     fontSize: 10,
                                   ),

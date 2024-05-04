@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/componets/message/avatar_user.dart';
 import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/storage/safe_account_store.dart';

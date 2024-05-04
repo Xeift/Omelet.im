@@ -143,8 +143,6 @@ class SignUpPageState extends State<SignUpPage> {
                 _signUpEamil, _signUpName, _singUpPassword);
             final statusCode = res.statusCode;
 
-            print('[sign_up_page.dart] ${res.body}');
-
             if (!context.mounted) {
               return;
             }

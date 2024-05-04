@@ -217,9 +217,11 @@ class LoadingPageState extends State<LoadingPage> {
             return;
           }
 
-          final (token, ipkPub) = await loadJwtAndIpkPub();
-          socket.emit(
-              'clientReturnJwtToServer', {'token': token, 'ipkPub': ipkPub});
+          final token = await loadJwt();
+          final safeDeviceIdStore = SafeDeviceIdStore();
+          final deviceId = await safeDeviceIdStore.getLocalDeviceId();
+          socket.emit('clientReturnJwtToServer',
+              {'token': token, 'deviceId': deviceId});
         });
       } else {
         print(

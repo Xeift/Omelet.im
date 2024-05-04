@@ -234,8 +234,6 @@ class LoginPageState extends State<LoginPage> {
 
                 await LoadingPageState().initSocket();
 
-                print('登入後的uid:{$ourUid}');
-
                 print(
                     '[login_page] 目前啟用帳號為：${await loadCurrentActiveAccount()}');
 

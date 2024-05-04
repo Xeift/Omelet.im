@@ -6,7 +6,7 @@ void loginErrorMsg(BuildContext context, String message) => showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('提示'),
+          title: const Text('Reminds'),
           backgroundColor: const Color.fromARGB(255, 253, 168, 98),
           content: Text(message),
           actions: <Widget>[

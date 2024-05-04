@@ -1,8 +1,6 @@
-import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:omelet/signal_protocol/safe_identity_store.dart';
 
 Future<void> changeCurrentActiveAccount(String newUid) async {
   const storage = FlutterSecureStorage();

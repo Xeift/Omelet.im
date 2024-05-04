@@ -143,7 +143,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     isTranslate = await safeConfigStore.isTranslateActive(friendsUid);
     if (mounted) {
       setState(() {
-        print('chat_room_setState');
         ReadMessageList;
         AIMessageTitle;
       });
@@ -240,7 +239,7 @@ class ReadMessageList extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(
-            child: Text('無訊息'),
+            child: Text('No Message'),
           );
         }
         List<Map<String, dynamic>> realMsg = snapshot.data!;
@@ -400,7 +399,6 @@ class MessageOwnTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[chat_room_page]訊息框:$message');
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Align(
@@ -677,7 +675,6 @@ class _AIMessageTitleState extends State<AIMessageTitle> {
   ) async {
     String translateLanguage =
         await safeConfigStore.getTranslationDestLang(ourUid);
-    print('[chat_room_page.dart]使用語言:$translateLanguage');
     var res = await getTranslatedSentenceApi(message, translateLanguage);
     var resBody = jsonDecode(res.body);
     return resBody['data'];

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
 import 'package:omelet/pages/notification_page/notification_page.dart';
@@ -23,9 +22,6 @@ import 'package:omelet/storage/safe_notify_store.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
 import 'package:omelet/notify/notify.dart';
-import 'package:omelet/storage/safe_device_id_store.dart';
-import 'package:omelet/storage/safe_account_store.dart';
-import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
 
 late io.Socket socket;
@@ -148,12 +144,9 @@ class LoadingPageState extends State<LoadingPage> {
                 await safeMsgStore.storeReceivedMsg(msg);
             final notify = NotificationService();
             await notify.showNotify('From $senderName:', decryptedMsg);
-            print('reload');
             ChatRoomPageState.currenInstance()?.reloadData();
-            print('1');
             MultiChatRoomPageState.currenInstanceInMultiChat()
                 ?.reloadDataInMulti();
-            print('2');
           });
 
           socket.on('receivedFriendRequest', (msg) async {
@@ -164,7 +157,6 @@ class LoadingPageState extends State<LoadingPage> {
 
             // 儲存好友邀請
             await safeNotifyStore.writeNotification(jsonDecode(msg));
-            print('[loading_page] 完成');
             NotificationPageState.currenInstanceForNoti()?.reloadDataNoti();
             // 顯示好友邀請
           });
@@ -251,6 +243,6 @@ class LoadingPageState extends State<LoadingPage> {
               child: CircularProgressIndicator(), // 顯示載入指示器
             ),
           )
-        : const Scaffold(body: Center(child: Text('加載中'))); // 或其他 UI
+        : const Scaffold(body: Center(child: Text('Error'))); // 或其他 UI
   }
 }

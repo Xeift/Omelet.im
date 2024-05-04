@@ -19,8 +19,8 @@ class NotificationPageState extends State<NotificationPage> {
   static GlobalKey updateNotiKey = GlobalKey();
 
   Future<void> handleRefresh9() async {
-    await fetchAndDisplayNotifications(); // 重新获取通知数据
-    setState(() {}); // 刷新页面
+    await fetchAndDisplayNotifications();
+    setState(() {});
   }
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayNotifications() async {
@@ -28,7 +28,6 @@ class NotificationPageState extends State<NotificationPage> {
     List<Map<String, dynamic>> jsonMessages =
         messages.map((message) => message as Map<String, dynamic>).toList();
     if (messages.isNotEmpty) {
-      print('[notification_page.dart]通知內容物：$jsonMessages');
       return jsonMessages;
     } else {
       print('[notification_page.dart]沒有通知資料');
@@ -80,7 +79,7 @@ class NotificationPageState extends State<NotificationPage> {
                       );
                     } else if (realMsg[index]['type'] == 'system') {
                     } else if (realMsg[index]['type'] == 'system_notify') {
-                      final String requestUid = realMsg[index]['initiatorUid'];
+                      final String requestUid = realMsg[index]['targetUid'];
                       final int requestTime = realMsg[index]['timestamp'];
                       print(
                           '[notification_page.dart]friends reply${realMsg[index]}');
@@ -152,8 +151,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
 
   Future<void> _sendFriendsAccept() async {
     final res = await replyFriendRequestApi(requestUid, true);
-    print('[notification_page.dart] ${res.body}');
-    print('[notification_page.dart]已成為好友');
+    print('[notification_page.dart]已成為好友 ${res.body}');
     await safeNotifyStore.deleteNotification(requestTime);
     print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
     // 更新裝置 id 資訊並儲存到本地
@@ -186,7 +184,6 @@ class FriednsRequestItemTitle extends StatelessWidget {
           final Map<String, dynamic>? data = snapshot.data;
           if (data != null) {
             String username = data['data']['username'].toString();
-            print('[notification.dart] username:$username');
             return InkWell(
               child: Container(
                 height: 80,
@@ -256,7 +253,7 @@ class FriednsRequestItemTitle extends StatelessWidget {
               ),
             );
           } else {
-            return const Center(child: Text('錯誤資料，請回報Omelet.im團隊'));
+            return const Center(child: Text('Error, please report to the Omelet.im team.'));
           }
         }
       },
@@ -282,11 +279,10 @@ class SystemNotify extends StatelessWidget {
       var res = await getUserPublicInfoApi(senderUid);
       String responseBody = res.body.toString();
       Map<String, dynamic> resBody = jsonDecode(responseBody);
-      print('[notification_page.dart]抓取用戶資料{$resBody}');
       return resBody;
     } catch (e) {
-      print('[notification_page.dart]获取用户信息失败: $e');
-      rethrow; // 继续抛出异常以便 FutureBuilder 处理
+      print('[notification_page.dart]獲取用戶資料失敗: $e');
+      rethrow; 
     }
   }
 
@@ -297,7 +293,7 @@ class SystemNotify extends StatelessWidget {
       onDelete();
     } catch (e) {
       print('[notification_page.dart]删除通知失败: $e');
-      // 在这里你可以添加适当的错误处理，比如显示一个SnackBar或者弹出对话框
+  
     }
   }
 
@@ -312,7 +308,7 @@ class SystemNotify extends StatelessWidget {
                 AlwaysStoppedAnimation(Color.fromARGB(255, 240, 118, 36)),
           );
         } else if (snapshot.hasError) {
-          return Text('错误: ${snapshot.error}');
+          return Text('Error: ${snapshot.error}');
         } else {
           final Map<String, dynamic>? data = snapshot.data;
           if (data != null) {

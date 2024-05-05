@@ -12,7 +12,7 @@ Future<http.Response> getAvailableOpkIndexApi(
 
   final res = await http.get(
       Uri.parse(
-          '$serverUri/api/v1/get-available-opk-index?uid=$remoteUid&deviceId=$deviceId'),
+          '$serverUri/api/v1/get-available-opk-index?theirUid=$remoteUid&theirDeviceId=$deviceId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token'

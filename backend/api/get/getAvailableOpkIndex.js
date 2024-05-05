@@ -7,10 +7,10 @@ const friendController = require('../../controller/friendController.js');
 router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let ourUid = req.decodedToken._uid; // extract from JWT
-        let theirUid = req.query.uid; // direct in api query
-        let deviceId = req.query.deviceId; // direct in api query
+        let theirUid = req.query.theirUid; // direct in api query
+        let theirDeviceId = req.query.theirDeviceId; // direct in api query
 
-        let opkIds = await preKeyBundleController.getAvailableOpkIndex(theirUid, deviceId);
+        let opkIds = await preKeyBundleController.getAvailableOpkIndex(theirUid, theirDeviceId);
         if (!await friendController.isFriend(ourUid, theirUid)) {
             if (ourUid !== theirUid) {
                 res.status(401).json({

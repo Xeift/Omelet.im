@@ -7,7 +7,7 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let uid = req.query.uid;
         let userPublicInfo = await authController.getUserPublicInfoByUid(uid);
-
+        
         res.status(200).json({
             message: '成功取得使用者公開資訊',
             data: userPublicInfo,

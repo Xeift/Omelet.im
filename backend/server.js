@@ -25,9 +25,9 @@ app.use('/api/v1/get-unread-msg', rateLimit.authLimiter, require('./api/get/getU
 app.use('/api/v1/upload-pre-key-bundle', rateLimit.authLimiter, require('./api/post/uploadPreKeyBundle.js'));
 app.use('/api/v1/download-pre-key-bundle', rateLimit.authLimiter, require('./api/get/downloadPreKeyBundle.js'));
 app.use('/api/v1/get-available-opk-index', rateLimit.authLimiter, require('./api/get/getAvailableOpkIndex.js'));
-app.use('/api/v1/update-opk', rateLimit.authLimiter, require('./api/post/updateOpk.js'));
 app.use('/api/v1/get-self-opk-status', rateLimit.authLimiter, require('./api/get/getSelfOpkStatus.js'));
 app.use('/api/v1/get-self-spk-status', rateLimit.authLimiter, require('./api/get/getSelfSpkStatus.js'));
+app.use('/api/v1/update-opk', rateLimit.authLimiter, require('./api/post/updateOpk.js'));
 app.use('/api/v1/update-spk', rateLimit.authLimiter, require('./api/post/updateSpk.js'));
 app.use('/api/v1/update-pfp', rateLimit.authLimiter, require('./api/post/updatePfp.js'));
 app.use('/api/v1/upload-img', rateLimit.authLimiter, require('./api/post/uploadImg.js'));

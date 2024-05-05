@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
 const email = require('../../utils/email.js');
@@ -65,6 +66,10 @@ router.post('/submit-info', async(req, res) => {
             token: null
         });
     }
+});
+
+router.get('/confirm-reset-email', async(req, res) => {
+    res.sendFile(path.join(__dirname, '../../page/confirm-reset-email.html'));
 });
 
 module.exports = router;

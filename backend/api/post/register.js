@@ -1,5 +1,6 @@
 
 const express = require('express');
+const path = require('path');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
 const email = require('../../utils/email.js');
@@ -49,6 +50,23 @@ router.post('/send-mail', async(req, res) => {
             data: null,
             token: null
         });
+    }
+});
+
+router.get('/confirm-register-email', async(req, res) => {
+    try {
+        let code = req.query.code;
+        let decodedToken = await jwt.verifyJWTSocket(code);
+        let uid = decodedToken['_uid'];
+        let email = decodedToken['_email'];
+        await authController.makeUnverifiedUserVerified(uid, email);
+        console.log(__dirname);
+        res.sendFile(path.join(__dirname, '../../page/confirm-register-email-success.html'));
+    }
+    catch (err) {
+        console.log(__dirname);
+        console.log(err);
+        res.sendFile(path.join(__dirname, '../../page/confirm-register-email-failed.html'));
     }
 });
 

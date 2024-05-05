@@ -43,8 +43,6 @@ app.use('/api/v1/remove-friend', rateLimit.authLimiter, require('./api/post/remo
 app.use('/api/v1/get-gpt-resp', rateLimit.authLimiter, require('./api/post/getGptResp.js'));
 app.use('/api/v1/get-translated-sentence', rateLimit.authLimiter, require('./api/post/getTranslatedSentence.js'));
 
-app.use('/confirm-register-email', rateLimit.authLimiter, require('./page/confirm-register-email.js'));
-app.use('/confirm-reset-email', rateLimit.authLimiter, require('./page/confirm-reset-email.js'));
 
 app.use('/pfp', express.static('pfp'));
 app.use('/img', rateLimit.authLimiter, require('./api/get/downloadImage.js'));

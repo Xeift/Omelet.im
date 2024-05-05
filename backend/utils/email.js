@@ -24,7 +24,7 @@ async function sendResetPasswordMail(email, code) {
                     若您並未請求重置密碼，請忽略此郵件。<br>
                     若您要重設密碼，請點擊下方按鈕並按照網頁中的指示操作。
                 </p>
-                <a href="${AWS_PUBLIC_SERVER_URI}confirm-reset-email?code=${code}" style="text-decoration: none; display: inline-block; padding: 10px 20px; background-color: #fff; color: #000; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s, border-color 0.3s;">
+                <a href="${AWS_PUBLIC_SERVER_URI}api/v1/reset-password/confirm-reset-email?code=${code}" style="text-decoration: none; display: inline-block; padding: 10px 20px; background-color: #fff; color: #000; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s, border-color 0.3s;">
                     按我重置密碼
                 </a>
             </div>`
@@ -55,7 +55,7 @@ async function sendRegisterMail(email, code) {
                     若您並未請求註冊帳號，請忽略此郵件。<br>
                     若您要註冊帳號，請點擊下方按鈕並按照網頁中的指示操作。
                 </p>
-                <a href="${AWS_PUBLIC_SERVER_URI}confirm-register-email?code=${code}" style="text-decoration: none; display: inline-block; padding: 10px 20px; background-color: #fff; color: #000; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s, border-color 0.3s;">
+                <a href="${AWS_PUBLIC_SERVER_URI}api/v1/register/confirm-register-email?code=${code}" style="text-decoration: none; display: inline-block; padding: 10px 20px; background-color: #fff; color: #000; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s, border-color 0.3s;">
                     註冊帳號
                 </a>
             </div>`

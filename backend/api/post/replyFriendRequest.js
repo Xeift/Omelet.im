@@ -11,9 +11,6 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let isAgree = JSON.parse(req.body.isAgree);
     let isFriend = await friendController.isFriend(theirUid, ourUid);
 
-    console.log(`isAgree ${isAgree}`);
-    console.log(`isAgree tp ${typeof(isAgree)}`);
-
     let friendRequestExists = await friendController.isFriendRequestExists(theirUid, ourUid);
 
     try {

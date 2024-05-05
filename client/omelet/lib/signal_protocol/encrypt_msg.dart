@@ -6,14 +6,14 @@ import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
 import 'package:omelet/storage/safe_account_store.dart';
 import 'package:omelet/signal_protocol/safe_session_store.dart';
-import 'package:omelet/signal_protocol/v2_encrypt_pre_key_signal_message.dart';
-import 'package:omelet/signal_protocol/v2_encrypt_signal_message.dart';
+import 'package:omelet/signal_protocol/encrypt_pre_key_signal_message.dart';
+import 'package:omelet/signal_protocol/encrypt_signal_message.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart' show socket;
 import 'package:omelet/utils/generate_random_filename.dart';
 import 'package:omelet/api/post/upload_img_api.dart';
 
-Future<void> v2EncryptMsg(
+Future<void> encryptMsg(
     String theirUid, String plainText, String msgType) async {
   final ourUid = await loadCurrentActiveAccount();
   final safeDeviceIdStore = SafeDeviceIdStore();
@@ -52,17 +52,17 @@ Future<void> v2EncryptMsg(
     // 判斷加密的訊息類型
     if (!sessionExsists) {
       // 沒 Session，PreKeySignalMessage
-      return await v2EncryptPreKeySignalMessage(
+      return await encryptPreKeySignalMessage(
           receiverUid, receiverDeviceId, receiverAddress, plainText);
     } else {
       // 有 Session
       if (unackMsgExsists) {
         // 有 unackMsg，PreKeySignalMessage
-        return await v2EncryptPreKeySignalMessage(
+        return await encryptPreKeySignalMessage(
             receiverUid, receiverDeviceId, receiverAddress, plainText);
       } else {
         // 沒有 unackMsg，SignalMessage
-        return await v2EncryptSignalMessage(receiverAddress, plainText);
+        return await encryptSignalMessage(receiverAddress, plainText);
       }
     }
   }

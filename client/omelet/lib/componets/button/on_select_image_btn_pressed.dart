@@ -7,10 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
-import 'package:omelet/signal_protocol/v2_encrypt_msg.dart';
+import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/storage/safe_account_store.dart';
 
-Future<void> v2OnSelectImageBtnPressed(String theirUid) async {
+Future<void> onSelectImageBtnPressed(String theirUid) async {
   final ourUid = await loadCurrentActiveAccount();
   final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -34,7 +34,7 @@ Future<void> v2OnSelectImageBtnPressed(String theirUid) async {
     });
 
     // 加密圖片
-    await v2EncryptMsg(theirUid, imgBytes, 'image');
+    await encryptMsg(theirUid, imgBytes, 'image');
 
     ChatRoomPageState.currenInstance()?.reloadData();
     MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();

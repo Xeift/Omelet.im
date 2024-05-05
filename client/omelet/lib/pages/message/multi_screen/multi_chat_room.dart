@@ -7,8 +7,8 @@ import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
-import 'package:omelet/componets/button/v2_on_select_image_btn_pressed.dart';
-import 'package:omelet/componets/button/v2_on_send_msg_btn_pressed.dart';
+import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
+import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
@@ -152,7 +152,7 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
                   }),
               actions: [
                 Padding(
-                  padding: const EdgeInsets.all(6.0), 
+                  padding: const EdgeInsets.all(6.0),
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
@@ -163,9 +163,7 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
                         minimumSize:
                             MaterialStateProperty.all<Size>(const Size(50, 10)),
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromARGB(
-                                255, 250, 143, 21)) 
-                        ),
+                            const Color.fromARGB(255, 250, 143, 21))),
                     child: const Icon(
                       Icons.change_circle,
                       color: Color.fromARGB(255, 0, 0, 0),
@@ -825,10 +823,9 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
 
   Future<void> _sendMessage() async {
     if (_sendMsgController.text.trim().isNotEmpty) {
-      await v2OnSendMsgBtnPressed(
+      await onSendMsgBtnPressed(
           widget.friendsAInfo['data']['uid'], _sendMsgController.text);
-      // await v2OnSendMsgBtnPressed(
-      //     widget.friendsInfo['data']['uid'], _sendMsgController.text);
+
       setState(() {
         _sendMsgController.clear();
       });
@@ -894,7 +891,7 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
                                   onPressed: () {
                                     print(
                                         '[chat_room_page.dart]uid:${widget.friendsAInfo['data']['uid']}');
-                                    v2OnSelectImageBtnPressed(
+                                    onSelectImageBtnPressed(
                                         widget.friendsAInfo['data']['uid']);
                                     Navigator.of(context).pop();
                                   },

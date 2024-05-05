@@ -3,14 +3,14 @@ import 'dart:typed_data';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
 
-import 'package:omelet/api/get/v2_download_pre_key_bundle_api.dart';
+import 'package:omelet/api/get/download_pre_key_bundle_api.dart';
 import 'package:omelet/signal_protocol/safe_spk_store.dart';
 import 'package:omelet/signal_protocol/safe_opk_store.dart';
 import 'package:omelet/signal_protocol/safe_session_store.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
-import 'package:omelet/signal_protocol/v2_pre_key_bundle_converter.dart';
+import 'package:omelet/signal_protocol/pre_key_bundle_converter.dart';
 
-Future<(bool, String)> v2EncryptPreKeySignalMessage(
+Future<(bool, String)> encryptPreKeySignalMessage(
     String theirUid,
     String theirDeviceId,
     SignalProtocolAddress receiverAddress,
@@ -22,7 +22,7 @@ Future<(bool, String)> v2EncryptPreKeySignalMessage(
   final registrationId = await ipkStore.getLocalRegistrationId();
 
   // 下載單一 PreKeyBundle
-  final res = await v2DownloadPreKeyBundleApi(theirUid, theirDeviceId);
+  final res = await downloadPreKeyBundleApi(theirUid, theirDeviceId);
   final preKeyBundle = jsonDecode(res.body)['data']['PreKeyBundle'];
   print('❌❌❌❌❌');
   // 轉換成函式庫能使用的形態
@@ -55,7 +55,7 @@ Future<(bool, String)> v2EncryptPreKeySignalMessage(
 
   print('✨✨✨✨✨');
   print(
-      '[v2_encrypt_pre_key_signal_message] isPreKeySignalMessage: $isPreKeySignalMessage');
+      '[encrypt_pre_key_signal_message] isPreKeySignalMessage: $isPreKeySignalMessage');
   print('✨✨✨✨✨');
 
   return (isPreKeySignalMessage, jsonEncode(ciphertext.serialize()));

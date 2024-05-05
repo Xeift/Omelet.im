@@ -8,23 +8,22 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let ourUid = req.decodedToken._uid; // extract from JWT
         let theirUid = req.query.uid; // direct in api query
-        let ipkPub = req.query.ipkPub;
-        let deviceId = await preKeyBundleController.findDeviceIdByIpkPub(ourUid, ipkPub);
+        let deviceId = req.query.deviceId; // direct in api query
 
-        let ourPreKeyIndex = await preKeyBundleController.getMultiDevicesAvailableOpkIndex(ourUid, true, deviceId);
-        let theirPreKeyIndex = await preKeyBundleController.getMultiDevicesAvailableOpkIndex(theirUid, false, deviceId);
-        
+        let opkIds = await preKeyBundleController.getAvailableOpkIndex(theirUid, deviceId);
         if (!await friendController.isFriend(ourUid, theirUid)) {
-            res.status(401).json({
-                message: '新增好友後方可取得可用 opk index',
-                data: null,
-                token: null
-            });
+            if (ourUid !== theirUid) {
+                res.status(401).json({
+                    message: '新增好友後方可取得可用 opk index',
+                    data: null,
+                    token: null
+                });
+            }
         }
 
         res.status(200).json({
             message: '成功取得 Pre Key Index',
-            data: { ourPreKeyIndex: ourPreKeyIndex, theirPreKeyIndex: theirPreKeyIndex },
+            data: { opkIds: opkIds },
             token: null
         });
     }

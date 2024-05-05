@@ -10,8 +10,8 @@ import 'package:intl/intl.dart';
 
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
-import 'package:omelet/componets/button/v2_on_select_image_btn_pressed.dart';
-import 'package:omelet/componets/button/v2_on_send_msg_btn_pressed.dart';
+import 'package:omelet/componets/button/on_select_image_btn_pressed.dart';
+import 'package:omelet/componets/button/on_send_msg_btn_pressed.dart';
 import 'package:omelet/componets/message/avatar.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
@@ -705,7 +705,7 @@ class _ActionBarState extends State<_ActionBar> {
 
   Future<void> _sendMessage() async {
     if (_sendMsgController.text.trim().isNotEmpty) {
-      await v2OnSendMsgBtnPressed(
+      await onSendMsgBtnPressed(
           widget.friendsInfo['data']['uid'], _sendMsgController.text);
       setState(() {
         _sendMsgController.clear();
@@ -761,7 +761,7 @@ class _ActionBarState extends State<_ActionBar> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    v2OnSelectImageBtnPressed(
+                                    onSelectImageBtnPressed(
                                         widget.friendsInfo['data']['uid']);
                                     Navigator.of(context).pop();
                                   },

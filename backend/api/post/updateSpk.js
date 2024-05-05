@@ -15,7 +15,7 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
 
     try {
         res.status(200).json({
-            message: 'opk 上傳成功',
+            message: 'spk 更新成功',
             data: null,
             token: null
         });

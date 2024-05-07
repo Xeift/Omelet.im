@@ -41,18 +41,13 @@ app.use('/api/v1/get-device-ids', rateLimit.authLimiter, require('./api/get/getD
 app.use('/api/v1/remove-friend', rateLimit.authLimiter, require('./api/post/removeFriend.js'));
 app.use('/api/v1/get-translated-sentence', rateLimit.authLimiter, require('./api/post/getTranslatedSentence.js'));
 
-
 app.use('/pfp', express.static('pfp'));
 app.use('/img', rateLimit.authLimiter, require('./api/get/downloadImage.js'));
-
 
 // TODO: debug 用，重置 PreKeyBundle
 app.use('/api/v1/debug-reset-prekeybundle-and-unread-msg', rateLimit.authLimiter, require('./api/debug.js'));
 
-
-
 app.use('*', require('./api/notFound.js'));
-
 
 server.listen(BACKEND_PORT, () => {
     console.log(`後端伺服器已啟動\n${SERVER_URI}`);

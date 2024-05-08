@@ -7,8 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
-import 'package:omelet/signal_protocol/encrypt_msg.dart';
 import 'package:omelet/storage/safe_account_store.dart';
+import 'package:omelet/signal_protocol/encrypt_msg.dart';
 
 Future<void> onSelectImageBtnPressed(String theirUid) async {
   final ourUid = await loadCurrentActiveAccount();

@@ -6,7 +6,7 @@ class DeveloperPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color.fromARGB(255, 188, 139, 112),
+      backgroundColor: const Color.fromARGB(255, 188, 139, 112),
       appBar: AppBar(),
       body: Center(
         child: SingleChildScrollView(
@@ -28,37 +28,33 @@ class DeveloperPage extends StatelessWidget {
                 height: 20,
               ),
               _buildFlippableDeveloperCard(
-                frontImagePath: 'assets/xeift.png',
-                backImagePath: 'assets/xeift.png',
-                developerName: 'Xeift',
-                developerType: 'Backend Developer',
-                hideText:'nothing',
-                hideSecText:'nothing'
-              ),
+                  frontImagePath: 'assets/xeift.png',
+                  backImagePath: 'assets/xeift.png',
+                  developerName: 'Xeift',
+                  developerType: 'Backend Developer',
+                  hideText: 'nothing',
+                  hideSecText: 'nothing'),
               _buildFlippableDeveloperCard(
-                frontImagePath: 'assets/thomas.png',
-                backImagePath: 'assets/thomas.png',
-                developerName: 'Thomas',
-                developerType: 'Feature Developer',
-                hideText:'nothing',
-                hideSecText:'nothing'
-              ),
+                  frontImagePath: 'assets/thomas.png',
+                  backImagePath: 'assets/thomas.png',
+                  developerName: 'Thomas',
+                  developerType: 'Feature Developer',
+                  hideText: 'nothing',
+                  hideSecText: 'nothing'),
               _buildFlippableDeveloperCard(
-                frontImagePath: 'assets/maple.png',
-                backImagePath: 'assets/nini.png',
-                developerName: 'Maple',
-                developerType: 'Frontend Developer',
-                hideText:'咩～',
-                hideSecText:'咩～'
-              ),
+                  frontImagePath: 'assets/maple.png',
+                  backImagePath: 'assets/nini.png',
+                  developerName: 'Maple',
+                  developerType: 'Frontend Developer',
+                  hideText: '咩～',
+                  hideSecText: '咩～'),
               _buildFlippableDeveloperCard(
-                frontImagePath: 'assets/nini.png',
-                backImagePath: 'assets/maple.png',
-                developerName: 'Wendy',
-                developerType: 'App UI Design',
-                hideText:'nothing',
-                hideSecText:'nothing'
-              ),
+                  frontImagePath: 'assets/nini.png',
+                  backImagePath: 'assets/maple.png',
+                  developerName: 'Wendy',
+                  developerType: 'App UI Design',
+                  hideText: 'nothing',
+                  hideSecText: 'nothing'),
             ],
           ),
         ),
@@ -75,13 +71,12 @@ class DeveloperPage extends StatelessWidget {
     required String hideSecText,
   }) {
     return DeveloperCard(
-      frontImagePath: frontImagePath,
-      backImagePath: backImagePath,
-      developerName: developerName,
-      developerType: developerType,
-      hideText: hideText,
-      hideSecText: hideSecText
-    );
+        frontImagePath: frontImagePath,
+        backImagePath: backImagePath,
+        developerName: developerName,
+        developerType: developerType,
+        hideText: hideText,
+        hideSecText: hideSecText);
   }
 }
 
@@ -98,7 +93,9 @@ class DeveloperCard extends StatefulWidget {
     required this.frontImagePath,
     required this.backImagePath,
     required this.developerName,
-    required this.developerType, required this.hideText, required this.hideSecText,
+    required this.developerType,
+    required this.hideText,
+    required this.hideSecText,
   }) : super(key: key);
 
   @override
@@ -134,9 +131,7 @@ class _DeveloperCardState extends State<DeveloperCard> {
             ),
           ],
         ),
-        child: _showFront
-            ? _buildFront()
-            : _buildBack(),
+        child: _showFront ? _buildFront() : _buildBack(),
       ),
     );
   }

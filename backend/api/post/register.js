@@ -60,11 +60,11 @@ router.get('/confirm-register-email', async(req, res) => {
         let uid = decodedToken['_uid'];
         let email = decodedToken['_email'];
         await authController.makeUnverifiedUserVerified(uid, email);
-        res.sendFile(path.join(__dirname, '../../page/confirm-register-email-success.html'));
+        res.sendFile(path.join(__dirname, '../../view/confirm-register-email-success.html'));
     }
     catch (err) {
         console.log(err);
-        res.sendFile(path.join(__dirname, '../../page/confirm-register-email-failed.html'));
+        res.sendFile(path.join(__dirname, '../../view/confirm-register-email-failed.html'));
     }
 });
 

@@ -69,7 +69,7 @@ router.post('/submit-info', async(req, res) => {
 });
 
 router.get('/confirm-reset-email', async(req, res) => {
-    res.sendFile(path.join(__dirname, '../../page/confirm-reset-email.html'));
+    res.sendFile(path.join(__dirname, '../../view/confirm-reset-email.html'));
 });
 
 module.exports = router;

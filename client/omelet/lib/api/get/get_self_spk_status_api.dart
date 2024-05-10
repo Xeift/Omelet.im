@@ -1,5 +1,4 @@
 // 取得自己 signed pre key 的狀態（是否過期，需不需要更新）
-
 import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/server_uri.dart';

@@ -1,5 +1,4 @@
 // 取得自己 one-time pre key 的狀態（是否耗盡，需不需要補充）
-
 import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/server_uri.dart';

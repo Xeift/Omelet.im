@@ -1,10 +1,8 @@
 // 取得裝置 id
-
 import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/storage/safe_account_store.dart';
-
 import 'package:omelet/storage/safe_device_id_store.dart';
 
 Future<http.Response> getDeviceIdsApi() async {

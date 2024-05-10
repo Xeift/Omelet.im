@@ -1,5 +1,4 @@
 // 用於取得對方所有裝置和自己其他裝置可用的 one-time pre key index
-
 import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/server_uri.dart';

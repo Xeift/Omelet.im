@@ -13,11 +13,6 @@ Future<http.StreamedResponse> uploadImgApi(isPreKeySignalMessage, sender,
   final senderDeviceId = await safeDeviceIdStore.getLocalDeviceId();
   http.MultipartRequest request;
 
-  print('--------------------------------');
-  print(sender);
-  print(receiver);
-  print('--------------------------------');
-
   request =
       http.MultipartRequest('POST', Uri.parse('$serverUri/api/v1/upload-img'))
         ..fields['isPreKeySignalMessage'] = isPreKeySignalMessage.toString()

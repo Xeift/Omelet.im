@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -32,6 +30,6 @@ Future<String> decryptMsg(bool isPreKeySignalMessage, String remoteUid,
     plainText = utf8.decode(await selfSessionCipher
         .decryptFromSignal(listFormatCipherTextSignalMsg));
   }
-  print('[decrypt_msg.dart] 已解密訊息👉 $plainText');
+
   return plainText;
 }

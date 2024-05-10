@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 // 警告視窗
+import 'package:flutter/material.dart';
 
 void loginErrorMsg(BuildContext context, String message) => showDialog(
       context: context,

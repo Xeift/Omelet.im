@@ -24,10 +24,6 @@ Future<(bool, String)> encryptSignalMessage(
       await sessionCipher.encrypt(Uint8List.fromList(utf8.encode(plainText)));
   final isPreKeySignalMessage =
       ciphertext.getType() == CiphertextMessage.prekeyType;
-  print('✨✨✨✨✨');
-  print(
-      '[encrypt_signal_message] isPreKeySignalMessage: $isPreKeySignalMessage');
-  print('✨✨✨✨✨');
 
   return (isPreKeySignalMessage, jsonEncode(ciphertext.serialize()));
 }

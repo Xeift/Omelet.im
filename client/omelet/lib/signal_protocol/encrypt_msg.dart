@@ -41,14 +41,6 @@ Future<void> encryptMsg(
     // 判斷是否有未確認的訊息
     final unackMsgExsists = sessionState.hasUnacknowledgedPreKeyMessage();
 
-    print('🤎🤎🤎');
-    print('接收者地址為：$receiverAddress');
-    print('是否有 Session？$sessionExsists');
-    print('是否有 未確認的訊息？$unackMsgExsists');
-    print('是否有 session？$sessionExsists');
-    print('是否有未確認的訊息？$unackMsgExsists');
-    print('🤎🤎🤎\n');
-
     // 判斷加密的訊息類型
     if (!sessionExsists) {
       // 沒 Session，PreKeySignalMessage

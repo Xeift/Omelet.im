@@ -24,16 +24,12 @@ Future<(bool, String)> encryptPreKeySignalMessage(
   // 下載單一 PreKeyBundle
   final res = await downloadPreKeyBundleApi(theirUid, theirDeviceId);
   final preKeyBundle = jsonDecode(res.body)['data']['PreKeyBundle'];
-  print('❌❌❌❌❌');
+
   // 轉換成函式庫能使用的形態
   final (ipkPub, spkPub, spkSig, opkPub, spkId, opkId) =
       await preKeyBundleTypeConverter(theirDeviceId, preKeyBundle);
 
-  print(ipkPub.publicKey.serialize());
-  print(spkSig);
-  print(spkId);
-  print('❌❌❌❌❌');
-
+  // 使用 SessionBuilder 建立 Session
   final sessionBuilder = SessionBuilder(
       sessionStore, opkStore, spkStore, ipkStore, receiverAddress);
 
@@ -52,11 +48,6 @@ Future<(bool, String)> encryptPreKeySignalMessage(
   final isPreKeySignalMessage =
       ciphertext.getType() == CiphertextMessage.prekeyType;
   ciphertext.getType() == CiphertextMessage.prekeyType;
-
-  print('✨✨✨✨✨');
-  print(
-      '[encrypt_pre_key_signal_message] isPreKeySignalMessage: $isPreKeySignalMessage');
-  print('✨✨✨✨✨');
 
   return (isPreKeySignalMessage, jsonEncode(ciphertext.serialize()));
 }

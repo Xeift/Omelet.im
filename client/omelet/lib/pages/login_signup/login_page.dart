@@ -7,7 +7,7 @@ import 'package:omelet/developer/test_ping_page.dart';
 import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/storage/safe_account_store.dart';
-import 'package:omelet/componets/alert/alert_msg.dart';
+import 'package:omelet/components/alert/alert_msg.dart';
 import 'package:omelet/pages/nav_bar_control_page.dart';
 import 'package:omelet/pages/login_signup/sign_up_page.dart';
 import 'package:omelet/api/post/login_api.dart';

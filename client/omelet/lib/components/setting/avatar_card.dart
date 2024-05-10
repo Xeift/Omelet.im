@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/storage/safe_account_store.dart';
-import 'package:omelet/componets/message/avatar_user.dart';
+import 'package:omelet/components/message/avatar_user.dart';
 
 class AvatarCard extends StatefulWidget {
   const AvatarCard({

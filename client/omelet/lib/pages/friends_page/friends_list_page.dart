@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:omelet/api/post/remove_friend_api.dart';
-import 'package:omelet/componets/alert/alert_msg.dart';
-import 'package:omelet/componets/message/avatar.dart';
+import 'package:omelet/components/alert/alert_msg.dart';
+import 'package:omelet/components/message/avatar.dart';
 import 'package:omelet/pages/friends_page/friends_add_page.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';

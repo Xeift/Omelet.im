@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:omelet/componets/button/on_update_pfp_btn_pressed.dart';
+import 'package:omelet/components/button/on_update_pfp_btn_pressed.dart';
 import 'package:omelet/models/setting.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart';
 import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/utils/server_uri.dart';
-import 'package:omelet/componets/setting/avatar_card.dart';
-import 'package:omelet/componets/setting/setting_title.dart';
+import 'package:omelet/components/setting/avatar_card.dart';
+import 'package:omelet/components/setting/setting_title.dart';
 import 'package:omelet/theme/theme_provider.dart';
 import 'package:omelet/storage/safe_account_store.dart';
 

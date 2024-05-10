@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/send_friend_request_api.dart';
-import 'package:omelet/componets/alert/alert_msg.dart';
+import 'package:omelet/components/alert/alert_msg.dart';
 
 class FriendsAddPage extends StatefulWidget {
   const FriendsAddPage({Key? key, required this.ourUid}) : super(key: key);
@@ -25,7 +25,6 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
     // 將_requestFriendsType設置為 'username'
     _requestFriendsType = 'username';
   }
-
 
   Future<String> getOurName() async {
     var res = await getUserPublicInfoApi(widget.ourUid);
@@ -96,7 +95,6 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
               // 若異步未完成，則需等待
               return const CircularProgressIndicator();
             } else if (snapshot.connectionState == ConnectionState.done) {
-              
               String ourName = snapshot.data ?? ''; // get the name
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -229,9 +227,9 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                         ElevatedButton(
                           onPressed: _sendRequest,
                           style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(150, 50), 
-                            backgroundColor: const Color.fromARGB(
-                                255, 255, 136, 67),
+                            fixedSize: const Size(150, 50),
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 136, 67),
                           ),
                           child: const Text(
                             'Submit',

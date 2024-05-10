@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:omelet/componets/alert/alert_msg.dart';
+import 'package:omelet/components/alert/alert_msg.dart';
 import 'package:omelet/api/post/reset_password_api.dart';
 import 'package:omelet/storage/safe_account_store.dart';
 

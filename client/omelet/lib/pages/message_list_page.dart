@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-import 'package:omelet/componets/message/avatar.dart';
+import 'package:omelet/components/message/avatar.dart';
 import 'package:omelet/pages/message/chat_room_page.dart';
 import 'package:omelet/storage/safe_msg_store.dart';
 import 'package:omelet/storage/safe_util_store.dart';

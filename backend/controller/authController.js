@@ -14,6 +14,11 @@ async function isPasswordMatch(username, password) {
             { email: username }
         ]
     });
+
+    if (!user) {
+        return false;
+    }
+
     if (await passwordHelper.checkPassword(password, user.password)) {
         return user;
     }

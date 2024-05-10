@@ -33,6 +33,7 @@ router.post('/', async(req, res) => {
             user.username,
             user.email
         );
+        
         res.status(200).json({
             message: '登入成功',
             data: {

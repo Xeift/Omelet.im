@@ -48,9 +48,8 @@ class LoadingPageState extends State<LoadingPage> {
   }
 
   Future<void> waitForIsShowUserPage() async {
-    // 停止加載
     setState(() {
-      _isLoading = false;
+      _isLoading = false; // 停止加載
     });
     await initSocket(); // 等待 3 秒後開始初始化 Socket
   }

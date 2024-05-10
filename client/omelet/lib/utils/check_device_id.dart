@@ -6,9 +6,7 @@ import 'package:omelet/storage/safe_device_id_store.dart';
 
 Future<void> checkDeviceId() async {
   final res = await getDeviceIdsApi();
-  print(res.body);
   final deviceIds = jsonDecode(res.body)['data'];
-  print('[check_device_id] $deviceIds');
   final ourOtherDeviceIds = deviceIds['ourOtherDeviceIds'];
   List<String> ourOtherDeviceIdsString = ourOtherDeviceIds
       .map((deviceId) => deviceId.toString())
@@ -27,7 +25,4 @@ Future<void> checkDeviceId() async {
     await safeDeviceIdStore.updateTheirDeviceIds(
         entry.key, friendDeviceIdsString);
   }
-  print('✨✨✨✨✨');
-  print('已完成 check_device_id');
-  print('✨✨✨✨✨');
 }

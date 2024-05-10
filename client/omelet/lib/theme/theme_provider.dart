@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_import
-
 import 'package:flutter/material.dart';
 import 'package:omelet/theme/theme_constants.dart';
 

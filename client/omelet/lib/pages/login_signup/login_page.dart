@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:omelet/developer/test_ping_page.dart';
 
+import 'package:omelet/developer/test_ping_page.dart';
 import 'package:omelet/pages/login_signup/forget_page.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/storage/safe_account_store.dart';
@@ -199,12 +199,7 @@ class LoginPageState extends State<LoginPage> {
             }
 
             final res = await loginApi(_userEmail, _userPassword);
-            print(
-                '[login_page.dart deBug]:userEmail:$_userEmail,_userPassword:$_userPassword');
             final statusCode = res.statusCode;
-            print('[login_page.dart deBug]res report:$statusCode');
-            print('[home_page.dart] API 回應內容：${res.body}');
-
             final resBody = jsonDecode(res.body);
 
             if (!context.mounted) {
@@ -233,14 +228,6 @@ class LoginPageState extends State<LoginPage> {
                 await generateAndStoreKey();
 
                 await LoadingPageState().initSocket();
-
-                print(
-                    '[login_page] 目前啟用帳號為：${await loadCurrentActiveAccount()}');
-
-                print('[login_page] 目前所有內容：${await storage.readAll()}');
-                print(
-                    '[login_page] 目前所有 key：${(await storage.readAll()).keys}');
-                print('準備跳轉至使用者介面');
 
                 nextPage();
                 break;

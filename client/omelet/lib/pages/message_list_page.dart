@@ -43,7 +43,6 @@ class _MessagePageState extends State<MessagePage> {
       if (mounted) {
         setState(() {
           lastMsg = loadedMsg;
-          print('[message_list_page.dart]lastMsg:$lastMsg');
           _isLoading = false; // Set loading state
         });
       }
@@ -56,7 +55,6 @@ class _MessagePageState extends State<MessagePage> {
 
   Future<Map<String, dynamic>?> _loadIsSendedList() async {
     var resM = await safeMsgStore.getChatList();
-    print('[message_list_page.dart]lastMsg:$resM');
     return resM;
   }
 
@@ -78,7 +76,6 @@ class _MessagePageState extends State<MessagePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('[message_list_page] Messages: $lastMsg');
     return Stack(
       children: [
         RefreshIndicator(
@@ -126,9 +123,7 @@ class _MessagePageState extends State<MessagePage> {
           );
   }
 
-  void _onDeleted() {
-    //TODO:寫入刪除訊息列的邏輯
-  }
+  void _onDeleted() {}
 
   Widget _delegate(BuildContext context, int index) {
     if (lastMsg.isNotEmpty) {
@@ -145,8 +140,6 @@ class _MessagePageState extends State<MessagePage> {
           String messageContent = '';
           final String remoteUid = senderUid;
           final String messageDate = message['message']['timestamp'];
-
-          print('[message_list_page.dart]message:$message');
 
           if (message['message']['type'] == 'image') {
             messageContent = '[圖片]';

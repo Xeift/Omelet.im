@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -94,7 +92,6 @@ class SafeMsgStore {
     for (var unreadMsg in unreadMsgs) {
       // 若為圖片，則根據檔名下載加密過的圖片
       if (unreadMsg['type'] == 'image') {
-        print('😎img $unreadMsg');
         final imgUrl = "$serverUri/img/${unreadMsg['content']}";
         var response = await http.get(Uri.parse(imgUrl));
         unreadMsg['content'] = response.body;
@@ -132,7 +129,6 @@ class SafeMsgStore {
       Map<String, dynamic> receivedMsg) async {
     // 若為圖片，則根據檔名下載加密過的圖片
     if (receivedMsg['type'] == 'image') {
-      print('😎img $receivedMsg');
       final imgUrl = "$serverUri/img/${receivedMsg['content']}";
       var response = await http.get(Uri.parse(imgUrl));
       receivedMsg['content'] = response.body;
@@ -145,15 +141,6 @@ class SafeMsgStore {
       int.parse(receivedMsg['senderDeviceId']),
       receivedMsg['content'],
     );
-
-    // // 若為圖片，則將解密後的圖片儲存至 App Directory
-    // if (receivedMsg['type'] == 'image') {
-    //   List<int> bytes = jsonDecode(decryptedMsg).cast<int>();
-    //   final directory = await getApplicationDocumentsDirectory();
-    //   File file = File('${directory.path}/output.png');
-    //   print('已儲存到 ${directory.path}/output.png');
-    //   file.writeAsBytesSync(bytes);
-    // }
 
     // 處理從自己其他裝置發送訊息的情況
     final String senderKey;
@@ -185,7 +172,6 @@ class SafeMsgStore {
     Map<String, String> allData = await storage.readAll();
     Map<String, dynamic> lastMsgWithEachUser = {};
     final ourCurrentUid = await loadCurrentActiveAccount();
-    print('[safe_msg_store]ourCurrentUid:$ourCurrentUid');
     for (var entry in allData.entries) {
       List<String> keyParts = entry.key.split('_');
       if (keyParts.length != 4 || keyParts[1] != 'msg') continue;

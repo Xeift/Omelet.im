@@ -55,13 +55,11 @@ class LoadingPageState extends State<LoadingPage> {
   }
 
   Future<void> initSocket() async {
-    print('[loading_page] 初始狀態檢查開始 --------------------');
     try {
       PermissionStatus permission = await Permission.notification.status;
       if (permission.isDenied) {
         Permission.notification.request();
       }
-      print('[loading_page] 通知權限狀態：$permission');
       String ourUid = await loadCurrentActiveAccount();
 
       String getTranslate =
@@ -84,8 +82,6 @@ class LoadingPageState extends State<LoadingPage> {
 
       // JWT 存在，直接連線到 Socket.io Server
       if (await isCurrentActiveAccountExsist()) {
-        print('[loading_page] currentActiveAccount 存在✅');
-
         final token = await loadJwt();
         final safeDeviceIdStore = SafeDeviceIdStore();
         final deviceId = await safeDeviceIdStore.getLocalDeviceId();
@@ -103,8 +99,6 @@ class LoadingPageState extends State<LoadingPage> {
 
         socket.onConnect((_) async {
           final safeNotifyStore = SafeNotifyStore();
-          print(
-              '[loading_page] 所有通知內容：${await safeNotifyStore.readAllNotifications()}');
 
           // // 回傳 JWT，驗證身份
           // socket.emit(
@@ -113,9 +107,6 @@ class LoadingPageState extends State<LoadingPage> {
           // );
 
           socket.on('jwtValid', (data) async {
-            print('[loading_page] 已連接至後端');
-            print('[loading_page] 本裝置的 socket.id 為： ${socket.id}');
-
             // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
             await checkOpkStatus();
 
@@ -138,9 +129,6 @@ class LoadingPageState extends State<LoadingPage> {
           });
 
           socket.on('serverForwardMsgToClient', (msg) async {
-            print('--------------------------------');
-            print('[loading_page] 已接收訊息👉 $msg');
-            print('--------------------------------\n');
             final safeMsgStore = SafeMsgStore();
             final (senderName, decryptedMsg) =
                 await safeMsgStore.storeReceivedMsg(msg);
@@ -152,11 +140,6 @@ class LoadingPageState extends State<LoadingPage> {
           });
 
           socket.on('receivedFriendRequest', (msg) async {
-            print('--------------------------------');
-            print('[main.dart] 已接收到好友邀請👉 $msg');
-            print('--------------------------------\n');
-            print('[loading_page] ${jsonDecode(msg).runtimeType}');
-
             // 儲存好友邀請
             await safeNotifyStore.writeNotification(jsonDecode(msg));
             NotificationPageState.currenInstanceForNoti()?.reloadDataNoti();
@@ -164,11 +147,7 @@ class LoadingPageState extends State<LoadingPage> {
           });
 
           socket.on('acceptedFriendRequest', (msg) async {
-            print('--------------------------------');
-            print('[main.dart] 對方已同意好友邀請👉 $msg');
-            print('--------------------------------\n');
             await safeNotifyStore.writeNotification(jsonDecode(msg));
-            print('friends require reply ${jsonDecode(msg)}');
             final res =
                 await getUserPublicInfoApi(jsonDecode(msg)['targetUid']);
             final resJson = jsonDecode(res.body);
@@ -184,10 +163,6 @@ class LoadingPageState extends State<LoadingPage> {
           });
 
           socket.on('friendsDevicesUpdated', (msg) async {
-            print('--------------------------------');
-            print('[main.dart] 更新好友裝置👉 $msg');
-            print('--------------------------------\n');
-            print(msg['friendNewDevicesIds'].runtimeType);
             // 更新裝置 id 資訊並儲存到本地
             await safeDeviceIdStore.updateTheirDeviceIds(
                 msg['friendUid'], msg['friendNewDevicesIds']);
@@ -199,10 +174,6 @@ class LoadingPageState extends State<LoadingPage> {
 
         // 後端檢查 JWT 是否過期
         socket.on('jwtExpired', (data) async {
-          print('--------------------------------');
-          print('[main.dart] JWT expired');
-          print('--------------------------------\n');
-
           if (mounted) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const LoginPage(
@@ -218,13 +189,10 @@ class LoadingPageState extends State<LoadingPage> {
               {'token': token, 'deviceId': deviceId});
         });
       } else {
-        print(
-            '[main.dart] currentActiveAccount 不存在❌\n該使用者第一次開啟 App，應跳轉至登入頁面並產生公鑰包\n');
         String ourUid = await loadCurrentActiveAccount();
         await safeConfigStore.setTranslationDestLang(
             ourUid, 'Chinese Traditional');
         if (mounted) {
-          print('觸發跳轉');
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => const LoginPage(
                     title: '',

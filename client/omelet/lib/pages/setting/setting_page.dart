@@ -7,7 +7,6 @@ import 'package:omelet/components/button/on_update_pfp_btn_pressed.dart';
 import 'package:omelet/models/setting.dart';
 import 'package:omelet/pages/login_signup/loading_page.dart';
 import 'package:omelet/storage/safe_config_store.dart';
-import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/components/setting/avatar_card.dart';
 import 'package:omelet/components/setting/setting_title.dart';
 import 'package:omelet/theme/theme_provider.dart';
@@ -35,12 +34,10 @@ class _SettingPageState extends State<SettingPage> {
   Future<void> _initializeTranslateLanguage() async {
     translateLangunage =
         await safeConfigStore.getTranslationDestLang(widget.ourUid);
-    print('[setting_page.dart]translateLanuage:$translateLangunage');
   }
 
   Future<void> _signOut() async {
     await deletCurrentActiveAccount();
-    print('登出');
     socket.emit('logout');
     if (mounted) {
       await Navigator.of(context).pushAndRemoveUntil(
@@ -113,8 +110,7 @@ class _SettingPageState extends State<SettingPage> {
                                             child: ElevatedButton(
                                               onPressed: () async {
                                                 await onUpdatePfpBtnPressed();
-                                                print(
-                                                    '[setting_page.dart]$serverUri/pfp/${widget.ourUid}');
+
                                                 // ignore: use_build_context_synchronously
                                                 Navigator.of(context).pop();
                                                 setState(() {});
@@ -143,7 +139,6 @@ class _SettingPageState extends State<SettingPage> {
                                             height: 55,
                                             child: ElevatedButton(
                                               onPressed: () async {
-                                                print('[setting_page]刪除圖片');
                                                 Navigator.of(context).pop();
                                               },
                                               style: ElevatedButton.styleFrom(
@@ -151,7 +146,7 @@ class _SettingPageState extends State<SettingPage> {
                                                       Color.fromARGB(
                                                           0, 255, 255, 255)),
                                               child: Text(
-                                                'Delet Image',
+                                                'Delete Image',
                                                 style: textTheme.titleSmall
                                                     ?.copyWith(
                                                   color: Colors.red,

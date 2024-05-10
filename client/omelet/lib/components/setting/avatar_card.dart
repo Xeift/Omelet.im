@@ -31,8 +31,6 @@ class _AvatarCardState extends State<AvatarCard> {
 
   @override
   Widget build(BuildContext context) {
-    print('[setting_page]imgurl:$serverUri/pfp/${widget.ourUid}.png');
-    print('$serverUri/pfp/${widget.ourUid}.png');
     return FutureBuilder<String>(
       future: loadUserName(),
       builder: (context, snapshot) {

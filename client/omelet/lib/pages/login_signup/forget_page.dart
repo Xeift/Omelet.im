@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -94,7 +92,6 @@ class ForgetPageState extends State<ForgetPage> {
 
             final res = await resetPasswordSendMailApi(_userForgetEmail);
             final statusCode = res.statusCode;
-            final resBody = jsonDecode(res.body);
 
             if (!context.mounted) {
               return;

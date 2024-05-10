@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
@@ -10,7 +8,6 @@ import 'package:omelet/signal_protocol/safe_opk_store.dart';
 import 'package:omelet/signal_protocol/safe_identity_store.dart';
 import 'package:omelet/api/post/upload_pre_key_bundle_api.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
-
 import 'package:omelet/storage/safe_account_store.dart';
 
 Future<bool> isPreKeyBundleExists() async {
@@ -26,10 +23,8 @@ Future<bool> isPreKeyBundleExists() async {
 
 Future<void> generateAndStoreKey() async {
   if (await isPreKeyBundleExists()) {
-    print('[generateAndStoreKey] 本地已有金鑰✅，已取消產生金鑰');
     return;
   }
-  print('[generateAndStoreKey] 本地無金鑰❌，已產生金鑰');
 
   final registrationId = generateRegistrationId(false);
   final selfIpk = generateIdentityKeyPair(); // 產生 IPK（長期金鑰對，平常不會動）

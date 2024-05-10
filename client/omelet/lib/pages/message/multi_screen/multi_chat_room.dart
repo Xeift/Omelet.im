@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
+
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/get_translated_sentence_api.dart';
 import 'package:omelet/components/button/on_select_image_btn_pressed.dart';
@@ -54,7 +55,6 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
     try {
       isTranslateA =
           await safeConfigStore.isTranslateActive(widget.friendsUidA);
-      print('isTranslateA:$isTranslateA');
       isTranslateB =
           await safeConfigStore.isTranslateActive(widget.friendsUidB);
 
@@ -63,15 +63,8 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
       } else if (isTranslateA == true && isTranslateB == true) {
       } else if (isTranslateA == false && isTranslateB == true) {
         await safeConfigStore.disableTranslation(widget.friendsUidB);
-      } else if (isTranslateA == false && isTranslateB == false) {
-      } else {
-        print('Error');
-      }
-      var debugTranslateInit =
-          await safeConfigStore.debugShowAllActiveTranslateUid();
+      } else if (isTranslateA == false && isTranslateB == false) {}
 
-      print('[chat_room_page] deBugTranslateList：$debugTranslateInit');
-      print('isTranslateB:$isTranslateB');
       await Future.wait([
         _fetchUserInfo(widget.friendsUidA),
         _fetchUserInfo(widget.friendsUidB),
@@ -233,7 +226,6 @@ class _ReadMessageList extends StatelessWidget {
   final String ourUid;
 
   Future<List<Map<String, dynamic>>> fetchAndDisplayMessagesed() async {
-    print('test:${friendsInfo['data']['uid']}');
     final SafeMsgStore safeMsgStore = SafeMsgStore();
     List<String> messages =
         await safeMsgStore.readAllMsg(friendsInfo['data']['uid']);
@@ -242,17 +234,14 @@ class _ReadMessageList extends StatelessWidget {
           .map((message) => jsonDecode(message))
           .toList()
           .cast<Map<String, dynamic>>();
-      print('[chat_room_page] 抓取內存訊息：$parsedMessages');
       return parsedMessages;
     } else {
-      print('[chat_room_page] 沒有訊息資料');
       return []; // 添加一個默認返回值，例如空列表
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print('加載訊息中....');
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: fetchAndDisplayMessagesed(),
       builder: (context, snapshot) {
@@ -788,7 +777,6 @@ class _AIMessageTitleState extends State<_AIMessageTitle> {
   ) async {
     String translateLanguage =
         await safeConfigStore.getTranslationDestLang(ourUid);
-    print('[chat_room_page.dart]使用語言:$translateLanguage');
     var res = await getTranslatedSentenceApi(message, translateLanguage);
     var resBody = jsonDecode(res.body);
     return resBody['data'];
@@ -840,8 +828,6 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
 
   void _changeTranslateStatus(bool isTranslateStatus) async {
     if (isTranslateStatus) {
-      print(
-          '[multi_chat_room]widget.friendsInfo${widget.friendsAInfo['data']['uid']}');
       await safeConfigStore
           .enableTranslation(widget.friendsAInfo['data']['uid']);
       await safeConfigStore
@@ -853,9 +839,6 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
           .disableTranslation(widget.friendsBInfo['data']['uid']);
     }
 
-    var debugTranslate = await safeConfigStore.debugShowAllActiveTranslateUid();
-
-    print('[chat_room_page] deBugTranslateList：$debugTranslate');
     setState(() {
       MultiChatRoomPageState.currenInstanceInMultiChat()?.reloadDataInMulti();
     });
@@ -889,8 +872,6 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    print(
-                                        '[chat_room_page.dart]uid:${widget.friendsAInfo['data']['uid']}');
                                     onSelectImageBtnPressed(
                                         widget.friendsAInfo['data']['uid']);
                                     Navigator.of(context).pop();

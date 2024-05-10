@@ -129,7 +129,6 @@ class _FriendsListState extends State<FriendsList> {
 
         Future<void> onDeletedFriends(String userUid) async {
           await removeFriendApi(userUid);
-          print('[friends_list_page.dart]已刪除好友$userUid');
         }
 
         return Slidable(
@@ -219,7 +218,6 @@ class _FriendsListState extends State<FriendsList> {
                                               }
                                               friendSelect['selected'] =
                                                   value; // 更新 friendSelect['selected']
-                                              print(friendSelect);
                                             });
                                           },
                                         ),
@@ -251,8 +249,6 @@ class _FriendsListState extends State<FriendsList> {
                                       // 其他样式属性
                                     ),
                                     onPressed: () {
-                                      print(
-                                          '[friends_list_page.dart] selectMultiFrends :$selectMultiFrends');
                                       // 在提交按鈕的事件處理器中使用選擇的用戶
                                       if (selectMultiFrends.length == 2) {
                                         Navigator.of(context).push(

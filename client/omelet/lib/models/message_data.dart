@@ -10,7 +10,7 @@ class MessageData {
       required this.profilePicture});
 
   final String senderName;
-  final String remoteUid; //對方uid
+  final String remoteUid; // 對方uid
   final String message;
   final DateTime messageDate;
   final String profilePicture;

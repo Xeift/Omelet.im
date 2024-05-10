@@ -30,7 +30,6 @@ class NotificationPageState extends State<NotificationPage> {
     if (messages.isNotEmpty) {
       return jsonMessages;
     } else {
-      print('[notification_page.dart]沒有通知資料');
       return []; // Adding a default return value, for example, an empty list
     }
   }
@@ -65,7 +64,6 @@ class NotificationPageState extends State<NotificationPage> {
                     if (realMsg[index]['type'] == 'friend_request') {
                       final String requestUid = realMsg[index]['initiatorUid'];
                       final int requestTime = realMsg[index]['timestamp'];
-                      print('[notification_page.dart]realMsg:$realMsg');
                       return FriednsRequestItemTitle(
                         requestTime: requestTime,
                         requestData: realMsg,
@@ -81,8 +79,7 @@ class NotificationPageState extends State<NotificationPage> {
                     } else if (realMsg[index]['type'] == 'system_notify') {
                       final String requestUid = realMsg[index]['targetUid'];
                       final int requestTime = realMsg[index]['timestamp'];
-                      print(
-                          '[notification_page.dart]friends reply${realMsg[index]}');
+
                       return SystemNotify(
                         senderUid: requestUid,
                         sendTime: requestTime,
@@ -90,9 +87,6 @@ class NotificationPageState extends State<NotificationPage> {
                           setState(() {});
                         },
                       );
-                    } else {
-                      print(
-                          '[notification_page.dart] Error type for notification ${realMsg[index]['type']}');
                     }
                     return null;
                   },
@@ -116,9 +110,7 @@ class NotificationPageState extends State<NotificationPage> {
   }
 
   reloadDataNoti() async {
-    setState(() {
-      print('[notification_page.dart]setStata');
-    });
+    setState(() {});
   }
 }
 
@@ -145,26 +137,20 @@ class FriednsRequestItemTitle extends StatelessWidget {
     String responseBody =
         res.body.toString(); // Convert response body to string
     Map<String, dynamic> resBody = jsonDecode(responseBody);
-    print('[notification_page.dart]抓取用戶資料{$resBody}');
     return resBody;
   }
 
   Future<void> _sendFriendsAccept() async {
-    final res = await replyFriendRequestApi(requestUid, true);
-    print('[notification_page.dart]已成為好友 ${res.body}');
+    await replyFriendRequestApi(requestUid, true);
     await safeNotifyStore.deleteNotification(requestTime);
-    print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
     // 更新裝置 id 資訊並儲存到本地
     await checkDeviceId();
     onAccept();
   }
 
   Future<void> _sendFriendsDismiss() async {
-    final res = await replyFriendRequestApi(requestUid, false);
-    print('[notification_page.dart] ${res.body}');
-    print('拒絕邀請🥲');
+    await replyFriendRequestApi(requestUid, false);
     await safeNotifyStore.deleteNotification(requestTime);
-    print('[notification_page.dart]訊息列表已刪除 Time:$requestTime');
     onDismiss();
   }
 
@@ -253,7 +239,8 @@ class FriednsRequestItemTitle extends StatelessWidget {
               ),
             );
           } else {
-            return const Center(child: Text('Error, please report to the Omelet.im team.'));
+            return const Center(
+                child: Text('Error, please report to the Omelet.im team.'));
           }
         }
       },
@@ -282,18 +269,16 @@ class SystemNotify extends StatelessWidget {
       return resBody;
     } catch (e) {
       print('[notification_page.dart]獲取用戶資料失敗: $e');
-      rethrow; 
+      rethrow;
     }
   }
 
   Future<void> _deleteNotification() async {
     try {
       await safeNotifyStore.deleteNotification(sendTime);
-      print('[notification_page.dart]訊息列表已刪除 Time:$sendTime');
       onDelete();
     } catch (e) {
-      print('[notification_page.dart]删除通知失败: $e');
-  
+      print('[notification_page.dart] 删除通知失敗: $e');
     }
   }
 
@@ -313,7 +298,6 @@ class SystemNotify extends StatelessWidget {
           final Map<String, dynamic>? data = snapshot.data;
           if (data != null) {
             String username = data['data']['username'].toString();
-            print('[notification.dart] username:$username');
             return InkWell(
               child: Container(
                 height: 80,

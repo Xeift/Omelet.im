@@ -10,7 +10,6 @@ import 'package:omelet/pages/setting/setting_page.dart';
 import 'package:omelet/utils/server_uri.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/pages/message_list_page.dart';
-// import '../pages/notification_page.dart';
 
 class NavBarControlPage extends StatefulWidget {
   const NavBarControlPage({Key? key, required this.ourUid}) : super(key: key);

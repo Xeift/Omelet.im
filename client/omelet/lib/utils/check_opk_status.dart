@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 
 import 'package:libsignal_protocol_dart/libsignal_protocol_dart.dart';
@@ -11,7 +9,6 @@ import 'package:omelet/signal_protocol/safe_opk_store.dart';
 Future<void> checkOpkStatus() async {
   final getSelfOpkStatusRes = await getSelfOpkStatusApi();
   final getSelfOpkStatusResBody = jsonDecode(getSelfOpkStatusRes.body);
-  print('[check_opk_status] 狀態：$getSelfOpkStatusResBody');
 
   final outOfOpk = getSelfOpkStatusResBody['data']['outOfOpk'];
   final lastBatchMaxOpkId =

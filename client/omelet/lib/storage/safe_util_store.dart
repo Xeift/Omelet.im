@@ -19,10 +19,6 @@ class SafeUtilStore {
       // 只有當不存在相同的uid時才將資料加入列表
       myList.add({'uid': uid, 'isSended': isSended});
       await _saveListToSecureStorage(myList);
-      print(
-          '[safe_util_store] 已將好友列入messageList中 uid $uid, isSended $isSended');
-    } else {
-      print('[safe_util_store] 該uid已存在於列表中: $uid');
     }
   }
 

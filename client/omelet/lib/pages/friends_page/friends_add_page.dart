@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
 import 'package:omelet/api/get/get_user_public_info_api.dart';
 import 'package:omelet/api/post/send_friend_request_api.dart';
 import 'package:omelet/components/alert/alert_msg.dart';
@@ -22,7 +23,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
   void initState() {
     super.initState();
     _requestFriendsController = TextEditingController();
-    // 將_requestFriendsType設置為 'username'
+    // 將 _requestFriendsType 設置為 'username'
     _requestFriendsType = 'username';
   }
 
@@ -41,8 +42,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
             _requestFriendsController.text, _requestFriendsType);
         final statusCode = res.statusCode;
         final resBody = jsonDecode(res.body);
-        // print('[friends_add_page] 好友邀請送出型態: $_requestFriendsType');
-        // print('[friends_add_page] 好友邀請狀態碼: $statusCode');
+
         if (mounted) {
           if (statusCode == 200) {
             loginErrorMsg(context, 'Friend request sent successfully.');
@@ -64,8 +64,6 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                 'Server encountered an error. \n Please make sure to select a submission type');
           }
         }
-
-        print('[friends_add_page] 好友邀請回應: $resBody');
 
         setState(() {
           _requestFriendsController.clear();

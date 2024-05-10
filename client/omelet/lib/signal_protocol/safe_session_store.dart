@@ -1,4 +1,4 @@
-// ignore_for_file: implementation_imports, avoid_print
+// ignore_for_file: implementation_imports
 
 import 'dart:convert';
 import 'dart:typed_data';

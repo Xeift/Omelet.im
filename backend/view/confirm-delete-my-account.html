@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刪除帳號 | Omelet.im</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+
+    input {
+        font-size: 1.2em;
+        padding: 10px;
+        margin-bottom: 20px;
+        width: 300px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+    input:focus {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    button {
+        font-size: 1.2em;
+        padding: 10px 20px;
+        background-color: #fff;
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+    }
+
+    button:active {
+        transform: scale(0.9);
+    }
+
+    .error-message {
+        color: red;
+        font-size: 1.2em;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>刪除帳號</h1>
+    <form id="passwordForm">
+        <input id="username" type="password" placeholder="請輸入帳號/Email" required><br>
+        <input id="password" type="password" placeholder="請輸入密碼" required><br>
+        <input id="confirm-msg" type="text" placeholder="請輸入「我確認刪除帳號」" required><br>
+        <button type="button" onclick="submitPassword()">確認刪除帳號</button>
+    </form>
+    <div id="errorMessage" class="error-message"></div>
+</div>
+
+<script>
+    async function submitPassword() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var confirmMsg = document.getElementById("confirm-msg").value;
+
+
+        var urlParams = new URLSearchParams(window.location.search);
+        if (confirmMsg !== "我確認刪除帳號") {
+            document.getElementById("errorMessage").innerText = "請輸入「我確認刪除帳號」";
+            return;
+        }
+
+        document.getElementById("errorMessage").innerText = "";
+
+        const response = await fetch("https://omelet.im:8443/api/v1/delete-my-account/submit-info", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username: username, password: password })
+        });
+
+        console.log(response.status);
+        if (response.status === 200) {
+            document.getElementById("errorMessage").innerText = "帳號刪除成功";
+        }
+        else {
+            document.getElementById("errorMessage").innerText = "帳號或密碼錯誤";
+        }
+    }
+</script>
+
+</body>
+</html>

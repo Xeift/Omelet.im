@@ -21,6 +21,7 @@ app.use(bodyParser.json());
 app.use('/api/v1/login', rateLimit.authLimiter, require('./api/post/login.js'));
 app.use('/api/v1/register', rateLimit.authLimiter, require('./api/post/register.js'));
 app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/post/resetPassword.js'));
+app.use('/api/v1/delete-my-account', rateLimit.authLimiter, require('./api/post/deleteMyAccount.js'));
 app.use('/api/v1/get-unread-msg', rateLimit.authLimiter, require('./api/get/getUnreadMsg.js'));
 app.use('/api/v1/upload-pre-key-bundle', rateLimit.authLimiter, require('./api/post/uploadPreKeyBundle.js'));
 app.use('/api/v1/download-pre-key-bundle', rateLimit.authLimiter, require('./api/get/downloadPreKeyBundle.js'));

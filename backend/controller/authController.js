@@ -59,6 +59,11 @@ async function createNewVerifiedUser(uid, timestamp, username, email, password) 
     });
 }
 
+async function removeVerifiedUser(uid) {
+    await VerifiedUserModel.deleteOne({ uid: uid });
+}
+
+
 async function removeUnverifiedUserByEmail(email) {
     await UnverifiedUserModel.deleteMany({ email: email });
 }
@@ -124,6 +129,7 @@ module.exports = {
     isUserIdExsists,
     isEmailVerified,
     createNewUnverifiedUser,
+    removeVerifiedUser,
     makeUnverifiedUserVerified,
     updatePasswordByEmail,
     updatePfpStatus,

@@ -74,11 +74,11 @@ class LoadingPageState extends State<LoadingPage> {
       getTranslate = await safeConfigStore.getTranslationDestLang(ourUid);
 
       // TODO: 刪除所有儲存空間、PreKeyBundle、UnreadMsg，debug 用
-      const storage = FlutterSecureStorage();
-      await storage.deleteAll();
-      print('[loading_page] 已刪除所有儲存空間');
-      final res = await debugResetPrekeyBundleAndUnreadMsgApi();
-      print('[loading_page.dart] ${jsonDecode(res.body)}');
+      // const storage = FlutterSecureStorage();
+      // await storage.deleteAll();
+      // print('[loading_page] 已刪除所有儲存空間');
+      // final res = await debugResetPrekeyBundleAndUnreadMsgApi();
+      // print('[loading_page.dart] ${jsonDecode(res.body)}');
 
       // JWT 存在，直接連線到 Socket.io Server
       if (await isCurrentActiveAccountExsist()) {

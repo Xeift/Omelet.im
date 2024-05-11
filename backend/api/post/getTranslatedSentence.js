@@ -22,7 +22,8 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
             { role: 'system', content: 'You are now a translation robot and cannot reply to other questions except the translated content.' },
             { role: 'system', content: `Translate "${msg}" conversation to "${destLang}" and keep the original intention without adding redundant content` }, 
             { role: 'system', content: 'The reply content can only contain content that needs to be translated.' },
-            { role: 'system', content: 'This translation must be more colloquial,but should not deviate from the original meaning.' }],
+            { role: 'system', content: 'This translation must be more colloquial,but should not deviate from the original meaning.' },
+            { role: 'system', content: 'If "${msg}" and "${destLang}" have the same language, just just send "${msg}"directly' }],
         max_tokens: 160,
         stream: false,
     });

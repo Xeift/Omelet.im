@@ -73,7 +73,6 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
           friendsAInfo = results[0];
           friendsBInfo = results[1];
           isLoading = false;
-          // 数据加载完成后执行页面刷新操作
         });
       });
     } catch (e) {

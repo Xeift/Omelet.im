@@ -238,15 +238,15 @@ class _FriendsListState extends State<FriendsList> {
                                           MaterialStateProperty.all<Color>(
                                         Theme.of(context)
                                             .colorScheme
-                                            .secondary, // 设置按钮的背景颜色
+                                            .secondary, 
                                       ),
                                       padding: MaterialStateProperty.all<
                                           EdgeInsetsGeometry>(
                                         const EdgeInsets.symmetric(
                                             vertical: 10,
-                                            horizontal: 20), // 设置按钮的内边距
+                                            horizontal: 20), 
                                       ),
-                                      // 其他样式属性
+                                   
                                     ),
                                     onPressed: () {
                                       // 在提交按鈕的事件處理器中使用選擇的用戶
@@ -268,9 +268,9 @@ class _FriendsListState extends State<FriendsList> {
                                     child: const Text(
                                       'Submit',
                                       style: TextStyle(
-                                        fontSize: 15, // 设置按钮文字的大小
+                                        fontSize: 15,
                                         fontWeight:
-                                            FontWeight.bold, // 设置按钮文字的粗细
+                                            FontWeight.bold, 
                                       ),
                                     ),
                                   ),

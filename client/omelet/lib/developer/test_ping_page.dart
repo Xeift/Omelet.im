@@ -12,11 +12,11 @@ class _TestPingPageState extends State<TestPingPage> {
   final String _domain = 'omelet.im';
   int _signalStrength = 0;
   String _resString = '';
-  bool _isDisposed = false; // 新增一个标志位
+  bool _isDisposed = false; 
 
   @override
   void dispose() {
-    _isDisposed = true; // 在组件销毁时设置标志位
+    _isDisposed = true; 
     super.dispose();
   }
 
@@ -24,7 +24,7 @@ class _TestPingPageState extends State<TestPingPage> {
     _resString = 'ping $_domain \n\n';
     final ping = Ping(_domain, count: 5);
     ping.stream.listen((event) {
-      if (_isDisposed) return; // 在处理 ping 结果前检查组件是否已销毁
+      if (_isDisposed) return; 
       if (event.error != null) {
         setState(() {
           _resString = event.error.toString();

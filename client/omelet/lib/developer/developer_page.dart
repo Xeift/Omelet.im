@@ -32,8 +32,8 @@ class DeveloperPage extends StatelessWidget {
                   backImagePath: 'assets/xeift.png',
                   developerName: 'Xeift',
                   developerType: 'Backend Developer',
-                  hideText: 'nothing',
-                  hideSecText: 'nothing'),
+                  hideText: '好累',
+                  hideSecText: '人生短短幾個秋，bug怎麼這麼多'),
               _buildFlippableDeveloperCard(
                   frontImagePath: 'assets/thomas.png',
                   backImagePath: 'assets/thomas.png',

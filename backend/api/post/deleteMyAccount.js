@@ -1,8 +1,6 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const jwt = require('../../utils/jwt.js');
-const email = require('../../utils/email.js');
 const authController = require('../../controller/authController.js');
 
 

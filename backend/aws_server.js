@@ -27,13 +27,14 @@ app.use(bodyParser.json());
 app.use('/api/v1/login', rateLimit.authLimiter, require('./api/post/login.js'));
 app.use('/api/v1/register', rateLimit.authLimiter, require('./api/post/register.js'));
 app.use('/api/v1/reset-password', rateLimit.authLimiter, require('./api/post/resetPassword.js'));
+app.use('/api/v1/delete-my-account', rateLimit.authLimiter, require('./api/post/deleteMyAccount.js'));
 app.use('/api/v1/get-unread-msg', rateLimit.authLimiter, require('./api/get/getUnreadMsg.js'));
 app.use('/api/v1/upload-pre-key-bundle', rateLimit.authLimiter, require('./api/post/uploadPreKeyBundle.js'));
-app.use('/api/v1/v2-download-pre-key-bundle', rateLimit.authLimiter, require('./api/get/downloadPreKeyBundle.js'));
-app.use('/api/v1/v2-get-available-opk-index', rateLimit.authLimiter, require('./api/get/getAvailableOpkIndex.js'));
-app.use('/api/v1/update-opk', rateLimit.authLimiter, require('./api/post/updateOpk.js'));
+app.use('/api/v1/download-pre-key-bundle', rateLimit.authLimiter, require('./api/get/downloadPreKeyBundle.js'));
+app.use('/api/v1/get-available-opk-index', rateLimit.authLimiter, require('./api/get/getAvailableOpkIndex.js'));
 app.use('/api/v1/get-self-opk-status', rateLimit.authLimiter, require('./api/get/getSelfOpkStatus.js'));
 app.use('/api/v1/get-self-spk-status', rateLimit.authLimiter, require('./api/get/getSelfSpkStatus.js'));
+app.use('/api/v1/update-opk', rateLimit.authLimiter, require('./api/post/updateOpk.js'));
 app.use('/api/v1/update-spk', rateLimit.authLimiter, require('./api/post/updateSpk.js'));
 app.use('/api/v1/update-pfp', rateLimit.authLimiter, require('./api/post/updatePfp.js'));
 app.use('/api/v1/upload-img', rateLimit.authLimiter, require('./api/post/uploadImg.js'));
@@ -45,7 +46,6 @@ app.use('/api/v1/get-friend-request', rateLimit.authLimiter, require('./api/get/
 app.use('/api/v1/get-friend-list', rateLimit.authLimiter, require('./api/get/getFriendList.js'));
 app.use('/api/v1/get-device-ids', rateLimit.authLimiter, require('./api/get/getDeviceIds.js'));
 app.use('/api/v1/remove-friend', rateLimit.authLimiter, require('./api/post/removeFriend.js'));
-app.use('/api/v1/get-gpt-resp', rateLimit.authLimiter, require('./api/post/getGptResp.js'));
 app.use('/api/v1/get-translated-sentence', rateLimit.authLimiter, require('./api/post/getTranslatedSentence.js'));
 
 

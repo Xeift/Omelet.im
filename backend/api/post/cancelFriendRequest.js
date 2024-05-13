@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('../../utils/jwt.js');
 const friendController = require('../../controller/friendController.js');
-const authController = require('../../controller/authController.js');
-const eventEmitter = require('../../utils/eventEmitter.js');
-
 
 router.post('/', jwt.verifyJWT, async(req, res) => {
     let decodedToken = req.decodedToken;

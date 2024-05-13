@@ -19,6 +19,7 @@ backend
 │  ├─ notFound.js
 │  └─ post
 │     ├─ cancelFriendRequest.js
+│     ├─ deleteMyAccount.js
 │     ├─ getTranslatedSentence.js
 │     ├─ login.js
 │     ├─ register.js
@@ -52,22 +53,24 @@ backend
 │  └─ verifiedUserModel.js
 ├─ package-lock.json
 ├─ package.json
-├─ page
-│  ├─ confirm-register-email-failed.html
-│  ├─ confirm-register-email-success.html
-│  ├─ confirm-reset-email.html
-│  └─ confirm-reset-email.js
 ├─ pfp
 │  ├─ 552415467919118336.png
 │  └─ 561550071007547392.png
+├─ README.md
 ├─ server.js
-└─ utils
-   ├─ email.js
-   ├─ eventEmitter.js
-   ├─ jwt.js
-   ├─ passwordHelper.js
-   ├─ rateLimit.js
-   ├─ snowflakeId.js
-   └─ socket.js
+├─ utils
+│  ├─ email.js
+│  ├─ eventEmitter.js
+│  ├─ jwt.js
+│  ├─ passwordHelper.js
+│  ├─ rateLimit.js
+│  ├─ snowflakeId.js
+│  └─ socket.js
+└─ view
+   ├─ confirm-delete-my-account.html
+   ├─ confirm-register-email-failed.html
+   ├─ confirm-register-email-success.html
+   ├─ confirm-reset-email.html
+   └─ confirm-reset-email.js
 
 ```

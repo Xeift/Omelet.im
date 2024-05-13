@@ -24,8 +24,6 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
         let preKeyBundle = await preKeyBundleController.downloadPreKeyBundle(theirUid, theirDeviceId, opkId);
         await preKeyBundleController.v2DeleteOpkPub(theirUid, theirDeviceId, opkId);
 
-        console.log(`已刪除 ${theirUid} ${theirDeviceId} 的 opk id: ${opkId}`);
-
         res.status(200).json({
             message: '成功下載 Pre Key Bundle',
             data: { 'PreKeyBundle': preKeyBundle },

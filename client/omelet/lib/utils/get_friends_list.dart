@@ -31,13 +31,13 @@ Future<List<Map<String, dynamic>>> getFriendsList() async {
 Future<List<Map<String, dynamic>>> convertIterableToList(
     Iterable<Future<Response>> iterable, List<String> uidList) async {
   List<Map<String, dynamic>> resultList = [];
-  // 使用索引来遍历 uidList
+  // 使用索引遍歷 uidList
   await Future.forEach(iterable, (Future<Response> future) async {
     Response response = await future;
     Map<String, dynamic> responseData =
         response.body.isNotEmpty ? jsonDecode(response.body) : {};
 
-    // 将 uid 添加到 responseData['data'] 中
+    // 將 uid 添加到 responseData['data'] 中
     responseData['data']['uid'] = uidList[resultList.length];
 
     resultList.add(responseData);

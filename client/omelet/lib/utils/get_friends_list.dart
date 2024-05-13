@@ -10,10 +10,10 @@ Future<List<Map<String, dynamic>>> getFriendsList() async {
     final getFriendsListApi = await getFriendListApi();
 
     var jsonResponse = jsonDecode(getFriendsListApi.body);
+
     List jsonFriendsData = jsonResponse['data'];
     List<String> stringList =
         jsonFriendsData.map((item) => item.toString()).toList();
-
     if (jsonFriendsData.isNotEmpty) {
       List<Future<Response>> responseFutures =
           stringList.map((i) => getUserPublicInfoApi(i)).toList();

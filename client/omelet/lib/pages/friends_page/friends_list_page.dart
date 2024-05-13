@@ -232,21 +232,17 @@ class _FriendsListState extends State<FriendsList> {
                                     style: ButtonStyle(
                                       minimumSize:
                                           MaterialStateProperty.all<Size>(
-                                        const Size(80, 50), // 设置按钮的最小尺寸
+                                        const Size(80, 50), // 設置按钮的最小尺寸
                                       ),
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .secondary, 
+                                        Theme.of(context).colorScheme.secondary,
                                       ),
                                       padding: MaterialStateProperty.all<
                                           EdgeInsetsGeometry>(
                                         const EdgeInsets.symmetric(
-                                            vertical: 10,
-                                            horizontal: 20), 
+                                            vertical: 10, horizontal: 20),
                                       ),
-                                   
                                     ),
                                     onPressed: () {
                                       // 在提交按鈕的事件處理器中使用選擇的用戶
@@ -269,8 +265,7 @@ class _FriendsListState extends State<FriendsList> {
                                       'Submit',
                                       style: TextStyle(
                                         fontSize: 15,
-                                        fontWeight:
-                                            FontWeight.bold, 
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),

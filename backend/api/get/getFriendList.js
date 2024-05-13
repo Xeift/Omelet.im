@@ -7,7 +7,7 @@ router.get('/', jwt.verifyJWT, async(req, res) => {
     try {
         let decodedToken = req.decodedToken;
         let uid = decodedToken._uid;
-
+        
         let friendList = await friendController.getFriendsList(uid);
 
         res.status(200).json({

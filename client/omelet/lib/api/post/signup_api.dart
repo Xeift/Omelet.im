@@ -19,6 +19,6 @@ Future<http.Response> signUpSendMailApi(
       'password': password
     }),
   );
-  print('[signup_api.dart]email:$email,username:$username,password:$password');
+
   return res;
 }

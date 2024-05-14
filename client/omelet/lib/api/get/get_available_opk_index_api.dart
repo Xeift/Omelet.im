@@ -6,7 +6,6 @@ import 'package:omelet/storage/safe_account_store.dart';
 
 Future<http.Response> getAvailableOpkIndexApi(
     String remoteUid, String deviceId) async {
-  print('deviceId is : $deviceId');
   final token = await loadJwt();
 
   final res = await http.get(

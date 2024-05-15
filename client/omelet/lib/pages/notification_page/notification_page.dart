@@ -268,7 +268,6 @@ class SystemNotify extends StatelessWidget {
       Map<String, dynamic> resBody = jsonDecode(responseBody);
       return resBody;
     } catch (e) {
-      print('[notification_page.dart]獲取用戶資料失敗: $e');
       rethrow;
     }
   }
@@ -278,7 +277,7 @@ class SystemNotify extends StatelessWidget {
       await safeNotifyStore.deleteNotification(sendTime);
       onDelete();
     } catch (e) {
-      print('[notification_page.dart] 删除通知失敗: $e');
+      print('[notification_page.dart] 刪除通知失敗: $e');
     }
   }
 

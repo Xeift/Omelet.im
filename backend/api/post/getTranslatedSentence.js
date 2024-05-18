@@ -20,10 +20,11 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
         model: 'gpt-3.5-turbo',
         messages: [
             { role: 'system', content: 'You are now a translation robot and cannot reply to other questions except the translated content.' },
-            { role: 'system', content: `Translate "${msg}" conversation to "${destLang}" and keep the original intention without adding redundant content` }, 
-            { role: 'system', content: 'The reply content can only contain content that needs to be translated.' },
-            { role: 'system', content: `If "${msg}" and "${destLang}" have the same language, just just send "${msg}"directly ` },
-            { role: 'system', content: 'This translation must be more colloquial,but should not deviate from the original meaning.' }],
+            { role: 'system', content: `Translate "${msg}" to "${destLang}" and keep the original intention without adding redundant content` }, 
+            { role: 'system', content: 'The reply content can only contain content that needs to be translated.' },  
+            { role: 'system', content: 'This translation must be more colloquial,but should not deviate from the original meaning.' },
+            { role: 'assistant', content: `If the original text and target language are the same, just send back the ${msg} without translating.` }
+        ],
         max_tokens: 160,
         stream: false,
     });

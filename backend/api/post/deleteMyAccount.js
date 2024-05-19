@@ -3,7 +3,6 @@ const path = require('path');
 const router = express.Router();
 const authController = require('../../controller/authController.js');
 
-
 router.post('/submit-info', async(req, res) => {
     try {
         const { username, password } = req.body;

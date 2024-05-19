@@ -8,7 +8,6 @@ router.post('/', jwt.verifyJWT, async(req, res) => {
     let ourUid = decodedToken._uid;
     let theirUid = req.body.theirUid;
 
-
     let friendRequestExists = await friendController.isFriendRequestExists(ourUid, theirUid);
 
     try {

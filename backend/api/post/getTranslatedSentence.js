@@ -8,7 +8,6 @@ const openai = new OpenAI({
     apiKey: OPENAI_API_KEY,
 });
 
-
 router.post('/', jwt.verifyJWT, async(req, res) => {
     let decodedToken = req.decodedToken;
     let msg = req.body.msg;

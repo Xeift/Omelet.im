@@ -1,10 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:omelet/api/get/get_user_public_info_api.dart';
-import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
-import 'package:omelet/pages/notification_page/notification_page.dart';
-
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:permission_handler/permission_handler.dart';
 
@@ -23,6 +19,9 @@ import 'package:omelet/storage/safe_config_store.dart';
 import 'package:omelet/storage/safe_device_id_store.dart';
 import 'package:omelet/utils/check_unread_notify.dart';
 import 'package:omelet/notify/notify.dart';
+import 'package:omelet/api/get/get_user_public_info_api.dart';
+import 'package:omelet/pages/message/multi_screen/multi_chat_room.dart';
+import 'package:omelet/pages/notification_page/notification_page.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:omelet/api/debug_reset_prekeybundle_and_unread_msg.dart';

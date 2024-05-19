@@ -81,7 +81,7 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget buildTitle() {
-    //Login字樣
+    // Login字樣
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Text(

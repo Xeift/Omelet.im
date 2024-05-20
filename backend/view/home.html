@@ -21,6 +21,10 @@
             padding: 50px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h1 {
             font-size: 2.5em;
@@ -39,18 +43,22 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            text-decoration: none;
             transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
         }
         .download-button:hover {
             background-color: #555;
             transform: scale(1.05);
         }
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px; /* 調整此處的 margin 值以設定 QR 代碼和按鈕之間的間隔 */
+        }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-        .container {
-            animation: fadeIn 1s ease-in-out;
         }
     </style>
 </head>
@@ -58,7 +66,8 @@
     <div class="container">
         <h1>Omelet.im</h1>
         <p>端對端加密即時通訊軟體，保障您的隱私安全。</p>
-        <a href="https://drive.google.com/drive/folders/11Exu9GMsLzcB_MHWT_RuiR8co0JjsbOx?usp=sharing" class="download-button"  target="_blank">下載</a>
+        <img src="/view/qr.png" alt="QR Code" class="qr-code">
+        <a href="https://drive.google.com/drive/folders/11Exu9GMsLzcB_MHWT_RuiR8co0JjsbOx?usp=sharing" class="download-button" target="_blank">下載</a>
     </div>
 </body>
 </html>

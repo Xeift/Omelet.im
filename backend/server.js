@@ -48,6 +48,7 @@ app.use('/img', rateLimit.authLimiter, require('./api/get/downloadImage.js'));
 // TODO: debug 用，重置 PreKeyBundle
 app.use('/api/v1/debug-reset-prekeybundle-and-unread-msg', rateLimit.authLimiter, require('./api/debug.js'));
 
+app.use('/view', express.static('view'));
 app.use('/', rateLimit.authLimiter, require('./view/home.js'));
 
 app.use('*', require('./api/notFound.js'));

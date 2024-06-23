@@ -99,12 +99,6 @@ class LoadingPageState extends State<LoadingPage> {
         socket.onConnect((_) async {
           final safeNotifyStore = SafeNotifyStore();
 
-          // // 回傳 JWT，驗證身份
-          // socket.emit(
-          //   'clientReturnJwtToServer',
-          //   {'token': token, 'ipkPub': ipkPub},
-          // );
-
           socket.on('jwtValid', (data) async {
             // 若伺服器中自己的 OPK 耗盡，則產生並上傳 OPK
             await checkOpkStatus();

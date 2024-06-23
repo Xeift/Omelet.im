@@ -121,6 +121,7 @@ class LoadingPageState extends State<LoadingPage> {
             }
           });
 
+          // 客戶端接收到伺服器傳送的訊息時
           socket.on('serverForwardMsgToClient', (msg) async {
             final safeMsgStore = SafeMsgStore();
             final (senderName, decryptedMsg) =
@@ -132,11 +133,11 @@ class LoadingPageState extends State<LoadingPage> {
                 ?.reloadDataInMulti();
           });
 
+          // 客戶端收到好友邀請時
           socket.on('receivedFriendRequest', (msg) async {
-            // 儲存好友邀請
-            await safeNotifyStore.writeNotification(jsonDecode(msg));
-            NotificationPageState.currenInstanceForNoti()?.reloadDataNoti();
-            // 顯示好友邀請
+            await safeNotifyStore.writeNotification(jsonDecode(msg)); // 儲存好友邀請
+            NotificationPageState.currenInstanceForNoti()
+                ?.reloadDataNoti(); // 顯示好友邀請
           });
 
           socket.on('acceptedFriendRequest', (msg) async {

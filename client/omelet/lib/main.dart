@@ -6,13 +6,12 @@ import 'package:omelet/pages/login_signup/loading_page.dart';
 import 'package:omelet/theme/theme_constants.dart';
 import 'package:omelet/theme/theme_provider.dart';
 
-final hintMsgKey = GlobalKey();
 void main() {
   debugPaintSizeEnabled = false; // 顯示組件的邊界
   debugPaintBaselinesEnabled = false; // 顯示組件的基線
   runApp(
     ChangeNotifierProvider(
-      create: (context) => ThemeProvier(),
+      create: (context) => ThemeProvider(),
       child: const MyApp(),
     ),
   );
@@ -30,7 +29,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Omelet.im',
-      theme: Provider.of<ThemeProvier>(context).themeData,
+      theme: Provider.of<ThemeProvider>(context).themeData,
       darkTheme: darkMode,
       initialRoute: '/',
       routes: {

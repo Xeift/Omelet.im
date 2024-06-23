@@ -323,7 +323,7 @@ class _SettingPageState extends State<SettingPage> {
                           ),
                         ),
                         onTap: () {
-                          Provider.of<ThemeProvier>(context, listen: false)
+                          Provider.of<ThemeProvider>(context, listen: false)
                               .toggleTheme();
                         },
                       ),

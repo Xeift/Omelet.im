@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:omelet/theme/theme_constants.dart';
 
-class ThemeProvier with ChangeNotifier {
+class ThemeProvider with ChangeNotifier {
   ThemeData _themeData = lightMode;
 
   ThemeData get themeData => _themeData;

@@ -131,38 +131,41 @@ class SignUpPageState extends State<SignUpPage> {
             side: WidgetStateProperty.all(
                 const BorderSide(color: Colors.grey, width: 1)),
           ),
-          onPressed: () async {
+          onPressed: () {
             _signUpEamil = emailSignUpTextFieldController.text;
             _singUpPassword = passwordSignUpTextFieldController.text;
             _signUpName = nameSignUpTextFieldController.text;
 
-            final res = await signUpSendMailApi(
-                _signUpEamil, _signUpName, _singUpPassword);
-            final statusCode = res.statusCode;
+            final BuildContext ctx = context;
 
-            if (!context.mounted) {
-              return;
-            }
+            signUpSendMailApi(_signUpEamil, _signUpName, _singUpPassword)
+                .then((res) {
+              final statusCode = res.statusCode;
 
-            switch (statusCode) {
-              case 200:
-                loginErrorMsg(context, '已寄送驗證 Email，請查看信箱');
-                break;
-              case 409:
-                loginErrorMsg(context, '此 Email 已被使用，請登入');
-                break;
-              case 422:
-                loginErrorMsg(context, '請輸入註冊資訊');
-                break;
-              case 429:
-                loginErrorMsg(context, '請稍候再重新輸入');
-                break;
-              case 500:
-                loginErrorMsg(context, '伺服器預期外錯誤');
-                break;
-              default:
-                loginErrorMsg(context, '未知錯誤');
-            }
+              if (!mounted) {
+                return;
+              }
+
+              switch (statusCode) {
+                case 200:
+                  loginErrorMsg(ctx, '已寄送驗證 Email，請查看信箱');
+                  break;
+                case 409:
+                  loginErrorMsg(ctx, '此 Email 已被使用，請登入');
+                  break;
+                case 422:
+                  loginErrorMsg(ctx, '請輸入註冊資訊');
+                  break;
+                case 429:
+                  loginErrorMsg(ctx, '請稍候再重新輸入');
+                  break;
+                case 500:
+                  loginErrorMsg(ctx, '伺服器預期外錯誤');
+                  break;
+                default:
+                  loginErrorMsg(ctx, '未知錯誤');
+              }
+            });
           },
           autofocus: true,
           child: Text(

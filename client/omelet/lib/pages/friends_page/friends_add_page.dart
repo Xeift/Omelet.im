@@ -78,7 +78,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
@@ -103,7 +103,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                     width: 325,
                     height: 85,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
@@ -136,7 +136,7 @@ class _FriendsAddPageState extends State<FriendsAddPage> {
                     width: 325,
                     height: 300,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(

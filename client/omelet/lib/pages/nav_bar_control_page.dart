@@ -50,7 +50,7 @@ class _NavBarControlPageState extends State<NavBarControlPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         // 設定所需的高度

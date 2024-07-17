@@ -46,7 +46,7 @@ class LoginPageState extends State<LoginPage> {
       theme: lightMode,
       darkTheme: darkMode,
       home: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -182,7 +182,7 @@ class LoginPageState extends State<LoginPage> {
         width: 150,
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.black),
+            backgroundColor: WidgetStateProperty.all(Colors.black),
           ),
           child: Text(
             'Login',
@@ -270,9 +270,9 @@ class LoginPageState extends State<LoginPage> {
         width: 150,
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.grey),
-            minimumSize: MaterialStateProperty.all(const Size(100, 50)),
-            side: MaterialStateProperty.all(
+            backgroundColor: WidgetStateProperty.all(Colors.grey),
+            minimumSize: WidgetStateProperty.all(const Size(100, 50)),
+            side: WidgetStateProperty.all(
                 const BorderSide(color: Colors.grey, width: 1)),
           ),
           onPressed: () {

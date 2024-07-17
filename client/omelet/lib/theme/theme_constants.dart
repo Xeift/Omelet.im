@@ -15,7 +15,7 @@ abstract class AppColors {
 ThemeData get lightMode => ThemeData(
       brightness: Brightness.light,
       colorScheme: const ColorScheme.light(
-          background: Colors.white,
+          surface: Colors.white,
           primary: Color.fromARGB(255, 94, 94, 94),
           secondary: Color.fromARGB(255, 0, 0, 0)),
       appBarTheme: const AppBarTheme(
@@ -49,7 +49,7 @@ ThemeData get lightMode => ThemeData(
 ThemeData get darkMode => ThemeData(
       brightness: Brightness.dark,
       colorScheme: const ColorScheme.dark(
-          background: Color.fromARGB(255, 16, 16, 16),
+          surface: Color.fromARGB(255, 16, 16, 16),
           primary: Color.fromARGB(255, 203, 203, 203),
           secondary: Color.fromARGB(255, 253, 253, 253)),
       appBarTheme: const AppBarTheme(

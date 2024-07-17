@@ -81,9 +81,9 @@ class _TestPingPageState extends State<TestPingPage> {
               ElevatedButton(
                 onPressed: _doPing,
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
+                  backgroundColor: WidgetStateProperty.all(
                       const Color.fromARGB(255, 251, 120, 27)),
-                  minimumSize: MaterialStateProperty.all<Size>(
+                  minimumSize: WidgetStateProperty.all<Size>(
                     const Size(100, 50),
                   ),
                 ),

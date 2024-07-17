@@ -95,7 +95,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
       );
     } else {
       return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(65), // 設定所需的高度
           child: ClipRect(
@@ -860,8 +860,8 @@ class _ActionBarState extends State<_ActionBar> {
             child: ElevatedButton(
               style: ButtonStyle(
                 minimumSize:
-                    MaterialStateProperty.all<Size>(const Size(50, 50)),
-                backgroundColor: MaterialStateProperty.all<Color>(
+                    WidgetStateProperty.all<Size>(const Size(50, 50)),
+                backgroundColor: WidgetStateProperty.all<Color>(
                     Theme.of(context).colorScheme.secondary), // 设置按钮的最小尺寸
                 // 其他样式属性
               ),

@@ -126,9 +126,9 @@ class SignUpPageState extends State<SignUpPage> {
         width: 150,
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.grey),
-            minimumSize: MaterialStateProperty.all(const Size(100, 50)),
-            side: MaterialStateProperty.all(
+            backgroundColor: WidgetStateProperty.all(Colors.grey),
+            minimumSize: WidgetStateProperty.all(const Size(100, 50)),
+            side: WidgetStateProperty.all(
                 const BorderSide(color: Colors.grey, width: 1)),
           ),
           onPressed: () async {

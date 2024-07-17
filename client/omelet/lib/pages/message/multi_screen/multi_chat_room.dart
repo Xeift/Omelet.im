@@ -122,7 +122,7 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
       );
     } else {
       return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50), // 設定所需的高度
           child: Container(
@@ -153,8 +153,8 @@ class MultiChatRoomPageState extends State<MultiChatRoomPage> {
                     },
                     style: ButtonStyle(
                         minimumSize:
-                            MaterialStateProperty.all<Size>(const Size(50, 10)),
-                        backgroundColor: MaterialStateProperty.all<Color>(
+                            WidgetStateProperty.all<Size>(const Size(50, 10)),
+                        backgroundColor: WidgetStateProperty.all<Color>(
                             const Color.fromARGB(255, 250, 143, 21))),
                     child: const Icon(
                       Icons.change_circle,
@@ -969,8 +969,8 @@ class _ActionBarForMultiState extends State<_ActionBarForMulti> {
             child: ElevatedButton(
               style: ButtonStyle(
                 minimumSize:
-                    MaterialStateProperty.all<Size>(const Size(50, 50)),
-                backgroundColor: MaterialStateProperty.all<Color>(
+                    WidgetStateProperty.all<Size>(const Size(50, 50)),
+                backgroundColor: WidgetStateProperty.all<Color>(
                     Theme.of(context).colorScheme.secondary), // 设置按钮的最小尺寸
                 // 其他样式属性
               ),

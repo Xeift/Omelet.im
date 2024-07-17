@@ -80,7 +80,7 @@ class ForgetPageState extends State<ForgetPage> {
         width: 150,
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.black),
+            backgroundColor: WidgetStateProperty.all(Colors.black),
           ),
           child: Text(
             'Submit',

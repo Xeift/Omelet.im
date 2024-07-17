@@ -1,6 +1,5 @@
 const jwt = require('./jwt');
 const msgController = require('../controller/msgController');
-const preKeyBundleController = require('../controller/preKeyBundleController.js');
 const friendController = require('../controller/friendController.js');
 const authController = require('../controller/authController.js');
 const eventEmitter = require('../utils/eventEmitter.js');

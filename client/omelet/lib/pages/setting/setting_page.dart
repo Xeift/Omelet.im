@@ -75,7 +75,7 @@ class _SettingPageState extends State<SettingPage> {
             );
           } else {
             return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               appBar: AppBar(
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back_ios),

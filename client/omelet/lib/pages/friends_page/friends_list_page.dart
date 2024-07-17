@@ -39,7 +39,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -231,14 +231,14 @@ class _FriendsListState extends State<FriendsList> {
                                   child: ElevatedButton(
                                     style: ButtonStyle(
                                       minimumSize:
-                                          MaterialStateProperty.all<Size>(
+                                          WidgetStateProperty.all<Size>(
                                         const Size(80, 50), // 設置按钮的最小尺寸
                                       ),
                                       backgroundColor:
-                                          MaterialStateProperty.all<Color>(
+                                          WidgetStateProperty.all<Color>(
                                         Theme.of(context).colorScheme.secondary,
                                       ),
-                                      padding: MaterialStateProperty.all<
+                                      padding: WidgetStateProperty.all<
                                           EdgeInsetsGeometry>(
                                         const EdgeInsets.symmetric(
                                             vertical: 10, horizontal: 20),

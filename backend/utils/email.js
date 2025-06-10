@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config({ path: 'config/.env' });
+require('../config/config.js');
 const AWS_PUBLIC_SERVER_URI = process.env.AWS_PUBLIC_SERVER_URI;
 const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 
@@ -29,8 +29,8 @@ async function sendResetPasswordMail(email, code) {
                 </a>
             </div>`
     };
-    
-    
+
+
     transporter.sendMail(mailOptions);
 }
 

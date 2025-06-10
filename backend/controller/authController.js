@@ -2,7 +2,7 @@ const snowflakeId = require('../utils/snowflakeId');
 const passwordHelper = require('../utils/passwordHelper');
 const VerifiedUserModel = require('../model/verifiedUserModel');
 const UnverifiedUserModel = require('../model/unverifiedUserModel');
-require('dotenv').config({ path: 'config/.env' });
+require('../config/config.js');
 const AWS_PUBLIC_SERVER_URI = process.env.AWS_PUBLIC_SERVER_URI;
 const fs = require('fs');
 const path = require('path');

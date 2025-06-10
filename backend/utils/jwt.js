@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config({ path: 'config/.env' });
+require('../config/config.js');
 const JWT_SECRET = process.env.JWT_SECRET;
 const util = require('util');
 const jwtVerify = util.promisify(jwt.verify);
@@ -43,7 +43,7 @@ async function verifyJWT(req, res, next) {
         });
     }
     else {
-        jwt.verify(token, JWT_SECRET, async(err, payload) => {
+        jwt.verify(token, JWT_SECRET, async (err, payload) => {
             if (err) {
                 res.status(403).json({
                     message: '此 JWT 已過期或失效',

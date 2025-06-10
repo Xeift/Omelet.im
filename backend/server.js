@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const rateLimit = require('./utils/rateLimit.js');
-require('dotenv').config({ path: 'config/.env' });
+require('./config/config.js');
 const BACKEND_PORT = process.env.BACKEND_PORT;
 const SERVER_URI = process.env.SERVER_URI;
 

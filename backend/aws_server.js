@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const rateLimit = require('./utils/rateLimit.js');
-require('dotenv').config({ path: 'config/.env' });
+require('./config/config.js');
 const AWS_BACKEND_PORT = process.env.AWS_BACKEND_PORT;
 const AWS_LOCAL_SERVER_URI = process.env.AWS_LOCAL_SERVER_URI; // 8443
 const fs = require('fs');
